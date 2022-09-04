@@ -1,15 +1,38 @@
-.vs
-.vscode
-.editorconfig
+# Django #
+*.log
+*.pot
+*.pyc
+__pycache__
+db.sqlite3
+media
 
-.venv
+# Backup files # 
+*.bak 
 
-__pycache__/
-00*.py
-.env
+# Python # 
+*.py[cod] 
+*$py.class 
 
-logs
-esufrn/public/
+# Environments 
+.env 
+.venv 
+env/ 
+venv/ 
+ENV/ 
+env.bak/ 
+venv.bak/
+
+# Visual Studio Code # 
+.vscode/* 
+!.vscode/settings.json 
+!.vscode/tasks.json 
+!.vscode/launch.json 
+!.vscode/extensions.json 
+.history
+
+# Other #
+logs/
+src/public/
 
 *.sql
 *.pid
