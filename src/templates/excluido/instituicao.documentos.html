@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    {% include "base.header.html" %}
+    <body>
+        <!-------- Barra Governo -------->
+        {% include "base.governo.html" %}
+        <!-------- Home -------->
+        <div class="background-home">
+            <!-- Navbar -->
+            <div id="nav-box" class="pt-3 w-100 secondary">
+                {% include "base.acessibilidade.html" %}
+                <!--  -->
+                {% include "base.navbar.html" %}
+            </div>
+        </div>
+        <!-------- Conteúdo -------->
+        <nav aria-label="breadcrumb" class="container">
+            <ol class="breadcrumb px-0 mb-0">
+                <li class="breadcrumb-item">
+                    <a href="/"><i class="fas fa-home"></i> </a>
+                </li>
+                <li class="breadcrumb-item" aria-current="page">
+                    <a href="#">Instituição</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Documentos</li>
+            </ol>
+            <hr class="hr-escuro mt-0" />
+        </nav>
+        <article>
+            <div class="container mt-5 text-center cabecalho">
+                <h3>Documentos Institucionais</h3>
+                <hr class="hr-escuro mt-5" />
+            </div>
+            <div class="container mt-4 corpo historia text-left">
+                <h3 class="font-weight-bold mb-5">Planos de Cursos</h3>
+                <p>
+                    <a href="/media/files/CURSO-TÉCNICO-EM-MASSOTERAPIA.pdf" target="_blank">Técnico em Massoterapia</a>
+                </p>
+                <p>
+                    <a href="/media/files/PLANO-DE-CURSO-TÉCNICO-EM-ENFERMAGEM-2016.pdf"
+                       target="_blank">Técnico em Enfermagem</a>
+                </p>
+                <p>
+                    <a href="/media/files/CURSO-TÉCNICO-EM-VIGILÂNCIA-EM-SAÚDE.pdf"
+                       target="_blank">Técnico em Vigilância em Saúde</a>
+                </p>
+                <p>
+                    <a href="/media/files/TÉCNICO-EM-AGENTE-COMUNITÁRIO-DE-SAÚDE-2016.pdf"
+                       target="_blank">
+                        Técnico em Agente Comunitário de Saúde
+                    </a>
+                </p>
+                <p>
+                    <a href="/media/files/CURSO-TÉCNICO-EM-REGISTROS-E-INFORMAÇÕES-EM-SAÚDE.pdf"
+                       target="_blank">
+                        Técnico em Registros e Informações em Saúde
+                    </a>
+                </p>
+                <!-- -------------------------------------------------------- -->
+                <h3 class="font-weight-bold my-5">Documentos Institucionais</h3>
+                <p>
+                    <a href="/media/files/Carta de Serviços_versão pósplenária.pdf"
+                       target="_blank">Carta de Serviços</a>
+                </p>
+                <p>
+                    <a href="/media/files/1_PPC_GESTO_HOSPITALAR.pdf" target="_blank">
+                        Projeto Político Pedagogico do Curso de Gestão Hospitalar
+                    </a>
+                </p>
+                <p>
+                    <a href="/media/files/Resolução ESUFRN Tec 002-2020_2_2021_1_2021_2 VÁLIDA (1).pdf"
+                       target="_blank">
+                        Calendário dos Cursos Técnicos
+                    </a>
+                </p>
+                <p>
+                    <a href="/media/files/BS_187-2020 - Regulamento Cursos EBTT UFRN.pdf"
+                       target="_blank">Regulamento dos Cursos EBTT</a>
+                </p>
+                <p>
+                    <a href="/media/files/REgimento-Interno-ESUFRN_2015.pdf" target="_blank">
+                        Regulamento Interno da Escola de Saúde da UFRN
+                    </a>
+                </p>
+                <p>
+                    <a href="/media/files/Orientações-para-confecção-de-camisetas-dos-Cursos-Técnicos-da-ESUFRN-3.pdf"
+                       target="_blank">
+                        Orientação para Confecção de Camisetas dos Cursos Técnicos – ESUFRN
+                    </a>
+                </p>
+                <p>
+                    <a href="/media/files/manual de orientação para confecção de jalecos.pdf"
+                       target="_blank">
+                        Manual de Orientação para Confecção de Jalecos – ESUFRN
+                    </a>
+                </p>
+                <p>
+                    <a href="/media/files/Orientações-para-diagramação-da-placa-de-concluintes-dos-Cursos-Técnicos-da-ESUFRN-4.pdf"
+                       target="_blank">
+                        Orientação para diagramação da Placa de Concluintes dos Cursos Técnicos – ESUFRN
+                    </a>
+                </p>
+                <p>
+                    <a href="/media/files/ESUFRN-Mini-Manual.pdf" target="_blank">Identidade Visual ESUFRN, Mini Manual</a>
+                </p>
+                <p>
+                    <a href="https://www.ufrn.br/imprensa/identidade-visual" target="_blank">Identidade Visual UFRN</a>
+                </p>
+            </div>
+            <div class="container text-right">
+                <hr class="hr-escuro my-5" />
+            <a href="#" class="text-uppercase text-dark">Voltar ao topo <i class="fas fa-arrow-alt-circle-up"></i
+        ></a>
+    </div>
+</article>
+<!-------- Footer -------->
+{% include "base.footer.html" %}
+<!-------- Javascript -------->
+{% include "base.scripts.html" %}
+</body>
+</html>

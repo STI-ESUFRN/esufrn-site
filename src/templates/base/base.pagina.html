@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        {% include "base.head.html" %}
+        {% block head %}
+        {% endblock head %}
+        <title>
+            {% block title %}
+                Escola de Saúde da UFRN
+            {% endblock title %}
+        </title>
+        {% block styles %}
+        {% endblock styles %}
+    </head>
+    <body>
+        <!-- Barra governo -->
+        {% include "base.governo.html" %}
+        <!-- Navbar -->
+        <div class="background-home">
+            <div id="nav-box" class="pt-3 w-100 secondary">
+                {% include "base.acessibilidade.html" %}
+                {% include "base.navbar.html" %}
+            </div>
+        </div>
+        <!-- Breadcrumbs -->
+        {% block breadcrumbs %}
+            {% include "base.breadcrumbs.html" %}
+        {% endblock breadcrumbs %}
+        <!-- Content -->
+        {% block content %}
+        {% endblock content %}
+        <!-- Footer -->
+        {% include "base.footer.html" %}
+        <!-- Scripts -->
+        {% include "base.scripts.html" %}
+        {% block scripts %}
+        {% endblock scripts %}
+    </body>
+</html>

@@ -1,0 +1,174 @@
+{% extends "dashboard.base.html" %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'assets/css/reserva.style.css' %}"/>
+    <style>
+        table.table th:nth-child(1){
+            width: 20px;
+        }
+    </style>
+{% endblock styles %}
+{% block content %}
+    <div class="card rounded-0">
+        <div class="card-header head-table border-0 rounded-0">
+            <b><i class="fas fa-paper-plane mr-2"></i>Solicitações de reserva em Espera</b>
+        </div>
+        <div class="card-body p-0" style="overflow-x: auto;">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr class="capt-table">
+                        <th class="border-0 text-center" scope="col"></th>
+                        <th class="border-0" scope="col">Título</th>
+                        <th class="border-0" scope="col">Sala</th>
+                        <th class="border-0" scope="col">Solicitante</th>
+                        <th class="border-0 text-center" scope="col">Data</th>
+                        <th class="border-0 text-center" scope="col">Tempo</th>
+                    </tr>
+                </thead>
+                <tbody id="lista-de-chamados">
+                    <!-- AJAX -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="mt-4" id="detalhes-chamado">
+        <div class="card-group" id="detalhes" style="display: none;opacity: 0;">
+            <div class="card" style="width: 18rem;">
+                <div class="card-header head-table border-0 rounded-0">
+                    <b><i class="fas fa-info mr-2"></i>Detalhes da reserva</b>
+                    <button id="detalhes-dismiss" type="button" class="close" aria-label="Close">
+                        <span aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i></span>
+                    </button>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <small>Sala:</small> <b data-attribute="classroom.classroom_name">---</b>
+                    </h5>
+                    <p class="card-text">
+                        <small>Evento:</small> <b data-attribute="event">---</b>
+                    </p>
+                    <hr/>
+                    <div class="row">
+                        <div class="col-md-4" title="Data para a qual a sala foi reservada">
+                            <small>Data:</small> <b date-format="DD/MM/YYYY" data-attribute="date">---</b>
+                        </div>
+                        <div class="col-md-4">
+                            <small>Turno:</small> <b data-attribute="shift_name">---</b>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-sm btn-light px-2 m-0"
+                                    data-toggle="modal"
+                                    data-target="#calendarModal">
+                                <small>
+                                    Consultar calendário <i class="fas fa-calendar"></i>
+                                </small>
+                            </button>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="row">
+                        <div class="col">
+                            <small>Equipamentos:</small>
+                            <b data-attribute="equipment">---</b>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <small>Solicitante:</small> <b data-attribute="requester">---</b>
+                        </div>
+                        <div class="col-md-4">
+                            <small>Email:</small> <b data-attribute="email">---</b>
+                        </div>
+                        <div class="col-md-4">
+                            <small>Telefone:</small> <b data-attribute="phone">---</b>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="row">
+                        <div class="col">
+                            <small>Justificativa:</small>
+                            <b data-attribute="cause">---</b>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer border-top-0">
+                    <p>
+                        <b>Ações:</b>
+                    </p>
+                    <small class="text-muted">Observações sobre a reserva:</small>
+                    <textarea id="reserve-obs" data-attribute="obs" class="form-control mb-3" rows="2" placeholder="Escrever observação" title="Campo de observações sobre este chamado.&#10;Pode ser editado.">
+                        </textarea>
+                    <a href="#" class="btn mb-1 btn-outline-primary btn-sm" id="obsReserve">Salvar Observação</a>
+                    <hr/>
+                    <small class="text-muted">Inserir mensagem no email resposta:</small>
+                    <textarea id="reserve-email"
+                              class="form-control mb-3"
+                              rows="2"
+                              placeholder="Escrever menagem"
+                              title="Essa mensagem será adicionada no corpo do Email enviado ao solicitante.&#10;Este campo pode ser em branco."></textarea>
+                    <a href="#"
+                       class="btn mb-1 btn-outline-success btn-sm"
+                       id="confirmReserve"
+                       data-status="A">Aprovar Reserva</a>
+                    <a href="#"
+                       class="btn mb-1 btn-outline-danger btn-sm"
+                       id="rejectReserve"
+                       data-status="R">Rejeitar Reserva</a>
+                    <p class="m-0 mt-2">
+                        <small class="text-muted" title="Data que o solicitante submeteu o chamado">
+                            Data do pedido: <span date-format="DD/MM/YYYY HH:mm" data-attribute="created_at">---</span>
+                        </small>
+                    </p>
+                    <p class="m-0 mt-2">
+                        <small class="text-muted">
+                            Ultima Alteração: <span date-format="DD/MM/YYYY HH:mm" data-attribute="refresh_at">---</span>
+                        </small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade"
+         id="calendarModal"
+         tabindex="-1"
+         role="dialog"
+         aria-labelledby="mymodal"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="text-center">
+                        Uso da sala: <b><span data-attribute="classroom.classroom_name"></span></b>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="table-reserva d-flex justify-content-md-center mx-auto">
+                                <div id="tabela-de-salas">
+                                    <div id="escolheMes">
+                                        <!-- AJAX -->
+                                    </div>
+                                    <div id="reservation-calendar">
+                                        <!-- RESERVATION CALENDAR -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+{% block scripts %}
+    <script src="{% static 'assets/dashboard/js/ajax_csrf.js' %}"></script>
+    <script src="{% static 'assets/dashboard/reserva/js/dashboard.js' %}"></script>
+{% endblock scripts %}

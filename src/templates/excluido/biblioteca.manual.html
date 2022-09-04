@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  {% include "base.header.html" %}
+</head>
+
+<body>
+  <!-------- Barra Governo -------->
+  {% include "base.governo.html" %}
+  <!-------- Home -------->
+  <div class="background-home">
+    <!-- Navbar -->
+    <div id="nav-box" class="pt-3 w-100 secondary">
+      {% include "base.acessibilidade.html" %}
+      <!--  -->
+      {% include "base.navbar.html" %}
+    </div>
+  </div>
+
+
+  <!-------- Conteúdo -------->
+
+  <nav aria-label="breadcrumb" class="container">
+    <ol class="breadcrumb px-0 mb-0">
+      <li class="breadcrumb-item"><a href="/"><i class='fas fa-home'></i>
+        </a></li>
+      <li class="breadcrumb-item" aria-current="page"><a href="#">Biblioteca</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Manual do Usuário</li>
+    </ol>
+    <hr class="hr-escuro mt-0">
+  </nav>
+
+  <article>
+
+    <div class="container mt-5 text-center cabecalho">
+      <h3>Manual do Usuário</h3>
+      <hr class="hr-escuro mt-5">
+    </div>
+
+    <div class="container mt-4 corpo">
+
+      <h3 class="text-center">NORMAS DE UTILIZAÇÃO DAS BIBLIOTECAS DO SISTEMA DE BIBLIOTECAS DA UFRN (SISBI)</h3>
+
+      <br>
+
+      <p><b>CADASTRO:</b></p>
+      <p>
+        Para estar apto a realizar empréstimos nas bibliotecas do Sistema de Bibliotecas da UFRN, o usuário deve
+        cadastrar
+        uma senha com seis ou oito números dentro do seu SIGAA . Para isso, deve-se entrar no link ‘Biblioteca’ e em
+        seguida no ‘Cadastre-se para Utilizar os Serviços da Biblioteca’ completando as informações pedidas.
+      </p>
+      <p>
+        OBS: Quem deseja, pode solicitar a realização do serviço em uma das bibliotecas do SISBI/UFRN.
+      </p>
+      <p><b>EMPRÉSTIMOS:</b></p>
+      <p>
+        – DOMICILIAR (mediante apresentação de documento com foto):
+      </p>
+      <p>
+        ALUNOS DE CURSO TÉCNICOS, GRADUAÇÕES, E SERVIDORES: Máximo de 3 materiais do acervo circulante por 15 dias.
+      </p>
+      <p>
+        ALUNOS DE PÓS-GRADUAÇÕES E PROFESSORES: Máximo de 5 materiais do acervo circulante por 30 dias.
+      </p>
+      <p>
+        – ESPECIAL (mediante apresentação de documento com foto):
+      </p>
+      <p>
+        FOTOCÓPIA: Empréstimo por 3 horas.
+      </p>
+      <p>
+        MATERIAL FORA DE EMPRÉSTIMO (Tarja Amarela): Sexta-feira, a partir das 12h, com devolução na segunda-feira
+        subsequente pela manhã.
+      </p>
+      <p><b>RENOVAÇÃO:</b></p>
+      <p>
+        O documento pode ser renovado on line dentro do SIGAA do usuário uma única vez. O passo-a-passo para esse
+        serviço
+        é: ‘Biblioteca’ – ‘Empréstimos’ – ‘Renovar Meus Empréstimos’. Neste ponto é possível escolher entre renovar
+        apenas
+        um ou mais documentos. Terminado o novo prazo, o mesmo exemplar só sairá para empréstimo do mesmo usuário após
+        24
+        horas.
+      </p>
+      <p><b>DEVOLUÇÃO:</b></p>
+      <p>
+        A data de devolução está indicada na papeleta anexada à última folha do livro. O não cumprimento do prazo
+        previsto
+        implicará na suspensão do serviço de empréstimo por um dia para cada dia de atraso por cada documento emprestado
+        (conforme a RESOLUÇÃO No 028/2010-CONSAD, de 16 de setembro de 2010).
+      </p>
+    </div>
+
+    <div class="container text-right">
+      <hr class="hr-escuro my-5">
+      <a href="#" class="text-uppercase text-dark">Voltar ao topo <i class='fas fa-arrow-alt-circle-up'></i></a>
+    </div>
+  </article>
+
+
+  <!-------- Footer -------->
+  {% include "base.footer.html" %}
+  <!-------- Javascript -------->
+  {% include "base.scripts.html" %}
+</body>
+
+</html>

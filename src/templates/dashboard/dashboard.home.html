@@ -1,0 +1,90 @@
+{% extends "dashboard.base.html" %}
+{% block styles %}
+    <style>
+    table.custom-table {
+        table-layout: fixed;
+    }
+    </style>
+{% endblock styles %}
+{% block content %}
+    <div class="row">
+        <div class="col-6">
+            <b>Últimas mensagens:</b>
+            <hr class="mt-2"/>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="card rounded-0">
+                        <div class="card-header">{{ message.sent_at }}</div>
+                        <div class="card-body">
+                            <div class="text-muted">Contato: {{ message.contact }}</div>
+                            <blockquote class="blockquote mb-0">
+                                <p>{{ message.message }}</p>
+                                <footer class="blockquote-footer">
+                                    {{ message.name }} pelo <cite title="Source Title">Formulário do site da ESUFRN</cite>
+                                </footer>
+                            </blockquote>
+                        </div>
+                    </div>
+                    {% if not forloop.last %}<hr/>{% endif %}
+                {% endfor %}
+            {% else %}
+                <i>Não há mensagens para exibir.</i>
+            {% endif %}
+        </div>
+        <div class="col-6">
+            <div class="mb-2">
+                <b>Aulas em andamento:</b>
+                <hr class="mt-2"/>
+                {% if classes %}
+                    <table class="table custom-table">
+                        <thead class="capt-table">
+                            <tr>
+                                <th>Sala</th>
+                                <th>Turma</th>
+                                <th>Professor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for class in classes %}
+                                <tr>
+                                    <td>{{ class.period.classroom }}</td>
+                                    <td>{{ class.period.classname }}</td>
+                                    <td>{{ class.period.requester }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <i>Não há aulas acontecendo no momento.</i>
+                {% endif %}
+            </div>
+            <hr/>
+            <div class="mb-2">
+                <b>Eventos em andamento:</b>
+                <hr class="mt-2"/>
+                {% if events %}
+                    <table class="table custom-table">
+                        <thead class="capt-table">
+                            <tr>
+                                <th>Sala</th>
+                                <th>Evento</th>
+                                <th>Solicitante</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for event in events %}
+                                <tr>
+                                    <td>{{ event.classroom }}</td>
+                                    <td>{{ event.event }}</td>
+                                    <td>{{ event.requester }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <i>Não há eventos acontecendo no momento.</i>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}

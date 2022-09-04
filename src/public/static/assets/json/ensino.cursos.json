@@ -1,0 +1,265 @@
+[
+  {
+    "id": "c001",
+    "Nome": "Curso Técnico em Enfermagem",
+    "head": {
+      "Vagas": "80 vagas (divididas entre primeiro e segundo semestres).",
+      "Tempo": "Aproximadamente dois anos e meio.",
+      "Carga": "1800 horas.",
+      "Turno": "Manhã e Tarde.",
+      "Periodicidade": "Anual."
+    },
+    "main": {
+      "Forma de ingresso": "Processo Seletivo junto à COMPERVE.",
+      "A quem se destina": "estudantes ou profissionais que tenham concluído ensino Médio.",
+      "Estrutura oferecida": [
+        "Laboratórios de enfermagem e informática;",
+        "Salas de aula climatizadas com data-show;",
+        "Dispositivos de Multimídia;",
+        "Biblioteca com exemplares atualizados;",
+        "Estágios realizados com acompanhamento de instrutores;",
+        "Auditórios e anfiteatros;",
+        "Corpo docente qualificado."
+      ],
+      "Área de atuação": "O egresso atua na promoção, prevenção, recuperação e reabilitação dos processos saúde/doença. Colabora com o atendimento das   necessidades de saúde dos pacientes e comunidade, em todas as faixas etárias. Promove ações de orientação e preparo do paciente para exames. Realiza   cuidados de enfermagem, tais como: curativos, administração de medicamentos e vacinas, nebulizações, banho de leito, mensuração antropométrica e   verificação de sinais vitais, dentre outros. Presta assistência de enfermagem a pacientes clínicos e cirúrgicos. Técnico em enfermagem no atendimento  ao cliente grave.",
+      "Maiores informações": "ensino@es.ufrn.br"
+    }
+  },
+  {
+    "id": "c002",
+    "Nome": "Curso Técnico em Vigilância em Saúde",
+    "head": {
+      "Vagas": "80 vagas (sendo 40 no primeiro semestre e 40 no segundo).",
+      "Duração": "Dois anos.",
+      "Carga": "Aproximadamente 1200 horas.",
+      "Turno": "Manhã e Tarde.",
+      "Periodicidade": "Semestral."
+    },
+    "main": {
+      "Forma de ingresso": "Processo Seletivo junto à COMPERVE.",
+      "A quem se destina": "Estudantes ou profissionais concluintes ou que tenham concluído Ensino Médio.",
+      "Estrutura oferecida": [
+        "Laboratórios de enfermagem e informática;",
+        "Salas de aula climatizadas com data-show;",
+        "Dispositivos de Multimídia;",
+        "Biblioteca com exemplares atualizados;",
+        "Estágios realizados com acompanhamento de instrutores;",
+        "Auditórios e anfiteatros;",
+        "Corpo docente qualificado."
+      ],
+      "Perfil do Profissional": "Ao final do curso, o egresso é capaz de compreender os determinantes da saúde, realizando ações, em seu nível de competência, atuando com base nos princípios do SUS, de modo autônomo, crítico, reflexivo e criativo.",
+      "Área de atuação": "O egresso atua em diversos cenários de promoção da saúde, de proteção e prevenção de agravos e doenças, compreendendo o território enquanto espaço de produção de condições que influenciam no processo saúde/doença da população. Promove ações capazes de contribuir com a melhoria da vida e saúde da população, estando apto a atuar em ações das vigilâncias: sanitária, epidemiológica, ambiental e em saúde do trabalhador, em seu nível de competência, fortalecendo o modelo de vigilância em saúde, proposto pelo Sistema Único de Saúde (SUS). Poderá atuar, ainda, na área de planejamento, gestão, informação, educação em saúde e em outros cenários como núcleos de vigilância epidemiológica, secretarias municipais e estaduais, secretaria de vigilância em Saúde, entre outros.",
+      "Maiores informações": "ensino@es.ufrn.br"
+    }
+  },
+  {
+    "id": "c003",
+    "Nome": "Curso Técnico em Registros e Informações em Saúde",
+    "head": {
+      "Vagas": "40 vagas (somente no segundo semestre). ",
+      "Tempo": "Aproximadamente dois anos. ",
+      "Carga": "1200 horas. ",
+      "Turno": "Tarde. ",
+      "Periodicidade": "Anual. "
+    },
+    "main": {
+      "Forma de ingresso": "por meio de Processo Seletivo junto à COMPERVE. ",
+      "A quem se destina": "Estudantes ou profissionais concluintes ou que tenham concluído Ensino Médio. ",
+      "Estrutura oferecida": [
+        "Laboratórios de enfermagem e informática;",
+        "Salas de aula climatizadas com data-show;",
+        "Dispositivos de Multimídia;",
+        "Biblioteca com exemplares atualizados;",
+        "Estágios realizados com acompanhamento de instrutores;",
+        "Auditórios e anfiteatros;",
+        "Corpo docente qualificado."
+      ],
+      "Perfil do Profissional": "Ao final do curso, o profissional egresso é capaz de aplicar técnicas de organização e administração de serviços de documentação, registros e estatística de Saúde; realizar procedimentos voltados ao desenvolvimento, guarda, catalogação e manutenção de registros e processamento de dados; supervisionar o pessoal auxiliar, visando à qualidade e volume de ações realizadas; colaborar com o corpo clínico na preparação de normas de conteúdo dos prontuários e na avaliação da qualidade dos dados; promover a obtenção de dados produzidos nos serviços de Saúde necessários a avaliação, planejamento, administração dos procedimentos e avaliação epidemiológica e coordenar as atividades dos serviços de registros de Saúde, subsidiando as outras áreas de trabalho das unidades de Saúde. ",
+      "Área de atuação": "Atua na organização do conteúdo e do arquivo de prontuários, na organização das fontes de dados e no registro para os sistemas de informações em saúde, contribuindo para a continuidade do atendimento, o planejamento e a avaliação das ações. Desenvolve procedimentos de guarda, catalogação, pesquisa e manutenção de registros e dados em saúde. ",
+      "Maiores informações": "ensino@es.ufrn.br"
+    }
+  },
+  {
+    "id": "c004",
+    "Nome": " Curso Técnico em Práticas Integrativas e Complementares em Saúde",
+    "head": {
+      "Vagas": " 35 vagas.",
+      "Duração": " Dois anos.",
+      "Carga": " 1200 horas.",
+      "Turno": " Manhã e/ou Tarde.",
+      "Periodicidade": " Anual."
+    },
+    "main": {
+      "Forma de ingresso": " Ocorrerá mediante aprovação no processo seletivo classificatório regido por edital publicado pela ESUFRN/UFRN. ,Para a seleção o candidato deverá ter concluído ou estar no último ano do Ensino Médio.",
+      "A quem se destina": " Estudantes ou profissionais concluintes que tenham concluído Ensino Médio.",
+      "Estrutura oferecida": [
+        "Laboratórios de enfermagem e informática;",
+        "Salas de aula climatizadas com data-show;",
+        "Dispositivos de Multimídia;",
+        "Biblioteca com exemplares atualizados;",
+        "Estágios realizados com acompanhamento de instrutores;",
+        "Auditórios e anfiteatros;",
+        "Corpo docente qualificado."
+      ],
+      "Perfil do profissional": " O egresso estará apto a desenvolver práticas coletivas e individuais com ênfase na promoção do cuidado, da saúde e na prevenção dos desequilíbrios energético-funcionais e/ou restauração das desarmonias existentes. Espera-se que este profissional possua competências específicas para atuar na gestão do estresse, sendo capacitado a conduzir práticas corporais de descontração e relaxamento, advindas de tradições da medicina aiurvédica indiana, como o Yoga e da Medicina Tradicional Chinesa (MTC), como o Lian Gong e o Tai Chi Chuan; aplicar técnicas de massagens relaxantes e estimulantes, do tipo terapêutica e estética; utilizar técnicas oriundas da aromaterapia, cromoterapia, musicoterapia, auriculoterapia, moxabustão e ventosaterapia, entre outras. Aliado a isso, este profissional desenvolverá competências gerais dos profissionais de nível técnico da área de saúde.",
+      "Área de atuação": " Atua em clínicas de reabilitação, clínicas estéticas, associações desportivas, hospitais, unidades básicas de saúde e domicílios, centros de atendimento a idosos, casas de repouso, entre outros.",
+      "Maiores informações": " ensino@es.ufrn.br"
+    }
+  },
+  {
+    "id": "c005",
+    "Nome": " Curso Técnico Agente Comunitário em Saúde",
+    "head": {
+      "Vagas": " 25 vagas (somente no segundo semestre).",
+      "Tempo": " Aproximadamente um ano e meio.",
+      "Carga": "1220 horas .",
+      "Turno": " Tarde/noturno.",
+      "Periodicidade": " Anual."
+    },
+    "main": {
+      "Forma de ingresso": " Por meio de Processo Seletivo junto à COMPERVE.",
+      "A quem se destina": " Estudantes ou profissionais concluintes ou que tenham concluído Ensino Médio.",
+      "Estrutura oferecida": [
+        "Laboratórios de enfermagem e informática;",
+        "Salas de aula climatizadas com data-show;",
+        "Dispositivos de Multimídia;",
+        "Biblioteca com exemplares atualizados;",
+        "Estágios realizados com acompanhamento de instrutores;",
+        "Auditórios e anfiteatros;",
+        "Corpo docente qualificado."
+      ],
+      "Perfil do profissional": " O profissional técnico em Agente Comunitário de Saúde atua na perspectiva de promoção, prevenção e proteção da saúde, orienta e acompanha famílias e grupos em seus domicílios e os encaminha aos serviços de saúde. Realiza mapeamento e cadastramento de dados sociais, demográficos e de saúde, consolidando e analisando as informações obtidas; participa, com as equipes de saúde e a comunidade, da elaboração, implementação, avaliação e reprogramação do plano de ação local de saúde. Participa e mobiliza a população para as reuniões do conselho de saúde. Identifica indivíduos ou grupos que demandam cuidados especiais, sensibilizando a comunidade para a convivência. Trabalha em equipe nas unidades básicas do Sistema Único de Saúde, promovendo a integração entre população atendida e os serviços de atenção básica à saúde.",
+      "Área de atuação": " Atua no Sistema Único de Saúde.",
+      "Maiores informações": " ensino@es.ufrn.br"
+    }
+  },
+  {
+    "id": "c006",
+    "Nome": " Curso Técnico em Massoterapia",
+    "head": {
+      "Vagas": " 40 vagas. ",
+      "Tempo": " Mínimo de 24 meses.",
+      "Carga": " Aproximadamente 1200 horas.",
+      "Turno": " Manhã (2017.2).",
+      "Periodicidade": "  bienal."
+    },
+    "main": {
+      "Forma de ingresso": " Processo Seletivo junto à COMPERVE.",
+      "A quem se destina": " Portadores de certificado de conclusão do Ensino Médio; Tenham idade mínima de 18 anos, na data da matrícula.",
+      "Estrutura oferecida": [
+        "Laboratórios de práticas e informática;",
+        "Salas de aula climatizadas com data-show;",
+        "Dispositivos de Multimídia;",
+        "Biblioteca com exemplares atualizados;",
+        "Estágios realizados com acompanhamento de instrutores;",
+        "Auditórios e anfiteatros;",
+        "Corpo docente qualificado."
+      ],
+      "Perfil do profissional": " O Técnico em Massoterapia pode desenvolver práticas coletivas e individuais com ênfase na promoção do cuidado à saúde e na prevenção dos desequilíbrios energético-funcionais e/ou restauração das desarmonias existentes. ",
+      "Este profissional deverá estar apto para atuar na gestão do estresse, sendo capacitado a:": " Aplicar técnicas de massagem relaxantes e estimulantes, do tipo terapêutica e estética; Utilizar técnicas oriundas da aromaterapia, cromoterapia, auriculoterapia, moxabustão e ventosaterapia.",
+      "Área de atuação": " Ambientes de Saúde (Hospitais, Clínicas), Spas,Hotéis, Espaços de Convivência, Parques, Centros Comunitários, Clubes, Academias, Empresas públicas e privadas (projetos de qualidade de vida), Associações, Escolas, Centros-dia (idosos, apoio psico-social), casas de detenção, dentre outros.",
+      "Maiores informações": " ensino@es.ufrn.br"
+    }
+  },
+  {
+    "id": "c007",
+    "Nome": " Curso Técnico em Estética",
+    "head": {
+      "Vagas": " 25 vagas",
+      "Tempo": " Aproximadamente dois anos.",
+      "Carga": " 1220 horas.",
+      "Turno": " Tarde.",
+      "Forma de ingresso": " PRONATEC."
+    },
+    "main": {
+      "A quem se destina": " estudantes ou profissionais que tenham concluído o Ensino Médio.",
+      "Estrutura oferecida": [
+        "Laboratório, equipamentos e materiais para técnicas de estética;",
+        "Laboratórios de informática;",
+        "Salas de aula climatizadas com data-show;",
+        "Dispositivos de Multimídia;",
+        "Biblioteca com exemplares atualizados;",
+        "Estágios realizados com acompanhamento de instrutores;",
+        "Auditórios e anfiteatros;",
+        "Corpo docente qualificado."
+      ],
+      "Área de atuação": " O egresso atua em atividades de embelezamento, promoção, proteção, manutenção e recuperação estética da pele. Seleciona e aplica procedimentos e recursos estéticos utilizando produtos cosméticos, técnicas e equipamentos específicos de acordo com as características e necessidades do cliente. Utiliza técnicas de atendimento ao cliente orientando-o sobre ações de proteção à saúde cutânea.",
+      "Maiores informações": " ensino@es.ufrn.br"
+    }
+  },
+  {
+    "id": "c013",
+    "Nome": " Especialização Técnica em Terapia Intensiva Adulto",
+    "head": {
+      "Vagas": " 50 vagas ",
+      "Tempo": " Seis meses.",
+      "Carga": " 360 horas.",
+      "Turno": " Manhã ",
+      "Forma de ingresso": " Processo Seletivo realizado na Escola de Saúde."
+    },
+    "main": {
+      "A quem se destina": "  Técnicos de Enfermagem.",
+      "Estrutura oferecida": [
+        "Laboratórios de enfermagem e informática;",
+        "Salas de aula climatizadas com data-show;",
+        "Dispositivos de Multimídia;",
+        "Biblioteca com exemplares atualizados;",
+        "Estágios realizados com acompanhamento de instrutores;",
+        "Auditórios e anfiteatros;",
+        "Corpo docente qualificado."
+      ],
+      "Área de atuação": " Ao concluir o curso, o Técnico em Enfermagem receberá o título de “Técnico em Enfermagem Especialista em Unidade de Terapia Intensiva Adulto”, conforme previsto na Lei do Exercício Profissional de Enfermagem – Lei Federal nº 7.498/86 e do Decreto nº 94.466/87 – prestando cuidados de enfermagem aos clientes criticamente enfermos sob a supervisão direta e responsabilidade do Enfermeiro.",
+      "Maiores informações": " ensino@es.ufrn.br"
+    }
+  },
+  {
+    "id": "c014",
+    "Nome": " Especialização Técnica em Enfermagem do Trabalho",
+    "head": {
+      "Vagas": " 40 vagas ",
+      "Tempo": " 12 meses.",
+      "Carga": " 330 horas.",
+      "Turno": " Noturno",
+      "Forma de ingresso": " Processo seletivo regido por edital publicado pela ESUFRN."
+    },
+    "main": {
+      "A quem se destina": "  Pessoas que concluíram o ensino médio e o curso Técnico em Enfermagem.",
+      "Estrutura oferecida": [
+        "Laboratórios de enfermagem e informática;",
+        "Salas de aula climatizadas com data-show;",
+        "Dispositivos de Multimídia;",
+        "Biblioteca com exemplares atualizados;",
+        "Auditórios e anfiteatros;",
+        "Corpo docente qualificado."
+      ],
+      "Área de atuação": " Participar com o enfermeiro no planejamento, programação, orientação e execução das atividades de enfermagem do trabalho, nos três níveis de prevenção, integrando a equipe de saúde do trabalhador (ANENT, 2017).",
+      "Maiores informações": " ensino@es.ufrn.br"
+    }
+  },
+  {
+    "id": "g001",
+    "Nome": " Curso Superior de Tecnologia em Gestão Hospitalar",
+    "head": {
+      "Vagas": " 90 vagas (45 a cada semestre).",
+      "Duração": " Três anos.",
+      "Carga": " 2440 horas.",
+      "Turno": " Tarde e Noite.",
+      "Periodicidade": " Semestral."
+    },
+    "main": {
+      "Forma de ingresso": " Sistema de Seleção Unificada (SiSu).",
+      "A quem se destina": " Candidatos que tenham concluído o ensino médio.",
+      "Estrutura oferecida": [
+        "Laboratórios de enfermagem e informática;",
+        "Salas de aula climatizadas com data-show;",
+        "Dispositivos de Multimídia;",
+        "Biblioteca com exemplares atualizados;",
+        "Estágios realizados com acompanhamento de instrutores;",
+        "Auditórios e anfiteatros;",
+        "Corpo docente qualificado."
+      ],
+      "Área de atuação": " Atua no planejamento, organização e gerenciamento dos processos de trabalho em saúde, envolvendo a área de gestão de pessoas, materiais e equipamentos. Organiza e controla compras e custos, áreas de apoio e logística hospitalar, bem como acompanha e supervisiona contratos e convênios, através dos princípios da gestão, qualidade e viabilidade dos serviços presta suporte aos setores fins. Pode atuar em hospitais – e seus setores – clínicas e unidades de saúde, laboratórios médicos e empresas prestadoras de serviço em saúde.",
+      "Maiores informações": " ensino@es.ufrn.br"
+    }
+  }
+]

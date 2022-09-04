@@ -1,0 +1,109 @@
+{% extends "dashboard.base.html" %}
+{% load static %}
+{% block styles %}
+    <style>
+        #reservation-calendar table {
+            table-layout: fixed;
+        }
+
+        @media (min-width: 992px) {
+            .modal-lg {
+                max-width: 80%;
+            }
+        }
+    </style>
+{% endblock styles %}
+{% block content %}
+    <form autocomplete="off" id="form-chamado">
+        {% csrf_token %}
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label>
+                    <b>Solicitante</b>
+                </label>
+                <input type="text"
+                       class="form-control rounded-0"
+                       name="requester"
+                       placeholder="Nome do solicitante"
+                       required/>
+                <div class="invalid-feedback">Campo obrigatório.</div>
+            </div>
+            <div class="form-group col-md-4">
+                <label>
+                    <b>Curso</b>
+                </label>
+                <input type="text"
+                       class="form-control rounded-0"
+                       name="course"
+                       placeholder="Curso do solicitante"
+                       required/>
+                <div class="invalid-feedback">Campo obrigatório.</div>
+            </div>
+            <div class="form-group col-md-4">
+                <label>
+                    <b>Contato</b>
+                </label>
+                <input type="text"
+                       class="form-control rounded-0"
+                       name="contact"
+                       placeholder="Email/Whatsapp"
+                       required/>
+                <div class="invalid-feedback">Campo obrigatório.</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputAddress2">
+                <b>Título</b>
+            </label>
+            <input type="text"
+                   class="form-control rounded-0"
+                   name="title"
+                   placeholder="Título do chamado"
+                   required/>
+            <div class="invalid-feedback">Campo obrigatório.</div>
+        </div>
+        <div class="form-group">
+            <label for="inputAddress2">
+                <b>Descrição</b>
+            </label>
+            <textarea class="form-control"
+                      rows="3"
+                      name="description"
+                      placeholder="Descrição do problema"
+                      required></textarea>
+            <div class="invalid-feedback">Campo obrigatório.</div>
+        </div>
+        <hr class="mt-4"/>
+        <small>
+            <p>Opções do Suporte:</p>
+        </small>
+        <div class="form-group">
+            <label for="inputAddress2">
+                <b>Observações</b>
+            </label>
+            <textarea class="form-control"
+                      rows="3"
+                      name="obs"
+                      placeholder="Observações sobre o chamado, quem atendeu, o que foi feito, etc..."></textarea>
+            <div class="invalid-feedback">Campo obrigatório.</div>
+        </div>
+        <div class="form-group">
+            <label>
+                <b>Status:</b>
+            </label>
+            <br/>
+            <label>
+                <input type="checkbox" name="status"/>
+                Resolvido
+            </label>
+        </div>
+        <div class="text-center mt-4">
+            <button id="enviar-chamado" class="btn btn-dark rounded-0">Cadastrar Chamado</button>
+        </div>
+    </form>
+{% endblock content %}
+{% block scripts %}
+    <script src="{% static 'assets/dashboard/js/form_validate.js' %}"></script>
+    <script src="{% static 'assets/dashboard/chamado/js/badge.js' %}"></script>
+    <script src="{% static 'assets/dashboard/chamado/js/inserir.js' %}"></script>
+{% endblock scripts %}

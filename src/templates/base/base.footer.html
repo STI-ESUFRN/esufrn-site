@@ -1,0 +1,99 @@
+{% load static %}
+<style>
+    input.transparent-input{
+       background-color: #ffffff11 !important;
+    }
+    input.transparent-input:focus{
+        color: #ffffffff !important;
+     }
+</style>
+<footer class="mt-5">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1180.0361839143961!2d-35.2023323929017!3d-5.834074961214089!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7b2ff5f5dc3e34d%3A0xe6608f57294f3808!2sEscola%20de%20Sa%C3%BAde%20-%20ES%2FUFRN!5e0!3m2!1spt-BR!2sbr!4v1653324004771!5m2!1spt-BR!2sbr"
+            width="100%"
+            height="300"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <div class="container text-white social-media">
+        <h5>Redes Sociais</h5>
+        <a target="_blank" href="https://www.facebook.com/escoladesaudeufrn"><i class="fab fa-facebook text-white"></i></a>
+        <a target="_blank"
+           href="https://www.youtube.com/channel/UCvSA9aC-dmOoQJXbLi_e4cw"><i class="fab fa-youtube text-white"></i></a>
+        <a target="_blank" href="https://www.instagram.com/esufrn/?hl=pt"><i class="fab fa-instagram text-white"></i></a>
+        <hr/>
+    </div>
+    <div class="container text-white social-media">
+        <h5>Entre em contato com a gente!</h5>
+        <div style="margin: 20px">
+            <form id="form-contato" method="post" autocomplete="off">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <input class="form-control transparent-input"
+                               name="nome"
+                               type="text"
+                               placeholder="Nome"
+                               required/>
+                        <div class="invalid-feedback">Informe seu nome</div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <input class="form-control transparent-input"
+                               name="contato"
+                               type="email"
+                               placeholder="Email para contato"
+                               required/>
+                        <div class="invalid-feedback">Informe um endereço de email válido</div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <input class="form-control transparent-input"
+                               name="mensagem"
+                               type="text"
+                               placeholder="Mensagem"
+                               required/>
+                        <div class="invalid-feedback">Este campo não pode estar vazio</div>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <button id="enviar-mensagem" type="submit">Enviar</button>
+                    </div>
+                </div>
+                <div id="message-status-message"></div>
+            </form>
+        </div>
+        <hr class="mt-4"/>
+    </div>
+    <div class="container text-white pt-4 link-resumo">
+        {% for item in mainItens %}
+            {% if item.main.footer and item.main.action_type == "hover" %}
+                <div>
+                    <h5>{{ item.main.name }}</h5>
+                    {% for sub in item.subs %}
+                        <a href="{{ sub.main.link }}">
+                            <p>{{ sub.main.name }}</p>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endfor %}
+        <hr/>
+    </div>
+    <div class="container mt-4">
+        <div class="row text-white text-center link-info">
+            <div class="col-md-6">
+                <p>E-mail: esufrn@ufrn.br</p>
+                <p>Sec. Direção: 3342-2290/R100</p>
+            </div>
+            <div class="col-md-6">
+                <p>E-mail: sec.direcaodeensino.esufrn@gmail.com</p>
+                <p>Sec. Direção Ensino: 3342-2290/R101</p>
+            </div>
+        </div>
+    </div>
+    <div class="container text-center mt-4">
+        <a href="">
+            <img src="{% static 'assets/images/logotipo_ufrn_esufrn.low.png' %}"
+                 alt="Logo suporte ESUFRN "/>
+        </a>
+        <!-- <p style="font-size: 12px; color: white; margin-bottom: 0; padding-bottom: 5px;">O visual deste site foi baseado no <a class="text-white" href="http://portalpadrao.gov.br/" target="_blank">Portal Padrão</a> </p> -->
+    </div>
+</footer>

@@ -1,0 +1,55 @@
+{% extends "base.pagina.html" %}
+{% load static %}
+{% block content %}
+    <article>
+        <div class="container mt-5 text-center cabecalho">
+            <h3>Equipe ESUFRN</h3>
+            <hr class="hr-escuro mt-5"/>
+        </div>
+        <div class="container mt-4 corpo historia" id="equipeES">
+            <h3 class="text-center mb-5">
+                <b>Docentes</b>
+            </h3>
+            {% for i in equipe %}
+                {% if i.kind == 'docente' %}
+                    <div class="boxEquipe">
+                        <div class="equipe">
+                            <img src="{{ i.photo.url }}"
+                                 alt="{{ i.name }} - Escola de saúde da UFRN - ESUFRN"
+                                 title="{{ i.name }}"/>
+                            <span>
+                                <a target="_blank" href="{{ i.sigaa }}">
+                                    <p>SIGAA</p>
+                                </a>
+                                <a target="_blank" href="{{ i.cv }}">
+                                    <p>CV</p>
+                                </a>
+                            </span>
+                        </div>
+                        <p>{{ i.name }}</p>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            <hr class="hr-escuro mt-5"/>
+            <h3 class="my-5 text-center">
+                <b>Técnico-administrativo</b>
+            </h3>
+            {% for i in equipe %}
+                {% if i.kind == 'servidor' %}
+                    <div class="boxEquipe">
+                        <div class="equipe">
+                            <img src="{{ i.photo.url }}"
+                                 alt="{{ i.name }} - Escola de saúde da UFRN - ESUFRN"
+                                 title="{{ i.name }}"/>
+                        </div>
+                        <p>{{ i.name }}</p>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="container text-right">
+            <hr class="hr-escuro my-5"/>
+            <a href="#" class="text-uppercase text-dark">Voltar ao topo <i class="fas fa-arrow-alt-circle-up"></i></a>
+        </div>
+    </article>
+{% endblock content %}

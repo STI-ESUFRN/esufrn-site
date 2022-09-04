@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  {% include "base.header.html" %}
+</head>
+<body>
+  <!-------- Barra Governo -------->
+
+  {% include "base.governo.html" %}
+
+  <!-------- Home -------->
+
+  <div class="background-home principal">
+
+    <!-- Imagem Back -->
+    <!-- <img id="back" src="/static/assets/images/background.png" class="" alt="Escola de Saúde da UFRN - ESUFRN"> -->
+    <!-- <svg viewBox="0 0 1080 60">
+      <path style="fill:#ffffff;stroke:none" d="m -2.1383708,240.22025 v 22.42705 38.48654 H 1085.1142 V 262.6473 249.3029 C 715.70463,219.76034 451.47612,279.5853 -2.1383708,240.22025 Z"
+        transform="translate(0,-236)" />
+    </svg> -->
+
+    <!-- Navbar -->
+
+    <div id="nav-box" class="pt-3 w-100">
+      {% include "base.acessibilidade.html" %}
+
+      <!--  -->
+
+      {% include "base.navbar.html" %}
+
+      <!-- Carousel -->
+
+      <div class="owl-carousel owl-theme slide-owl">
+        {% for i in important %}
+        <div class="destaque-box">
+          <div class="destaque-image">
+            <img src="/media/{{ i.image }}" alt="">
+          </div>
+          <div class="container destaque-text">
+              <a href="{{ i.get_absolute_url }}" target="_blank">
+                <div class="w-60">
+                  <h2 class="text-white">
+                    {{ i.title|truncatechars:150 }}
+                  </h2>
+                </div>
+              </a>
+            </div>
+        </div>
+        {% endfor %}
+      </div>
+
+    </div> 
+
+  </div>
+
+  <!-------- Conteúdo -------->
+
+  <section id="noticias" class="container">
+  
+    <div class="titulo mb-5">
+      <h1>Notícias</h1>
+    </div>
+
+    <div class="row">
+      {% for i in post %}
+      <a href="{{ i.get_absolute_url }}" class="col-md-3">
+        <div class="news-item mb-4">
+          {% if i.image %}
+           <img src="{{ i.image.url }}" alt="{{ i.title}} - Escola de Saúde da UFRN - ESUFRN" title="{{ i.title}} - Escola de Saúde da UFRN - ESUFRN">
+          {% else %}
+            <img src="/static/assets/images/ESUFRN.low.png" alt="">
+
+          {% endif %}
+          <span></span>
+          <h3 title="{{ i.title }}"> {{ i.title|truncatechars:150 }}</h3>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  
+    <div class="text-l-center">
+      <a href="/noticias/1" class="text-center"><button class="btn btn-outline-dark btn-lg btn-radio">Ver mais notícicas</button></a>
+    </div>
+    
+  </section>
+
+  <!-- Eventos -->
+
+  <section id="eventos" class="mt-5">
+    <svg viewBox="0 0 1080 60">
+      <path style="fill:#ffffff;stroke:none" d="m -2.1383708,240.22025 v 22.42705 38.48654 H 1085.1142 V 262.6473 249.3029 C 715.70463,219.76034 451.47612,279.5853 -2.1383708,240.22025 Z"
+        transform="translate(0,-236)" />
+    </svg>
+    <img class="back-eventos" src="/static/assets/images/calendar.png" alt="Background Calendário">
+
+    <div class="titulo mb-5 mt-4 text-white">
+      <h1>Eventos</h1>
+    </div>
+
+    <script>
+      var showEventName_is_active = false
+      function showEventName(element){
+        if (!showEventName_is_active){
+          showEventName_is_active=true
+          $("#event-name").animate({opacity: 0},100,function (){
+            $(this).text(element.getAttribute('title'))
+          }).animate({opacity: 1},100, function () {
+            showEventName_is_active=false
+          })
+        }
+      }
+    </script>
+
+    <div class="container" style="text-align: center">
+      {% for i in events %}
+
+      <a href="{{ i.get_absolute_url }}" style="display: inline-block">
+        <div class="evento-item">
+          {% if i.image %}
+            <img src="{{ i.image.url }}" alt="{{ i.title}} - Escola de Saúde da UFRN - ESUFRN" title="{{i.title }}" onmouseover="showEventName(this)">
+          {% else %}
+            <img src="/static/assets/images/ESUFRN.low.png" alt="{{ i.title }} - Escola de Saúde da UFRN - ESUFRN" title="{{ i.title }}" onmouseover="showEventName(this)">
+          {% endif %}
+        </div>
+      </a>
+
+      {% endfor %}
+
+      <h5 id="event-name" class="text-white my-4"></h5>
+    </div>
+
+    <div class="text-l-center my-5 position-relative">
+      <a href="/blog/evento/1" class="text-center">
+        <button class="btn btn-outline-light btn-lg btn-radio">Ver mais eventos</button>
+      </a>
+    </div>
+
+  </section>
+    
+  <!-- Newsletter -->
+
+  <section id="newsletter">
+    <div class="container newsletter py-5">
+
+      <div class="titulo mb-4 text-black">
+        <h1>Newsletter</h1>
+        <p class="mb-0">
+          Cadastre-se e receba nosso conteúdo exclusivo e informes sobre editais de concurso e aberturas de turmas.
+        </p>
+      </div>
+
+      <form action="." autocomplete="off" method="POST">
+        {% csrf_token %}
+        <div class="container">
+          <div class="row">
+            <div class="col-md-4 px-md-1 py-1">
+              {{ newsletter.name_person }}
+              {{ newsletter.name_person.errors }}
+            </div>
+            <div class="col-md-8 px-md-1 py-1">
+              {{ newsletter.email }}
+              {{ newsletter.email.errors }}
+            </div>
+            <div class="col-md-12 p-md-0">
+              <div class="row justify-content-md-center text-center mt-3">
+                {% for field in newsletter.category %}
+
+                    <div class="col-md-4 form-check">
+                      {{ field }}
+                    </div>
+                    
+                {% endfor %}
+                
+                  {{ newsletter.category.errors }}
+                
+                <div class="col-md-5 mt-4">
+                  <button>
+                    Cadastrar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+    </div>
+  </section>
+
+  <!-- Depoimentos -->
+
+  <section id="depoimentos" class="py-5">
+    <div class="titulo mb-4 text-white">
+      <h1>Depoimentos</h1>
+    </div>
+
+    <div class="depoimento-shadow">
+      <span></span><span></span>
+      <div class="owl-carousel owl-theme depoimentos-owl">
+        {% for depoimento in depoimentos %}
+        <div class="depoimento-item text-center pt-2">
+          <img src="{{ depoimento.file.url }}" alt="{{ depoimento.name }} - Escola de Saúde da UFRN - ESUFRN" title="{{ depoimento.name }}">
+          <div class="mt-4 w-75 text-white">
+            <h3><i class='fas fa-quote-right text-white'></i></h3>
+            <p>{{ depoimento.testimonial }}</p>
+            <p>{{ depoimento.name }}</p>
+            <p>{{ depoimento.occupation }}</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Portais -->
+
+  <section>
+    <div class="titulo my-5">
+      <h1>Portais</h1>
+    </div>
+    <div class="mb-5">
+      <div class="owl-carousel owl-theme portais-owl">
+        {% for i in portal %}
+        <a href="{{ i.link }}" target="_blank">
+          <img src="{{ i.image.url }}" alt="{{ i.name }}" title="{{ i.name }}">
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-------- Footer -------->
+  {% include "base.footer.html" %}
+  <!-------- Javascript -------->
+  {% include "base.scripts.html" %}
+
+  <script src="/static/assets/owl-carousel/owl.carousel.min.js"></script>
+  <script>
+    $(document).ready(function ($) {
+
+
+      $('.slide-owl').owlCarousel({
+        items: 1,
+        loop: true,
+        autoplay: true,
+        autoplayTimeout: 3000,
+        autoplayHoverPause: true,
+        dots: true,
+      });
+
+      $('.portais-owl').owlCarousel({
+        loop: true,
+        autoplay: true,
+        autoplayTimeout: 2000,
+        autoplayHoverPause: false,
+        nav: false,
+        responsive: {
+          0: {
+            items: 1, nav: false, loop: true,
+          },
+          600: {
+            items: 2, nav: false, loop: true,
+          },
+          1000: {
+            items: 3, nav: false, loop: true,
+          },
+          1200: {
+            items: 4, nav: false, loop: true,
+          }
+        },
+      });
+
+      $('.depoimentos-owl').owlCarousel({
+        items: 2,
+        center: true,
+        loop: true,
+        autoplay: true,
+        autoplayTimeout: 3000,
+        autoplayHoverPause: true,
+        responsive: {
+          0: {
+            items: 1
+          },
+          700: {
+            items: 2
+          }
+        },
+        dots: false,
+      });
+
+    });
+  </script>
+</body>
+</html>

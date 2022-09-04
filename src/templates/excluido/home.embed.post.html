@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        {% include "base.head.html" %}
+        {% if news.image %}
+            <meta property="og:image" content="{{ news.image.url }}" />
+        {% else %}
+            <meta property="og:image" content="/static/assets/imagens/logo.png" />
+        {% endif %}
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="{{ news.title }}"/>
+        <meta property="og:url" content="{{ news.get_absolute_url }}"/>
+        <meta property="og:description" content="{{ news.subtitle }}"/>
+    </head>
+    <body>
+        {% load mytags %}
+        {% if status == "sucesso" %}
+            <article>
+                <div class="container mt-5 text-center cabecalho">
+                    <h4 class="text-uppercase my-3">Notícias</h4>
+                    <h3>{{ news.title|mark|safe }}</h3>
+                    <h5 class="text-muted my-4">{{ news.subtitle|mark|safe }}</h5>
+                    <hr class="hr-escuro"/>
+                    <p class="my-3 text-center text-sm-left">
+                        {% if news.category == "evento" %}<b>Data do evento: {{ news.event_date|date:'d N Y' }}</b>&nbsp &nbsp{% endif %}
+                        Publicado: {{ news.published_at|date:"d/m/y H:i" }} &nbsp &nbsp
+                        Última modificação: {{ news.modified_at|date:"d/m/y H:i" }} &nbsp &nbsp
+                        Autor: {{ news.author }}
+                        <br class="d-sm-none"/>
+                        <span class="float-sm-right">
+                            <a data-href="{{ news.get_absolute_url }}"
+                               data-layout="button"
+                               data-size="large"
+                               data-mobile-iframe="false"><a class="btn text-white border-0 rounded-0"
+   style="background-color: #0A62C4;
+          font-size: 12px;
+          display: inline;"
+   target="_blank"
+   href="https://www.facebook.com/sharer/sharer.php?u=http://www.escoladesaude.ufrn.br{{ news.get_absolute_url }}">
+                                <i class="fab fa-facebook-f"></i> Compartilhar</a>
+                        </a>
+                        <a href="https://api.whatsapp.com/send?text=http://www.escoladesaude.ufrn.br{{ news.get_absolute_url }}"
+                           target="_blank"
+                           class="btn text-white border-0 rounded-0"
+                           style="background-color: #25b966;
+                                  font-size: 12px;
+                                  display: inline;">
+                            <i class="fab fa-whatsapp"></i> Compartilhar
+                        </a>
+                    </span>
+                </p>
+                <hr class="hr-escuro"/>
+            </div>
+            <div class="container mt-4 corpo" style="word-wrap: break-word">
+                {% if news.image %}
+                    <div class="text-center">
+                        <img src="{{ news.image.url }}"
+                             alt="{{ news.title }} - ESUFRN"
+                             style="max-width:90%;
+                                    max-height: 30%;"/>
+                    </div>
+                {% endif %}
+                <div id="paragrafo-noticia">{{ news.news|mark|safe|linebreaks }}</div>
+                {% if attachments %}
+                    <table class="table table-hover mt-5">
+                        <thead>
+                            <tr>
+                                <th>Publicado em</th>
+                                <th colspan="2">Nome do documento</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for attachment in attachments %}
+                                <tr>
+                                    <td>
+                                        {% if attachment.file.get_published_date is not None %}
+                                            {{ attachment.file.get_published_date }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a target="_blank" href="{{ attachment.file.file.url }}">{{ attachment.file.name }}</a>
+                                    </td>
+                                    <td>
+                                        <a href="{{ attachment.file.file.url }}" download>
+                                            <i class="fas fa-download" aria-hidden="true"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+        </article>
+    {% else %}
+        <div class="container mt-5 text-center cabecalho">
+            <h3>Error</h3>
+        </div>
+    {% endif %}
+    {% include "base.scripts.html" %}
+    <div id="fb-root"></div>
+    <script>
+		(function (d, s, id) {
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) return;
+			js = d.createElement(s); js.id = id;
+			js.src = 'https://connect.facebook.net/pt_BR/sdk.js#xfbml=1&version=v2.11';
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+    </script>
+</body>
+</html>

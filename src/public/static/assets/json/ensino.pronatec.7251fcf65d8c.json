@@ -1,0 +1,142 @@
+[
+  {
+    "id": "e010",
+    "nome": " Técnico em Estética (Pronatec)",
+    "ativo": false,
+    "head": {
+      "vagas": " 25 vagas",
+      "duracao": " Aproximadamente dois anos.",
+      "carga": " 1220 horas.",
+      "turno": " Tarde",
+      "periodicidade": " -- "
+    },
+    "main": {
+      "Forma de ingresso": " PRONATEC. ",
+      "A quem se destina": "  Estudantes ou profissionais que tenham concluído o Ensino Médio.",
+      "Estrutura oferecida": [
+        "Laboratórios de enfermagem e informática;",
+        "Salas de aula climatizadas com data-show;",
+        "Dispositivos de Multimídia;",
+        "Biblioteca com exemplares atualizados;",
+        "Estágios realizados com acompanhamento de instrutores;",
+        "Auditórios e anfiteatros;",
+        "Corpo docente qualificado."
+      ],
+      "Área de atuação": " O egresso atua em atividades de embelezamento, promoção, proteção, manutenção e recuperação estética da pele. Seleciona e aplica procedimentos e recursos estéticos utilizando produtos cosméticos, técnicas e equipamentos específicos de acordo com as características e necessidades do cliente. Utiliza técnicas de atendimento ao cliente orientando-o sobre ações de proteção à saúde cutânea.",
+      "Maiores informações": " ensino@es.ufrn.br"
+    },
+    "fotos": {
+      "Aula de laboratório de Estética": "pronatec.estetica.1.jpg",
+      "Aula de laboratório de Estética 2": "pronatec.estetica.2.jpg",
+      "Aula Prática de Estética": "pronatec.estetica.3.jpg"
+    }
+  },
+  {
+    "id": "e011",
+    "nome": " Técnico em Análises Clínicas (Pronatec)",
+    "ativo": false,
+    "head": {
+      "vagas": " --",
+      "duracao": " --",
+      "carga": " --",
+      "turno": " --",
+      "periodicidade": " --"
+    },
+    "main": {
+      "Forma de ingresso": " --",
+      "A quem se destina": "  --",
+      "Estrutura oferecida": [
+        "Laboratórios de enfermagem e informática;",
+        "Salas de aula climatizadas com data-show;",
+        "Dispositivos de Multimídia;",
+        "Biblioteca com exemplares atualizados;",
+        "Estágios realizados com acompanhamento de instrutores;",
+        "Auditórios e anfiteatros;",
+        "Corpo docente qualificado."
+      ],
+      "Área de atuação": " --",
+      "Maiores informações": " ensino@es.ufrn.br"
+    }
+  },
+  {
+    "id": "e012",
+    "nome": " Técnico em Segurança do Trabalho (Pronatec)",
+    "ativo": false,
+    "head": {
+      "vagas": " --",
+      "duracao": " --",
+      "carga": " --",
+      "turno": " --",
+      "periodicidade": " --"
+    },
+    "main": {
+      "Forma de ingresso": " --",
+      "A quem se destina": "  --",
+      "Estrutura oferecida": [
+        "Laboratórios de enfermagem e informática;",
+        "Salas de aula climatizadas com data-show;",
+        "Dispositivos de Multimídia;",
+        "Biblioteca com exemplares atualizados;",
+        "Estágios realizados com acompanhamento de instrutores;",
+        "Auditórios e anfiteatros;",
+        "Corpo docente qualificado."
+      ],
+      "Área de atuação": " --",
+      "Maiores informações": " ensino@es.ufrn.br"
+    }
+  },
+  {
+    "id": "e013",
+    "nome": " Técnico em Saúde Bucal (Pronatec)",
+    "ativo": false,
+    "head": {
+      "vagas": " --",
+      "duracao": " --",
+      "carga": " --",
+      "turno": " --",
+      "periodicidade": " --"
+    },
+    "main": {
+      "Forma de ingresso": " --",
+      "A quem se destina": "  --",
+      "Estrutura oferecida": [
+        "Laboratórios de enfermagem e informática;",
+        "Salas de aula climatizadas com data-show;",
+        "Dispositivos de Multimídia;",
+        "Biblioteca com exemplares atualizados;",
+        "Estágios realizados com acompanhamento de instrutores;",
+        "Auditórios e anfiteatros;",
+        "Corpo docente qualificado."
+      ],
+      "Área de atuação": " --",
+      "Maiores informações": " ensino@es.ufrn.br"
+    }
+  },
+  {
+    "id": "e014",
+    "nome": " Técnico em Manutenção e Suporte em Informática (Pronatec)",
+    "ativo": false,
+    "head": {
+      "vagas": " --",
+      "duracao": " --",
+      "carga": " --",
+      "turno": " --",
+      "periodicidade": " --"
+    },
+    "main": {
+      "Forma de ingresso": " --",
+      "A quem se destina": "  --",
+      "Estrutura oferecida": [
+        "Laboratórios de enfermagem e informática;",
+        "Salas de aula climatizadas com data-show;",
+        "Dispositivos de Multimídia;",
+        "Biblioteca com exemplares atualizados;",
+        "Estágios realizados com acompanhamento de instrutores;",
+        "Auditórios e anfiteatros;",
+        "Corpo docente qualificado."
+      ],
+      "Área de atuação": " --",
+      "Maiores informações": " ensino@es.ufrn.br"
+    }
+  }
+]

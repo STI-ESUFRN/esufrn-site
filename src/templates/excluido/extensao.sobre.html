@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+{% include "base.header.html" %}
+
+<body>
+  <!-------- Barra Governo -------->
+  {% include "base.governo.html" %}
+  <!-------- Home -------->
+  <div class="background-home">
+    <!-- Navbar -->
+    <div id="nav-box" class="pt-3 w-100 secondary">
+      {% include "base.acessibilidade.html" %}
+      <!--  -->
+      {% include "base.navbar.html" %}
+    </div>
+  </div>
+
+
+  <!-------- Conteúdo -------->
+
+  <nav aria-label="breadcrumb" class="container">
+    <ol class="breadcrumb px-0 mb-0">
+      <li class="breadcrumb-item"><a href="/"><i class='fas fa-home'></i>
+        </a></li>
+      <li class="breadcrumb-item" aria-current="page"><a href="#">Extensão</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Sobre</li>
+    </ol>
+    <hr class="hr-escuro mt-0">
+  </nav>
+
+  <article>
+
+    <div class="container mt-5 text-center cabecalho">
+      <h3>Extensão</h3>
+      <hr class="hr-escuro mt-5">
+    </div>
+
+    <div class="container mt-5 corpo historia text-justify">
+
+      <!-- <h3 class="font-weight-bold mb-5">Extenção</h3> -->
+
+      <p>
+        A ESUFRN desenvolve ações de extensão a fim de intensificar relações transformadoras entre a Universidade e a sociedade, por meio de um processo educativo, cultural, científico, artístico e/ou social. Dessa forma, vem gradativamente incentivando e assegurando o desenvolvimento de programas e projetos de extensão realizados individualmente ou por meio de grupos.
+      </p>
+      <p>
+        Além de aproximar a Universidade da sociedade, as atividades e projetos de extensão colaboram com o processo ensino-aprendizagem, proporcionando aos discentes maiores vivências na realização de procedimentos em situação simulada nos laboratórios e na comunidade, de modo a desenvolverem habilidades e competências de acordo com a especificidade de cada curso. Nestes projetos, há envolvimento da comunidade interna e externa em atividades que possibilitam o compartilhamento dos saberes e favorecem a interação e o aprendizado.
+      </p>
+      <p>
+        De forma recorrente, a Escola também é solicitada para colaborar com eventos em ações promovidas por instituições públicas e/ou privadas que solicitam a cessão de docentes e discentes para executar ações e procedimentos assistenciais, tais como prevenção e detecção precoce da hipertensão arterial e da diabetes através da aferição da pressão arterial e da medição da glicose no sangue, realização de massagens relaxantes e Lian gong; participação em campanhas nacionais de imunização; realização de palestras e cursos pelos docentes e discentes da ESUFRN, entre outros.
+      </p>
+
+      <a href="https://sigaa.ufrn.br/sigaa/public/extensao/consulta_extensao.jsf" class="text-center" target="_blank">
+        <button class="btn btn-outline-dark btn-radio mt-5">
+          Consultar as atividades de extensão
+        </button>
+      </a>
+
+      <div class="container mt-5 text-center cabecalho">
+        <h3>Comitê de Ética</h3>
+        <hr class="hr-escuro mt-5">
+      </div>
+
+      <div class="container mt-5 corpo historia">
+
+        <p>
+          <a href="http://www2.ebserh.gov.br/web/huol-ufrn/cep" target="_blank">
+            CEP - Comitê de Ética em Pesquisa do Hospital Universitário Onofre Lopes (HUOL)
+          </a>
+        </p>
+        <p>
+          <a href="http://www.cep.propesq.ufrn.br/" target="_blank">
+            CEP - Comitê de Ética em Pesquisa da UFRN
+          </a>
+        </p>
+
+      </div>
+
+    </div>
+
+    <div class="container text-right">
+      <hr class="hr-escuro my-5">
+      <a href="#" class="text-uppercase text-dark">Voltar ao topo <i class='fas fa-arrow-alt-circle-up'></i></a>
+    </div>
+  </article>
+
+
+  <!-------- Footer -------->
+  {% include "base.footer.html" %}
+  <!-------- Javascript -------->
+  {% include "base.scripts.html" %}
+</body>
+
+</html>

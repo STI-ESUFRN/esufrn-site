@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+{% include "base.header.html" %}
+
+<body>
+  <!-------- Barra Governo -------->
+  {% include "base.governo.html" %}
+  <!-------- Home -------->
+  <div class="background-home">
+    <!-- Navbar -->
+    <div id="nav-box" class="pt-3 w-100 secondary">
+      {% include "base.acessibilidade.html" %}
+      <!--  -->
+      {% include "base.navbar.html" %}
+    </div>
+  </div>
+
+
+  <!-------- Conteúdo -------->
+
+  <nav aria-label="breadcrumb" class="container">
+    <ol class="breadcrumb px-0 mb-0">
+      <li class="breadcrumb-item"><a href="/"><i class='fas fa-home'></i>
+        </a></li>
+      <li class="breadcrumb-item" aria-current="page"><a href="#">Pesquisa</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Sobre</li>
+    </ol>
+    <hr class="hr-escuro mt-0">
+  </nav>
+
+  <article>
+
+    <div class="container mt-5 text-center cabecalho">
+      <h3>Pesquisa</h3>
+      <hr class="hr-escuro mt-5">
+    </div>
+
+    <div class="container mt-5 corpo historia text-justify">
+
+      <p>
+        A Escola de Saúde promove atividades de pesquisa por meio de grupo de pesquisa, orientação de trabalhos, realização de projetos, produção técnica e científica, participação em bancas, em consonância com o movimento acadêmico nacional preconizado pelo MEC, MS e Conselho Nacional de Desenvolvimento Científico e Tecnológico (CNPq).
+      </p>
+      <p>
+        A pesquisa na ESUFRN alcança pertinência científica e relevância social ao buscar a abrangência direta de dois aspectos importantes da produção do conhecimento em saúde, a saber: problematização da saúde à luz da interface com os saberes das ciências humanas e sociais e os avanços e desafios do Sistema Único de Saúde.
+      </p>
+      <p>
+        A partir desses aspectos centrais, emergem possibilidades de questionamentos e de objetos de estudo no âmbito da investigação em saúde. Nesse contexto, a pesquisa no âmbito do ensino técnico e tecnológico em saúde contribui tanto para o processo ensino-aprendizagem, quanto para formação e atuação profissional crítico-reflexiva.
+      </p>
+      <p>
+        Ainda no âmbito da pesquisa, a Escola de Saúde é cadastrada no Programa Institucional de Bolsas de Iniciação Científica para o Ensino Médio e Iniciação Científica (PIBIC-EM e PIBIC-IC), mediante a apresentação de solicitação formal e seguindo o calendário do CNPq e da UFRN. Estes programas estão centrados na iniciação científica de novos talentos em todas as áreas do conhecimento, servindo de incentivo à sua formação, privilegiando a participação ativa de estudantes em projetos de pesquisa com qualidade acadêmica, mérito científico e orientação adequada, individual e continuada.
+      </p>
+
+    </div>
+
+    <div class="container text-right">
+      <hr class="hr-escuro my-5">
+      <a href="#" class="text-uppercase text-dark">Voltar ao topo <i class='fas fa-arrow-alt-circle-up'></i></a>
+    </div>
+  </article>
+
+
+  <!-------- Footer -------->
+  {% include "base.footer.html" %}
+  <!-------- Javascript -------->
+  {% include "base.scripts.html" %}
+</body>
+
+</html>

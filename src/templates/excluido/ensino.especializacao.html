@@ -1,0 +1,40 @@
+{% extends "base.pagina.html" %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet"
+          href="{% static 'assets/owl-carousel/owl.carousel.min.css' %}"/>
+{% endblock styles %}
+{% block content %}
+    <nav aria-label="breadcrumb" class="container">
+        <ol class="breadcrumb px-0 mb-0">
+            <li class="breadcrumb-item">
+                <a href="{% url 'home' %}">
+                    <i class="fas fa-home"></i>
+                </a>
+            </li>
+            <li class="breadcrumb-item" aria-current="page">
+                <a href="#">Ensino</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Especializações Lato Sensu</li>
+        </ol>
+        <hr class="hr-escuro mt-0"/>
+    </nav>
+    <article>
+        <div class="container mt-5 text-center cabecalho">
+            <h3>Especializações Lato Sensu</h3>
+            <hr class="hr-escuro mt-5"/>
+        </div>
+        <div class="container mt-4 corpo">
+            <p>– Especialização em Terapia Intensiva em Enfermagem</p>
+            <p>– Especialização em Gestão em Saúde na Modalidade de Educação à Distância(EAD)</p>
+            <p>– Especialização em Enfermagem Obstétrica</p>
+        </div>
+        <div class="container text-right">
+            <hr class="hr-escuro my-5"/>
+            <a href="#" class="text-uppercase text-dark">Voltar ao topo <i class="fas fa-arrow-alt-circle-up"></i></a>
+        </div>
+    </article>
+{% endblock content %}
+{% block scripts %}
+    <script src="{% static 'assets/owl-carousel/owl.carousel.min.js' %}"></script>
+{% endblock scripts %}

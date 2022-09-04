@@ -1,0 +1,70 @@
+{% extends "base.pagina.html" %}
+{% load mytags %}
+{% block styles %}
+    <style>
+    .documentos {
+        color: #ffffff;
+        background-color: #0b3e61;
+        padding-top: 6px;
+        padding-bottom: 6px;
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+    </style>
+{% endblock styles %}
+{% block content %}
+    <article>
+        <div class="container mt-5 text-center cabecalho">
+            <h3>Outras publicações</h3>
+            <hr class="hr-escuro mt-5"/>
+        </div>
+        <div class="container mt-4 corpo historia">
+            <div id="accordion">
+                {% for ano in anos %}
+                    <div class="card">
+                        <div class="card-header documentos" id="{{ ano.ano }}-heading">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link text-light"
+                                        data-toggle="collapse"
+                                        data-target="#{{ ano.ano }}-collapse"
+                                        aria-expanded="true"
+                                        aria-controls="{{ ano.ano }}-collapse">
+                                    {{ ano.ano }}
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="{{ ano.ano }}-collapse"
+                             class="collapse {% if forloop.first %}show{% endif %}"
+                             aria-labelledby="{{ ano.ano }}-heading"
+                             data-parent="#accordion">
+                            <div class="card-body">
+                                {% for publicacao in ano.publicacoes %}
+                                    <div>
+                                        {% comment %} {% with publicacao.date as d %}
+                                            {% if d %}
+                                                <div>
+                                                    <small class="text-muted">{{ d|date:"j" }} de {{ d|date:"F" }}</small>
+                                                </div>
+                                            {% endif %}
+                                        {% endwith %} {% endcomment %}
+                                        <div>
+                                            {% if publicacao.file %}
+                                                <a href="{{ publicacao.file.url }}">{{ publicacao.name }}</a>
+                                            {% else %}
+                                                {{ publicacao.name }}
+                                            {% endif %}
+                                        </div>
+                                        {% with publicacao.authors as authors %}
+                                            {% if authors %}<div>Autor{{ authors|split:';'|length|pluralize:'es' }}: {{ authors|enum:';' }}</div>{% endif %}
+                                        {% endwith %}
+                                    </div>
+                                    {% if not forloop.last %}<hr class="hr-escuro"/>{% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </article>
+{% endblock content %}

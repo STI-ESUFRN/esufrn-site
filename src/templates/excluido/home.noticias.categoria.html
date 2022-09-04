@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  {% include "base.head.html" %}
+</head>
+
+<body>
+  <!-------- Barra Governo -------->
+  {% include "base.governo.html" %}
+  <!-------- Home -------->
+  <div class="background-home">
+    <!-- Navbar -->
+    <div id="nav-box" class="pt-3 w-100 secondary">
+      {% include "base.acessibilidade.html" %}
+      <!--  -->
+      {% include "base.navbar.html" %}
+    </div>
+  </div>
+
+
+  <!-------- Conteúdo -------->
+
+  <nav aria-label="breadcrumb" class="container">
+    <ol class="breadcrumb px-0 mb-0">
+      <li class="breadcrumb-item"><a href="/"><i class='fas fa-home'></i>
+        </a></li>
+      <li class="breadcrumb-item active" aria-current="page">Notícias</li>
+    </ol>
+    <hr class="hr-escuro mt-0">
+  </nav>
+
+  <article>
+
+    <div class="container mt-4 cabecalho cat-inner">
+      <h3 class="text-center">Notícias</h3>
+      <hr class="hr-escuro mt-4 mb-4">
+      <h4 class="text-dark mb-3"><b>Categorias:</b></h4>
+
+      <a id="cat-tud" class="btn badge-pill btn-primary my-2 mr-2" href="/noticias/1">Tudo</a>
+      <a id="cat-con" class="btn badge-pill btn-primary m-2" href="/blog/concurso/1">Concurso</a>
+      <a id="cat-eve" class="btn badge-pill btn-primary m-2" href="/blog/evento/1">Evento</a>
+      <a id="cat-not" class="btn badge-pill btn-primary m-2" href="/blog/noticia/1">Notícia</a>
+      <a id="cat-pro" class="btn badge-pill btn-primary m-2" href="/blog/processo/1">Processo seletivo</a>
+
+      <hr class="hr-escuro mt-4">
+    </div>
+
+    {% if status == "sucesso" %}
+
+    <div class="container">
+      {% for i in news %}
+      <div class="item-noticia mt-4">
+        <p class="mb-1 text-dark">
+          {{ i.modified_at|date:"d/m/y H:i" }}
+        </p>
+        <a href="{{ i.get_absolute_url }}">
+          <h2>{{ i.title }}</h2>
+        </a>
+        {% if i.category == "evento" %}
+        <p class="text-muted resumo">
+          Data do evento: {{ i.event_date|date:'d N Y' }}
+        </p>
+        {% endif %}
+        <p class="text-muted resumo">{{ i.subtitle }}</p>
+        <hr class="hr-escuro my-4">
+      </div>
+
+      {% endfor %}
+
+    </div>
+
+    <div class="container text-center text-uppercase">
+
+
+      <!--       INICIO PAGINADOR   -->
+
+      {% if total == 1%}
+      <a class="a-clear mx-1" href="{{ pag }}">
+        <button class="btn btn-outline-dark rounded-circle btn-pagination">
+          <p>{{ pag }}</p>
+        </button>
+      </a>
+      {% else %}
+
+      {% if pag <= 4 %} {% for i in rng %} <a class="a-clear mx-1" href="{{ i }}">
+        <button class="btn btn-outline-dark rounded-circle btn-pagination">
+          <p>{{ i }}</p>
+        </button>
+        </a>
+        {% endfor %}
+        {% endif %}
+
+        {% if pag > 4 %}
+        <a class="a-clear mx-1" href="1">
+          <button class="btn btn-outline-dark rounded-circle btn-pagination">
+            <p>1</p>
+          </button>
+        </a>
+        <button class="btn btn-outline-dark mx-1 rounded-circle btn-pagination">
+          <p>...</p>
+        </button>
+        {% for i in rng %}
+
+        <a class="a-clear mx-1" href="{{ i }}">
+          <button class="btn btn-outline-dark rounded-circle btn-pagination">
+            <p>{{ i }}</p>
+          </button>
+        </a>
+
+        {% endfor %}
+
+        {% endif %}
+
+
+        {% if pag|add:"3" < total %} <button class="btn btn-outline-dark rounded-circle btn-pagination mx-1">
+          <p>...</p>
+          </button>
+          {% endif %}
+
+
+          {% if total > 5 %}
+
+          <a class="a-clear mx-1" href="{{ total }}">
+            <button class="btn btn-outline-dark rounded-circle btn-pagination">
+              <p>{{ total }}</p>
+            </button>
+          </a>
+
+          {% endif %}
+          {% endif %}
+
+          <!-- ----------- FIM PAGINADOR  -->
+
+    </div>
+
+    {% else %}
+
+    <div class="container text-center my-5">
+      <h2 class="mb-5">Nenhuma notícia foi encontrada!</h2>
+      <hr class="hr-escuro my-4">
+    </div>
+    {% endif %}
+
+
+    <div class="container text-right text-uppercase mt-5">
+      <a href="#" class="text-dark">Voltar ao topo <i class='fas fa-arrow-alt-circle-up'></i></a>
+    </div>
+    </div>
+
+
+  </article>
+
+
+  <!-------- Footer -------->
+  {% include "base.footer.html" %}
+  <!-------- Javascript -------->
+  {% include "base.scripts.html" %}
+  <script>
+
+    $("a[href='{{pag}}'] .btn-pagination").addClass("active")
+
+    var categoria = window.location.pathname.split('/');
+    switch (categoria[2]) {
+      case 'concurso':
+        $("div.cat-inner a.btn#cat-con").css({ 'background-color': '#0b3e61', 'border-color': '#0b3e61' });
+        break;
+      case 'evento':
+        $("div.cat-inner a.btn#cat-eve").css({ 'background-color': '#0b3e61', 'border-color': '#0b3e61' });
+        break;
+      case 'noticia':
+        $("div.cat-inner a.btn#cat-not").css({ 'background-color': '#0b3e61', 'border-color': '#0b3e61' });
+        break;
+      case 'processo':
+        $("div.cat-inner a.btn#cat-pro").css({ 'background-color': '#0b3e61', 'border-color': '#0b3e61' });
+        break;
+      default:
+        $("div.cat-inner a.btn#cat-tud").css({ 'background-color': '#0b3e61', 'border-color': '#0b3e61' });
+        break;
+    }
+    if ($.browser.mozilla) {
+      $(".evento-item h5").css('white-space', 'nowrap');
+      // Normal Revert, careful and note your the use of !important
+    }
+  </script>
+
+
+  <style>
+    .secondary {
+      background-color: #0b3e61 !important;
+    }
+
+    footer {
+      background-color: #0b3e61 !important;
+    }
+
+    .dropdown-item.active,
+    .dropdown-item:active,
+    .dropdown-item.hover,
+    .dropdown-item:hover {
+      background-color: #082f49;
+    }
+  </style>
+</body>
+
+</html>

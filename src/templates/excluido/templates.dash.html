@@ -1,0 +1,188 @@
+<!-- -------------------------------------------------- Tabela --------------------------------------------------------- -->
+<div class="card rounded-0">
+    <div class="card-header head-table border-0 rounded-0">
+        <b><i class="fas fa-paper-plane mr-2"></i>Chamados em Espera</b>
+    </div>
+    <div class="card-body p-0" style="overflow-x: auto;">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr class="capt-table">
+                    <th class="border-0 text-center" scope="col"></th>
+                    <th class="border-0" scope="col">Tipo</th>
+                    <th class="border-0" scope="col">Título</th>
+                    <th class="border-0" scope="col">Solicitante</th>
+                    <th class="border-0 text-center" scope="col">Tempo</th>
+                </tr>
+            </thead>
+            <tbody id="lista-de-chamados">
+                <tr data-id-chamado="1">
+                    <td class="text-center px-0 pl-2">
+                        <i class="fas fa-exclamation-circle text-success"></i>
+                    </td>
+                    <td>Reserva</td>
+                    <td>Sala 15 - (Térreo)</td>
+                    <td>Professor Flávio</td>
+                    <td class="text-center font-weight-bold">50min</td>
+                </tr>
+                <tr data-id-chamado="2">
+                    <td class="text-center px-0 pl-2">
+                        <i class="fas fa-exclamation-circle text-warning"></i>
+                    </td>
+                    <td>Chamado</td>
+                    <td>Computador nao está ligando.</td>
+                    <td>Micheline</td>
+                    <td class="text-center font-weight-bold text-danger">2h</td>
+                </tr>
+                <tr data-id-chamado="3">
+                    <td class="text-center px-0 pl-2">
+                        <i class="fas fa-exclamation-circle text-warning"></i>
+                    </td>
+                    <td>Chamado</td>
+                    <td>Internet parou de funcionar.</td>
+                    <td>Belinha</td>
+                    <td class="text-center font-weight-bold text-danger">1h42</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- -------------------------------------------------- Chamado Reserva --------------------------------------------------------- -->
+<div class="card-group" id="detalhes-1" style="display: none;">
+    <div class="card" style="width: 18rem;">
+        <div class="card-header head-table border-0 rounded-0">
+            <b data-reserve-id=""><i class="fas fa-info mr-2"></i>Detalhes do Chamado</b>
+            <!-- <span class="float-right"><i class="fas fa-spinner fa-spin"></i></span> -->
+        </div>
+        <div class="card-body">
+            <small class="text-muted">Tipo: Reserva de Sala</small>
+            <h5 class="card-title">
+                <small>Título:</small> <b data-var="classroomname">Sala 15 - (Térreo)</b>
+            </h5>
+            <p class="card-text">
+                <small>Evento:</small> <b data-var="event">Orientação mestrado profissional - Cláudia Rubin</b>
+            </p>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <table class="table m-0">
+                    <tbody>
+                        <tr class="Xcapt-table text-left">
+                            <th class="border-0 pl-0 py-0"
+                                scope="col"
+                                title="Data para a qual a sala foi reservada">
+                                <small>Data:</small> <b data-var="date">25/05/2019</b>
+                            </th>
+                            <th class="border-0 py-0" scope="col">
+                                <small>Turno:</small> <b data-var="shift">Manhã</b>
+                            </th>
+                            <th class="border-0 py-0" scope="col">
+                                <button class="btn btn-sm btn-light p-0 m-0"
+                                        data-toggle="modal"
+                                        data-target=".bd-example-modal-lg">
+                                    <small>&nbsp Consultar calendário &nbsp<i class="fas fa-calendar"></i>&nbsp&nbsp</small>
+                                </button>
+                            </th>
+                        </tr>
+                    </tbody>
+                </table>
+            </li>
+            <li class="list-group-item">
+                <small>Equipamentos:</small> <b data-var="equipment">Projetor e software</b>
+            </li>
+            <li class="list-group-item">
+                <table class="table m-0">
+                    <tbody>
+                        <tr class="Xcapt-table text-left">
+                            <th class="border-0 pl-0 py-0" scope="col">
+                                <small>Solicitante:</small> <b data-var="requester">Maria das Dores</b>
+                            </th>
+                            <th class="border-0 py-0" scope="col">
+                                <small class="ml-5">Email:</small> <b data-var="email">mariazinha@email.com</b>
+                            </th>
+                            <th class="border-0 py-0" scope="col">
+                                <small class="ml-5">Telefone:</small> <b data-var="phone">84 9 9999-4444</b>
+                            </th>
+                        </tr>
+                    </tbody>
+                </table>
+            </li>
+        </ul>
+        <div class="card-footer border-top-0">
+            <p>
+                <b>Ações:</b>
+            </p>
+            <small class="text-muted">Observação do chamado:</small>
+            <textarea id="reserve-obs"
+                      class="form-control mb-3"
+                      rows="2"
+                      placeholder="Escrever observação"
+                      title="Campo de observações sobre este chamado.&#10;Pode ser editado."></textarea>
+            <small class="text-muted">Iserir mensagem no email resposta:</small>
+            <textarea id="reserve-email"
+                      class="form-control mb-3"
+                      rows="2"
+                      placeholder="Escrever menagem"
+                      title="Essa mensagem será adicionada no corpo do Email enviado ao solicitante.&#10;Este campo de ser em branco."></textarea>
+            <a href="#"
+               class="btn mb-1 btn-outline-success btn-sm"
+               id="confirmReserve"
+               data-status="A">Aprovar Reserva</a>
+            <a href="#"
+               class="btn mb-1 btn-outline-danger btn-sm"
+               id="rejectReserve"
+               data-status="R">Rejeitar Reserva</a>
+            <a href="#" class="btn mb-1 btn-outline-primary btn-sm" id="obsReserve">Salvar Observação</a>
+            <p class="m-0 mt-2">
+                <small class="text-muted" title="Data que o solicitante submeteu o chamado">Data do Chamado: <span data-var="created_at"></span></small>
+            </p>
+            <p class="m-0 mt-2">
+                <small class="text-muted">Ultima Alteração: <span data-var="refresh_at"></span></small>
+            </p>
+        </div>
+    </div>
+</div>
+<!-- -------------------------------------------------- Chamado Normal --------------------------------------------------------- -->
+<div class="card-group" id="detalhes-2">
+    <div class="card" style="width: 18rem;">
+        <div class="card-header head-table border-0 rounded-0">
+            <b><i class="fas fa-info mr-2"></i>Detalhes do Chamado</b>
+        </div>
+        <div class="card-body">
+            <small class="text-muted">Tipo: Chamado Convencional</small>
+            <h5 class="card-title">
+                <small>Título:</small> <b>Computador nao está ligando.</b>
+            </h5>
+            <p class="card-text">
+                <small>Descrição:</small> <b>Computador nao está ligando, preciso enviar um email
+        urgentemente. Já tentei de tudo.</b>
+    </p>
+</div>
+<ul class="list-group list-group-flush">
+    <li class="list-group-item">
+        <small>Solicitante:</small> <b>Maria das Dores</b>
+    </li>
+    <li class="list-group-item">
+        <small>Sala:</small> <b>Sala 27A</b>
+    </li>
+    <li class="list-group-item">
+        <small>Tempo decorrido:</small> <b>42min</b>
+    </li>
+</ul>
+<div class="card-footer border-top-0">
+    <p>
+        <b>Ações:</b>
+    </p>
+    <small class="text-muted">Observação do chamado:</small>
+    <textarea class="form-control mb-3" rows="2" placeholder="Escrever observação"></textarea>
+    <a href="#" class="btn mb-1 btn-outline-success btn-sm">Resolvido</a>
+    <a href="#" class="btn mb-1 btn-outline-danger btn-sm">Não Resolvido</a>
+    <a href="#" class="btn mb-1 btn-outline-primary btn-sm">Salvar Observação</a>
+    <p class="m-0 mt-2">
+        <small class="text-muted">Data do Chamado: 23/05/2019 19:35</small>
+    </p>
+    <p class="m-0 mt-2">
+        <small class="text-muted">Ultima Alteração: --</small>
+    </p>
+</div>
+</div>
+</div>

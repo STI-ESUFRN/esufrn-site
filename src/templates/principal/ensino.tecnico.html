@@ -1,0 +1,359 @@
+{% extends "base.pagina.html" %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet"
+          href="{% static 'assets/owl-carousel/owl.carousel.min.css' %}"/>
+    <style>
+		.secondary {
+			background-color: #0b3e61 !important;
+		}
+
+		.inner-infos div {
+			margin-top: 5px;
+		}
+
+		.info-item {
+			padding: 18px 10px 10px 10px;
+			/* background-color: #0b3e61; */
+			text-align: center;
+			/* color: white; */
+			margin-top: 30px;
+			height: 100%;
+			border-radius: 20px;
+			background-color: white;
+			color: #0b3e61
+		}
+
+		.info-item p {
+			font-weight: 600;
+		}
+
+		.info-item>p {
+			font-size: 12px;
+		}
+
+		.info-item div {
+			height: calc(100% - 37px);
+			text-align: center;
+		}
+
+		.info-item div p {
+			font-size: 20px;
+		}
+
+		.card-course {
+			background-color: #0b3e61
+		}
+
+		.btn-cursos .btn-primary {
+			background-color: #0b3e61;
+			border-color: #0b3e61;
+		}
+
+		.bg-azul-escuro {
+			background-color: #0b3e61;
+		}
+
+		.owl-carousel {
+			border-radius: 20px;
+			overflow: hidden;
+		}
+
+		.modal-content {
+			border-radius: 20px;
+			overflow: hidden;
+		}
+
+		footer {
+			background-color: #0b3e61 !important;
+		}
+
+		.dropdown-item.active,
+		.dropdown-item:active,
+		.dropdown-item.hover,
+		.dropdown-item:hover {
+			background-color: #082f49;
+		}
+		.force-wrap{
+			white-space:normal !important;
+		}
+    </style>
+{% endblock styles %}
+{% block content %}
+    <article>
+        <div class="container" id="dadosAlert"></div>
+        {% if curso == 'pronatec' %}
+            <div class="container mt-5 text-center cabecalho">
+                <h3>Pronatec na Escola</h3>
+                <hr class="hr-escuro mt-5"/>
+            </div>
+            <div class="container text-justify">
+                <p>
+                    A Escola de Saúde também oferece cursos de qualificação profissional através da oferta de cursos técnicos com
+                    duração média de um ano e meio e de cursos de Formação Inicial e Continuada (FIC), com carga horária variando
+                    entre 160 e 320 horas através do Programa Nacional de Acesso ao Ensino Técnico e Emprego (Pronatec),
+                </p>
+                <p>
+                    A iniciativa que ocorre desde o ano de 2011, vem se configurando como uma experiência exitosa que já
+                    possibilitou o resgate da autoestima e da cidadania, inserção no mercado de trabalho e inclusão sócio-educativa
+                    de cerca de 4.520 alunos em 31 cursos de Formação Inicial e Continuada e 08 cursos Técnicos realizados através
+                    da Bolsa-Formação.
+                </p>
+                <p>
+                    Os cursos são ministrados através de metodologias ativas, tais como aulas práticas e teórico-práticas,
+                    seminários, palestras, dramatizações, visitas técnicas e exposições dialogadas, tendo por base a concepção do
+                    aluno construtor do seu conhecimento a partir da sua participação ativa.
+                </p>
+                <p>
+                    A oferta de cursos atende como público alvo prioritário os estudantes do ensino médio da rede pública,
+                    inclusive da Educação de Jovens e Adultos, trabalhadores, beneficiários dos programas federais de transferência
+                    de renda e grupos em situação de vulnerabilidade social.
+                </p>
+                <hr class="hr-escuro mt-5"/>
+                <a class="btn-cursos"
+                   target="_blank"
+                   href="http://www.etec.eaj.ufrn.br/">
+                    <button class="btn btn-primary mx-2 my-1 rounded-0 text-center">MedioTec</button>
+                </a>
+            </div>
+        {% endif %}
+        <div class="container mt-5 text-center cabecalho">
+            {% if curso == 'tecnico' %}
+                <h3>Técnico</h3>
+            {% elif curso == 'graduacao' %}
+                <h3>Graduação Tecnológica</h3>
+            {% elif curso == 'especializacao' %}
+                <h3>Especialização Lato Senso</h3>
+            {% elif curso == 'mestrado' %}
+                <h3>Mestrado Profissional</h3>
+            {% elif curso == 'pronatec' %}
+                <h3>Pronatec</h3>
+            {% endif %}
+            <hr class="hr-escuro mt-5"/>
+        </div>
+        <div id="cursos">
+            <div class="container text-center btn-cursos" id="c-cursos">
+                <!-- AJAX -->
+            </div>
+            <div class="container text-center btn-cursos mt-4" id="c-cursos-off">
+                <p id="leg-cursos-off" style="display: none;">Cursos não ofertados na atualidade:</p>
+                <!-- AJAX -->
+            </div>
+            {% if curso == 'tecnico' %}
+                <div class="container mt-5 text-center cabecalho">
+                    <h3>Pós-Técnico</h3>
+                    <hr class="hr-escuro mt-5"/>
+                </div>
+                <div class="container text-center btn-cursos" id="c-postecnico">
+                    <!-- AJAX -->
+                </div>
+            {% endif %}
+        </div>
+        <div class="container mt-4 text-right">
+            <hr class="hr-escuro my-5"/>
+            <a href="#" class="text-uppercase text-dark">Voltar ao topo <i class="fas fa-arrow-alt-circle-up"></i></a>
+        </div>
+    </article>
+    <!-- --------------------------------------------------------------------------------------------- -->
+    <!-- Modal -->
+    <div class="modal bd-example-modal-lg"
+         id="modalCursos"
+         tabindex="-1"
+         role="dialog"
+         aria-labelledby="exampleModalLongTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg border-0 rounded-0" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-azul-escuro border-0 rounded-0 p-4">
+                    <h3 id="c-modal-nome"
+                        class="text-center modal-title font-weight-bold text-white w-100"></h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times text-white"></i>
+                    </button>
+                </div>
+                <div class="modal-body bg-azul-escuro p-4">
+                    <div class="inner-infos row">
+                        <div class="col-md">
+                            <div class="info-item border">
+                                <p>
+                                    <i class="fas fa-user"></i> Vagas:
+                                </p>
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <p id="c-modal-vagas"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md">
+                            <div class="info-item border">
+                                <p>
+                                    <i class="fas fa-stopwatch"></i> Duração:
+                                </p>
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <p id="c-modal-duracao"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md">
+                            <div class="info-item border">
+                                <p>
+                                    <i class="fas fa-clock"></i> Carga Horária:
+                                </p>
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <p id="c-modal-carga"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md">
+                            <div class="info-item border">
+                                <p>
+                                    <i class="fas fa-sun"></i> Turno:
+                                </p>
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <p id="c-modal-turno"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md">
+                            <div class="info-item border">
+                                <p>
+                                    <i class="fas fa-calendar"></i> Periodicidade:
+                                </p>
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <p id="c-modal-periodo"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-course mt-4 w-100" id="card-modal">
+                        <div class="inner-course w-50 mr-4" style="float:left;">
+                            <div class="owl-carousel owl-theme course-owl h-100" id="modal-images">
+                                <div class="item-course h-100">
+                                    <img src="{% static 'assets/images/course1.jpg' %}" alt=""/>
+                                </div>
+                                <div class="item-course">
+                                    <img src="{% static 'assets/images/course2.jpg' %}" alt=""/>
+                                </div>
+                                <div class="item-course">
+                                    <img src="{% static 'assets/images/course3.jpg' %}" alt=""/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-white h-100 pt-3" id="c-modal-outros"></div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-azul-escuro border-0 rounded-0 p-4">
+                    <button type="button" class="btn btn-light rounded-1" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+{% block scripts %}
+    <script src="{% static 'assets/owl-carousel/owl.carousel.min.js' %}"></script>
+    <script>
+		function setCarousel() {
+			$('#modal-images').owlCarousel({
+				items: 1,
+				loop: true,
+				autoplay: true,
+				autoplayTimeout: 1400,
+				autoplayHoverPause: true,
+				dots: false,
+			});
+		}
+
+		var dataCursos = [];
+
+		$('#cursos').on('click', 'button', function (e) {
+			if (dataCursos.length > 0) {
+				e.preventDefault();
+				$("#card-modal").html(`
+					<div class="inner-course w-50 mr-4" style="float:left;">
+						<div class="owl-carousel owl-theme course-owl h-100" id="modal-images"></div>
+					</div>
+					<div class="text-white h-100 pt-3" id="c-modal-outros"></div>
+				`);
+				var cursoId = $(this).attr('id');
+				var cursoObj = dataCursos.filter(obj => {
+					return obj.id === cursoId;
+				});
+				cursoObj = cursoObj[0];
+				$("#c-modal-nome").text(cursoObj.nome || '--');
+				$("#c-modal-vagas").text(cursoObj.head.vagas || '--');
+				$("#c-modal-duracao").text(cursoObj.head.duracao || '--');
+				$("#c-modal-carga").text(cursoObj.head.carga || '--');
+				$("#c-modal-turno").text(cursoObj.head.turno || '--');
+				$("#c-modal-periodo").text(cursoObj.head.periodicidade || '--');
+				$("#c-modal-outros").text('');
+				$.each(cursoObj.main, function (i, v) {
+					$("#c-modal-outros").append(`
+						<h5><b><i class='fas fa-hand-point-right'></i> ${i}:</b></h5>
+						<p class="ml-4">${v}</p>
+					`);
+				});
+				$("#modal-images").html('');
+				$.each(cursoObj.fotos, function (i, v) {
+					$("#modal-images").append(`
+						<div class="item-course h-100">
+							<img style="height:400px; object-fit:cover;" src="/static/assets/images/courses/${v}" alt="${i}">
+						</div>
+					`);
+				});
+				setCarousel();
+				$('#modalCursos').modal('show');
+			}
+		});
+
+		{% if curso == 'tecnico' %}
+		var urlCurso = '/static/assets/json/ensino.tecnico.json'
+		{% elif curso == 'graduacao' %}
+		var urlCurso = '/static/assets/json/ensino.graduacao.json'
+		{% elif curso == 'especializacao' %}
+		var urlCurso = '/static/assets/json/ensino.especializacao.json'
+		{% elif curso == 'mestrado' %}
+		var urlCurso = '/static/assets/json/ensino.mestrado.json'
+		{% elif curso == 'pronatec' %}
+		var urlCurso = '/static/assets/json/ensino.pronatec.json'
+		{% endif %}
+
+		$.getJSON(urlCurso, function (json) {
+			$.each(json, function (i, v) {
+				dataCursos.push(v);
+				if (v.ativo) {
+					$("#c-cursos").append(`
+						<button id="${v.id}" class="force-wrap btn btn-primary mx-2 my-1 rounded-0">${v.nome}</button>
+					`);
+				} else {
+					$("#leg-cursos-off").show();
+					$("#c-cursos-off").append(`
+						<button id="${v.id}" class="force-wrap btn btn-secondary mx-2 my-1 rounded-0">${v.nome}</button>
+					`);
+				}
+			});
+		}).fail(function (err) {
+			console.log(err);
+			$("#dadosAlert").html("<div class='alert alert-danger rounded-0' role='alert'>Houve um erro ao carregar o arquivo de cursos, por favor, contate o suporte!</div>");
+		});
+
+		{% if curso == 'tecnico' %}
+		$.getJSON("/static/assets/json/ensino.postecnico.json", function (json) {
+			$.each(json, function (i, v) {
+				console.log(v);
+				dataCursos.push(v)
+				$("#c-postecnico").append(`
+						<button id="${v.id}" class="force-wrap btn btn-${v.ativo ? "primary" : "secondary"} mx-2 my-1 rounded-0"> ${v.nome}</button>
+				`)
+			});
+		}).fail(function (err) {
+			console.log(err);
+			$("#dadosAlert").html("<div class='alert alert-danger rounded-0' role='alert'>Houve um erro ao carregar o arquivo de cursos, por favor, contate o suporte!</div>")
+		});
+		{% endif %}
+
+		var surl = new URL(window.location.href);
+		var c = surl.searchParams.get("curso");
+		$(document).ready(function () {
+			console.log($(`#${c}`).click())
+		});
+    </script>
+{% endblock scripts %}

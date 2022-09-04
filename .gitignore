@@ -1,0 +1,17 @@
+.vs
+.vscode
+.editorconfig
+
+.venv
+
+__pycache__/
+00*.py
+.env
+
+logs
+esufrn/public/
+
+*.sql
+*.pid
+
+TODO.md

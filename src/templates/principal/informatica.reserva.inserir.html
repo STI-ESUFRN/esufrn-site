@@ -1,0 +1,246 @@
+{% extends "base.pagina.html" %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'assets/css/datepicker.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'assets/css/reserva.style.css' %}"/>
+{% endblock styles %}
+{% block content %}
+    <article>
+        <div class="container mt-5 text-center cabecalho">
+            <h3>Reserva de Salas</h3>
+            <hr class="hr-escuro mt-5"/>
+        </div>
+        <div class="container mt-4 corpo">
+            <div class="row d-flex justify-content-md-center">
+                <div class="col-md-12">
+                    <h3 class="text-center my-4">
+                        <b>Formulário de Reserva</b>
+                    </h3>
+                    <form class="mt-2" autocomplete="off" id="form-reserva">
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="col-md-6 mb-2">
+                                <!-- FORM SALA -->
+                                <label for="exampleFormControlSelect1">
+                                    <b>Sala *</b>
+                                </label>
+                                <select class="form-control rounded-0"
+                                        name="classroom"
+                                        id="classroom"
+                                        required>
+                                    <option disabled selected>
+                                        Selecione uma sala
+                                    </option>
+                                    {% for sala in salas %}
+                                        <option value="{{ sala.id }}"
+                                                data-classNumber="{{ sala.number }}"
+                                                data-type="{{ sala.type }}"
+                                                {% if sala.justification_required %}data-justification_required{% endif %}>
+                                            {{ sala }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                <div class="form-check my-2" id="term" hidden>
+                                    <input type="checkbox" class="form-check-input" id="confirm" name="confirm"/>
+                                    <label class="form-check-label" for="confirm">
+                                        Marcando esta caixa, você declara que o laboratório contará com a supervisão
+                                        de um <strong>docente</strong> no momento da aula. *
+                                    </label>
+                                </div>
+                                <div class="invalid-feedback">Selecione uma sala.</div>
+                                <div class="mt-2">
+                                    <button id="sala-disp"
+                                            type="button"
+                                            class="btn btn-primary"
+                                            data-toggle="modal"
+                                            data-target="#calendarModal"
+                                            disabled>
+                                        Consultar disponibilidade <i class="fas fa-calendar ml-2" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="inputAddress">
+                                    <b>Data *</b>
+                                </label>
+                                <input class="form-control rounded-0"
+                                       name="date"
+                                       data-mask="00-00-0000"
+                                       data-toggle="datepicker"
+                                       required/>
+                                <div class="invalid-feedback">Informe uma data.</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputAddress2">
+                                <b>Nome do evento *</b>
+                            </label>
+                            <input type="text"
+                                   class="form-control rounded-0"
+                                   required
+                                   name="event"
+                                   placeholder="Nome do curso, minicurso ou evento"/>
+                            <div class="invalid-feedback">Informe o nome do evento.</div>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <b>Turno *</b>
+                            </label>
+                            <br/>
+                            <div class="form-check form-check-inline mx-2">
+                                <input class="form-check-input"
+                                       type="radio"
+                                       name="shift"
+                                       id="shiftM"
+                                       value="M"
+                                       required/>
+                                <label class="form-check-label" for="shiftM">Manhã</label>
+                            </div>
+                            <div class="form-check form-check-inline mx-2">
+                                <input class="form-check-input"
+                                       type="radio"
+                                       name="shift"
+                                       id="shiftT"
+                                       value="T"
+                                       required/>
+                                <label class="form-check-label" for="shiftT">Tarde</label>
+                            </div>
+                            <div class="form-check form-check-inline mx-2">
+                                <input class="form-check-input"
+                                       type="radio"
+                                       name="shift"
+                                       id="shiftN"
+                                       value="N"
+                                       required/>
+                                <label class="form-check-label" for="shiftN">Noite</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputAddress2">Equipamento multimídia e software</label>
+                            <input type="text"
+                                   class="form-control rounded-0"
+                                   name="equipment"
+                                   placeholder="Será necessária a utilização de algum equipamento multimídia ou sofware específico?"/>
+                            <small id="emailHelp" class="form-text text-muted">Exemplo: Datashow, caixa de som, software específico</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputAddress2">
+                                <b>Solicitante *</b>
+                            </label>
+                            <input type="text"
+                                   class="form-control rounded-0"
+                                   required
+                                   name="requester"
+                                   placeholder="Nome completo do solicitante"
+                                   required/>
+                            <div class="invalid-feedback">Informe o nome completo do solicitante.</div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="inputEmail4">
+                                    <b>Email *</b>
+                                </label>
+                                <input type="email"
+                                       class="form-control rounded-0"
+                                       name="email"
+                                       placeholder="Email do solicitante"
+                                       required/>
+                                <div class="invalid-feedback">Informe um endereço de Email válido.</div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="phone">
+                                    <b>Telefone (de preferência, WhatsApp) *</b>
+                                </label>
+                                <input id="phone"
+                                       type="text"
+                                       class="form-control rounded-0"
+                                       data-mask="(00) 0 0000-0000"
+                                       name="phone"
+                                       placeholder="Telefone para contato"
+                                       required/>
+                                <div class="invalid-feedback">Informe um número de celular válido.</div>
+                            </div>
+                        </div>
+                        <div class="form-group" hidden>
+                            <label>
+                                <b>Justificativa *</b>
+                            </label>
+                            <textarea name="cause"
+                                      cols="30"
+                                      rows="6"
+                                      class="form-control textarea-counter rounded-0"
+                                      placeholder="Informe aqui a justificativa de sua reserva"
+                                      maxlength="512"
+                                      data-counter="#count"></textarea>
+                            <div class="invalid-feedback">Informe uma justificativa do uso dessa sala.</div>
+                            <small id="count" class="float-right"></small>
+                        </div>
+                        <div class="mt-1" id="status-message"></div>
+                        <div class="text-center mt-4">
+                            <button id="enviar-reserva" class="btn btn-dark rounded-0">Enviar Solicitação</button>
+                        </div>
+                    </form>
+                    <div class="modal fade"
+                         id="calendarModal"
+                         tabindex="-1"
+                         role="dialog"
+                         aria-labelledby="mymodal"
+                         aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="text-center">
+                                        Uso da sala: <b><span id="sala-selec"></span></b>
+                                    </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i></span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="table-reserva d-flex justify-content-md-center mx-auto">
+                                                <div id="tabela-de-salas">
+                                                    <div id="escolheMes">
+                                                        <!-- AJAX -->
+                                                    </div>
+                                                    <div id="reservation-calendar">
+                                                        <!-- RESERVATION CALENDAR -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <p>
+                                                <small>A cor do ícone indica se a solicitação está em análise (<i class="fas fa-circle text-warning"></i>) ou se ja foi confirmada (<i class="fas fa-circle text-success"></i>).</small>
+                                            </p>
+                                            <p>
+                                                <small>Você pode não pode solicitar uma sala em um turno que já possui um evento marcado. Havendo a necessidade de agendamento um horário específico já ocupado, entre em contato com a direção.</small>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container text-right">
+            <hr class="hr-escuro my-5"/>
+            <a href="#" class="text-uppercase text-dark">Voltar ao topo <i class="fas fa-arrow-alt-circle-up"></i></a>
+        </div>
+    </article>
+{% endblock content %}
+{% block scripts %}
+    <script src="{% static 'assets/js/textarea_counter.js' %}"></script>
+    <script src="{% static 'assets/js/jquery.mask.js' %}"></script>
+    <script src="{% static 'assets/js/datepicker.min.js' %}"></script>
+    <script src="{% static 'assets/dashboard/js/moment.min.js' %}"></script>
+    <script src="{% static 'assets/js/reservation_calendar.js' %}"></script>
+    <script src="{% static 'assets/js/form_validate.js' %}"></script>
+    <script src="{% static 'assets/js/reserva.js' %}"></script>
+{% endblock scripts %}

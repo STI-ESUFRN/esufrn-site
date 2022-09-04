@@ -1,0 +1,27 @@
+<!-- Breadcrumbs -->
+<style>
+    .breadcrumb-ellipsis {
+        max-width: 25%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+<nav aria-label="breadcrumb" class="container">
+    <ol class="breadcrumb px-0 mb-0">
+        <li class="breadcrumb-item">
+            <a href="{% url 'home' %}"><i class="fas fa-home"></i></a>
+        </li>
+        {% for crumb in crumbs %}
+            <li class="breadcrumb-item breadcrumb-ellipsis {% if forloop.last %}active{% endif %}"
+                aria-current="page">
+                {% if crumb.link %}
+                    <a href="{{ crumb.link }}">{{ crumb.name }}</a>
+                {% else %}
+                    {{ crumb.name }}
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ol>
+    <hr class="hr-escuro mt-0"/>
+</nav>

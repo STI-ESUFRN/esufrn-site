@@ -1,0 +1,311 @@
+{% extends "base.pagina.html" %}
+{% load mytags %}
+{% block styles %}
+    <style>
+        .secondary {
+            background-color: #0b3e61 !important;
+        }
+        
+        footer {
+            background-color: #0b3e61 !important;
+        }
+        .dropdown-item.active,
+		.dropdown-item:active,
+		.dropdown-item.hover,
+		.dropdown-item:hover {
+			background-color: #082f49;
+		}
+
+        .dropbtn {
+            background-color: transparent;
+            border: none;
+        }
+        .custom-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .custom-dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 160px;
+            border-color: rgba(0,0,0,0.15);
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .custom-dropdown-menu a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .custom-dropdown-menu a:hover {
+            background-color: #ddd;
+        }
+
+        .custom-dropdown:hover .custom-dropdown-menu {
+            display: block;
+            margin-top: 0;
+        }
+
+        .custom-dropdown:hover {
+            cursor:pointer;
+        }
+        a.active{
+            font-weight: bold;
+        }
+    </style>
+{% endblock styles %}
+{% block content %}
+    <article>
+        {% comment %} <div class="container mt-4 cabecalho cat-inner">
+            <h3 class="text-center">Resultados da busca</h3>
+            <hr class="hr-escuro mt-4 mb-4"/>
+        </div> {% endcomment %}
+        <div class="container my-4 cabecalho cat-inner">
+            <div class="d-inline mr-4">
+                EXIBINDO&nbsp;
+                <div class="dropdown custom-dropdown d-inline">
+                    <button class="dropbtn m-0 p-0">
+                        <b>
+                            {% if category %}
+                                {{ category|upper }}S
+                            {% else %}
+                                TUDO
+                            {% endif %}
+                            <i class="fas fa-solid fa-caret-down"></i>
+                        </b>
+                    </button>
+                    <div class="dropdown-menu custom-dropdown-menu">
+                        <div class="text-center text-muted my-2">FILTRAR POR</div>
+                        {% with category=request.GET.category period=request.GET.period|getparam:'period' %}
+                            <a class="{{ category|active }}"
+                               href="{% url 'busca' %}?termo={{ search }}{{ period }}">Tudo</a>
+                            <a class="{{ category|active:'concurso' }}"
+                               href="{% url 'busca' %}?termo={{ search }}&category=concurso{{ period }}">Concurso</a>
+                            <a class="{{ category|active:'evento' }}"
+                               href="{% url 'busca' %}?termo={{ search }}&category=evento{{ period }}">Evento</a>
+                            <a class="{{ category|active:'noticia' }}"
+                               href="{% url 'busca' %}?termo={{ search }}&category=noticia{{ period }}">Notícia</a>
+                            <a class="{{ category|active:'processo' }}"
+                               href="{% url 'busca' %}?termo={{ search }}&category=processo{{ period }}">Processo seletivo</a>
+                            <a class="{{ category|active:'curso' }}"
+                               href="{% url 'busca' %}?termo={{ search }}&category=curso{{ period }}">Curso</a>
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
+            <div class="d-inline mr-4">
+                <div class="dropdown custom-dropdown d-inline">
+                    <button class="dropbtn m-0 p-0">
+                        <b>
+                            FILTRAR POR DATA
+                            <i class="fas fa-solid fa-caret-down"></i>
+                        </b>
+                    </button>
+                    <div class="dropdown-menu custom-dropdown-menu">
+                        <div class="text-center text-muted my-2">POR PERÍODO</div>
+                        {% with period=request.GET.period category=request.GET.category|getparam:'category' %}
+                            <a class="{{ period|active }}"
+                               href="{% url 'busca' %}?termo={{ search }}{{ category }}">Em qualquer data</a>
+                            <a class="{{ period|active:'hora' }}"
+                               href="{% url 'busca' %}?termo={{ search }}&period=hora{{ category }}">Na última hora</a>
+                            <a class="{{ period|active:'dia' }}"
+                               href="{% url 'busca' %}?termo={{ search }}&period=dia{{ category }}">Nas últimas 24 horas</a>
+                            <a class="{{ period|active:'semana' }}"
+                               href="{% url 'busca' %}?termo={{ search }}&period=semana{{ category }}">Na última semana</a>
+                            <a class="{{ period|active:'mes' }}"
+                               href="{% url 'busca' %}?termo={{ search }}&period=mes{{ category }}">No último mês</a>
+                            <a class="{{ period|active:'ano' }}"
+                               href="{% url 'busca' %}?termo={{ search }}&period=ano{{ category }}">No último ano</a>
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% load mytags %}
+        {% if total > 0 %}
+            {% if news %}
+                {% comment %} <div class="container cabecalho">
+                    <h4 class="text-dark mb-3">
+                        <b>Notícias:</b>
+                    </h4>
+                    <hr class="hr-escuro mt-4"/>
+                </div> {% endcomment %}
+                <div class="container">
+                    {% for i in news %}
+                        {% comment %} <div class="item-noticia mt-4">
+                            <p class="mb-1 text-dark">{{ i.modified_at|date:"d/m/y H:i" }}</p>
+                            <a href="{{ i.get_absolute_url }}">
+                                <h2>{{ i.title|bold|safe }}</h2>
+                            </a>
+                            <p class="text-muted resumo">{{ i.subtitle|bold|safe }}</p>
+                            <hr class="hr-escuro my-4"/>
+                        </div> {% endcomment %}
+                        <div class="row my-2">
+                            <div class="col-lg-2 align-self-center text-center">
+                                <img src="{% if i.image %}{{ i.image.url }}{% endif %}"
+                                     style="object-fit: cover;"
+                                     width="100%"
+                                     height="120px"
+                                     onerror="this.src='https://images2.imgbox.com/02/21/d1mWMGt6_o.png'"/>
+                            </div>
+                            <div class="col-lg-10 align-self-center item-noticia pl-lg-0">
+                                <p class="mb-1 text-dark">{{ i.modified_at|date:"d/m/y H:i" }}</p>
+                                <a href="{{ i.get_absolute_url }}">
+                                    <h2>{{ i.title|bold|safe }}</h2>
+                                </a>
+                                {% if i.category == "evento" %}
+                                    <p class="text-muted resumo">Data do evento: {{ i.event_date|date:'d N Y' }}</p>
+                                {% endif %}
+                                <p class="text-muted resumo">{{ i.subtitle|bold|safe }}</p>
+                            </div>
+                        </div>
+                        {% if not forloop.last %}<hr class="hr-escuro"/>{% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% if result_cur %}
+                <div class="container cabecalho">
+                    <h4 class="text-dark mt-3">
+                        <b>Cursos:</b>
+                    </h4>
+                    <hr class="hr-escuro mb-4"/>
+                </div>
+                <div class="container">
+                    {% for i in result_cur %}
+                        <div class="item-noticia mt-4">
+                            <a href="{% url 'ensino_pronatec' %}?curso={{ i.id }}">
+                                <h2>{{ i.nome|bold|safe }}</h2>
+                            </a>
+                            <p class="text-muted resumo">
+                                Vagas: {{ i.head.vagas|bold|safe }};
+                                Duração: {{ i.head.duracao|bold|safe }};
+                                Carga Horária: {{ i.head.carga|bold|safe }}
+                            </p>
+                            {% if not forloop.last %}<hr class="hr-escuro my-4"/>{% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% if result_pub %}
+                <div class="container cabecalho">
+                    <h4 class="text-dark mb-3">
+                        <b>Publicações:</b>
+                    </h4>
+                    <hr class="hr-escuro mt-4"/>
+                </div>
+                {% for i in result_pub %}
+                    <div class="container">
+                        <div class="item-noticia mt-4">
+                            <a href="{{ i.file.url }}">
+                                <h2>{{ i.name|bold|safe }}</h2>
+                            </a>
+                            <hr class="hr-escuro my-4"/>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% comment %} Paginador {% endcomment %}
+            <div class="container text-center text-uppercase mt-4">
+                {% comment %} {% if pag > 4 %}
+                    <a class="a-clear mx-1" href="{% url 'busca' %}?termo={{ search }}&page=1{% if period %}&period={{ period }}{% endif %}{% if category %}&category={{ category }}{% endif %}" data-page='1'>
+                        <button class="btn btn-outline-dark rounded-circle btn-pagination">
+                            <p>1</p>
+                        </button>
+                    </a>
+                    <button class="btn btn-outline-dark mx-1 rounded-circle btn-pagination">
+                        <p>...</p>
+                    </button>
+                {% endif %}
+                {% for i in rng %}
+                    <a class="a-clear mx-1" href="{% url 'busca' %}?termo={{ search }}&page={{ i }}{% if period %}&period={{ period }}{% endif %}{% if category %}&category={{ category }}{% endif %}" data-page='{{ i }}'>
+                        <button class="btn btn-outline-dark rounded-circle btn-pagination">
+                            <p>
+                                {{ i }}
+                            </p>
+                        </button>
+                    </a>
+                {% endfor %}
+                {% if pag|add:3 < total %}
+                    <button class="btn mx-1 btn-outline-dark rounded-circle btn-pagination">
+                        <p>
+                            ...
+                        </p>
+                    </button>
+                    <a class="a-clear mx-1" href="{% url 'busca' %}?termo={{ search }}&page={{ total }}{% if period %}&period={{ period }}{% endif %}{% if category %}&category={{ category }}{% endif %}" data-page='{{ total }}'>
+                        <button class="btn btn-outline-dark rounded-circle btn-pagination">
+                            <p>
+                                {{ total }}
+                            </p>
+                        </button>
+                    </a>
+                {% endif %} {% endcomment %}
+                {% with period=request.GET.period|getparam:'period' category=request.GET.category|getparam:'category' %}
+                    {% if pag > 4 %}
+                        <a class="a-clear mx-1"
+                           href="{% url 'busca' %}?termo={{ search }}&page=1{{ category }}{{ period }}">
+                            <button class="btn btn-outline-dark rounded-circle btn-pagination {{ pag|active:'1' }}">
+                                <p>
+                                    1
+                                </p>
+                            </button>
+                        </a>
+                        <button class="mx-1 btn btn-outline-dark rounded-circle btn-pagination">
+                            <p>
+                                ...
+                            </p>
+                        </button>
+                    {% endif %}
+                    {% for i in rng %}
+                        <a class="a-clear mx-1"
+                           href="{% url 'busca' %}?termo={{ search }}&page={{ i }}{{ category }}{{ period }}">
+                            <button class="btn btn-outline-dark rounded-circle btn-pagination {{ pag|active:i }}">
+                                <p>
+                                    {{ i }}
+                                </p>
+                            </button>
+                        </a>
+                    {% endfor %}
+                    {% if pag|add:3 < total %}
+                        <button class="mx-1 btn btn-outline-dark rounded-circle btn-pagination">
+                            <p>
+                                ...
+                            </p>
+                        </button>
+                        <a class="a-clear mx-1"
+                           href="{% url 'busca' %}?termo={{ search }}&page={{ total }}{{ category }}{{ period }}">
+                            <button class="btn btn-outline-dark rounded-circle btn-pagination {{ pag|active:total }}">
+                                <p>
+                                    {{ total }}
+                                </p>
+                            </button>
+                        </a>
+                    {% endif %}
+                {% endwith %}
+            </div>
+        {% else %}
+            <div class="container text-center my-5">
+                <h2 class="mb-5">
+                    Nenhuma notícia foi encontrada!
+                </h2>
+                <hr class="hr-escuro my-4"/>
+            </div>
+        {% endif %}
+        <div class="container text-right text-uppercase">
+            <a href="#" class="text-dark">Voltar ao topo <i class="fas fa-arrow-alt-circle-up"></i></a>
+        </div>
+    </article>
+{% endblock content %}
+{% block scripts %}
+    <script>
+        $("a[data-page='{{pag}}'] .btn-pagination").addClass("active");
+        $("div.cat-inner a.btn#cat-tud").css({ 'background-color': '#0b3e61', 'border-color': '#0b3e61' });
+        if ($.browser.mozilla) {
+            $(".evento-item h5").css('white-space', 'nowrap');
+        }
+    </script>
+{% endblock scripts %}

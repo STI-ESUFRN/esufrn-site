@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        {% include "base.head.html" %}
+        {% load static %}
+        <link rel="stylesheet"
+              href="{% static 'assets/owl-carousel/owl.carousel.min.css' %}"/>
+        <link rel="stylesheet"
+              href="{% static 'assets/owl-carousel/owl.theme.default.min.css' %}"/>
+        <title>Escola de Saúde da UFRN</title>
+    </head>
+    <body>
+        <!-------- Barra Governo -------->
+        {% include "base.governo.html" %}
+        <!-------- Home -------->
+        <div class="background-home principal">
+            <!-- Navbar -->
+            <div id="nav-box" class="w-100">
+                <!-- Height: Auto / 120px -->
+                <div class="main-container container d-lg-flex px-0 menu-container">
+                    <div class="flex-shrink h-100 pr-lg-2 text-center py-4 py-lg-0">
+                        <img class="h-100 mx-auto my-0"
+                             src="{% static 'assets/images/logotipo_ufrn_esufrn.low.png' %}"
+                             alt="Logo Escola de Saúde da UFRN - ESUFRN"/>
+                    </div>
+                    <div class="w-100 h-100 position-relative py-1 pl-lg-5 menu-box">
+                        <svg class="d-none d-lg-blockXX"
+                             width="0.29775494in"
+                             height="1.805558in"
+                             viewBox="0 0 21.438339 129.99985"
+                             version="1.1"
+                             id="svg3"
+                             sodipodi:docname="vetor.svg">
+                            <defs id="defs7" pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10"
+                            gridtolerance="10" guidetolerance="10" id="namedview5" showgrid="false" />
+                            <path id="Sem nome"
+                            d="m 0,-3.0094776e-5 c 0,0 0,130.000000094776 0,130.000000094776 0,0 20,0 20,0 2.25,-7.25 2.5,-24.25 -4,-65.25 -6.5,-41 4.04,-64.80000009 4,-64.750000094776 0,0 -20,0 -20,0 z"
+                            style="fill:#ffffff;stroke:none;stroke-width:1" inkscape:connector-curvature="0" />
+                        </svg>
+                        <div class="h-50 d-lg-flex align-items-center text-center"
+                             style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)">
+                            <div class="mr-lg-auto float-none float-lg-left my-2"
+                                 style="color: rgba(255, 255, 255, 0.7);
+                                        font-size: 20px;">
+                                ESCOLA DE SAÚDE - UFRN
+                            </div>
+                            <div class="ml-lg-auto float-none float-lg-right my-2" id="logo">
+                                <button id="contraste">
+                                    <i class="fas fa-sun"></i>
+                                    <strong>ALTO CONTRASTE</strong>
+                                </button>
+                                <a href="http://www.vlibras.gov.br/#baixar" target="_blank">
+                                    <button>
+                                        <i class="fas fa-sign-language"></i>
+                                        <strong>VLIBRAS</strong>
+                                    </button>
+                                </a>
+                                <button class="btn btn-sm btn-light"
+                                        title="Diminuir fonte"
+                                        onclick="mudaFonte(1)">
+                                    <i class="fas fa-font"></i><small><i style="font-size: 7px; vertical-align: text-top" class="fas fa-minus"></i></small>
+                                </button>
+                                <button class="btn btn-sm btn-light"
+                                        title="Aumentar fonte"
+                                        onclick="mudaFonte(2)">
+                                    <i class="fas fa-font"></i><small><i style="font-size: 7px; vertical-align: text-top" class="fas fa-plus"></i></small>
+                                </button>
+                                <form class="form-inline my-2 my-lg-0 form-busca"
+                                      method="get"
+                                      action="{% url 'busca' %}">
+                                    <input type="search" name="termo" placeholder="Buscar"/>
+                                    <button type="submit">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="h-50">
+                            <nav class="navbar navbar-expand-lg container mb-2 ml-lg-0 pl-lg-0 ">
+                                <button id="btn-menu"
+                                        class="navbar-toggler text-white"
+                                        data-toggle="collapse"
+                                        data-target="#navbarSupportedContent"
+                                        aria-controls="navbarSupportedContent"
+                                        aria-expanded="false"
+                                        aria-label="Toggle navigation">
+                                    <i class="fas fa-bars"></i>
+                                </button>
+                                <div class="collapse navbar-collapse" id="navbarSupportedContent">{% include "base.navbar.itens.html" %}</div>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                <!-- Carousel -->
+                {% if important %}
+                    <div class="owl-carousel owl-theme slide-owl border-0">
+                        {% for i in important %}
+                            <a href="{{ i.get_absolute_url }}" target="_blank">
+                                <div class="destaque-box d-flex h-100 flex-column flex-md-row py-2">
+                                    <div class="xdestaque-image d-flex" style="flex: 1;">
+                                        {% if i.image %}
+                                            <img src="/media/{{ i.image }}"
+                                                 alt=""
+                                                 style=" width: 100%; height: 100%; position: absolute; bottom: 0px; left: 0px; z-index: 1; object-fit: cover; opacity: 0.5; filter: blur(10px); "/>
+                                            <img src="/media/{{ i.image }}"
+                                                 alt=""
+                                                 class="h-100 h-100 m-auto"
+                                                 style="object-fit: contain;
+                                                        z-index: 2;
+                                                        max-height: 450px;"/>
+                                        {% else %}
+                                            <img src="{% static 'assets/images/ESUFRN.high.png' %}"
+                                                 alt=""
+                                                 style=" width: 100%; height: 100%; position: absolute; bottom: 0px; left: 0px; z-index: 1; object-fit: cover; opacity: 0.5; filter: blur(10px); "/>
+                                            <img src="{% static 'assets/images/ESUFRN.high.png' %}"
+                                                 alt=""
+                                                 class="h-100 h-100 m-auto"
+                                                 style="object-fit: contain;
+                                                        z-index: 2;
+                                                        max-height: 450px;"/>
+                                        {% endif %}
+                                        <!-- <span style=" background-color: transparent; background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.8) 100%); width: 100%; position: absolute; bottom: 0px; left: 0px; height: 50%; "></span> -->
+                                    </div>
+                                    <div class="xcontainer xdestaque-text d-flex py-5 px-2 my-auto"
+                                         style="flex: 1;">
+                                        <h2 class="text-white slide-font m-auto" style="z-index: 10000;">{{ i.title|truncatechars:150 }}</h2>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="owl-carousel owl-theme slide-owl">
+                        <div class="destaque-box h-100">
+                            <div class="destaque-image">
+                                <img src="{% static 'assets/images/porta.min.jpg' %}" alt=""/>
+                                <span style=" background-color: transparent; background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.8) 100%); width: 100%; position: absolute; bottom: 0px; left: 0px; height: 50%; "></span>
+                            </div>
+                            <div class="container destaque-text">
+                                <a href="{% url 'pagina' 'instituicao_contato' %}">
+                                    <div class="w-60 h-100 d-flex align-items-end">
+                                        <div>
+                                            <h1 class="text-white slide-font">Contatos, Requerimentos e Solicitações</h1>
+                                            <h4 class="text-white">Clique aqui...</h4>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        {% comment %} </div> {% endcomment %}
+        <!-------- Conteúdo -------->
+        <section id="noticias" class="container mt-5">
+            <div class="titulo mb-4">
+                <h2 class="d-inline">Notícias</h2>
+                <!-- <p class="d-block">Ver mais</p> -->
+            </div>
+            <div class="row">
+                {% for i in post %}
+                    <a href="{{ i.get_absolute_url }}" class="col-md-4 mb-2 news-link">
+                        <div class="news-item mb-0" style="box-shadow: 0 0 10px #d0d0d0;">
+                            {% if i.image %}
+                                <img src="{{ i.image.url }}"
+                                     alt="{{ i.title }} - Escola de Saúde da UFRN - ESUFRN"
+                                     title="{{ i.title }} - Escola de Saúde da UFRN - ESUFRN"/>
+                            {% else %}
+                                <img src="{% static 'assets/images/ESUFRN.low.png' %}" alt=""/>
+                            {% endif %}
+                        </div>
+                        <p class="mb-0 mb-sm-2" style="text-align: left; text-align-last: left;">{{ i.published_at|date:'d F Y' }}</p>
+                        <h5 class="mb-4 mb-sm-0"
+                            style="text-align: left; text-align-last: left"
+                            title="{{ i.title }}">
+                            {{ i.title|truncatechars:150 }}
+                        </h5>
+                    </a>
+                {% endfor %}
+            </div>
+            <div class="text-l-left mb-4 mb-lg-0 mt-4">
+                <a href="{% url 'noticias' %}" class="text-center">
+                    <button class="btn btn-outline-dark btn-radio">Ver mais notícicas</button>
+                </a>
+            </div>
+        </div>
+    </section>
+    <!-- Eventos -->
+    <section id="eventos" class="Xmt-3">
+        <svg viewBox="0 0 1080 60">
+            <path style="fill:#ffffff;stroke:none"
+            d="m -2.1383708,240.22025 v 22.42705 38.48654 H 1085.1142 V 262.6473 249.3029 C 715.70463,219.76034 451.47612,279.5853 -2.1383708,240.22025 Z"
+            transform="translate(0,-236)" />
+        </svg>
+        <div class="container titulo mb-0 mb-sm-4 mt-2 mt-sm-5 pt-3 text-white">
+            <h2>Eventos</h2>
+        </div>
+        <div class="container pb-3">
+            {% if events %}
+                <div class="row">
+                    {% for i in events %}
+                        <div class="col-md-4 text-left mt-4 mt-sm-0">
+                            <a class="text-white d-inline-block" href="{{ i.get_absolute_url }}">
+                                <h2 class="mb-1">{{ i.event_date|date:'d N' }}</h2>
+                                {{ i.title }}
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <h5 class="text-white">No momento não há eventos futuros cadastrados</h5>
+            {% endif %}
+            <div class="text-l-left my-4 see-more">
+                <a href="{% url 'noticias' %}?category=evento" class="text-center">
+                    <button class="btn btn-outline-light btn-radio">Ver mais eventos</button>
+                </a>
+            </div>
+        </div>
+    </section>
+    <!-- Newsletter -->
+    <section id="newsletter">
+        <div class="container newsletter py-5">
+            <div class="titulo mb-4 text-black text-center text-md-left">
+                <h2>Newsletter</h2>
+                <p class="mb-0">
+                    Cadastre-se e receba nosso conteúdo exclusivo e informes sobre editais de concurso e aberturas de turmas.
+                </p>
+            </div>
+            <div class="container">
+                <form id="newsletter-form" autocomplete="off" method="post">
+                    {% csrf_token %}
+                    <div class="form-row justify-content-md-center text-center">
+                        <div class="col-12 status-message"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-4 px-md-1 py-1">{{ newsletter.name_person }}</div>
+                        <div class="col-md-8 px-md-1 py-1">{{ newsletter.email }}</div>
+                    </div>
+                    <div class="form-row justify-content-md-center text-center mt-3">
+                        {% for field in newsletter.category %}<div class="col-md-4 form-check">{{ field }}</div>{% endfor %}
+                    </div>
+                    <hr class="hr-escuro"/>
+                    <div class="form-row justify-content-md-center text-center mt-3">
+                        <div class="col-md-12">
+                            <label>
+                                {{ newsletter.consent }} Declaro que li e concordo com os <a href="#">termos de uso</a> da Escola de Saúde da UFRN
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-row justify-content-md-center text-center mt-3">
+                        <div class="col-md-5">
+                            <button id="cadastrar-newsletter">
+                                Cadastrar
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <!-- Depoimentos -->
+    <section id="depoimentos" class="py-5">
+        <div class="titulo mb-4 text-white text-center">
+            <h1>
+                Depoimentos
+            </h1>
+        </div>
+        <div class="depoimento-shadow">
+            <div class="owl-carousel owl-theme depoimentos-owl">
+                {% for depoimento in depoimentos %}
+                    <div class="depoimento-item text-center pt-2">
+                        {% if depoimento.file %}
+                            <img src="{{ depoimento.file.url }}"
+                                 alt="{{ depoimento.name }} - Escola de Saúde da UFRN - ESUFRN"
+                                 title="{{ depoimento.name }}"/>
+                        {% else %}
+                            <img src="{% static 'assets/images/ESUFRN.low.png' %}"
+                                 alt="{{ depoimento.name }} - Escola de Saúde da UFRN - ESUFRN"
+                                 title="{{ depoimento.name }}"/>
+                        {% endif %}
+                        <div class="mt-4 w-75 text-white">
+                            <h3>
+                                <i class="fas fa-quote-right text-white"></i>
+                            </h3>
+                            <p>
+                                {{ depoimento.testimonial }}
+                            </p>
+                            <p>
+                                {{ depoimento.name }}
+                            </p>
+                            <p>
+                                {{ depoimento.occupation }}
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    <!-- Portais -->
+    <section>
+        <div class="my-5">
+            <div class="owl-carousel owl-theme portais-owl">
+                <a href="http://bvsenfermeria.bvsalud.org/pt/brasil/" target="_blank">
+                    <img src="/media/files/BIBLIOTECA.png" alt="" title=""/>
+                </a>
+                <a href="http://cnpq.br/" target="_blank">
+                    <img src="/media/files/cnpq.png" alt="" title=""/>
+                </a>
+                <a href="http://www.cofen.gov.br/" target="_blank">
+                    <img src="/media/files/cofen.png" alt="" title=""/>
+                </a>
+                <a href="https://www.ufrn.br/" target="_blank">
+                    <img src="/media/files/UFRN_logotipo_flat.png" alt="" title=""/>
+                </a>
+                <a href="http://www.aplicativos.gov.br/categorias?filtro=Categoria&valor=7f35cdb799032648c6159fb5c3842137"
+                   target="_blank">
+                    <img src="/media/files/JOGOS.png" alt="" title=""/>
+                </a>
+                <a href="http://www.ouvidoria.ufrn.br/" target="_blank">
+                    <img src="/media/files/ouvidoria-2.png" alt="" title=""/>
+                </a>
+                <a href="http://www-periodicos-capes-gov-br.ez18.periodicos.capes.gov.br/index.php?"
+                   target="_blank">
+                    <img src="/media/files/periodicos.png" alt="" title=""/>
+                </a>
+                <a href="http://www.mostradeprofissoes.prograd.ufrn.br/" target="_blank">
+                    <img src="/media/files/portal1.png" alt="" title=""/>
+                </a>
+                <a href="http://www.saude.gov.br/" target="_blank">
+                    <img src="/media/files/PORTAL-DA-SAUDE.png" alt="" title=""/>
+                </a>
+                <a href="http://www.rets.epsjv.fiocruz.br/" target="_blank">
+                    <img src="/media/files/REDE.png" alt="" title=""/>
+                </a>
+                <a href="http://www.cartadeservicos.ufrn.br/" target="_blank">
+                    <img src="/media/files/SERVICOS-3.png" alt="" title=""/>
+                </a>
+                <a href="https://sigaa.ufrn.br/sigaa/public/home.jsf" target="_blank">
+                    <img src="/media/files/sigaa.png" alt="" title=""/>
+                </a>
+                <a href="https://sigrh.ufrn.br/sigrh/public/home.jsf" target="_blank">
+                    <img src="/media/files/sigrh.png" alt="" title=""/>
+                </a>
+                <a href="https://sipac.ufrn.br/public/jsp/portal.jsf" target="_blank">
+                    <img src="/media/files/sipac.png" alt="" title=""/>
+                </a>
+            </div>
+        </div>
+    </section>
+    {% for alerta in alertas %}
+        <div class="modal fade notification-modal"
+             tabindex="-1"
+             data-alert-id="{{ alerta.id }}"
+             role="dialog"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body ">
+                        <div class="alert-container">
+                            {{ alerta.content|safe }}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                            Fechar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    <!-------- Footer -------->
+    {% include "base.footer.html" %}
+    <!-------- Javascript -------->
+    {% include "base.scripts.html" %}
+    <script src="{% static 'assets/owl-carousel/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'assets/js/home.js' %}"></script>
+</body>
+</html>

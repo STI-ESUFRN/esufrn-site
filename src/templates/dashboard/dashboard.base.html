@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        {% include "dashboard.base.head.html" %}
+        {% block styles %}
+        {% endblock styles %}
+    </head>
+    <body>
+        <div class="no-print">
+            <div class="mb-4">{% include "dashboard.base.navbar.html" %}</div>
+            {% include "dashboard.base.loader.html" with name="global" %}
+            <div class="row">
+                <div class="col-6 fixed-bottom px-4" id="status-message"></div>
+            </div>
+        </div>
+        <section class="my-3">
+            <div class="container">
+                {% block content %}
+                {% endblock content %}
+            </div>
+        </section>
+        <!-- SCRIPTS -->
+        {% include "dashboard.base.scripts.html" %}
+        {% block scripts %}
+        {% endblock scripts %}
+        <!-- FOOTER -->
+        <div class="no-print">{% include "dashboard.base.footer.html" %}</div>
+    </body>
+</html>

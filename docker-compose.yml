@@ -1,0 +1,30 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:5.7
+    ports:
+      - '3306:3306'
+    environment:
+       MYSQL_ROOT_PASSWORD: 'dEM7wJm78!D0kJNR'
+    volumes:
+      - /opt/slack_bot/mysql_data:/var/lib/mysql
+      - /tmp/slack_bot/mysqld:/var/run/mysqld
+  gunicorn:
+    build: .
+    command: gunicorn esufrn.wsgi:application --bind 0.0.0.0:8000
+    expose:
+      - 8000
+    depends_on:
+      - mysql
+    env_file:
+      - ./.env
+    restart: always
+  nginx:
+    build:
+      context: nginx
+    ports:
+      - 80:80
+    depends_on:
+      - gunicorn
+    volumes:
+      - ./src/public:/usr/share/nginx/html

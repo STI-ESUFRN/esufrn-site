@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Document</title>
+        <style>
+            .footer {
+                margin-top:50px;
+                background-color: #00999c;
+                color: white;
+                padding: 5px
+            }
+            .mt15 {
+                margin-top: 15px;
+            }
+            .opitional {
+                padding-left: 10px;
+            }
+            .logo {
+                margin: 5px;
+            }
+            .text-center {
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <p>{{ message|safe }}</p>
+        </div>
+        <br/>
+        <div class="opitional">
+            {% if opitional %}{{ opitional|safe }}{% endif %}
+        </div>
+        <div class="footer">
+            <a href="https://escoladesaude.ufrn.br/">
+                <img class="logo"
+                     src="https://escoladesaude.ufrn.br/static/assets/images/logotipo_ufrn_esufrn.low.png"
+                     height="25px">
+            </a>
+            <div class="mt15">
+                Direção de Ensino
+                <br/>
+                Suporte de Informática - ESUFRN
+            </div>
+            <div class="mt15 text-center">
+                <small>Observação: este é um e-mail de notificação e foi gerado automaticamente. Por favor, não responda
+                esta mensagem.</small>
+            </div>
+        </div>
+    </body>
+</html>

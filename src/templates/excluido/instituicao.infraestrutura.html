@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    {% include "base.header.html" %}
+    <body>
+        <!-------- Barra Governo -------->
+        {% include "base.governo.html" %}
+        <!-------- Home -------->
+        <div class="background-home">
+            <!-- Navbar -->
+            <div id="nav-box" class="pt-3 w-100 secondary">
+                {% include "base.acessibilidade.html" %}
+                <!--  -->
+                {% include "base.navbar.html" %}
+            </div>
+        </div>
+        <!-------- Conteúdo -------->
+        <nav aria-label="breadcrumb" class="container">
+            <ol class="breadcrumb px-0 mb-0">
+                <li class="breadcrumb-item">
+                    <a href="/"><i class="fas fa-home"></i></a>
+                </li>
+                <li class="breadcrumb-item" aria-current="page">
+                    <a href="#">Instituição</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Infraestrutura</li>
+            </ol>
+            <hr class="hr-escuro mt-0" />
+        </nav>
+        <article>
+            <div class="container mt-5 text-center cabecalho">
+                <h3>Infraestrutura</h3>
+                <hr class="hr-escuro mt-5" />
+            </div>
+            <div class="container mt-5 corpo historia infraestrutura">
+                <div class="text-justify">
+                    <p>
+                        A estrutura física da ESUFRN é composta de espaços destinados à administração da Direção
+                        Geral e Vice Direção Geral; Direção acadêmica e Coordenações de Pesquisa, Estágio e
+                        Extensão; Cursos Técnicos, de Graduação e de Pós-Graduação.
+                    </p>
+                    <p>
+                        O ensino teórico-prático é operacionalizado em salas de aula e em ambientes que
+                        proporcionem o desenvolvimento de habilidade técnicas, e, no contexto da realidade do
+                        trabalho em saúde, em Serviços de Saúde.
+                    </p>
+                    <p>
+                        Possui Laboratório de Habilidades Práticas em Saúde, Laboratório de Informática,
+                        Laboratório de Vigilância em Saúde, Laboratórios de Corporeidade e Promoção da Saúde;
+                        salas de aula, auditório, biblioteca setorial, salas para docentes, sala de reunião,
+                        sala de pesquisa, copas, banheiros, almoxarifados e área de circulação e apoio a
+                        informática, totalizando 2.435,56m² de área construída. Todos os ambientes são
+                        equipados.
+                    </p>
+                </div>
+                <hr class="hr-escuro my-5" />
+                <h4 class="mb-5">Biblioteca</h4>
+                <figure class="figure mx-2">
+                    <img src="/media/files/biblioteca1.jpg"
+                         class="figure-img img-fluid rounded"
+                         alt="Biblioteca"
+                         title="Biblioteca"
+                         onclick="display_image(this)"/>
+                    <figcaption class="figure-caption">
+                        Biblioteca
+                    </figcaption>
+                </figure>
+                <figure class="figure mx-2">
+                    <img src="/media/files/biblioteca2.jpg"
+                         class="figure-img img-fluid rounded"
+                         alt="Biblioteca"
+                         title="Biblioteca"
+                         onclick="display_image(this)"/>
+                    <figcaption class="figure-caption">
+                        Prateleiras
+                    </figcaption>
+                </figure>
+                <figure class="figure mx-2">
+                    <img src="/media/files/biblioteca3.jpg"
+                         class="figure-img img-fluid rounded"
+                         alt="Biblioteca"
+                         title="Biblioteca"
+                         onclick="display_image(this)"/>
+                    <figcaption class="figure-caption">
+                        Sala de Estudos
+                    </figcaption>
+                </figure>
+                <figure class="figure mx-2">
+                    <img src="/media/files/biblioteca4.jpg"
+                         class="figure-img img-fluid rounded"
+                         alt="Biblioteca"
+                         title="Biblioteca"
+                         onclick="display_image(this)"/>
+                    <figcaption class="figure-caption">
+                        Recepção
+                    </figcaption>
+                </figure>
+                <hr class="hr-escuro mt-5" />
+                <h4 class="my-5">Prédio</h4>
+                <figure class="figure mx-2">
+                    <img src="/media/files/predio1.jpg"
+                         class="figure-img img-fluid rounded"
+                         alt="Prédio"
+                         title="Prédio"
+                         onclick="display_image(this)"/>
+                    <figcaption class="figure-caption">
+                        Prédio
+                    </figcaption>
+                </figure>
+                <figure class="figure mx-2">
+                    <img src="/media/files/predio2.jpg"
+                         class="figure-img img-fluid rounded"
+                         alt="Prédio"
+                         title="Prédio"
+                         onclick="display_image(this)"/>
+                    <figcaption class="figure-caption">
+                        Entrada
+                    </figcaption>
+                </figure>
+                <figure class="figure mx-2">
+                    <img src="/media/files/predio3.jpg"
+                         class="figure-img img-fluid rounded"
+                         alt="Prédio"
+                         title="Prédio"
+                         onclick="display_image(this)"/>
+                    <figcaption class="figure-caption">
+                        Prédio
+                    </figcaption>
+                </figure>
+                <figure class="figure mx-2">
+                    <img src="/media/files/predio4.jpg"
+                         class="figure-img img-fluid rounded"
+                         alt="Prédio"
+                         title="Prédio"
+                         onclick="display_image(this)"/>
+                    <figcaption class="figure-caption">
+                        Estacionamento
+                    </figcaption>
+                </figure>
+                <hr class="hr-escuro mt-5" />
+                <h4 class="my-5">Entrada</h4>
+                <figure class="figure mx-2">
+                    <img src="/media/files/recepcao1.jpg"
+                         class="figure-img img-fluid rounded"
+                         alt="Recepcao"
+                         title="Recepcao"
+                         onclick="display_image(this)"/>
+                    <figcaption class="figure-caption">
+                        Entrada
+                    </figcaption>
+                </figure>
+                <figure class="figure mx-2">
+                    <img src="/media/files/recepcao2.jpg"
+                         class="figure-img img-fluid rounded"
+                         alt="Recepcao"
+                         title="Recepcao"
+                         onclick="display_image(this)"/>
+                    <figcaption class="figure-caption">
+                        Bancos
+                    </figcaption>
+                </figure>
+                <figure class="figure mx-2">
+                    <img src="/media/files/recepcao3.jpg"
+                         class="figure-img img-fluid rounded"
+                         alt="Recepcao"
+                         title="Recepcao"
+                         onclick="display_image(this)"/>
+                    <figcaption class="figure-caption">
+                        Bancos
+                    </figcaption>
+                </figure>
+                <figure class="figure mx-2">
+                    <img src="/media/files/recepcao4.jpg"
+                         class="figure-img img-fluid rounded"
+                         alt="Recepcao"
+                         title="Recepcao"
+                         onclick="display_image(this)"/>
+                    <figcaption class="figure-caption">
+                        Bancos
+                    </figcaption>
+                </figure>
+            </div>
+            <div class="container text-right">
+                <hr class="hr-escuro my-5" />
+            <a href="#" class="text-uppercase text-dark">Voltar ao topo <i class="fas fa-arrow-alt-circle-up"></i
+        ></a>
+    </div>
+</article>
+<!-- Modal -->
+<div class="modal fade"
+     id="modal-infra"
+     tabindex="-1"
+     role="dialog"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content" data-dismiss="modal">
+            <img src=""
+                 class=""
+                 alt=""
+                 title=""
+                 style="width: 100%; height: auto; max-height: 90vh"/>
+        </div>
+    </div>
+</div>
+<style>
+      .modal {
+        background-color: #000000b3;
+      }
+</style>
+<!-------- Footer -------->
+{% include "base.footer.html" %}
+<!-------- Javascript -------->
+{% include "base.scripts.html" %}
+<script>
+      function display_image(id) {
+        $(".modal-content img").attr("src", id.attributes.src.value);
+        $("#modal-infra").modal("show");
+      }
+</script>
+</body>
+</html>

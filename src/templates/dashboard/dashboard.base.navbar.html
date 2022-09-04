@@ -1,0 +1,61 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-dark px-4">
+    <button class="navbar-toggler text-dark border-0"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbar-lista"
+            aria-controls="navbar-lista"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand mx-2" href="#">
+        <img class="img-logo"
+             src="{% static 'assets/images/logotipo_ufrn_esufrn.vlow.png' %}"/>
+    </a>
+    <div class="collapse navbar-collapse flex-column" id="navbar-lista">
+        <ul class="navbar-nav ml-auto">
+            {% for item in dashbordItens %}
+                <li class="nav-item mx-auto">
+                    <a class="nav-link {% if current.main == item.main %}active{% endif %}"
+                       href="{{ item.main.link }}">
+                        {{ item.main.name }}
+                    </a>
+                </li>
+            {% endfor %}
+            <li class="d-flex align-items-center nav-item mx-auto">
+                <div class="mx-4">
+                    <span class="font-weight-light">Bem-vindo(a),</span> <b>{{ user.get_short_name }}</b>
+                    <div class="text-center">
+                        <a href="{% url 'logout' %}"> Sair <i class="fas fa-sign-out-alt ml-1"></i></a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+{% if current.subs|length > 0 %}
+    <nav class="navbar navbar-expand-lg navbar-dark px-4 py-1 sec-nav">
+        <button class="navbar-toggler text-dark border-0"
+                type="button"
+                data-toggle="collapse"
+                data-target="#navbar-sublista"
+                aria-controls="navbar-sublista"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse flex-column" id="navbar-sublista">
+            <ul class="navbar-nav mr-auto">
+                {% for item in current.subs %}
+                    <li class="nav-item mx-auto">
+                        <a class="nav-link pt-3 {% if current_sub == item.related_name %}active{% endif %}"
+                           href="{{ item.link }}">
+                            {{ item.name }} {{ item.aditional|safe|default_if_none:'' }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </nav>
+{% endif %}

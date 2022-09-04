@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>ESUFRN - Dashboard</title>
+        {% load static %}
+        <link rel="icon" href="{% static 'assets/dashboard/images/icon.ico' %}"/>
+        <link rel="stylesheet"
+              href="{% static 'assets/dashboard/css/bootstrap.min.css' %}"/>
+        <link rel="stylesheet"
+              href="{% static 'assets/dashboard/css/style.login.css' %}"/>
+        <link href="https://fonts.googleapis.com/css?family=Nunito"
+              rel="stylesheet"/>
+    </head>
+    <body class="text-center">
+        <div class="container login-form px-4 py-5">
+            {% block content %}
+            {% endblock content %}
+        </div>
+    </body>
+</html>

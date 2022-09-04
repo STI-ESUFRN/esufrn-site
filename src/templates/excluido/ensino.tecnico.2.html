@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  {% include "base.header.html" %}
+</head>
+
+<body>
+  <!-------- Barra Governo -------->
+  {% include "base.governo.html" %}
+  <!-------- Home -------->
+  <div class="background-home">
+    <!-- Navbar -->
+    <div id="nav-box" class="pt-3 w-100 secondary">
+      {% include "base.acessibilidade.html" %}
+      <!--  -->
+      {% include "base.navbar.html" %}
+    </div>
+  </div>
+
+
+  <!-------- Conteúdo -------->
+
+  <nav aria-label="breadcrumb" class="container">
+    <ol class="breadcrumb px-0 mb-0">
+      <li class="breadcrumb-item"><a href="/"><i class='fas fa-home'></i>
+        </a></li>
+      <li class="breadcrumb-item" aria-current="page"><a href="#">Ensino</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Técnico e Pós-Técnico</li>
+    </ol>
+    <hr class="hr-escuro mt-0">
+  </nav>
+
+  <article>
+
+    <div class="container mt-5 text-center cabecalho">
+      <h3>Técnico</h3>
+      <hr class="hr-escuro mt-5">
+    </div>
+
+    <div class="container text-center btn-cursos">
+      <button class="btn btn-primary mx-2 my-1 rounded-0"> Curso Técnico em Enfermagem</button>
+      <button class="btn btn-primary mx-2 my-1 rounded-0"> Curso Técnico em Vigilância em Saúde</button>
+      <button class="btn btn-primary mx-2 my-1 rounded-0"> Curso Técnico em Registros e Informações em Saúde</button>
+      <button class="btn btn-primary mx-2 my-1 rounded-0"> Curso Técnico em Práticas Integrativas e Complementares em
+        Saúde</button>
+      <button class="btn btn-primary mx-2 my-1 rounded-0"> Curso Técnico Agente Comunitário em Saúde</button>
+      <button class="btn btn-primary mx-2 my-1 rounded-0"> Técnico em Massoterapia</button>
+      <button class="btn btn-primary mx-2 my-1 rounded-0"> Técnico em Estética (Pronatec)</button>
+      <button class="btn btn-primary mx-2 my-1 rounded-0"> Técnico em Análises Clínicas (Pronatec)</button>
+      <button class="btn btn-primary mx-2 my-1 rounded-0"> Técnico em Segurança do Trabalho (Pronatec)</button>
+      <button class="btn btn-primary mx-2 my-1 rounded-0"> Técnico em Saúde Bucal (Pronatec)</button>
+      <button class="btn btn-primary mx-2 my-1 rounded-0"> Técnico em Manutenção e Suporte em Informática
+        (Pronatec)</button>
+    </div>
+
+    <div class="container mt-5 text-center cabecalho">
+      <h3>Pós-Técnico</h3>
+      <hr class="hr-escuro mt-5">
+    </div>
+
+    <div class="container text-center btn-cursos">
+      <button class="btn btn-primary mx-2 my-1 rounded-0"> Especialização Técnica em Instrumentação Cirúrgica</button>
+      <button class="btn btn-primary mx-2 my-1 rounded-0"> Especialização Técnica em Terapia Intensiva Adulto</button>
+      <button class="btn btn-primary mx-2 my-1 rounded-0"> Especialização Técnica em Enfermagem do Trabalho</button>
+    </div>
+
+    <div class="container mt-4 corpo">
+
+      <h3 class="text-center font-weight-bold">Curso Tecnico em Enfermagem</h3>
+
+      <div class="inner-infos row">
+        <div class="col-md">
+          <div class="info-item">
+            <p><i class='fas fa-user'></i> Vagas:</p>
+            <div class="d-flex align-items-center justify-content-center">
+              <p>80</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md">
+          <div class="info-item">
+            <p><i class='fas fa-stopwatch'></i> Duração:</p>
+            <div class="d-flex align-items-center justify-content-center">
+              <p>Dois anos e meio.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md">
+          <div class="info-item">
+            <p><i class='fas fa-clock'></i> Carga Horária:</p>
+            <div class="d-flex align-items-center justify-content-center">
+              <p>1800h</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md">
+          <div class="info-item">
+            <p><i class='fas fa-sun'></i> Turno:</p>
+            <div class="d-flex align-items-center justify-content-center">
+              <p>Manhã e Tarde</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md">
+          <div class="info-item">
+            <p><i class='fas fa-calendar'></i> Periodicidade:</p>
+            <div class="d-flex align-items-center justify-content-center">
+              <p>Anual</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-course row mt-4 w-100 ml-0 p-4">
+        <div class="inner-course col-md-6 p-0">
+          <div class="owl-carousel owl-theme course-owl h-100">
+
+            <div class="item-course h-100">
+              <img class="" src="/static/assets/images/course1.jpg" alt="Curso técnico em emfermagem - ESUFRN">
+            </div>
+            <div class="item-course">
+              <img class="" src="/static/assets/images/course2.jpg" alt="Curso técnico em emfermagem - ESUFRN">
+            </div>
+            <div class="item-course">
+              <img class="" src="/static/assets/images/course3.jpg" alt="Curso técnico em emfermagem - ESUFRN">
+            </div>
+
+          </div>
+        </div>
+        <div class="col-md-6 text-white h-100 pt-3">
+          <h5><b><i class='fas fa-hand-point-right'></i> Forma de ingresso:</b></h5>
+          <p class="ml-4">Processo Seletivo junto à COMPERVE.</p>
+          <h5><b><i class='fas fa-hand-point-right'></i> A quem se destina:</b></h5>
+          <p class="ml-4">Estudantes ou profissionais que tenham concluído ensino Médio.</p>
+          <h5><b><i class='fas fa-hand-point-right'></i> Estrutura oferecida:</b></h5>
+          <p class="ml-4">Laboratórios de enfermagem e informática; Salas de aula climatizadas com data-show;
+            Dispositivos de Multimídia; Biblioteca com exemplares atualizados; Estágios realizados com acompanhamento de
+            instrutores; Auditórios e anfiteatros; Corpo docente qualificado.</p>
+
+        </div>
+        <div class="col-md-12 mt-4 text-white">
+          <h5><b><i class='fas fa-hand-point-right'></i> Área de Atuação:</b></h5>
+          <p class="ml-4">O egresso atua na promoção, prevenção, recuperação e reabilitação dos processos saúde/doença.
+            Colabora com o atendimento das necessidades de saúde dos pacientes e comunidade, em todas as faixas etárias.
+            Promove ações de orientação e preparo do paciente para exames. Realiza cuidados de enfermagem, tais como:
+            curativos, administração de medicamentos e vacinas, nebulizações, banho de leito, mensuração antropométrica
+            e verificação de sinais vitais, dentre outros. Presta assistência de enfermagem a pacientes clínicos e
+            cirúrgicos. Técnico em enfermagem no atendimento ao cliente grave.</p>
+          <h5><b><i class='fas fa-hand-point-right'></i> Maiores Informações:</b></h5>
+          <p class="ml-4">ensino@es.ufrn.br</p>
+        </div>
+      </div>
+
+      <style>
+        .background-home {
+          background-color: #0b3e61;
+        }
+
+        .inner-infos div {
+          margin-top: 5px;
+        }
+
+        .info-item {
+          padding: 18px 10px 10px 10px;
+          background-color: #0b3e61;
+          text-align: center;
+          color: white;
+          margin-top: 30px;
+          height: 100%;
+        }
+
+        .info-item p {
+          font-weight: 600;
+          /* vertical-align: middle; */
+        }
+
+        .info-item>p {
+          font-size: 12px;
+        }
+
+        .info-item div {
+          height: calc(100% - 37px);
+          text-align: center;
+        }
+
+        .info-item div p {
+          font-size: 20px;
+        }
+
+        .card-course {
+          background-color: #0b3e61
+        }
+
+        .btn-cursos .btn-primary {
+          background-color: #0b3e61;
+          border-color: #0b3e61;
+        }
+      </style>
+
+
+      <br><br><br><br><br><br>
+
+      <div id="dadosAlert"></div>
+
+      <div id="cursos">
+
+        <h3><b>Técnico</b></h3><br>
+
+        <p id="c001"> – Curso Técnico em Enfermagem</p>
+        <p id="c002"> – Curso Técnico em Vigilância em Saúde</p>
+        <p id="c003"> – Curso Técnico em Registros e Informações em Saúde</p>
+        <p id="c004"> – Curso Técnico em Práticas Integrativas e Complementares em Saúde</p>
+        <p id="c005"> – Curso Técnico Agente Comunitário em Saúde</p>
+        <p id="c006"> – Técnico em Massoterapia</p>
+        <p id="c007"> – Técnico em Estética (Pronatec)</p>
+        <p id="c008"> – Técnico em Análises Clínicas (Pronatec)</p>
+        <p id="c009"> – Técnico em Segurança do Trabalho (Pronatec)</p>
+        <p id="c010"> – Técnico em Saúde Bucal (Pronatec)</p>
+        <p id="c011"> – Técnico em Manutenção e Suporte em Informática (Pronatec)</p>
+
+        <br>
+        <h3><b>Pós-Técnico</b></h3><br>
+
+        <p id="c012"> – Especialização Técnica em Instrumentação Cirúrgica</p>
+        <p id="c013"> – Especialização Técnica em Terapia Intensiva Adulto</p>
+        <p id="c014"> – Especialização Técnica em Enfermagem do Trabalho</p>
+
+      </div>
+
+    </div>
+    <!-- --------------------------------------------------------------------------------------------- -->
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCursos">
+      Launch demo modal
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade bd-example-modal-lg" id="modalCursos" tabindex="-1" role="dialog"
+      aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+
+            <h3 class="text-center font-weight-bold">Curso Tecnico em Enfermagem</h3>
+
+            <div class="inner-infos row">
+              <div class="col-md">
+                <div class="info-item">
+                  <p><i class='fas fa-user'></i> Vagas:</p>
+                  <div class="d-flex align-items-center justify-content-center">
+                    <p>80</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md">
+                <div class="info-item">
+                  <p><i class='fas fa-stopwatch'></i> Duração:</p>
+                  <div class="d-flex align-items-center justify-content-center">
+                    <p>Dois anos e meio.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md">
+                <div class="info-item">
+                  <p><i class='fas fa-clock'></i> Carga Horária:</p>
+                  <div class="d-flex align-items-center justify-content-center">
+                    <p>1800h</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md">
+                <div class="info-item">
+                  <p><i class='fas fa-sun'></i> Turno:</p>
+                  <div class="d-flex align-items-center justify-content-center">
+                    <p>Manhã e Tarde</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md">
+                <div class="info-item">
+                  <p><i class='fas fa-calendar'></i> Periodicidade:</p>
+                  <div class="d-flex align-items-center justify-content-center">
+                    <p>Anual</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-course row mt-4 w-100 ml-0 p-4">
+              <div class="inner-course col-md-6 p-0">
+                <div class="owl-carousel owl-theme course-owl h-100">
+
+                  <div class="item-course h-100">
+                    <img class="" src="/static/assets/images/course1.jpg" alt="Curso técnico em emfermagem - ESUFRN">
+                  </div>
+                  <div class="item-course">
+                    <img class="" src="/static/assets/images/course2.jpg" alt="Curso técnico em emfermagem - ESUFRN">
+                  </div>
+                  <div class="item-course">
+                    <img class="" src="/static/assets/images/course3.jpg" alt="Curso técnico em emfermagem - ESUFRN">
+                  </div>
+
+                </div>
+              </div>
+              <div class="col-md-6 text-white h-100 pt-3">
+                <h5><b><i class='fas fa-hand-point-right'></i> Forma de ingresso:</b></h5>
+                <p class="ml-4">Processo Seletivo junto à COMPERVE.</p>
+                <h5><b><i class='fas fa-hand-point-right'></i> A quem se destina:</b></h5>
+                <p class="ml-4">Estudantes ou profissionais que tenham concluído ensino Médio.</p>
+                <h5><b><i class='fas fa-hand-point-right'></i> Estrutura oferecida:</b></h5>
+                <p class="ml-4">Laboratórios de enfermagem e informática; Salas de aula climatizadas com data-show;
+                  Dispositivos de Multimídia; Biblioteca com exemplares atualizados; Estágios realizados com
+                  acompanhamento de
+                  instrutores; Auditórios e anfiteatros; Corpo docente qualificado.</p>
+
+              </div>
+              <div class="col-md-12 mt-4 text-white">
+                <h5><b><i class='fas fa-hand-point-right'></i> Área de Atuação:</b></h5>
+                <p class="ml-4">O egresso atua na promoção, prevenção, recuperação e reabilitação dos processos
+                  saúde/doença.
+                  Colabora com o atendimento das necessidades de saúde dos pacientes e comunidade, em todas as faixas
+                  etárias.
+                  Promove ações de orientação e preparo do paciente para exames. Realiza cuidados de enfermagem, tais
+                  como:
+                  curativos, administração de medicamentos e vacinas, nebulizações, banho de leito, mensuração
+                  antropométrica
+                  e verificação de sinais vitais, dentre outros. Presta assistência de enfermagem a pacientes clínicos e
+                  cirúrgicos. Técnico em enfermagem no atendimento ao cliente grave.</p>
+                <h5><b><i class='fas fa-hand-point-right'></i> Maiores Informações:</b></h5>
+                <p class="ml-4">ensino@es.ufrn.br</p>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- --------------------------------------------------------------------------------------------- -->
+
+    <!-- Modal -->
+    <div class="modal fade bd-example-modal-lg" id="modalCursos" tabindex="-1" role="dialog"
+      aria-labelledby="modalDadosLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title w-100 text-center" id="modalDadosNome"></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="modalDados"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="container text-right">
+      <hr class="hr-escuro my-5">
+      <a href="#" class="text-uppercase text-dark">Voltar ao topo <i class='fas fa-arrow-alt-circle-up'></i></a>
+    </div>
+  </article>
+
+
+  <!-------- Footer -------->
+  {% include "base.footer.html" %}
+  <!-------- Javascript -------->
+  {% include "base.scripts.html" %}
+  <script src="/static/assets/owl-carousel/owl.carousel.min.js"></script>
+  <script>
+
+    $('.course-owl').owlCarousel({
+      items: 1,
+      loop: true,
+      autoplay: true,
+      autoplayTimeout: 3000,
+      autoplayHoverPause: true,
+      dots: false,
+    });
+
+    var dataCursos = [];
+    $.getJSON("/static/assets/js/ensino.cursos.json", function (json) {
+      dataCursos = json;
+    }).fail(function (err) {
+      console.log(err);
+      $("#dadosAlert").html("<div class='alert alert-danger rounded-0' role='alert'>Houve um erro ao carregar o arquivo de cursos, por favor, contate o suporte!</div>")
+    });
+
+    $('#cursos p').click(function (e) {
+      if (dataCursos.length > 1) {
+        e.preventDefault();
+        var cursoId = $(this).attr('id');
+        var cursoObj = dataCursos.filter(obj => {
+          return obj.id === cursoId
+        });
+        $("#modalDados").html(' ');
+        $("#modalDadosNome").html('<b>' + cursoObj[0]['Nome'] + '</b>');
+
+        $.each(cursoObj[0], function (vi, vv) {
+          vi == 'id' ? ' ' : $("#modalDados").append(`<p><b>${vi}: </b> ${vv}</p>`);
+        });
+        $('#modalCursos').modal('show')
+      }
+    });
+  </script>
+</body>
+
+</html>

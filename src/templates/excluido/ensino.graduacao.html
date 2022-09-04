@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>{% include "base.head.html" %}</head>
+    <body>
+        <!-------- Barra Governo -------->
+        {% include "base.governo.html" %}
+        <!-------- Home -------->
+        <div class="background-home">
+            <!-- Navbar -->
+            <div id="nav-box" class="pt-3 w-100 secondary">
+                {% include "base.acessibilidade.html" %}
+                <!--  -->
+                {% include "base.navbar.html" %}
+            </div>
+        </div>
+        <!-------- Conteúdo -------->
+        <nav aria-label="breadcrumb" class="container">
+            <ol class="breadcrumb px-0 mb-0">
+                <li class="breadcrumb-item">
+                    <a href="{% url 'home' %}"><i class="fas fa-home"></i></a>
+                </li>
+                <li class="breadcrumb-item" aria-current="page">Ensino</li>
+                <li class="breadcrumb-item active" aria-current="page">Graduação Tecnológica</li>
+            </ol>
+            <hr class="hr-escuro mt-0"/>
+        </nav>
+        <article>
+            <div class="container mt-5 text-center cabecalho">
+                <h3>Graduação Tecnológica</h3>
+                <hr class="hr-escuro mt-5"/>
+            </div>
+            <div class="container mt-4 corpo">
+                <div id="dadosAlert"></div>
+                <div id="cursos">
+                    <p id="g001">– Curso Superior de Tecnologia em Gestão Hospitalar</p>
+                </div>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade bd-example-modal-lg"
+                 id="modalCursos"
+                 tabindex="-1"
+                 role="dialog"
+                 aria-labelledby="modalDadosLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title w-100 text-center" id="modalDadosNome"></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i></span>
+                            </button>
+                        </div>
+                        <div class="modal-body" id="modalDados"></div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container text-right">
+                <hr class="hr-escuro my-5"/>
+                <a href="#" class="text-uppercase text-dark">Voltar ao topo <i class="fas fa-arrow-alt-circle-up"></i></a>
+            </div>
+        </article>
+        <!-------- Footer -------->
+        {% include "base.footer.html" %}
+        <!-------- Javascript -------->
+        {% include "base.scripts.html" %}
+        <script>
+    var dataCursos = [];
+    $.getJSON("/assets/json/ensino.cursos.json", function (json) {
+      dataCursos = json;
+    }).fail(function (err) {
+      console.log(err);
+      $("#dadosAlert").html("<div class='alert alert-danger rounded-0' role='alert'>Houve um erro ao carregar o arquivo de cursos, por favor, contate o suporte!</div>")
+    });
+
+    $('#cursos p').click(function (e) {
+      if (dataCursos.length > 1) {
+        e.preventDefault();
+        var cursoId = $(this).attr('id');
+        var cursoObj = dataCursos.filter(obj => {
+          return obj.id === cursoId
+        });
+        $("#modalDados").html(' ');
+        $("#modalDadosNome").html('<b>' + cursoObj[0]['Nome'] + '</b>');
+
+        $.each(cursoObj[0], function (vi, vv) {
+          vi == 'id' ? ' ' : $("#modalDados").append(`<p><b>${vi}: </b> ${vv}</p>`);
+        });
+        $('#modalCursos').modal('show')
+      }
+    });
+        </script>
+    </body>
+</html>

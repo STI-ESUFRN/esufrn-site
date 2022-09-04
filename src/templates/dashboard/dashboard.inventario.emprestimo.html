@@ -1,0 +1,301 @@
+{% extends "dashboard.base.html" %}
+{% load static %}
+{% block styles %}
+    <style>
+    table.table {
+        table-layout: fixed;
+    }
+    table.table td {
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+	}
+
+	table.custom-table th:first-child {
+		width: 20px;
+	}
+    </style>
+{% endblock styles %}
+{% block content %}
+    <form>
+        <div class="form-row">
+            <div class="form-group col-6">
+                <label>
+                    <b>Solicitante:</b>
+                </label>
+                <input class="form-control" type="text" required/>
+                <div class="invalid-feedback">Campo obrigatório</div>
+            </div>
+            <div class="form-group col-6">
+                <label>
+                    <b>Contato:</b>
+                </label>
+                <input class="form-control" type="text" required/>
+                <div class="invalid-feedback">Campo obrigatório</div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-2">
+                <label>
+                    <b>Patrimônio:</b>
+                </label>
+                <input class="form-control" type="text" value="1"/>
+            </div>
+            <div class="form-group col-2">
+                <label>
+                    <b>Quantidade:</b>
+                </label>
+                <input class="form-control" type="number" value="1" required/>
+                <div class="invalid-feedback">Campo obrigatório</div>
+            </div>
+        </div>
+        {% comment %}
+            name
+            contact
+            obs
+            borrow_date
+            status
+        {% endcomment %}
+    </form>
+    <hr/>
+    <div class="row">
+        <div class="col-md-3 mb-3">
+            <label>Status:</label>
+            <select class="form-control form-control-sm " data-filter name="status">
+                <option value="" selected>
+                    Todos os empréstimos
+                </option>
+                <option value="A">
+                    Apenas empréstimos pendentes de devolução
+                </option>
+                <option value="D">
+                    Apenas empréstimos marcados como devolvido
+                </option>
+                <option value="C">
+                    Apenas empréstimos cancelados
+                </option>
+            </select>
+        </div>
+    </div>
+    <div class="card rounded-0">
+        <div class="card-header head-table border-0 rounded-0">
+            <b><i class="fas fa-paper-plane mr-2"></i>Empréstimos</b>
+        </div>
+        <div class="card-body p-0" style="overflow-x: auto;">
+            <table class="table custom-table table-hover mb-0">
+                <thead>
+                    <tr class="capt-table">
+                        <th class="border-0 text-center" scope="col"></th>
+                        <th class="border-0" scope="col">Nome</th>
+                        <th class="border-0" scope="col">Data do pedido</th>
+                        <th class="border-0" scope="col">Data de devolução</th>
+                    </tr>
+                </thead>
+                <tbody id="emprestimos">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="text-center w-100 mb-4">
+        <button id="load-recente" class="btn rounded-0 mt-4">
+            <i class="fas fa-arrow-alt-circle-left"></i> Mais Recente
+        </button>
+        <button id="load-antigo" class="btn rounded-0 mt-4">
+            Mais Antigo <i class="fas fa-arrow-alt-circle-right"></i>
+        </button>
+    </div>
+    <div class="mt-4" id="detalhes-emprestimo">
+        <div class="card-group" id="detalhes" style="display: none;opacity: 0;">
+            <div class="card" style="width: 18rem;">
+                <div class="card-header head-table border-0 rounded-0">
+                    <b><i class="fas fa-info mr-2"></i>Detalhes do empréstimo</b>
+                    <button id="detalhes-dismiss" type="button" class="close" aria-label="Close">
+                        <span aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i></span>
+                    </button>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <small>Solicitante:</small> <b data-attribute="name">---</b>
+                    </h5>
+                    <div class="row">
+                        <div class="col-12">
+                            <small>Data de solicitação:</small> <b data-attribute="borrow_date">---</b>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <small>Data de devolução:</small> <b data-attribute="return_date">---</b>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer border-top-0">
+                    <p>
+                        <b>
+                            Equipamentos solicitados:
+                        </b>
+                    </p>
+                    <table class="table table-hover mb-0">
+                        <thread>
+                        <tr class="capt-table">
+                            <th>Modelo</th>
+                            <th>Tombamento</th>
+                            <th>Quantidade</th>
+                        </tr>
+                        </thread>
+                        <tbody id="loanEquipments">
+                            {% comment %} AJAX {% endcomment %}
+                        </tbody>
+                    </table>
+                    <hr/>
+                    <p>
+                        <b>
+                            Ações:
+                        </b>
+                    </p>
+                    <a href="#"
+                       class="btn mb-1 btn-outline-success btn-sm"
+                       id="confirmLoan"
+                       data-status="D">Marcar como devolvido</a>
+                    <a href="#"
+                       class="btn mb-1 btn-outline-danger btn-sm"
+                       id="cancelLoan"
+                       data-status="C">Cancelar solicitação</a>
+                    <a href="#"
+                       class="btn mb-1 btn-outline-warning btn-sm"
+                       id="waitLoan"
+                       data-status="A">Marcar como pendente</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+{% block scripts %}
+    <script src="{% static 'assets/dashboard/js/ajax_csrf.js' %}"></script>
+    <script>
+        var currentEmprestimo = undefined;
+        var actualPage = 0;
+        
+    function updateDash(pagina = 1){
+        actualPage = pagina;
+        actualPage == 1 ? $("#load-recente").attr("disabled", true) : $("#load-recente").attr("disabled", false);
+    
+        filters = $("[data-filter]").serialize();
+        $("#emprestimos").html("");
+        $.ajax({
+            type:"GET",
+            url:"/api/admin/emprestimos",
+            data: filters + `&page=${pagina}`,
+            success:function(response){
+                $.each(response.data, function(index, e){
+                    let row = $("<tr />", {"data-id-emprestimo":e.id});
+
+                    let fa = $("<td />",{class:"text-center px-0 pl-2"});
+                    let fas = $("<i />", {class:e.status=="A" ? `fas fa-solid fa-clock text-warning`: e.status=="D" ? `fas fa-check-circle text-success` : `fas fa-times-circle text-danger`})
+                    fa.append(fas);
+
+                    let borrow_date = $("<td />", {text:e.borrow_date});
+                    let return_date = $("<td />", {text:e.return_date});
+                    let name = $("<td />", {text:e.name});
+
+                    row.append(fa, name, borrow_date,return_date);
+                    $("#emprestimos").append(row);
+                });
+                response.paginator.current + 1 < response.paginator.total ? $("#load-antigo").attr("disabled", false) : $("#load-antigo").attr("disabled", true);
+                setListeners();
+            }
+        })
+    }
+    function setListeners() {
+        $("tr[data-id-emprestimo]").click(function (e) {
+            e.preventDefault();
+            currentEmprestimo = e.currentTarget.dataset.idEmprestimo;
+            showDetails();
+        });
+    }
+    function showDetails() {
+        $("#detalhes").animate({ opacity: 0 }, "fast", function () {
+            fillDash();
+        });
+    }
+    
+    function fillDash(){
+        
+        $.ajax({
+            type: "GET",
+            url: "/api/admin/emprestimos/" + currentEmprestimo,
+            success: function (response) {
+                $("[data-attribute]").each(function () {
+                    let attrvalue = response;
+                    $.map($(this).attr("data-attribute").split('.'), (value, index) => {
+                        attrvalue = attrvalue[value];
+                        return attrvalue;
+                    });
+                    $(this).text(attrvalue);
+                });
+                $.ajax({
+                    type: "GET",
+                    url: `/api/admin/emprestimos/${currentEmprestimo}/patrimonios`,
+                    success: function(response){
+                        $("#loanEquipments").html('');
+                        $.each(response, function(index, e){
+                            row = $("<tr />");
+                            model =$("<td />", {text:e.patrimony.model});
+                            dmp =$("<td />", {text:e.patrimony.dmp});
+                            quantity =$("<td />", {text:e.quantity});
+                            
+                            row.append(model, dmp,quantity);
+                            $("#loanEquipments").append(row);
+                        });
+                    }
+                });
+                $("#detalhes").animate({ opacity: 1 }, "fast").show();
+            }
+        });
+    }
+
+    function update(data) {
+        $.ajax({
+            url: `/api/admin/emprestimos/${currentEmprestimo}`,
+            type: 'PUT',
+            data: data,
+            success: function (response) {
+                $(".loader-global").removeClass("load");
+                if (response.status == "success") {
+                    updateDash();
+                    $("#detalhes").fadeTo("fast", 0).slideUp();
+                    showMessage(response.message, "alert-success");
+                } else {
+                    showMessage(response.message, "alert-danger");
+                }
+            },
+            error: function (err) {
+                $(".loader-global").removeClass("load");
+                showMessage(err.responseJSON.message, "alert-danger");
+            }
+        });
+    }
+$("#confirmLoan, #cancelLoan, #waitLoan").click(function (e) {
+	e.preventDefault();
+	$(".loader-global").addClass("load");
+	update({
+		status: $(this).attr("data-status")
+	});
+});
+$("[data-filter]").change(function () {
+    updateDash();
+});
+$("#load-antigo").click(function (e) {
+    e.preventDefault();
+    updateList(actualPage + 1);
+});
+
+$("#load-recente").click(function (e) {
+    e.preventDefault();
+    updateList(actualPage - 1);
+});
+$("#detalhes-dismiss").click(function () {
+	$("#detalhes").fadeTo("fast", 0).slideUp();
+});
+    updateDash();
+    </script>
+{% endblock scripts %}

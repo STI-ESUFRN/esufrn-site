@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+{% include "base.header.html" %}
+
+<body>
+  <!-------- Barra Governo -------->
+  {% include "base.governo.html" %}
+  <!-------- Home -------->
+  <div class="background-home">
+    <!-- Navbar -->
+    <div id="nav-box" class="pt-3 w-100 secondary">
+      {% include "base.acessibilidade.html" %}
+      <!--  -->
+      {% include "base.navbar.html" %}
+    </div>
+  </div>
+
+
+  <!-------- Conteúdo -------->
+
+  <nav aria-label="breadcrumb" class="container">
+    <ol class="breadcrumb px-0 mb-0">
+      <li class="breadcrumb-item"><a href="/"><i class='fas fa-home'></i>
+        </a></li>
+      <li class="breadcrumb-item" aria-current="page"><a href="#">Instituição</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Tragetória Histórica</li>
+    </ol>
+    <hr class="hr-escuro mt-0">
+  </nav>
+
+  <article>
+
+    <div class="container mt-5 text-center cabecalho">
+      <h3>Tragetória Histórica</h3>
+      <hr class="hr-escuro mt-5">
+    </div>
+
+    <div class="container mt-4 corpo historia text-justify">
+
+      <img class="float-left" src="/media/files/historia1.jpg" alt="Escola de saúde da UFRN - ESUFRN">
+      A Escola de Saúde da UFRN foi criada em dezembro de 1955 como Escola de Auxiliares de Enfermagem de Natal, vinculada à Sociedade de Assistência Hospitalar (SAH) e mantida inicialmente pela Fundação Sesp. As atividades começaram a ser desenvolvidas na Maternidade Escola Januário Cicco sendo, posteriormente, transferidas para o Hospital Universitário Onofre Lopes, tendo à frente dos seus trabalhos, como diretora, a enfermeira Maria de Lourdes Lopes.
+      <br><br>
+      <img class="float-right" src="/media/files/historia2.png" alt="Escola de saúde da UFRN - ESUFRN">
+      Ainda nos anos 50, a Escola de Auxiliares de Enfermagem de Natal passou a funcionar na Avenida Nilo Peçanha, em Petrópolis, ainda liga da à SAH. Em outubro de 1960 a Escola foi reconhecida pelo Governo Federal através do Decreto 49.120-A e, em janeiro de 1964, foi incorporada à UFRN, conforme Resolução do Conselho Universitário (Consuni) 02/64.
+
+      <br><br>
+      <img class="float-left" src="/media/files/historia3.png" alt="Escola de saúde da UFRN - ESUFRN">
+      Na década de 70, a Lei de Diretrizes e Bases da Educação Nacional (LDB) 5.692/71 instituiu as habilitações de Técnico e Auxiliar de Enfermagem que, no Rio Grande do Norte, foram implantadas, inicialmente, em escolas da rede estadual, expandindo-se posteriormente para a rede privada, sendo desenvolvidas através de convênios com a Escola de Auxiliares de Enfermagem de Natal.
+      <br><br>
+      <img class="float-right" src="/media/files/historia4.png" alt="Escola de saúde da UFRN - ESUFRN">
+      No ano de 1973, foi criado o curso de graduação em Enfermagem que passou a ser ofertado com infraestrutura e pessoal da Escola de Auxiliares de Enfermagem de Natal que, apesar das dificuldades para dar conta de todas as atividades, continuou ofertando cursos de auxiliares de enfermagem, uma vez que esta era a única escola pública que atendia à demanda aberta na capital potiguar.
+
+      <br><br>
+      Em 1996, a Escola de Auxiliares de Enfermagem de Natal filiou-se ao Conselho Nacional de Dirigentes das Escolas Técnicas Vinculadas às Universidades Federais (Condetuf), órgão permanente de coordenação das Escolas. Em setembro de 1997, a Escola foi reestruturada, conforme Resolução nº 057/97 do Conselho Administrativo (Consad) da UFRN, o que lhe assegurou autonomia financeira e pedagógica, bem como impulsionou a reorganização didática e administrativa.
+      <br><br>
+      <img class="float-left" src="/media/files/historia5.png" alt="Escola de saúde da UFRN - ESUFRN">
+      A LDB 9.394/96 resultou em profundas mudanças no ensino profissionalizante e, em 1999, seguindo mais uma resolução do Consad/UFRN, a Escola passou a denominar-se Escola de Enfermagem de Natal (EEN). A alteração levou à construção do Projeto Político Pedagógico que possibilitou a elaboração da proposta pedagógica do Curso Técnico em Enfermagem, reconhecido através da Portaria nº 219 de 11/12/2003, publicada no Diário Oficial da União em 17/11/2003.
+      <br><br>
+      A partir de abril de 2004, a Escola passou a desenvolver suas atividades no Complexo de Enfermagem do Campus Universitário, onde vem ampliando a oferta de cursos nos três níves de ensino: técnico, graduação e pós-graduação, fortalecendo e desenvolvendo seu Projeto Político Pedagógico, e traçando metas direcionadas à formação de pessoal da saúde e consolidação do SUS.
+
+      <br><br>
+      <img class="float-right" src="/media/files/historia6.png" alt="Escola de saúde da UFRN - ESUFRN">
+      No dia de 22 de maio de 2015, através da Resolução nº 008/15 do Conselho Universitário (CONSUNI), a Escola tornou-se Unidade Acadêmica Especializada em Educação Profissional em Saúde, passando a denominar-se Escola de Saúde da Universidade Federal do Rio Grande do Norte – ESUFRN.
+      <br><br>
+      De acordo com o Estatuto da UFRN, “as Unidades Acadêmicas Especializadas destinam-se a cumprir, isolada ou conjuntamente, objetivos especiais de ensino, pesquisa e extensão que, por sua complexidade, requeiram estrutura administrativa própria compatível com suas atividades”. Ser Unidade Acadêmica Especializada é o reconhecimento de toda a trajetória desta Escola, que a mais de 60 anos vem construindo a história no ensino profissional da saúde no Rio Grande do Norte.
+
+
+    </div>
+
+    <div class="container text-right">
+      <hr class="hr-escuro my-5">
+      <a href="#" class="text-uppercase text-dark">Voltar ao topo <i class='fas fa-arrow-alt-circle-up'></i></a>
+    </div>
+  </article>
+
+
+  <!-------- Footer -------->
+  {% include "base.footer.html" %}
+  <!-------- Javascript -------->
+  {% include "base.scripts.html" %}
+</body>
+
+</html>

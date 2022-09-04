@@ -1,0 +1,147 @@
+{% extends "dashboard.base.html" %}
+{% load static %}
+{% block styles %}
+    {% comment %} <link rel="stylesheet" href="{% static 'assets/css/reserva.style.css' %}"/> {% endcomment %}
+    <style>
+    .table-reserva {
+        overflow-x: auto !important;
+        margin: 0px;
+    }
+
+    .y-confirmado {
+        color: green;
+        font-size: 6px;
+        vertical-align: middle
+    }
+
+    .table.reservation td,
+    .table.reservation th {
+        padding: 0px;
+        font-size: 14px;
+        max-height: 32px
+    }
+    
+    .tr-dia {
+        background-color: #c9c9c9
+    }
+    .linha-turno~th {
+        width: 45px;
+    }
+    
+    .linha-dia~td {
+        text-align: right;
+        padding-right: 15px;
+        font-weight: 800;
+        font-size: 15px;
+    }
+    
+    th.linha-turno {
+        padding: 5px;
+    }
+
+    .linha-turno~td,
+    .linha-turno~td div {
+        padding: 5px;
+        font-size: 11px;
+        line-height: 13px;
+        min-width: 125px;
+        max-width: 125px;
+        max-height: 32px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    tr.table-separador td {
+        padding: 2px !important;
+        border: 0 !important;
+    }
+        
+    .table td,
+    .table th {
+        vertical-align: middle
+    }
+    </style>
+{% endblock styles %}
+{% block content %}
+    <div class="container">
+        <div class="no-print mb-5 text-center">
+            <h3>Relatório de reservas de sala</h3>
+            <div id="escolheMes"></div>
+            <div class="row justify-content-end">
+                <div class="col-auto">
+                    <button type="button"
+                            class="btn mb-1 btn-outline-success btn-sm"
+                            onclick="update();">
+                        Atualizar <i class="fas fa-refresh" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div class="col-auto">
+                    <button type="button"
+                            class="btn mb-1 btn-outline-primary btn-sm"
+                            onclick="window.print();return false;">
+                        Imprimir <i class="fas fa-print" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+            <hr/>
+        </div>
+        {% for sala in salas %}
+            <div class="w-100">
+                <div class="row">
+                    <div class="col">
+                        <b>{{ sala }}</b>
+                    </div>
+                    <div class="col text-center">
+                        <span class="planilha-data"></span>
+                    </div>
+                    <div class="col text-right">
+                        <span class="issued_at text-muted"></span>
+                    </div>
+                </div>
+                <hr class="hr-escuro"/>
+                <div class="table-reserva d-flex justify-content-md-center mx-auto">
+                    <div id="reservation-calendar-{{ sala.id }}"
+                         class="reservation-calendar"
+                         data-id="{{ sala.id }}">
+                        <!-- AJAX -->
+                    </div>
+                </div>
+            </div>
+            {% if not forloop.last %}
+                <hr class="no-print my-4"/>
+                <div style="page-break-before:always"></div>
+            {% endif %}
+        {% endfor %}
+        <div class="no-print mt-5">
+            <hr />
+            <div class="row justify-content-end">
+                <div class="col-auto">
+                    <button type="button"
+                            class="btn mb-1 btn-outline-secondary btn-sm"
+                            onclick="backTop();">
+                        Voltar para o topo <i class="fas fa-arrow-up" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div class="col-auto">
+                    <button type="button"
+                            class="btn mb-1 btn-outline-success btn-sm"
+                            onclick="update();">
+                        Atualizar <i class="fas fa-refresh" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div class="col-auto">
+                    <button type="button"
+                            class="btn mb-1 btn-outline-primary btn-sm"
+                            onclick="window.print();return false;">
+                        Imprimir <i class="fas fa-print" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+{% block scripts %}
+    <script src="{% static 'assets/dashboard/reserva/js/badge.js' %}"></script>
+    <script src="{% static 'assets/dashboard/reserva/js/relatorio.js' %}"></script>
+{% endblock scripts %}
