@@ -25,5 +25,6 @@
   "python.testing.pytestArgs": [
     "src"
   ],
-  "python.testing.unittestEnabled": false
+  "python.testing.unittestEnabled": false,
+  // "terminal.integrated.fontFamily": "PowerlineSymbols",
 }

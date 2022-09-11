@@ -1,9 +1,11 @@
 version: '3.9'
+
 services:
   mysql:
     image: mysql:8.0.30
+    restart: always
     ports:
-      - '3306:3306'
+      - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_ROOT_HOST: "%"
@@ -15,20 +17,19 @@ services:
       - mysqld-data:/var/run/mysqld
 
   phpmyadmin:
-    image: phpmyadmin:5.2.0
+    image: phpmyadmin:5.2.0-fpm-alpine
     restart: always
     expose:
-      - 8081
+      - 9000
     environment:
       PMA_HOST: mysql
-      PMA_PORT: 3306
-      APACHE_PORT: 8081
-      PMA_ARBITRARY: 1
-      PMA_ABSOLUTE_URI: http://*/phpmyadmin/
+      PMA_ABSOLUTE_URI: https://*/phpmyadmin/
     depends_on:
       - mysql
     links:
       - mysql
+    volumes:
+      - phpmyadmin-data:/var/www/html/
 
   web:
     build: .
@@ -46,6 +47,7 @@ services:
   nginx:
     build:
       context: nginx
+    restart: always
     ports:
       - 80:80
       - 443:443
@@ -54,7 +56,10 @@ services:
       - phpmyadmin
     volumes:
       - ./src/public:/usr/share/nginx/html
+      - phpmyadmin-data:/var/www/html/
+      - ./nginx/ssl:/ssl
 
 volumes:
   mysqld-data:
   mysql-data:
+  phpmyadmin-data:
