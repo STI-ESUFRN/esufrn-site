@@ -3,7 +3,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = int(os.environ.get("DEBUG", default=0))
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(' ')
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
 
 HTML_MINIFY = int(os.environ.get("MINIFY"))
 
@@ -14,15 +14,13 @@ INSTALLED_APPS = [
     "chamado",
     "inventario",
     "menu",
-
-    'rest_framework',
+    "rest_framework",
     "multiselectfield",
     "ckeditor",
     "ckeditor_uploader",
     "admin_interface",
     "colorfield",
     "corsheaders",
-
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -40,17 +38,17 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    'htmlmin.middleware.HtmlMinifyMiddleware',
-    'htmlmin.middleware.MarkRequestMiddleware',
+    "htmlmin.middleware.HtmlMinifyMiddleware",
+    "htmlmin.middleware.MarkRequestMiddleware",
 ]
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
 
-CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS").split(' ')
+CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS").split(" ")
 CSRF_COOKIE_SECURE = int(os.environ.get("CSRF_COOKIE_SECURE"))
 SESSION_COOKIE_SECURE = int(os.environ.get("SESSION_COOKIE_SECURE"))
 
-#SECURE_SSL_REDIRECT = True
+# SECURE_SSL_REDIRECT = True
 
 CORS_ORIGIN_ALLOW_ALL = True
 # CORS_ALLOWED_ORIGINS = [
@@ -88,16 +86,20 @@ WSGI_APPLICATION = "esufrn.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        'NAME': os.environ.get('MYSQL_DATABASE'),
-        'USER': os.environ.get('MYSQL_USER'),
-        'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
+        "NAME": os.environ.get("MYSQL_DATABASE"),
+        "USER": os.environ.get("MYSQL_USER"),
+        "PASSWORD": os.environ.get("MYSQL_PASSWORD"),
     }
 }
 
-DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {
+        "NAME": (
+            "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+        )
+    },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
@@ -112,10 +114,10 @@ DATE_INPUT_FORMATS = ["%d-%m-%Y"]
 
 HOST_URL = "http://escoladesaude.ufrn.br"
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'public', 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, "public", "static")
 STATIC_URL = "/static/"
 
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "public", "media")
 MEDIA_URL = "/media/"
@@ -126,21 +128,33 @@ CKEDITOR_CONFIGS = {
     "default": {
         "toolbar": [
             [
-                "Undo", "Redo",
+                "Undo",
+                "Redo",
                 "-",
                 "Format",
                 "-",
-                "Bold", "Italic", "Underline", "Image", "HorizontalRule",
+                "Bold",
+                "Italic",
+                "Underline",
+                "Image",
+                "HorizontalRule",
                 "-",
-                "Link", "Unlink",
+                "Link",
+                "Unlink",
                 "-",
-                "Cut", "Copy", "PasteText",
+                "Cut",
+                "Copy",
+                "PasteText",
                 "-",
-                "Subscript", "Superscript", "SpecialChar",
+                "Subscript",
+                "Superscript",
+                "SpecialChar",
                 "-",
-                "Outdent", "Indent",
+                "Outdent",
+                "Indent",
                 "-",
-                "BulletedList", "NumberedList",
+                "BulletedList",
+                "NumberedList",
             ]
         ],
         "width": "100%",
@@ -154,37 +168,57 @@ CKEDITOR_CONFIGS = {
         "allowedContent": True,
         "toolbar": [
             [
-                "Source", "Preview", "Undo", "Redo",
+                "Source",
+                "Preview",
+                "Undo",
+                "Redo",
                 "-",
-                "Format", "Font", "FontSize",
+                "Format",
+                "Font",
+                "FontSize",
                 "-",
-                "Bold", "Italic", "Underline", "Image", "HorizontalRule",
+                "Bold",
+                "Italic",
+                "Underline",
+                "Image",
+                "HorizontalRule",
                 "-",
-                'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock',
+                "JustifyLeft",
+                "JustifyCenter",
+                "JustifyRight",
+                "JustifyBlock",
                 "-",
-                "Link", "Unlink",
+                "Link",
+                "Unlink",
                 "-",
-                "Cut", "Copy", "Paste", "PasteText",
+                "Cut",
+                "Copy",
+                "Paste",
+                "PasteText",
                 "-",
-                "Subscript", "Superscript", "SpecialChar",
+                "Subscript",
+                "Superscript",
+                "SpecialChar",
                 "-",
-                "Outdent", "Indent",
+                "Outdent",
+                "Indent",
                 "-",
-                "BulletedList", "NumberedList",
+                "BulletedList",
+                "NumberedList",
                 "-",
             ]
         ],
         "width": "100%",
         "height": 600,
         "toolbarCanCollapse": False,
-        "extraPlugins": ",".join([
-            "codesnippet", "codesnippetgeshi", "div"
-        ]),
+        "extraPlugins": ",".join(["codesnippet", "codesnippetgeshi", "div"]),
         "codeSnippet_theme": "railscasts",
         "entities_latin": False,
         "basicEntities": False,
     },
 }
+
+TEST_RUNNER = "redgreenunittest.django.runner.RedGreenDiscoverRunner"
 
 ADMINS = [
     ("SUPORTE", "suporteeen@gmail.com"),
@@ -192,25 +226,21 @@ ADMINS = [
     ("Felipe", "felipe.medeiros.712@ufrn.edu.br"),
 ]
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', default="")
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", default="")
 
-# Email para notificação de reservas de sala e mensagens do site
 CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL")
-# Email secundário para notificação de mensagens do site
 CONTACT_EMAIL_2 = os.environ.get("CONTACT_EMAIL_2")
 
-# Email para notificação de novos chamados no sistema
 CONTACT_EMAIL_SUPORTE = os.environ.get("CONTACT_EMAIL_SUPORTE")
-# Email secundário para notificação de novos chamados no sistema e reserva de laboratórios (25 e 23)
 CONTACT_EMAIL_SUPORTE_2 = os.environ.get("CONTACT_EMAIL_SUPORTE_2")
 
 BOLD = ""
 
 REST_FRAMEWORK = {
-    'DEFAULT_RENDERER_CLASSES': os.environ.get("REST_RENDERERS").split(' '),
+    "DEFAULT_RENDERER_CLASSES": os.environ.get("REST_RENDERERS").split(" "),
 }

@@ -1,30 +1,60 @@
-version: '3'
+version: '3.9'
 services:
   mysql:
-    image: mysql:5.7
+    image: mysql:8.0.30
     ports:
       - '3306:3306'
     environment:
-       MYSQL_ROOT_PASSWORD: 'dEM7wJm78!D0kJNR'
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
-      - /opt/slack_bot/mysql_data:/var/lib/mysql
-      - /tmp/slack_bot/mysqld:/var/run/mysqld
-  gunicorn:
+      - mysql-data:/var/lib/mysql
+      - mysqld-data:/var/run/mysqld
+
+  phpmyadmin:
+    image: phpmyadmin:5.2.0
+    restart: always
+    expose:
+      - 8081
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      APACHE_PORT: 8081
+      PMA_ARBITRARY: 1
+      PMA_ABSOLUTE_URI: http://*/phpmyadmin/
+    depends_on:
+      - mysql
+    links:
+      - mysql
+
+  web:
     build: .
     command: gunicorn esufrn.wsgi:application --bind 0.0.0.0:8000
+    restart: always
     expose:
       - 8000
     depends_on:
       - mysql
+    volumes:
+      - mysqld-data:/run/mysqld
     env_file:
       - ./.env
-    restart: always
+
   nginx:
     build:
       context: nginx
     ports:
       - 80:80
+      - 443:443
     depends_on:
-      - gunicorn
+      - web
+      - phpmyadmin
     volumes:
       - ./src/public:/usr/share/nginx/html
+
+volumes:
+  mysqld-data:
+  mysql-data:

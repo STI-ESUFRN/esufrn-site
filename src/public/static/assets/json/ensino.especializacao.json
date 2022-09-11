@@ -1,0 +1,224 @@
+[
+  {
+    "id": "e010",
+    "nome": " Especialização em Terapia Intensiva em Enfermagem",
+    "ativo": false,
+    "head": {
+      "vagas": " 50 vagas .",
+      "duracao": " 18 meses.",
+      "carga": " 360 horas.",
+      "turno": " Noturno (sextas-feiras); Manhã e Tarde (sábados).",
+      "periodicidade": " -- "
+    },
+    "main": {
+      "Forma de ingresso": " Os candidatos inscritos são avaliados através de Exame do “Curriculum Vitae”.",
+      "A quem se destina": "  Enfermeiros.",
+      "Estrutura oferecida": [
+        "Laboratórios de enfermagem e informática;",
+        "Salas de aula climatizadas com data-show;",
+        "Dispositivos de Multimídia;",
+        "Biblioteca com exemplares atualizados;",
+        "Estágios realizados com acompanhamento de instrutores;",
+        "Auditórios e anfiteatros;",
+        "Corpo docente qualificado."
+      ],
+      "Área de atuação": " Ao concluir o curso, o Enfermeiro receberá o título de “Especialista em Terapia Intensiva”, conforme previsto na Lei do Exercício Profissional de Enfermagem – Lei Federal nº 7.498/86 e do Decreto nº 94.466/87 – que cabe privativamente ao Enfermeiro prestar cuidados diretos de Enfermagem a pacientes graves com risco de vida, embasados pela cientificidade e com aplicação das Resoluções Cofen nº 293/2004 e 358/2009, que conjuntamente com a RDC nº 10 da Anvisa, respalda a atuação segura do Enfermeiro na UTI.",
+      "Maiores informações": " ensino@es.ufrn.br"
+    }
+  },
+  {
+    "id": "e011",
+    "nome": " Especialização em Gestão em Saúde na Modalidade de Educação à Distância(EAD)",
+    "ativo": false,
+    "head": {
+      "vagas": " --",
+      "duracao": " --",
+      "carga": " --",
+      "turno": " --",
+      "periodicidade": " Turmas Encerradas"
+    },
+    "main": {
+      "Forma de ingresso": " --",
+      "A quem se destina": "  --",
+      "Estrutura oferecida": [
+        "Laboratórios de enfermagem e informática;",
+        "Salas de aula climatizadas com data-show;",
+        "Dispositivos de Multimídia;",
+        "Biblioteca com exemplares atualizados;",
+        "Estágios realizados com acompanhamento de instrutores;",
+        "Auditórios e anfiteatros;",
+        "Corpo docente qualificado."
+      ],
+      "Área de atuação": " --",
+      "Maiores informações": " ensino@es.ufrn.br"
+    }
+  },
+  {
+    "id": "e012",
+    "nome": " Especialização em Enfermagem Obstétrica",
+    "ativo": false,
+    "head": {
+      "vagas": " --",
+      "duracao": " --",
+      "carga": " --",
+      "turno": " -- ",
+      "periodicidade": " Turmas Encerradas"
+    },
+    "main": {
+      "Forma de ingresso": " Sistema de Seleção Unificada (SiSu).",
+      "A quem se destina": "  O curso será direcionado a enfermeiras (os) que já atuam em maternidades do Sistema Único de Saúde (SUS), com prioridade para àquelas com unidades federativas aderidas a Rede Cegonha e que em seus Planos de Ação Estadual estejam previstos Centros de Parto Normal – CPN sejam eles intra ou perihospitalar. Os profissionais precisam: Ter graduação em Enfermagem; Ter registro regular no Conselho Regional de Enfermagem de sua jurisdição; Apresentar carta de compromisso do gestor do serviço em que atua ou atuará (nos casos em que haverá criação de centros de Parto Normal –CPN;  Dedicar tempo suficiente à realização das atividades exigidas; Realizar os trabalhos e atividades sugeridas, indispensáveis à formação proposta.",
+      "Perfil do Egresso": " Para obtenção do certificado de Especialista em Enfermagem Obstétrica, a (o) estudante deverá ao final do curso ter comprovado a assistência direta de no mínimo de 20 partos, 15 atendimentos de pré-natal, 15 atendimentos ao recém nascido, além de elaboração de Trabalho de Conclusão de Curso (TCC), no formato de projeto de intervenção, com foco no processo de assistência ao pré-natal, parto e nascimento pela enfermagem obstétrica.",
+      "Estrutura oferecida": [
+        "Laboratórios de enfermagem e informática;",
+        "Salas de aula climatizadas com data-show;",
+        "Dispositivos de Multimídia;",
+        "Biblioteca com exemplares atualizados;",
+        "Estágios realizados com acompanhamento de instrutores;",
+        "Auditórios e anfiteatros;",
+        "Corpo docente qualificado."
+      ],
+      "Área de atuação": " Maternidades do Sistema Único de Saúde (SUS), com prioridade para àquelas com unidades federativas aderidas a Rede Cegonha e que em seus Planos de Ação Estadual estejam previstos Centros de Parto Normal – CPN, sejam eles intra ou perihospitalar.",
+      "As (os) enfermeiras (os) obstetras egressos do Curso CEEO – Rede Cegonha deverão ser capazes de": "I) Realizar consulta de pré-natal, puerpério e saúde sexual e reprodutiva; <br> II) Identificar e encaminhar gestantes alto risco no pré-natal; Sustentar a prática do enfermeiro obstetra na atenção ao parto e nascimento no âmbito da unidade obstétrica; <br> III) Prestar assistência ao trabalho de parto, parto e puerpério, de acordo com as evidências e práticas de humanização; <br> IV) Oferecer atenção humanizada, ética e reflexiva nos cuidados com gestantes, parturientes e puérperas; prestar cuidados imediatos ao recém-nascido na sala de parto, protegendo o período sensível e demonstrar habilidade na reanimação neonatal de acordo com a Sociedade Brasileira de Pediatria (SPB); <br> V) Desenvolver postura investigativa na perspectiva de inquerir sobre eventos relacionados à sua prática e elaborar documentos científicos.",
+      "Maiores informações": " ensino@es.ufrn.br"
+    }
+  },
+  {
+    "id": "e013",
+    "nome": " Especialização em Enfermagem em Terapia Intensiva Neonatal e Pediátrica",
+    "ativo": false,
+    "head": {
+      "vagas": "44 vagas",
+      "duracao": " 12 meses.",
+      "carga": " 380 horas.",
+      "turno": " quintas-feiras vespertino e noturno; sextas-feiras matutino e vespertino.",
+      "periodicidade": " Bienal"
+    },
+    "main": {
+      "Forma de ingresso": " Via edital a partir de análise curricular e avaliação de Carta de Intenção e Compromisso",
+      "A quem se destina": " em sua oferta inicial, foi destinado às equipes gestoras que atuassem no nível central e nas Unidades Regionais de Saúde Pública da Secretaria de Saúde Pública do Rio Grande do Norte (SESAP/RN), nas Secretarias Municipais de Saúde, Conselheiros do Conselho Estadual de Saúde e Servidores (técnico-administrativos e docentes) da UFRN.",
+      "Estrutura oferecida": [
+        "Laboratórios de enfermagem e informática;",
+        "Salas de aula climatizadas com data-show;",
+        "Dispositivos de Multimídia;",
+        "Biblioteca com exemplares atualizados;",
+        "Estágios realizados com acompanhamento de instrutores;",
+        "Auditórios e anfiteatros;",
+        "Corpo docente qualificado."
+      ],
+      "Área de atuação": " ao concluir o curso, o profissional receberá o título de “Especialista em Saúde Pública” e estará apto para atuar no processo de regionalização e organização das Redes de Atenção à Saúde, em consonância com os princípios e diretrizes do Sistema Único de Saúde, seguindo os preceitos da Educação e do Trabalho Interprofissional em Saúde.",
+      "As (os) enfermeiras (os) obstetras egressos do Curso CEEO – Rede Cegonha deverão ser capazes de": "I) Realizar consulta de pré-natal, puerpério e saúde sexual e reprodutiva; <br> II) Identificar e encaminhar gestantes alto risco no pré-natal; Sustentar a prática do enfermeiro obstetra na atenção ao parto e nascimento no âmbito da unidade obstétrica; <br> III) Prestar assistência ao trabalho de parto, parto e puerpério, de acordo com as evidências e práticas de humanização; <br> IV) Oferecer atenção humanizada, ética e reflexiva nos cuidados com gestantes, parturientes e puérperas; prestar cuidados imediatos ao recém-nascido na sala de parto, protegendo o período sensível e demonstrar habilidade na reanimação neonatal de acordo com a Sociedade Brasileira de Pediatria (SPB); <br> V) Desenvolver postura investigativa na perspectiva de inquerir sobre eventos relacionados à sua prática e elaborar documentos científicos.",
+      "Maiores informações": " atendimento.esufrn@gmail.com"
+    }
+  },
+  {
+    "id": "e014",
+    "nome": " Especialização em Enfermagem em Urgência e Emergência",
+    "ativo": false,
+    "head": {
+      "vagas": "44 vagas",
+      "duracao": " 12 meses.",
+      "carga": " 380 horas.",
+      "turno": " quintas-feiras vespertino e noturno; sextas-feiras matutino e vespertino.",
+      "periodicidade": " Bienal"
+    },
+    "main": {
+      "Forma de ingresso": " Via edital a partir de análise curricular e avaliação de Carta de Intenção e Compromisso",
+      "A quem se destina": " em sua oferta inicial, foi destinado às equipes gestoras que atuassem no nível central e nas Unidades Regionais de Saúde Pública da Secretaria de Saúde Pública do Rio Grande do Norte (SESAP/RN), nas Secretarias Municipais de Saúde, Conselheiros do Conselho Estadual de Saúde e Servidores (técnico-administrativos e docentes) da UFRN.",
+      "Estrutura oferecida": [
+        "Laboratórios de enfermagem e informática;",
+        "Salas de aula climatizadas com data-show;",
+        "Dispositivos de Multimídia;",
+        "Biblioteca com exemplares atualizados;",
+        "Estágios realizados com acompanhamento de instrutores;",
+        "Auditórios e anfiteatros;",
+        "Corpo docente qualificado."
+      ],
+      "Área de atuação": " ao concluir o curso, o profissional receberá o título de “Especialista em Saúde Pública” e estará apto para atuar no processo de regionalização e organização das Redes de Atenção à Saúde, em consonância com os princípios e diretrizes do Sistema Único de Saúde, seguindo os preceitos da Educação e do Trabalho Interprofissional em Saúde.",
+      "As (os) enfermeiras (os) obstetras egressos do Curso CEEO – Rede Cegonha deverão ser capazes de": "I) Realizar consulta de pré-natal, puerpério e saúde sexual e reprodutiva; <br> II) Identificar e encaminhar gestantes alto risco no pré-natal; Sustentar a prática do enfermeiro obstetra na atenção ao parto e nascimento no âmbito da unidade obstétrica; <br> III) Prestar assistência ao trabalho de parto, parto e puerpério, de acordo com as evidências e práticas de humanização; <br> IV) Oferecer atenção humanizada, ética e reflexiva nos cuidados com gestantes, parturientes e puérperas; prestar cuidados imediatos ao recém-nascido na sala de parto, protegendo o período sensível e demonstrar habilidade na reanimação neonatal de acordo com a Sociedade Brasileira de Pediatria (SPB); <br> V) Desenvolver postura investigativa na perspectiva de inquerir sobre eventos relacionados à sua prática e elaborar documentos científicos.",
+      "Maiores informações": " atendimento.esufrn@gmail.com"
+    }
+  },
+  {
+    "id": "e015",
+    "nome": " Especialização em Auditoria em Saúde",
+    "ativo": true,
+    "head": {
+      "vagas": "55 vagas",
+      "duracao": " 18 meses.",
+      "carga": " 360 horas.",
+      "turno": "sextas-feiras tarde e noite e sábados manhã e tarde uma vez ao mês.",
+      "periodicidade": " Bienal"
+    },
+    "main": {
+      "Forma de ingresso": " Via edital a partir de análise curricular",
+      "A quem se destina": " profissionais com diploma de curso superior nas seguintes áreas: cursos da área da saúde (Enfermagem, fisioterapia, odontologia, medicina, farmácia, nutrição, etc), Direito, Economia, Administração, Contabilidade, Gestão hospitalar",
+      "Estrutura oferecida": [
+        "Laboratórios de enfermagem e informática;",
+        "Salas de aula climatizadas com data-show;",
+        "Dispositivos de Multimídia;",
+        "Biblioteca com exemplares atualizados;",
+        "Estágios realizados com acompanhamento de instrutores;",
+        "Auditórios e anfiteatros;",
+        "Corpo docente qualificado."
+      ],
+      "Área de atuação": " ao concluir o curso os auditores em saúde estarão aptos a intervir sobre a realidade vigente mantendo ações de controle que visem a correta aplicação dos recursos em saúde para oferta da assistência de qualidade.",
+      "Maiores informações": " : espdeauditoriaesufrn@gmail.com"
+    }
+  },
+  {
+    "id": "e016",
+    "nome": " Especialização em Preceptoria em Saúde",
+    "ativo": true,
+    "head": {
+      "vagas": "44 vagas",
+      "duracao": " 12 meses.",
+      "carga": " 380 horas.",
+      "turno": " quintas-feiras vespertino e noturno; sextas-feiras matutino e vespertino.",
+      "periodicidade": " Bienal"
+    },
+    "main": {
+      "Forma de ingresso": " Via edital a partir de análise curricular e avaliação de Carta de Intenção e Compromisso",
+      "A quem se destina": " em sua oferta inicial, foi destinado às equipes gestoras que atuassem no nível central e nas Unidades Regionais de Saúde Pública da Secretaria de Saúde Pública do Rio Grande do Norte (SESAP/RN), nas Secretarias Municipais de Saúde, Conselheiros do Conselho Estadual de Saúde e Servidores (técnico-administrativos e docentes) da UFRN.",
+      "Estrutura oferecida": [
+        "Laboratórios de enfermagem e informática;",
+        "Salas de aula climatizadas com data-show;",
+        "Dispositivos de Multimídia;",
+        "Biblioteca com exemplares atualizados;",
+        "Estágios realizados com acompanhamento de instrutores;",
+        "Auditórios e anfiteatros;",
+        "Corpo docente qualificado."
+      ],
+      "Área de atuação": " ao concluir o curso, o profissional receberá o título de “Especialista em Saúde Pública” e estará apto para atuar no processo de regionalização e organização das Redes de Atenção à Saúde, em consonância com os princípios e diretrizes do Sistema Único de Saúde, seguindo os preceitos da Educação e do Trabalho Interprofissional em Saúde.",
+      "As (os) enfermeiras (os) obstetras egressos do Curso CEEO – Rede Cegonha deverão ser capazes de": "I) Realizar consulta de pré-natal, puerpério e saúde sexual e reprodutiva; <br> II) Identificar e encaminhar gestantes alto risco no pré-natal; Sustentar a prática do enfermeiro obstetra na atenção ao parto e nascimento no âmbito da unidade obstétrica; <br> III) Prestar assistência ao trabalho de parto, parto e puerpério, de acordo com as evidências e práticas de humanização; <br> IV) Oferecer atenção humanizada, ética e reflexiva nos cuidados com gestantes, parturientes e puérperas; prestar cuidados imediatos ao recém-nascido na sala de parto, protegendo o período sensível e demonstrar habilidade na reanimação neonatal de acordo com a Sociedade Brasileira de Pediatria (SPB); <br> V) Desenvolver postura investigativa na perspectiva de inquerir sobre eventos relacionados à sua prática e elaborar documentos científicos.",
+      "Maiores informações": " atendimento.esufrn@gmail.com"
+    }
+  },
+  {
+    "id": "e017",
+    "nome": " Especialização em Saúde Pública",
+    "ativo": false,
+    "head": {
+      "vagas": "44 vagas",
+      "duracao": " 12 meses.",
+      "carga": " 380 horas.",
+      "turno": " quintas-feiras vespertino e noturno; sextas-feiras matutino e vespertino.",
+      "periodicidade": " Bienal"
+    },
+    "main": {
+      "Forma de ingresso": " Via edital a partir de análise curricular e avaliação de Carta de Intenção e Compromisso",
+      "A quem se destina": " em sua oferta inicial, foi destinado às equipes gestoras que atuassem no nível central e nas Unidades Regionais de Saúde Pública da Secretaria de Saúde Pública do Rio Grande do Norte (SESAP/RN), nas Secretarias Municipais de Saúde, Conselheiros do Conselho Estadual de Saúde e Servidores (técnico-administrativos e docentes) da UFRN.",
+      "Estrutura oferecida": [
+        "Laboratórios de enfermagem e informática;",
+        "Salas de aula climatizadas com data-show;",
+        "Dispositivos de Multimídia;",
+        "Biblioteca com exemplares atualizados;",
+        "Estágios realizados com acompanhamento de instrutores;",
+        "Auditórios e anfiteatros;",
+        "Corpo docente qualificado."
+      ],
+      "Área de atuação": " ao concluir o curso, o profissional receberá o título de “Especialista em Saúde Pública” e estará apto para atuar no processo de regionalização e organização das Redes de Atenção à Saúde, em consonância com os princípios e diretrizes do Sistema Único de Saúde, seguindo os preceitos da Educação e do Trabalho Interprofissional em Saúde.",
+      "As (os) enfermeiras (os) obstetras egressos do Curso CEEO – Rede Cegonha deverão ser capazes de": "I) Realizar consulta de pré-natal, puerpério e saúde sexual e reprodutiva; <br> II) Identificar e encaminhar gestantes alto risco no pré-natal; Sustentar a prática do enfermeiro obstetra na atenção ao parto e nascimento no âmbito da unidade obstétrica; <br> III) Prestar assistência ao trabalho de parto, parto e puerpério, de acordo com as evidências e práticas de humanização; <br> IV) Oferecer atenção humanizada, ética e reflexiva nos cuidados com gestantes, parturientes e puérperas; prestar cuidados imediatos ao recém-nascido na sala de parto, protegendo o período sensível e demonstrar habilidade na reanimação neonatal de acordo com a Sociedade Brasileira de Pediatria (SPB); <br> V) Desenvolver postura investigativa na perspectiva de inquerir sobre eventos relacionados à sua prática e elaborar documentos científicos.",
+      "Maiores informações": " atendimento.esufrn@gmail.com"
+    }
+  }
+]

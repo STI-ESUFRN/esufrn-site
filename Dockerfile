@@ -16,15 +16,15 @@ COPY pyproject.toml .
 RUN pip install poetry
 RUN poetry install
 
-COPY ./scripts/ ./scripts
-RUN sed -i 's/\r$//g'  $APP_HOME/entrypoint.sh
-RUN chmod +x  $APP_HOME/entrypoint.sh
+COPY ./scripts ./scripts
+RUN sed -i 's/\r$//g' ./scripts/entrypoint.sh
+RUN chmod +x ./scripts/entrypoint.sh
 
 COPY . $APP_HOME
 
-RUN chown -R app:app $APP_HOME
+# RUN chown -R app:app $APP_HOME
 
-USER app
+# USER app
 
 WORKDIR $APP_HOME/src
 
