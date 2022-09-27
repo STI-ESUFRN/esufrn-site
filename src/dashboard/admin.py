@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import *
+from dashboard.models import DashboardItens, DashboardSubItens
 
 # Register your models here.
 

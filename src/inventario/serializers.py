@@ -1,9 +1,9 @@
 from rest_framework import serializers
 
-from .models import *
+from inventario.models import Emprestimo, Maquina, Patrimonio, PatrimonioEmprestimo
 
 
-class PatrimonioSerializador(serializers.ModelSerializer):
+class PatrimonioSerializer(serializers.ModelSerializer):
     category_name = serializers.SerializerMethodField()
 
     def get_category_name(self, obj):
@@ -14,8 +14,7 @@ class PatrimonioSerializador(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class EmprestimoSerializador(serializers.ModelSerializer):
-
+class EmprestimoSerializer(serializers.ModelSerializer):
     borrow_date = serializers.DateTimeField(
         format="%d-%m-%Y", input_formats=["%d-%m-%Y", "iso-8601"]
     )
@@ -28,14 +27,14 @@ class EmprestimoSerializador(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class MaquinaSerializador(serializers.ModelSerializer):
+class MaquinaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Maquina
         fields = "__all__"
 
 
-class PedidosSerializador(serializers.ModelSerializer):
-    patrimony = PatrimonioSerializador(read_only=False)
+class PedidosSerializer(serializers.ModelSerializer):
+    patrimony = PatrimonioSerializer(read_only=False)
 
     class Meta:
         model = PatrimonioEmprestimo

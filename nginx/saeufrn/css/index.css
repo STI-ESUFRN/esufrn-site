@@ -1,0 +1,45 @@
+html{
+	height:100%;
+}
+body{
+background-color:#66d9ff;
+padding-left:20px;
+padding-bottom:50px;
+padding-top:50px;
+padding-right:20px;
+}
+
+.container{
+
+background-color:#FFFFFF;
+width:900px;
+position:relative;
+
+}
+.logos{
+text-align: center;
+}
+.footer{
+color:white;
+position:absolute;
+width:90%;
+margin-left:20%;
+margin-top:23%;
+text-align:justify-all;;
+}
+
+.botao{
+padding-left:400px;
+padding-bottom:20px;
+margin-right:1%;
+margin-left:1%;
+margin-top:10%;
+}
+btn btn-default{
+	width: 150px;
+	height: 40px;
+	font-family:Arial;
+	font-size:30px;
+	word-spacing: 5px;
+	float:center;
+}

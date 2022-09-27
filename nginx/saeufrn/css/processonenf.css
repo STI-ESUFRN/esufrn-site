@@ -1,0 +1,148 @@
+body{
+background-color:#d43f3a;
+padding-left:20px;
+padding-bottom:50px;
+padding-top:50px;
+padding-right:20px;
+
+}
+a{
+padding-right:30px;
+text-align:center;
+}
+p{
+padding-left:50px;
+padding-right:50px;
+font-size:22px;
+color:black;
+font-family: Arial;
+word-spacing: 5px;
+text-align:justify;
+line-height:1.9;
+}
+
+h1 {
+padding-top:0px;
+font-size:20px;
+color:#1d5e83;
+font-family: Arial;
+font-weight:Bold;
+}
+h2{
+font-size:24px;
+color:#1E90FF;
+font-family: Arial;
+font-weight:Bold;
+padding-top:0px;
+text-align:center;
+}
+h3{
+padding-top:40px;
+padding-bottom:0px;
+font-size:25px;
+color:#1E90FF;
+font-family: Arial;
+font-weight:Bold;
+text-align:center;
+text-decoration:underline;
+}
+p{
+padding-left:50px;
+padding-right:50px;
+text-align:justify;
+text-indent:1.0;
+line-height:2.0;
+font-family: Arial;
+word-spacing: 5px;
+
+
+}
+u{
+padding-left:200px;
+padding-right:250px;
+}
+ol{
+padding-left:70px;
+padding-right:70px;
+}
+
+li{
+padding-left:50px;
+padding-right:50px;
+}
+.texto{
+padding-top:0px;
+padding-bottom:30px;
+font-size:22px;
+color:black;
+font-family: Arial;
+text-align:center;
+word-spacing: 5px;
+padding-left:50px;
+padding-right:50px;
+text-indent:50px;
+
+}
+img{
+padding-top:10px;
+padding-bottom:10px;
+
+}
+ul, ol{
+padding-left:70px;
+}
+li{
+line-height: ;
+font-size:22px;
+color:black;
+font-family: Arial;
+text-align:justify;
+word-spacing: 5px;
+text-indent:0.5px;
+padding-left:0px;
+padding-right:0px;
+line-height:1.9;
+}
+.container{
+padding-top:0px;
+padding-right:20px;
+padding-bottom:10px;
+width:1000px;
+background-color:#FFFFFF;
+
+
+}
+.refletir{
+text-align:center;
+}
+.leitura{
+text-align:center;
+padding-left:50px;
+padding-right:50px;
+}
+footer{
+background-color:#d43f3a;
+color:white;
+padding-left:280px;
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+	padding-left:50px;
+}
+th, td {
+    padding: 5px;
+}
+.barra{
+	padding-top:10px;
+}
+
+div.scroll {
+    width: 950px;
+    height: 700px;
+    overflow: scroll;
+}
+.atalhos{
+	text-align:center;
+}

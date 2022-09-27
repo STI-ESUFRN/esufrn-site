@@ -10,8 +10,6 @@ from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 from multiselectfield import MultiSelectField
 
-# Create your models here.
-
 
 class Classroom(models.Model):
     name = models.CharField("Nome da sala", max_length=64, blank=True, null=True)
@@ -247,7 +245,8 @@ class Reserve(models.Model):
             self.classroom.get_type_name().lower(), self.classroom
         )
         message = """
-            Uma solicitação de reserva de sala foi realizada. Por favor realizar a validação.<br/>
+            Uma solicitação de reserva de sala foi realizada.
+            Por favor realizar a validação.<br/>
             Sala: {0}<br/>
             Data: {1}<br/>
             Evento: {2}<br/>

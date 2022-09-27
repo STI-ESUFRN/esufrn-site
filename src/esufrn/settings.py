@@ -85,7 +85,7 @@ WSGI_APPLICATION = "esufrn.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.mysql",
+        "ENGINE": os.environ.get("DATABASE_ENGINE"),
         "NAME": os.environ.get("MYSQL_DATABASE"),
         "USER": os.environ.get("MYSQL_USER"),
         "PASSWORD": os.environ.get("MYSQL_PASSWORD"),
@@ -114,12 +114,12 @@ DATE_INPUT_FORMATS = ["%d-%m-%Y"]
 
 HOST_URL = "http://escoladesaude.ufrn.br"
 
-STATIC_ROOT = os.path.join(BASE_DIR, "public", "static")
+STATIC_ROOT = "/vol/web/static/"
 STATIC_URL = "/static/"
 
 STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
 
-MEDIA_ROOT = os.path.join(BASE_DIR, "public", "media")
+MEDIA_ROOT = "/vol/web/media/"
 MEDIA_URL = "/media/"
 
 
@@ -227,17 +227,14 @@ ADMINS = [
 ]
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
+EMAIL_HOST = os.environ.get("EMAIL_HOST")
+EMAIL_PORT = os.environ.get("EMAIL_PORT")
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", default="")
 
 CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL")
-CONTACT_EMAIL_2 = os.environ.get("CONTACT_EMAIL_2")
-
 CONTACT_EMAIL_SUPORTE = os.environ.get("CONTACT_EMAIL_SUPORTE")
-CONTACT_EMAIL_SUPORTE_2 = os.environ.get("CONTACT_EMAIL_SUPORTE_2")
 
 BOLD = ""
 

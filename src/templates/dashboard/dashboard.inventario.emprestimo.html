@@ -174,11 +174,11 @@
     <script>
         var currentEmprestimo = undefined;
         var actualPage = 0;
-        
+
     function updateDash(pagina = 1){
         actualPage = pagina;
         actualPage == 1 ? $("#load-recente").attr("disabled", true) : $("#load-recente").attr("disabled", false);
-    
+
         filters = $("[data-filter]").serialize();
         $("#emprestimos").html("");
         $.ajax({
@@ -217,9 +217,9 @@
             fillDash();
         });
     }
-    
+
     function fillDash(){
-        
+
         $.ajax({
             type: "GET",
             url: "/api/admin/emprestimos/" + currentEmprestimo,
@@ -242,7 +242,7 @@
                             model =$("<td />", {text:e.patrimony.model});
                             dmp =$("<td />", {text:e.patrimony.dmp});
                             quantity =$("<td />", {text:e.quantity});
-                            
+
                             row.append(model, dmp,quantity);
                             $("#loanEquipments").append(row);
                         });

@@ -34,8 +34,13 @@ class AdminMaquina(admin.ModelAdmin):
         "status",
     ]
     search_fields = ["patrimony__model", "patrimony__dmp", "status"]
-    list_filter = ["patrimony__model",
-                   "patrimony__dmp", "ram", "hdd", "patrimony__last_updated"]
+    list_filter = [
+        "patrimony__model",
+        "patrimony__dmp",
+        "ram",
+        "hdd",
+        "patrimony__last_updated",
+    ]
 
 
 admin.site.register(Maquina, AdminMaquina)

@@ -1,4 +1,4 @@
-from .models import *
+from dashboard.models import DashboardItens, DashboardSubItens
 
 
 def dashboardMenuItens(request):
@@ -6,9 +6,6 @@ def dashboardMenuItens(request):
     mainList = []
     for item in mainItens:
         sub = DashboardSubItens.objects.all().filter(menu=item.id)
-        mainList.append({
-            "main": item,
-            "subs": sub
-        })
+        mainList.append({"main": item, "subs": sub})
 
     return {"dashbordItens": mainList}

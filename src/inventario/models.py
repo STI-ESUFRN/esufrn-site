@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.db import models
 from django.forms import ValidationError
+
 from reserva.models import Classroom
 
 # Create your models here.
@@ -10,8 +11,9 @@ from reserva.models import Classroom
 class Patrimonio(models.Model):
 
     model = models.CharField(verbose_name="Modelo", max_length=64)
-    dmp = models.CharField(verbose_name="Tombamento",
-                           max_length=64, null=True, blank=True)
+    dmp = models.CharField(
+        verbose_name="Tombamento", max_length=64, null=True, blank=True
+    )
 
     TIPO_CHOICES = (
         ("C", "Computador de mesa"),
@@ -21,8 +23,7 @@ class Patrimonio(models.Model):
         ("E", "Cabo"),
         ("O", "Outro"),
     )
-    category = models.CharField(verbose_name="Tipo",
-                                max_length=1, choices=TIPO_CHOICES)
+    category = models.CharField(verbose_name="Tipo", max_length=1, choices=TIPO_CHOICES)
 
     def get_category(self):
         for index, e in self.TIPO_CHOICES:
@@ -33,16 +34,21 @@ class Patrimonio(models.Model):
         ("D", "Disponível"),
         ("E", "Emprestado"),
     )
-    status = models.CharField(verbose_name="Status",
-                              max_length=1, choices=STATUS_CHOICES, default='D')
+    status = models.CharField(
+        verbose_name="Status", max_length=1, choices=STATUS_CHOICES, default="D"
+    )
 
     last_updated = models.DateTimeField(
-        verbose_name="Última atualização", auto_now=True)
+        verbose_name="Última atualização", auto_now=True
+    )
 
     def clean(self):
-        if self.status == "E" and PatrimonioEmprestimo.objects.filter(patrimony=self, loan__return_date__isnull=True):
+        if self.status == "E" and PatrimonioEmprestimo.objects.filter(
+            patrimony=self, loan__return_date__isnull=True
+        ):
             raise ValidationError(
-                "Não é possível emprestar {}: patrimônio já foi emprestado".format(self))
+                "Não é possível emprestar {}: patrimônio já foi emprestado".format(self)
+            )
 
     def save(self, *args, **kwargs):
         self.clean()
@@ -56,12 +62,11 @@ class Patrimonio(models.Model):
 class Maquina(models.Model):
 
     patrimony = models.ForeignKey(
-        Patrimonio, verbose_name="Patrimônio", on_delete=models.CASCADE)
+        Patrimonio, verbose_name="Patrimônio", on_delete=models.CASCADE
+    )
 
-    ram = models.IntegerField(
-        verbose_name="RAM", null=True, blank=True)
-    hdd = models.IntegerField(
-        verbose_name="HDD", null=True, blank=True)
+    ram = models.IntegerField(verbose_name="RAM", null=True, blank=True)
+    hdd = models.IntegerField(verbose_name="HDD", null=True, blank=True)
 
     STATUS_CHOICES = (
         ("R", "Reserva"),
@@ -69,11 +74,13 @@ class Maquina(models.Model):
         ("W", "Atenção"),
         ("B", "Ruim"),
     )
-    status = models.CharField(verbose_name="Status",
-                              max_length=1, choices=STATUS_CHOICES)
+    status = models.CharField(
+        verbose_name="Status", max_length=1, choices=STATUS_CHOICES
+    )
 
-    obs = models.TextField(verbose_name="Observações",
-                           max_length=1000, null=True, blank=True)
+    obs = models.TextField(
+        verbose_name="Observações", max_length=1000, null=True, blank=True
+    )
 
     def get_dmp(self):
         return self.patrimony.dmp
@@ -96,23 +103,24 @@ class Maquina(models.Model):
 
 class Emprestimo(models.Model):
     name = models.CharField(verbose_name="Solicitante", max_length=100)
-    contact = models.CharField(
-        verbose_name="Contato", max_length=100, null=True)
-    obs = models.TextField(verbose_name="Contato",
-                           max_length=1000, null=True, blank=True)
+    contact = models.CharField(verbose_name="Contato", max_length=100, null=True)
+    obs = models.TextField(
+        verbose_name="Contato", max_length=1000, null=True, blank=True
+    )
 
     classroom = models.ForeignKey(
-        Classroom, verbose_name="Sala", on_delete=models.CASCADE, null=True, blank=True)
+        Classroom, verbose_name="Sala", on_delete=models.CASCADE, null=True, blank=True
+    )
     borrow_date = models.DateTimeField(verbose_name="Data de empréstimo")
     return_date = models.DateTimeField(
-        verbose_name="Recebido em", null=True, blank=True)
+        verbose_name="Recebido em", null=True, blank=True
+    )
     STATUS_CHOICES = (
         ("A", "Aguardando devolução"),
         ("D", "Devolvido"),
         ("C", "Cancelado"),
     )
-    status = models.CharField(
-        max_length=1, choices=STATUS_CHOICES, default="A")
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default="A")
 
     def clean(self):
         pass
@@ -133,8 +141,7 @@ class Emprestimo(models.Model):
 
 
 class PatrimonioEmprestimo(models.Model):
-    patrimony = models.ForeignKey(
-        Patrimonio, on_delete=models.CASCADE)
+    patrimony = models.ForeignKey(Patrimonio, on_delete=models.CASCADE)
     quantity = models.IntegerField(verbose_name="Quantidade", default=1)
     loan = models.ForeignKey(Emprestimo, on_delete=models.CASCADE)
 

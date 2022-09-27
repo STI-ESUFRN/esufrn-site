@@ -1,10 +1,9 @@
-
 from rest_framework import serializers
 
-from .models import *
+from reserva.models import Classroom, PeriodReserve, PeriodReserveDay, Reserve
 
 
-class ClassroomSerializador(serializers.ModelSerializer):
+class ClassroomSerializer(serializers.ModelSerializer):
     classroom_name = serializers.SerializerMethodField()
 
     def get_classroom_name(self, obj):
@@ -26,9 +25,8 @@ class ClassroomSerializador(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class ReserveSerializador(serializers.ModelSerializer):
-
-    classroom = ClassroomSerializador(read_only=False)
+class ReserveSerializer(serializers.ModelSerializer):
+    classroom = ClassroomSerializer(read_only=False)
 
     shift_name = serializers.SerializerMethodField()
 
@@ -46,15 +44,13 @@ class ReserveSerializador(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class ReservePublicSerializador(serializers.ModelSerializer):
-
+class ReservePublicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reserve
         fields = ("date", "classroom", "event", "status", "shift")
 
 
-class PeriodReserveDaySerializador(serializers.ModelSerializer):
-
+class PeriodReserveDaySerializer(serializers.ModelSerializer):
     status = serializers.SerializerMethodField()
 
     def get_status(self, obj):
@@ -76,8 +72,7 @@ class PeriodReserveDaySerializador(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class PeriodReserveDayPublicSerializador(serializers.ModelSerializer):
-
+class PeriodReserveDayPublicSerializer(serializers.ModelSerializer):
     status = serializers.SerializerMethodField()
 
     def get_status(self, obj):
@@ -95,16 +90,15 @@ class PeriodReserveDayPublicSerializador(serializers.ModelSerializer):
 
     class Meta:
         model = PeriodReserveDay
-        fields = ['status', 'event', 'date', 'shift', 'shift_name']
+        fields = ["status", "event", "date", "shift", "shift_name"]
 
 
-class PeriodReserveBasicSerializador(serializers.ModelSerializer):
-
+class PeriodReserveBasicSerializer(serializers.ModelSerializer):
     classroom = serializers.SerializerMethodField()
 
     def get_classroom(self, obj):
         classroom = Classroom.objects.get(id=obj.classroom.id)
-        serializer = ClassroomSerializador(classroom, many=False)
+        serializer = ClassroomSerializer(classroom, many=False)
         return serializer.data
 
     course_name = serializers.SerializerMethodField()

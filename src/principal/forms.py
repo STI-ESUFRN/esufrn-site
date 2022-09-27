@@ -18,8 +18,7 @@ class ContactES(forms.Form):
         max_length=100,
         required=True,
         widget=forms.TextInput(
-            attrs={"name": "contato", "placeholder": "Contato",
-                   "required": True}
+            attrs={"name": "contato", "placeholder": "Contato", "required": True}
         ),
     )
     message = forms.CharField(
@@ -57,9 +56,7 @@ class NewsletterForm(forms.ModelForm):
             "category": forms.CheckboxSelectMultiple(
                 attrs={"class": "form-check-input text-black"}
             ),
-            "consent": forms.CheckboxInput(
-                attrs={"required": True}
-            )
+            "consent": forms.CheckboxInput(attrs={"required": True}),
         }
 
 
@@ -73,14 +70,31 @@ class UnsubscribeES(forms.Form):
                 "name": "email",
                 "placeholder": "Email",
                 "required": True,
-                "class": "w-100 px-2"
+                "class": "w-100 px-2",
             }
         ),
     )
 
 
 class siginForm(forms.Form):
-    field_user_name = forms.CharField(label='Usuário', max_length=100, widget=forms.TextInput(
-        attrs={'class': 'form-control rounded-0 border-0 my-4', 'placeholder': 'Usuário', 'required': 'required'}))
-    field_passwd = forms.CharField(label='Senha', widget=forms.PasswordInput(
-        attrs={'class': 'form-control rounded-0 border-0 my-4', 'placeholder': 'Senha', 'required': 'required'}))
+    field_user_name = forms.CharField(
+        label="Usuário",
+        max_length=100,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control rounded-0 border-0 my-4",
+                "placeholder": "Usuário",
+                "required": "required",
+            }
+        ),
+    )
+    field_passwd = forms.CharField(
+        label="Senha",
+        widget=forms.PasswordInput(
+            attrs={
+                "class": "form-control rounded-0 border-0 my-4",
+                "placeholder": "Senha",
+                "required": "required",
+            }
+        ),
+    )

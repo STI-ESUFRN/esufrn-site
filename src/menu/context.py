@@ -1,4 +1,4 @@
-from .models import *
+from menu.models import Itens, SubItens, SubSubItens
 
 
 def menuItens(request):
@@ -18,14 +18,18 @@ def menuItens(request):
             for subsubitem in subsubitens:
                 subsubitenslist.append(subsubitem)
 
-            subitenslist.append({
-                "main": subitem,
-                "subs": subsubitenslist,
-            })
+            subitenslist.append(
+                {
+                    "main": subitem,
+                    "subs": subsubitenslist,
+                }
+            )
 
-        itenslist.append({
-            "main": item,
-            "subs": subitenslist,
-        })
+        itenslist.append(
+            {
+                "main": item,
+                "subs": subitenslist,
+            }
+        )
 
     return {"mainItens": itenslist}

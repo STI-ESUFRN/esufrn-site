@@ -1,17 +1,15 @@
 from rest_framework import serializers
 
-from chamado.models import *
+from chamado.models import Chamado
 
 
-class ChamadoSerializador(serializers.ModelSerializer):
-
+class ChamadoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chamado
-        fields = ['title', 'description', 'requester', 'course', 'contact']
+        fields = ["title", "description", "requester", "course", "contact"]
 
 
-class ChamadoAdminSerializador(serializers.ModelSerializer):
-
+class ChamadoAdminSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chamado
         exclude = ["solved_at"]

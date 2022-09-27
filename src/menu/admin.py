@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import *
+from menu.models import Itens, SubItens, SubSubItens
 
 # Register your models here.
 

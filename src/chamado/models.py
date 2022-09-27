@@ -5,19 +5,17 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.db import models
 from django.template.loader import render_to_string
-from django.utils.translation import gettext_lazy as _
 
 
 class Chamado(models.Model):
     title = models.CharField("Título", max_length=100)
-    description = models.CharField(
-        "Descrição", max_length=300, null=True, blank=True)
+    description = models.CharField("Descrição", max_length=300, null=True, blank=True)
     requester = models.CharField("Solicitante", max_length=50)
     course = models.CharField("Curso", max_length=100)
     contact = models.CharField(
-        "Whatsapp ou Email", max_length=50, null=True, blank=True)
-    date = models.DateTimeField(
-        "Registrado em", auto_now=False, auto_now_add=True)
+        "Whatsapp ou Email", max_length=50, null=True, blank=True
+    )
+    date = models.DateTimeField("Registrado em", auto_now=False, auto_now_add=True)
     solved_at = models.DateTimeField("Resolvido em", null=True, blank=True)
     lastModified = models.DateTimeField("Última modificação", auto_now=True)
 
@@ -40,10 +38,8 @@ class Chamado(models.Model):
             self.contact,
         )
 
-        context = {
-            "message": message
-        }
-        msg = render_to_string('base.email_conversation.html', context)
+        context = {"message": message}
+        msg = render_to_string("base.email_conversation.html", context)
 
         threading.Thread(
             target=send_mail,

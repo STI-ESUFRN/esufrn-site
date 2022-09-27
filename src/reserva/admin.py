@@ -1,7 +1,12 @@
-
 from django.contrib import admin
 
-from .models import *
+from reserva.models import (
+    Classroom,
+    PeriodReserve,
+    PeriodReserveDay,
+    Reserve,
+    UserClassroom,
+)
 
 # Register your models here.
 
@@ -11,8 +16,7 @@ class UserClassroomInline(admin.TabularInline):
 
 
 class AdminClassroom(admin.ModelAdmin):
-    list_display = ["number", "name", "type",
-                    "days_required", "justification_required"]
+    list_display = ["number", "name", "type", "days_required", "justification_required"]
     list_filter = ["type", "floor", "days_required", "justification_required"]
     inlines = [
         UserClassroomInline,
@@ -42,7 +46,7 @@ class AdminReserve(admin.ModelAdmin):
         # "event",
         # "phone",
     ]
-    exclude = ['tag']
+    exclude = ["tag"]
     search_fields = [
         "event",
         "equipment",
@@ -53,19 +57,19 @@ class AdminReserve(admin.ModelAdmin):
     list_filter = ["status", "classroom", "shift", "date"]
 
     def reserve_approve(modeladmin, request, queryset):
-        queryset.update(status='A')
+        queryset.update(status="A")
 
     reserve_approve.short_description = "Marcar reservas selecionadas como aprovadas"
 
     def reserve_decline(modeladmin, request, queryset):
-        queryset.update(status='R')
+        queryset.update(status="R")
 
     reserve_decline.short_description = "Marcar reservas selecionadas como rejeitadas"
 
     actions = [reserve_approve, reserve_decline]
 
     def save_model(self, request, obj, form, change):
-        if 'status' in form.changed_data:
+        if "status" in form.changed_data:
             if obj.status is not None:
                 obj.notify()
 
@@ -106,54 +110,37 @@ class AdminPeriodReserve(admin.ModelAdmin):
     ]
     list_filter = ["course", "classroom", "requester", "status"]
     fieldsets = (
-        (None, {
-            'fields': (
-                'classname',
-                'course',
-                'classcode',
-                'classroom',
-                'date_begin',
-                'date_end',
-                'workload',
-                'period',
-                "class_period",
-                'weekdays',
-                'shift',
-                'equipment',)
-        }),
-        ('Dados do docente', {
-            'fields': ('requester', 'email', 'phone')
-        }),
-        ('Administração', {
-            'fields': ('status',)
-        })
+        (
+            None,
+            {
+                "fields": (
+                    "classname",
+                    "course",
+                    "classcode",
+                    "classroom",
+                    "date_begin",
+                    "date_end",
+                    "workload",
+                    "period",
+                    "class_period",
+                    "weekdays",
+                    "shift",
+                    "equipment",
+                )
+            },
+        ),
+        ("Dados do docente", {"fields": ("requester", "email", "phone")}),
+        ("Administração", {"fields": ("status",)}),
     )
-
-    # def save_model(self, request, obj, form, change):
-    #     days = PeriodReserveDay.objects.filter(period=obj)
-    #     for day in days:
-    #         day.delete()
-
-    #     super().save_model(request, obj, form, change)
 
 
 admin.site.register(PeriodReserve, AdminPeriodReserve)
 
 
 class AdminPeriodReserveDay(admin.ModelAdmin):
-    list_display = [
-        "get_period_classroom",
-        "date",
-        "get_period_requester",
-        "shift"
-    ]
+    list_display = ["get_period_classroom", "date", "get_period_requester", "shift"]
     search_fields = ["period", "date"]
-    list_filter = [
-        "period",
-        "period__requester",
-        "period__classroom",
-        "shift"
-    ]
+    list_filter = ["period", "period__requester", "period__classroom", "shift"]
     readonly_fields = ["period", "date"]
 
 

@@ -81,8 +81,10 @@ def joinRange(rng1, rng2, qnt_page):
 
 
 def emailToken(email):
-    return hashlib.md5("[Jmh!&DKfY#u&l#4zvFXw5mV4iD(uEmUW]:{}".format(email.lower()).encode()).hexdigest()
+    return hashlib.md5(
+        "[Jmh!&DKfY#u&l#4zvFXw5mV4iD(uEmUW]:{}".format(email.lower()).encode()
+    ).hexdigest()
 
 
 def paginate(obj, page, npp):
-    return obj[((page-1)*npp):((page)*npp)]
+    return obj[((page - 1) * npp) : ((page) * npp)]
