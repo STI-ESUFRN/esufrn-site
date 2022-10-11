@@ -114,13 +114,13 @@ DATE_INPUT_FORMATS = ["%d-%m-%Y"]
 
 HOST_URL = "http://escoladesaude.ufrn.br"
 
-STATIC_ROOT = "/vol/web/static/"
 STATIC_URL = "/static/"
+MEDIA_URL = "/media/"
+
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
-
-MEDIA_ROOT = "/vol/web/media/"
-MEDIA_URL = "/media/"
 
 
 CKEDITOR_UPLOAD_PATH = "uploads/"

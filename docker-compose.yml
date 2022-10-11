@@ -42,22 +42,10 @@ services:
       - mysql
     volumes:
       - mysqld-data:/run/mysqld
-      - ./public:/vol/web
+      - ./src/media:/usr/src/app/media
+      - ./src/staticfiles:/usr/src/app/staticfiles
     env_file:
       - ./.env
-
-  planeja:
-    build:
-      context: ./planeja
-      dockerfile: Dockerfile
-    expose:
-      - 9000
-    depends_on:
-      - mysql
-    links:
-      - mysql
-    volumes:
-      - ./planeja:/var/www/html/
 
   nginx:
     build:
@@ -69,15 +57,15 @@ services:
     depends_on:
       - web
       - phpmyadmin
-    links:
-      - planeja
     volumes:
-      - ./public:/usr/share/nginx/html
+      - ./src/media:/usr/share/nginx/html/media:ro
+      - ./src/staticfiles:/usr/share/nginx/html/staticfiles:ro
       - ./nginx/ssl:/ssl
       - phpmyadmin-data:/var/www/html/phpmyadmin/
-      - ./planeja:/var/www/html/planeja/
 
 volumes:
   mysqld-data:
   mysql-data:
   phpmyadmin-data:
+  static-data:
+  media-data:

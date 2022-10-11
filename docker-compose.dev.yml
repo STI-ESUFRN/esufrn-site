@@ -1,6 +1,73 @@
-version: '3'
+version: '3.9'
+
 services:
+  mysql:
+    image: mysql:8.0.30
+    restart: always
+    expose:
+      - 3306
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_ROOT_HOST: "localhost"
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - mysqld-data:/var/run/mysqld
+      - ./mysql:/docker-entrypoint-initdb.d
+
+  phpmyadmin:
+    image: phpmyadmin:5.2.0-fpm-alpine
+    restart: always
+    expose:
+      - 9000
+    environment:
+      PMA_HOST: mysql
+      PMA_ABSOLUTE_URI: https://*/phpmyadmin/
+    depends_on:
+      - mysql
+    links:
+      - mysql
+    volumes:
+      - phpmyadmin-data:/var/www/html/
+
   web:
     build:
       context: .
       dockerfile: Dockerfile.dev
+    command: gunicorn esufrn.wsgi:application --workers 4 --threads 2 --bind 0.0.0.0:8000
+    restart: always
+    expose:
+      - 8000
+    depends_on:
+      - mysql
+    volumes:
+      - mysqld-data:/run/mysqld
+      - ./src/media:/usr/src/app/media
+      - ./src/staticfiles:/usr/src/app/staticfiles
+    env_file:
+      - ./.env
+
+  nginx:
+    build:
+      context: nginx
+    restart: always
+    ports:
+      - 8080:80
+      - 8081:443
+    depends_on:
+      - web
+      - phpmyadmin
+    volumes:
+      - ./src/media:/usr/share/nginx/html/media:ro
+      - ./src/staticfiles:/usr/share/nginx/html/staticfiles:ro
+      - ./nginx/ssl:/ssl
+      - phpmyadmin-data:/var/www/html/phpmyadmin/
+
+volumes:
+  mysqld-data:
+  mysql-data:
+  phpmyadmin-data:
+  static-data:
+  media-data:

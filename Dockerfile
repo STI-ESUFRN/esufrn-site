@@ -10,24 +10,30 @@ WORKDIR $APP_HOME
 RUN apk update && \
     apk add gcc musl-dev mariadb-connector-c-dev
 
-
 COPY pyproject.toml .
 RUN pip install poetry
 RUN poetry install --only main
 
-COPY ./scripts ./scripts
-RUN sed -i 's/\r$//g' ./scripts/entrypoint.sh
-RUN chmod +x ./scripts/entrypoint.sh
+COPY ./scripts/entrypoint.sh ./entrypoint.sh
+RUN sed -i 's/\r$//g' ./entrypoint.sh
+RUN chmod +x ./entrypoint.sh
 
-RUN mkdir -p $APP_HOME
-COPY ./src $APP_HOME/src
+RUN mkdir -p \
+    $APP_HOME \
+    $APP_HOME/staticfiles \
+    $APP_HOME/media
 
-RUN addgroup -S app && \
-    adduser -S app -G app && \
-    chown -R app:app $APP_HOME
+COPY ./src $APP_HOME
 
-USER app
+# RUN addgroup -S app && \
+#     adduser -S app -G app
+# RUN chown -R app:app \
+#     $APP_HOME \
+#     $APP_HOME/staticfiles \
+#     $APP_HOME/media
 
-WORKDIR $APP_HOME/src
+# USER app
 
-ENTRYPOINT ["../scripts/entrypoint.sh"]
+WORKDIR $APP_HOME
+
+ENTRYPOINT ["./entrypoint.sh"]

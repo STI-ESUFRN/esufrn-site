@@ -442,3 +442,13 @@ def publicacoes_outras(request):
         "crumbs": [{"name": "Publicações"}, {"name": "Outras publicações"}],
     }
     return render(request, "publicacoes.outraspublicacoes.html", context)
+
+
+def test_mail(request):
+    send_mail(
+        "test",
+        "test only",
+        settings.EMAIL_HOST_USER,
+        ["felipesena.m@gmail.com"],
+    )
+    return redirect("home")
