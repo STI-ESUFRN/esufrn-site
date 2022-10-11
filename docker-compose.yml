@@ -42,8 +42,8 @@ services:
       - mysql
     volumes:
       - mysqld-data:/run/mysqld
+      - static-data:/usr/src/app/staticfiles
       - ./src/media:/usr/src/app/media
-      - ./src/staticfiles:/usr/src/app/staticfiles
     env_file:
       - ./.env
 
@@ -58,14 +58,13 @@ services:
       - web
       - phpmyadmin
     volumes:
-      - ./src/media:/usr/share/nginx/html/media:ro
-      - ./src/staticfiles:/usr/share/nginx/html/staticfiles:ro
-      - ./nginx/ssl:/ssl
       - phpmyadmin-data:/var/www/html/phpmyadmin/
+      - static-data:/usr/share/nginx/html/staticfiles:ro
+      - ./src/media:/usr/share/nginx/html/media:ro
+      - ./nginx/ssl:/ssl
 
 volumes:
   mysqld-data:
   mysql-data:
   phpmyadmin-data:
   static-data:
-  media-data:
