@@ -3,7 +3,6 @@ version: '3.9'
 services:
   mysql:
     image: mysql:8.0.30
-    restart: always
     expose:
       - 3306
     environment:
@@ -19,7 +18,6 @@ services:
 
   phpmyadmin:
     image: phpmyadmin:5.2.0-fpm-alpine
-    restart: always
     expose:
       - 9000
     environment:
@@ -30,29 +28,27 @@ services:
     links:
       - mysql
     volumes:
-      - phpmyadmin-data:/var/www/html/
+      - phpmyadmin-data:/var/www/html
 
   web:
     build:
       context: .
       dockerfile: Dockerfile.dev
     command: gunicorn esufrn.wsgi:application --workers 4 --threads 2 --bind 0.0.0.0:8000
-    restart: always
     expose:
       - 8000
     depends_on:
       - mysql
     volumes:
       - mysqld-data:/run/mysqld
-      - static-data:/usr/src/app/staticfiles
-      - ./src/media:/usr/src/app/media
+      - static-data:/usr/src/app/src/staticfiles
+      - ./src/media:/usr/src/app/src/media
     env_file:
       - ./.env
 
   nginx:
     build:
       context: nginx
-    restart: always
     ports:
       - 8080:80
       - 8081:443
@@ -60,10 +56,10 @@ services:
       - web
       - phpmyadmin
     volumes:
-      - phpmyadmin-data:/var/www/html/phpmyadmin/
+      - phpmyadmin-data:/var/www/html/phpmyadmin
       - static-data:/usr/share/nginx/html/staticfiles:ro
       - ./src/media:/usr/share/nginx/html/media:ro
-      - ./nginx/ssl:/ssl
+      - ./nginx/ssl:/ssl:ro
 
 volumes:
   mysqld-data:
