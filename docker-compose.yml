@@ -25,6 +25,7 @@ services:
     environment:
       PMA_HOST: mysql
       PMA_ABSOLUTE_URI: https://*/phpmyadmin/
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     depends_on:
       - mysql
     links:
