@@ -43,8 +43,8 @@ services:
       - mysql
     volumes:
       - mysqld-data:/run/mysqld
-      - static-data:/usr/src/app/src/staticfiles
-      - ./src/media:/usr/src/app/src/media
+      - static-data:/usr/src/app/staticfiles
+      - ./src/media:/usr/src/app/media
     env_file:
       - ./.env
 
@@ -59,9 +59,10 @@ services:
       - web
       - phpmyadmin
     volumes:
-      - phpmyadmin-data:/var/www/html/phpmyadmin
+      - phpmyadmin-data:/var/www/html/phpmyadmin:ro
       - static-data:/usr/share/nginx/html/staticfiles:ro
       - ./src/media:/usr/share/nginx/html/media:ro
+      - ./src/templates:/usr/share/nginx/html/templates:ro
       - ./nginx/ssl:/ssl:ro
 
 volumes:
@@ -69,3 +70,4 @@ volumes:
   mysql-data:
   phpmyadmin-data:
   static-data:
+  media-data:

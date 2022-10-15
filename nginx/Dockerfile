@@ -1,6 +1,6 @@
 FROM nginx
 
-COPY default.conf /etc/nginx/conf.d/default.conf
+COPY ./conf/ /etc/nginx/
 
 RUN mkdir -p /var/www/html/esufrn
 

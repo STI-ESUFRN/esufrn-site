@@ -25,15 +25,4 @@ RUN mkdir -p \
 
 COPY ./src $APP_HOME
 
-# RUN addgroup -S app && \
-#     adduser -S app -G app
-# RUN chown -R app:app \
-#     $APP_HOME \
-#     $APP_HOME/staticfiles \
-#     $APP_HOME/media
-
-# USER app
-
-WORKDIR $APP_HOME
-
 ENTRYPOINT ["./entrypoint.sh"]
