@@ -8,6 +8,10 @@ ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(" ")
 HTML_MINIFY = int(os.environ.get("MINIFY", False))
 
 INSTALLED_APPS = [
+    # other
+    "admin_interface",
+    "colorfield",
+    # django
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -27,8 +31,6 @@ INSTALLED_APPS = [
     "multiselectfield",
     "ckeditor",
     "ckeditor_uploader",
-    "admin_interface",
-    "colorfield",
     "corsheaders",
 ]
 
@@ -48,9 +50,7 @@ MIDDLEWARE = [
 X_FRAME_OPTIONS = "SAMEORIGIN"
 
 CSRF_TRUSTED_ORIGINS = os.environ.get(
-    "CSRF_TRUSTED_ORIGINS", 
-    "http://* "
-    "https://*"
+    "CSRF_TRUSTED_ORIGINS", "http://* https://*"
 ).split(" ")
 CSRF_COOKIE_SECURE = int(os.environ.get("CSRF_COOKIE_SECURE", False))
 SESSION_COOKIE_SECURE = int(os.environ.get("SESSION_COOKIE_SECURE", False))
