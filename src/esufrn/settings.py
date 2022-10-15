@@ -2,31 +2,34 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get("SECRET_KEY")
-DEBUG = int(os.environ.get("DEBUG", default=0))
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
+DEBUG = int(os.environ.get("DEBUG", True))
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(" ")
 
-HTML_MINIFY = int(os.environ.get("MINIFY"))
+HTML_MINIFY = int(os.environ.get("MINIFY", False))
 
 INSTALLED_APPS = [
-    "principal",
-    "dashboard",
-    "reserva",
-    "chamado",
-    "inventario",
-    "menu",
-    "rest_framework",
-    "multiselectfield",
-    "ckeditor",
-    "ckeditor_uploader",
-    "admin_interface",
-    "colorfield",
-    "corsheaders",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # apps
+    "principal",
+    "dashboard",
+    "reserva",
+    "chamado",
+    "inventario",
+    "menu",
+    # lib
+    "rest_framework",
+    "django_filters",
+    "multiselectfield",
+    "ckeditor",
+    "ckeditor_uploader",
+    "admin_interface",
+    "colorfield",
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
@@ -44,9 +47,13 @@ MIDDLEWARE = [
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
 
-CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS").split(" ")
-CSRF_COOKIE_SECURE = int(os.environ.get("CSRF_COOKIE_SECURE"))
-SESSION_COOKIE_SECURE = int(os.environ.get("SESSION_COOKIE_SECURE"))
+CSRF_TRUSTED_ORIGINS = os.environ.get(
+    "CSRF_TRUSTED_ORIGINS", 
+    "http://* "
+    "https://*"
+).split(" ")
+CSRF_COOKIE_SECURE = int(os.environ.get("CSRF_COOKIE_SECURE", False))
+SESSION_COOKIE_SECURE = int(os.environ.get("SESSION_COOKIE_SECURE", False))
 
 # SECURE_SSL_REDIRECT = True
 
@@ -85,10 +92,10 @@ WSGI_APPLICATION = "esufrn.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": os.environ.get("DATABASE_ENGINE"),
-        "NAME": os.environ.get("MYSQL_DATABASE"),
-        "USER": os.environ.get("MYSQL_USER"),
-        "PASSWORD": os.environ.get("MYSQL_PASSWORD"),
+        "ENGINE": os.getenv("DATABASE_ENGINE"),
+        "NAME": os.getenv("MYSQL_DATABASE"),
+        "USER": os.getenv("MYSQL_USER"),
+        "PASSWORD": os.getenv("MYSQL_PASSWORD"),
     }
 }
 
@@ -239,5 +246,9 @@ CONTACT_EMAIL_SUPORTE = os.environ.get("CONTACT_EMAIL_SUPORTE")
 BOLD = ""
 
 REST_FRAMEWORK = {
-    "DEFAULT_RENDERER_CLASSES": os.environ.get("REST_RENDERERS").split(" "),
+    "DEFAULT_RENDERER_CLASSES": os.environ.get(
+        "REST_RENDERERS",
+        "rest_framework.renderers.JSONRenderer "
+        "rest_framework.renderers.BrowsableAPIRenderer",
+    ).split(" "),
 }

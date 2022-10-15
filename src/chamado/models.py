@@ -5,22 +5,40 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.db import models
 from django.template.loader import render_to_string
+from model_utils.models import SoftDeletableModel, TimeStampedModel
 
 
-class Chamado(models.Model):
+class Chamado(SoftDeletableModel, TimeStampedModel):
+    class Status(models.TextChoices):
+        RESOLVED = "Resolved"
+        NOT_RESOLVED = "Not resolved"
+        PENDING = "Pending"
+
     title = models.CharField("Título", max_length=100)
-    description = models.CharField("Descrição", max_length=300, null=True, blank=True)
+    description = models.TextField("Descrição", max_length=300)
     requester = models.CharField("Solicitante", max_length=50)
     course = models.CharField("Curso", max_length=100)
-    contact = models.CharField(
-        "Whatsapp ou Email", max_length=50, null=True, blank=True
-    )
+    contact = models.CharField("Whatsapp ou Email", max_length=50)
     date = models.DateTimeField("Registrado em", auto_now=False, auto_now_add=True)
-    solved_at = models.DateTimeField("Resolvido em", null=True, blank=True)
-    lastModified = models.DateTimeField("Última modificação", auto_now=True)
+    solved_at = models.DateTimeField("Resolvido em", null=True)
+    obs = models.TextField("Observações", null=True)
+    status = models.CharField(
+        "Status", max_length=12, choices=Status.choices, default=Status.PENDING
+    )
 
-    obs = models.TextField("Observações", null=True, blank=True)
-    status = models.BooleanField("Status", null=True)
+    def save(self, *args, **kwargs):
+        pk = self.pk
+
+        if self.status is not self.Status.PENDING:
+            if self.solved_at is None:
+                self.solved_at = datetime.today()
+        else:
+            self.solved_at = None
+
+        super(Chamado, self).save(*args, **kwargs)
+
+        if pk is None:
+            self.notify()
 
     def notify(self):
         message = """
@@ -59,20 +77,6 @@ class Chamado(models.Model):
                 )
             ),
         ).start()
-
-    def save(self, *args, **kwargs):
-        pk = self.pk
-
-        if self.status is not None:
-            if self.solved_at is None:
-                self.solved_at = datetime.today()
-        else:
-            self.solved_at = None
-
-        super(Chamado, self).save(*args, **kwargs)
-
-        if pk is None:
-            self.notify()
 
     class Meta:
         verbose_name = "Chamado"
