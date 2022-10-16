@@ -5,25 +5,25 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.db import models
 from django.template.loader import render_to_string
+from django.utils.translation import gettext_lazy as _
 from model_utils.models import SoftDeletableModel, TimeStampedModel
 
 
 class Chamado(SoftDeletableModel, TimeStampedModel):
     class Status(models.TextChoices):
-        RESOLVED = "Resolved"
-        NOT_RESOLVED = "Not resolved"
-        PENDING = "Pending"
+        RESOLVED = "R", _("Resolved")
+        NOT_RESOLVED = "N", _("Not resolved")
+        PENDING = "P", _("Pending")
 
     title = models.CharField("Título", max_length=100)
     description = models.TextField("Descrição", max_length=300)
     requester = models.CharField("Solicitante", max_length=50)
     course = models.CharField("Curso", max_length=100)
     contact = models.CharField("Whatsapp ou Email", max_length=50)
-    date = models.DateTimeField("Registrado em", auto_now=False, auto_now_add=True)
     solved_at = models.DateTimeField("Resolvido em", null=True)
     obs = models.TextField("Observações", null=True)
     status = models.CharField(
-        "Status", max_length=12, choices=Status.choices, default=Status.PENDING
+        "Status", max_length=1, choices=Status.choices, default=Status.PENDING
     )
 
     def save(self, *args, **kwargs):
@@ -81,7 +81,7 @@ class Chamado(SoftDeletableModel, TimeStampedModel):
     class Meta:
         verbose_name = "Chamado"
         verbose_name_plural = "Chamados"
-        ordering = ["-date"]
+        ordering = ["-created"]
 
     def __str__(self):
         return self.title

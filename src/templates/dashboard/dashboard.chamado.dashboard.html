@@ -1,118 +1,107 @@
 {% extends "dashboard.base.html" %}
 {% load static %}
 {% block styles %}
-    <style>
-	table.table th:nth-child(1){
-		width: 20px;
-	}
-    </style>
+<style>
+    table.table th:nth-child(1) {
+        width: 20px;
+    }
+</style>
 {% endblock styles %}
 {% block content %}
-    <div class="card rounded-0">
-        <div class="card-header head-table border-0 rounded-0">
-            <b><i class="fas fa-paper-plane mr-2"></i>Chamados em Espera</b>
-        </div>
-        <div class="card-body p-0" style="overflow-x: auto;">
-            <table class="table table-hover mb-0">
-                <thead>
-                    <tr class="capt-table">
-                        <th class="border-0 text-center" scope="col"></th>
-                        {% comment %} <th class="border-0" scope="col">Tipo</th> {% endcomment %}
-                        <th class="border-0" scope="col">Título</th>
-                        <th class="border-0" scope="col">Solicitante</th>
-                        <th class="border-0" scope="col">Contato</th>
-                        <th class="border-0 text-center" scope="col">Tempo</th>
-                    </tr>
-                </thead>
-                <tbody id="lista-de-chamados">
-                    {% comment %} AJAX {% endcomment %}
-                </tbody>
-            </table>
-        </div>
+<div class="card rounded-0">
+    <div class="card-header head-table border-0 rounded-0">
+        <b><i class="fas fa-paper-plane mr-2"></i>Chamados em Espera</b>
     </div>
-    <div class="mt-4" id="detalhes-chamado">
-        <div class="card-group" id="detalhes" style="display: none;opacity: 0;">
-            <div class="card" style="width: 18rem;">
-                <div class="card-header head-table border-0 rounded-0">
-                    <b><i class="fas fa-info mr-2"></i>Detalhes do Chamado</b>
-                    <button id="detalhes-dismiss" type="button" class="close" aria-label="Close">
-                        <span aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i></span>
-                    </button>
-                </div>
-                <div class="card-body">
-                    <!-- <small class="text-muted">Tipo: Chamado Convencional</small> -->
-                    <h5 class="card-title">
-                        <small>Título:</small> <b data-attribute="title">---</b>
-                    </h5>
-                    <p class="card-text">
-                        <small>Descrição:</small> <b data-attribute="description">---</b>
-                    </p>
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
-                        <small>Solicitante:</small> <b data-attribute="requester">Maria das Dores</b>
-                    </li>
-                    <li class="list-group-item">
-                        <small>Contato:</small> <b data-attribute="contact">Sala 27A</b>
-                    </li>
-                    <li class="list-group-item">
-                        <small>Curso:</small> <b data-attribute="course">Sala 27A</b>
-                    </li>
-                    <!-- <li class="list-group-item"><small>Tempo decorrido:</small> <b data-attribute="decorrido">42min REVER ISSO</b></li> -->
-                </ul>
-                <div class="card-footer border-top-0">
-                    <p>
-                        <b>Ações:</b>
-                    </p>
-                    <small class="text-muted">Observação do chamado:</small>
-                    <textarea id="call-obs"
-                              data-attribute="obs"
-                              class="form-control mb-3"
-                              rows="2"
-                              placeholder="Escrever observação"></textarea>
-                    <a href="#"
-                       class="btn mb-1 btn-outline-success btn-sm"
-                       id="confirmCall"
-                       data-status="A">Resolvido</a>
-                    <a href="#"
-                       class="btn mb-1 btn-outline-danger btn-sm"
-                       id="rejectCall"
-                       data-status="R">Não
+    <div class="card-body p-0" style="overflow-x: auto;">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr class="capt-table">
+                    <th class="border-0 text-center" scope="col"></th>
+                    {% comment %} <th class="border-0" scope="col">Tipo</th> {% endcomment %}
+                    <th class="border-0" scope="col">Título</th>
+                    <th class="border-0" scope="col">Solicitante</th>
+                    <th class="border-0" scope="col">Contato</th>
+                    <th class="border-0 text-center" scope="col">Tempo</th>
+                </tr>
+            </thead>
+            <tbody id="lista-de-chamados">
+                {% comment %} AJAX {% endcomment %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="mt-4" id="detalhes-chamado">
+    <div class="card-group" id="detalhes" style="display: none;opacity: 0;">
+        <div class="card" style="width: 18rem;">
+            <div class="card-header head-table border-0 rounded-0">
+                <b><i class="fas fa-info mr-2"></i>Detalhes do Chamado</b>
+                <button id="detalhes-dismiss" type="button" class="close" aria-label="Close">
+                    <span aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i></span>
+                </button>
+            </div>
+            <div class="card-body">
+                <!-- <small class="text-muted">Tipo: Chamado Convencional</small> -->
+                <h5 class="card-title">
+                    <small>Título:</small> <b data-attribute="title">---</b>
+                </h5>
+                <p class="card-text">
+                    <small>Descrição:</small> <b data-attribute="description">---</b>
+                </p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <small>Solicitante:</small> <b data-attribute="requester">Maria das Dores</b>
+                </li>
+                <li class="list-group-item">
+                    <small>Contato:</small> <b data-attribute="contact">Sala 27A</b>
+                </li>
+                <li class="list-group-item">
+                    <small>Curso:</small> <b data-attribute="course">Sala 27A</b>
+                </li>
+                <!-- <li class="list-group-item"><small>Tempo decorrido:</small> <b data-attribute="decorrido">42min REVER ISSO</b></li> -->
+            </ul>
+            <div class="card-footer border-top-0">
+                <p>
+                    <b>Ações:</b>
+                </p>
+                <small class="text-muted">Observação do chamado:</small>
+                <textarea id="call-obs" data-attribute="obs" class="form-control mb-3" rows="2"
+                    placeholder="Escrever observação"></textarea>
+                <a href="#" class="btn mb-1 btn-outline-success btn-sm" id="confirmCall" data-status="R">Resolvido</a>
+                <a href="#" class="btn mb-1 btn-outline-danger btn-sm" id="rejectCall" data-status="N">Não
                     Resolvido</a>
-                    <a href="#" class="btn mb-1 btn-outline-primary btn-sm" id="obsCall">Salvar Observação</a>
-                    <p class="m-0 mt-2">
-                        <small class="text-muted">Data do Chamado: <span date-format="DD/MM/YYYY HH:mm" data-attribute="date"></span></small>
-                    </p>
-                    <p class="m-0 mt-2">
-                        <small class="text-muted">Ultima Alteração: <span date-format="DD/MM/YYYY HH:mm" data-attribute="lastModified"></span></small>
-                    </p>
-                </div>
+                <a href="#" class="btn mb-1 btn-outline-primary btn-sm" id="obsCall">Salvar Observação</a>
+                <p class="m-0 mt-2">
+                    <small class="text-muted">Data do Chamado: <span date-format="DD/MM/YYYY HH:mm"
+                            data-attribute="created"></span></small>
+                </p>
+                <p class="m-0 mt-2">
+                    <small class="text-muted">Ultima Alteração: <span date-format="DD/MM/YYYY HH:mm"
+                            data-attribute="lastModified"></span></small>
+                </p>
             </div>
         </div>
     </div>
-    <div class="modal fade bd-example-modal-lg"
-         id="exampleModalCenter"
-         tabindex="-1"
-         role="dialog"
-         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-            <div class="modal-content rounded-0">
-                <div class="modal-header">
-                    <h5 class="modal-title mx-auto" id="exampleModalCenterTitle">
-                        Consulta de Calendário <i class="fas fa-calendar ml-4"></i> <b id="actual-mes">---</b>
-                    </h5>
-                    <button class="btn btn-sm btn-danger ml-5" data-dismiss="modal">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div id="reservation-calendar" class="w-100"></div>
-                </div>
+</div>
+<div class="modal fade bd-example-modal-lg" id="exampleModalCenter" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content rounded-0">
+            <div class="modal-header">
+                <h5 class="modal-title mx-auto" id="exampleModalCenterTitle">
+                    Consulta de Calendário <i class="fas fa-calendar ml-4"></i> <b id="actual-mes">---</b>
+                </h5>
+                <button class="btn btn-sm btn-danger ml-5" data-dismiss="modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="reservation-calendar" class="w-100"></div>
             </div>
         </div>
     </div>
+</div>
 {% endblock content %}
 {% block scripts %}
-    <script src="{% static 'assets/dashboard/js/ajax_csrf.js' %}"></script>
-    <script src="{% static 'assets/dashboard/chamado/js/dashboard.js' %}"></script>
+<script src="{% static 'assets/dashboard/js/ajax_csrf.js' %}"></script>
+<script src="{% static 'assets/dashboard/chamado/js/dashboard.js' %}"></script>
 {% endblock scripts %}

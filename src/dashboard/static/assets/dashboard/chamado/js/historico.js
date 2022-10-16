@@ -14,10 +14,10 @@ function refreshData(url = undefined) {
 		$.each(response.results, function (i, v) {
 			let row = $('<tr />', { "data-id-chamado": v.id });
 			let fas = $('<td />', { "class": 'text-center px-0 pl-2' });
-			let fa_check = $('<i />', { "class": v.status == true ? 'fas fa-check-circle text-success' : 'fas fa-times-circle text-danger' });
+			let fa_check = $('<i />', { "class": v.status == "R" ? 'fas fa-check-circle text-success' : 'fas fa-times-circle text-danger' });
 			fas.append(fa_check);
 
-			let criado_ha_date = new Date(v.date);
+			let criado_ha_date = new Date(v.created);
 			let criado_ha = criado_ha_date.toLocaleDateString();
 			let fa_cog = $('<td />', { class: "text-center", html: '<i class="fas fa-user-cog"></i>' });
 			let title = $('<td />', { text: v.title, title: v.title });
@@ -59,7 +59,7 @@ function fillCall(id) {
 		fillAttributes(response);
 
 		let status = $('[data-attribute=status]');
-		if (status.text() == 'true') {
+		if (status.text() == 'R') {
 			status.html('Resolvido <i class="fas fa-check-circle text-success"></i>');
 		} else {
 			status.html('Não resolvido <i class="fas fa-times-circle text-danger"></i>');
@@ -77,7 +77,7 @@ function patch(data) {
 		data: data,
 		success: function (response) {
 			refreshData();
-			if (response.status == undefined) {
+			if (response.status == "P") {
 				$("#detalhes").fadeTo("fast", 0).slideUp();
 			}
 			showMessage("Arquivo atualizado com sucesso", "alert-success");
@@ -96,10 +96,9 @@ refreshData();
 //--------------- LISTENERS ---------------
 $("#confirmCall, #rejectCall, #waitCall").click(function (e) {
 	e.preventDefault();
-	let status = $(this).attr("data-status");
 	patch({
 		obs: $("#call-obs").val() ? $("#call-obs").val() : "",
-		status: status == "A" ? true : status == "R" ? false : ""
+		status: $(this).attr("data-status")
 	});
 });
 

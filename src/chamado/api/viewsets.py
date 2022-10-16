@@ -29,21 +29,15 @@ class ChamadoAdminViewSet(viewsets.ModelViewSet):
     filterset_fields = {
         "status": ["exact"],
     }
-    ordering_fields = ["date"]
+    ordering_fields = ["created"]
 
-    # def get_queryset(self):
-    #     queryset = Chamado.objects.all()
+    def get_queryset(self):
+        queryset = super().get_queryset()
 
-    #     options = self.request.query_params.get("options")
-    #     if options is not None:
-    #         options_list = options.split(",")
-    #         if "hist" in options_list:
-    #             queryset = queryset.exclude(status__isnull=True)
+        options = self.request.query_params.get("options")
+        if options is not None:
+            options_list = options.split(",")
+            if "hist" in options_list:
+                queryset = queryset.exclude(status=Chamado.Status.PENDING)
 
-    #     status = self.request.query_params.get("status")
-    #     if status is not None:
-    #         queryset = queryset.filter(
-    #             status=True if status == "A" else False if status == "R" else None
-    #         )
-
-    #     return queryset
+        return queryset

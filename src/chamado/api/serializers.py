@@ -18,4 +18,17 @@ class ChamadoSerializer(serializers.ModelSerializer):
 class ChamadoAdminSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chamado
-        exclude = ["solved_at"]
+        fields = [
+            "id",
+            "title",
+            "description",
+            "requester",
+            "course",
+            "contact",
+            "solved_at",
+            "obs",
+            "status",
+            "created",
+            "modified",
+            "is_removed",
+        ]

@@ -1,13 +1,13 @@
 
 var localData = undefined;
 function refreshData(ring = true) {
-	$.get("/api/admin/chamados/?status=E", function (response) {
+	$.get("/api/admin/chamados/?status=P", function (response) {
 		let results = JSON.stringify(response.results);
 		if (localData != results) {
 			localData = results;
 
 			let data = response.results;
-			$("#badgeChamados").text(response.count);
+			$("#badgeChamados").text(response.count > 0 ? response.count : "");
 
 			$("#lista-de-chamados").html("");
 			$.each(data, (index, reserve) => {
@@ -18,7 +18,7 @@ function refreshData(ring = true) {
 				a1.append(a2);
 
 				var now = new Date();
-				let criado_ha_date = new Date(reserve.date);
+				let criado_ha_date = new Date(reserve.created);
 
 				let criado_ha = criado_ha_date.toISOString();
 				let title = $('<td />', { text: reserve.title });
@@ -63,7 +63,7 @@ function patch(data) {
 		type: 'PATCH',
 		data: data,
 		success: function (reserve) {
-			if (reserve.status != undefined) {
+			if (reserve.status != "P") {
 				refreshData();
 				$("#detalhes").fadeTo("fast", 0).slideUp();
 			}
@@ -95,10 +95,9 @@ setInterval(() => {
 //--------------- LISTENERS ---------------
 $("#confirmCall, #rejectCall").click(function (e) {
 	e.preventDefault();
-	let status = $(this).attr("data-status");
 	patch({
 		obs: $("#call-obs").val() ? $("#call-obs").val() : "",
-		status: status == "A" ? true : status == "R" ? false : ""
+		status: $(this).attr("data-status")
 	});
 });
 
