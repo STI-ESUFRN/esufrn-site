@@ -55,6 +55,7 @@ services:
     ports:
       - 80:80
       - 443:443
+      - 587:587
     depends_on:
       - web
       - phpmyadmin
