@@ -15,8 +15,8 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
-from .forms import NewsletterForm
-from .models import (
+from principal.forms import NewsletterForm
+from principal.models import (
     Alerta,
     Blog,
     BlogAttachments,
@@ -26,7 +26,9 @@ from .models import (
     Newsletter,
     Paginas,
     Publicacoes,
+    Revista,
 )
+
 from .utils import emailToken, joinRange, paginator, qnt_page
 
 
@@ -444,11 +446,11 @@ def publicacoes_outras(request):
     return render(request, "publicacoes.outraspublicacoes.html", context)
 
 
-def test_mail(request):
-    send_mail(
-        "test",
-        "test only",
-        settings.EMAIL_HOST_USER,
-        ["felipesena.m@gmail.com"],
-    )
-    return redirect("home")
+def publicacoes_revistas(request):
+    settings.BOLD = ""
+
+    context = {
+        "crumbs": [{"name": "Publicações"}, {"name": "Revistas"}],
+        "revistas": Revista.objects.all(),
+    }
+    return render(request, "publicacoes.revista.html", context)
