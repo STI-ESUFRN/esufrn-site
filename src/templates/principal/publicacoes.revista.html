@@ -1,23 +1,49 @@
 {% extends "base.pagina.html" %}
 {% load static %}
 {% load mytags %}
+{% block styles %}
+    <style>
+        .card-img-top {
+            width: 100%;
+            height: 15vw;
+            object-fit: cover;
+            object-position: top;
+        }
+        .revista-link{
+            text-decoration: none;
+            color: black;
+        }
+        .revista-link:hover{
+            text-decoration: none;
+            color: var(--es-green);
+        }
+    </style>
+{% endblock styles %}
 {% block content %}
     <article>
         <div class="container mt-5 text-center cabecalho">
-            <h3>Outras publicações</h3>
+            <h3>Revista ESUFRN</h3>
             <hr class="hr-escuro mt-5"/>
         </div>
-        <div class="container mt-4 corpo historia">
-            {% for revista in revistas %}
-                <div class="card" style="width: 18rem;">
-                    <img class="card-img-top" src="{{ revista.image.url }}">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
+        <div class="container mt-4 corpo">
+            <div class="row">
+                {% for revista in revistas %}
+                    <div class="col-md-4">
+                        <a class="revista-link" href={{ revista.file.url }} target="_blank">
+                            <div class="card">
+                                <img class="card-img-top" src="{{ revista.image.url }}">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <b>{{ revista.year }}</b>
+                                    </h5>
+                                    <p class="card-text">{{ revista.subtitle }}</p>
+                                    {% comment %} <a href="#" class="btn btn-primary">Go somewhere</a> {% endcomment %}
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
         </div>
     </article>
 {% endblock content %}
