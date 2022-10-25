@@ -19,10 +19,12 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # apps
+    "assets",
     "principal",
     "dashboard",
     "reserva",
     "chamado",
+    "eventos",
     "inventario",
     "menu",
     # lib
