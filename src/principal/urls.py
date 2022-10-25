@@ -17,7 +17,7 @@ from principal.views import (
     noticias,
     pagina,
     publicacoes_outras,
-    test_mail,
+    publicacoes_revistas,
 )
 
 urlpatterns = [
@@ -32,10 +32,10 @@ urlpatterns = [
     path("ensino/mestrado/", ensino_mestrado, name="ensino_mestrado"),
     path("ensino/pronatec/", ensino_pronatec, name="ensino_pronatec"),
     path("publicacoes/outras", publicacoes_outras, name="publicacoes_outras"),
+    path("publicacoes/revistas", publicacoes_revistas, name="publicacoes_revistas"),
     path("busca/", busca, name="busca"),
     path("noticias/<slug:slug>/", noticia, name="noticia"),
     path("noticias/", noticias, name="noticias"),
     path("newsletter/unsubscribe", email_unsubscribe, name="unsubscribe"),
     path("newsletter/subscribe", email_subscribe, name="subscribe"),
-    path("test", test_mail, name="test"),
 ]

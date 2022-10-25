@@ -47,6 +47,7 @@ services:
       - mysqld-data:/run/mysqld
       - static-data:/usr/src/app/staticfiles
       - ./src/media:/usr/src/app/media
+      - ./src/templates:/usr/src/app/templates:ro
     env_file:
       - ./.env
 

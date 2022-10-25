@@ -12,6 +12,7 @@ from principal.models import (
     Newsletter,
     Paginas,
     Publicacoes,
+    Revista,
 )
 
 
@@ -50,16 +51,10 @@ class BlogAdmin(admin.ModelAdmin):
         js = ("assets/js/jquery-3.3.1.min.js", "assets/js/admin_event.js")
 
 
-admin.site.register(Blog, BlogAdmin)
-
-
 class EquipeAdmin(admin.ModelAdmin):
     list_display = ["name", "sigaa", "kind"]
     search_fields = ["name"]
     list_filter = ["kind"]
-
-
-admin.site.register(Equipe, EquipeAdmin)
 
 
 class PublicacoesAdmin(admin.ModelAdmin):
@@ -67,23 +62,14 @@ class PublicacoesAdmin(admin.ModelAdmin):
     search_fields = ["name"]
 
 
-admin.site.register(Publicacoes, PublicacoesAdmin)
-
-
 class ArquivosAdmin(admin.ModelAdmin):
     list_display = ["name", "file"]
     search_fields = ["name"]
 
 
-admin.site.register(Arquivos, ArquivosAdmin)
-
-
 class PaginasAdmin(admin.ModelAdmin):
     list_display = ["name", "path"]
     search_fields = ["name"]
-
-
-admin.site.register(Paginas, PaginasAdmin)
 
 
 class DepoimentosAdmin(admin.ModelAdmin):
@@ -92,16 +78,10 @@ class DepoimentosAdmin(admin.ModelAdmin):
     list_filter = ["occupation"]
 
 
-admin.site.register(Depoimentos, DepoimentosAdmin)
-
-
 class NewsletterAdmin(admin.ModelAdmin):
     list_display = ["name_person", "email", "category", "subscribed_at", "last_updated"]
     search_fields = ["name_person", "email"]
     list_filter = ["category"]
-
-
-admin.site.register(Newsletter, NewsletterAdmin)
 
 
 class AdminDocumentos(admin.ModelAdmin):
@@ -110,15 +90,9 @@ class AdminDocumentos(admin.ModelAdmin):
     list_filter = ["category", "document_type"]
 
 
-admin.site.register(Documentos, AdminDocumentos)
-
-
 class AdminMensagem(admin.ModelAdmin):
     list_display = ["name", "contact"]
     search_fields = ["name", "contact", "message"]
-
-
-admin.site.register(Mensagem, AdminMensagem)
 
 
 class AdminAlerta(admin.ModelAdmin):
@@ -126,4 +100,20 @@ class AdminAlerta(admin.ModelAdmin):
     search_fields = ["title", "content"]
 
 
+class AdminRevista(admin.ModelAdmin):
+    list_display = ["year", "subtitle"]
+    search_fields = ["year", "subtitle"]
+    list_filter = ["type"]
+
+
+admin.site.register(Blog, BlogAdmin)
+admin.site.register(Equipe, EquipeAdmin)
+admin.site.register(Publicacoes, PublicacoesAdmin)
+admin.site.register(Arquivos, ArquivosAdmin)
+admin.site.register(Paginas, PaginasAdmin)
+admin.site.register(Depoimentos, DepoimentosAdmin)
+admin.site.register(Newsletter, NewsletterAdmin)
+admin.site.register(Documentos, AdminDocumentos)
+admin.site.register(Mensagem, AdminMensagem)
 admin.site.register(Alerta, AdminAlerta)
+admin.site.register(Revista, AdminRevista)

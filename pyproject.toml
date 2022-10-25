@@ -35,6 +35,7 @@ flake8 = "^4.0.1"
 pylint = "^2.13.5"
 pylint-django = "^2.5.3"
 bandit = "^1.7.4"
+djlint = "^1.19.2"
 
 [tool.isort]
 profile = 'black'
