@@ -2,53 +2,55 @@
 {% load static %}
 {% load mytags %}
 {% block styles %}
-    <style>
-        .card-img-top {
-            width: 100%;
-            height: 15vw;
-            object-fit: cover;
-            object-position: top;
-        }
-        .revista-link{
-            text-decoration: none;
-            color: black;
-        }
-        .revista-link:hover{
-            text-decoration: none;
-            color: var(--es-green);
-        }
-    </style>
+<style>
+    .card-img-top {
+        width: 100%;
+        height: 15vw;
+        object-fit: cover;
+        object-position: top;
+    }
+
+    .revista-link {
+        text-decoration: none;
+        color: black;
+    }
+
+    .revista-link:hover {
+        text-decoration: none;
+        color: var(--es-green);
+    }
+</style>
 {% endblock styles %}
 {% block content %}
-    <article>
-        <div class="container mt-5 text-center cabecalho">
-            <h3>Revista ESUFRN</h3>
-            <hr class="hr-escuro mt-5"/>
-        </div>
-        <div class="container mt-4 corpo">
-            <div class="row">
-                {% for revista in revistas %}
-                    <div class="col-md-4">
-                        <a class="revista-link" href={{ revista.file.url }} target="_blank">
-                            <div class="card">
-                                <img class="card-img-top" src="{{ revista.image.url }}">
-                                <div class="card-body">
-                                    <h5 class="card-title">
-                                        <b>{{ revista.year }}</b>
-                                    </h5>
-                                    <p class="card-text">{{ revista.subtitle }}</p>
-                                    {% comment %} <a href="#" class="btn btn-primary">Go somewhere</a> {% endcomment %}
-                                </div>
-                            </div>
-                        </a>
+<article>
+    <div class="container mt-5 text-center cabecalho">
+        <h3>Revista ESUFRN</h3>
+        <hr class="hr-escuro mt-5" />
+    </div>
+    <div class="container mt-4 corpo">
+        <div class="row">
+            {% for revista in revistas %}
+            <div class="col-md-4">
+                <a class="revista-link" href={{ revista.file.file.url }} target="_blank">
+                    <div class="card">
+                        <img class="card-img-top" src="{{ revista.image.url }}">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <b>{{ revista.year }}</b>
+                            </h5>
+                            <p class="card-text">{{ revista.subtitle }}</p>
+                            {% comment %} <a href="#" class="btn btn-primary">Go somewhere</a> {% endcomment %}
+                        </div>
                     </div>
-                {% endfor %}
+                </a>
             </div>
+            {% endfor %}
         </div>
-    </article>
+    </div>
+</article>
 {% endblock content %}
 {% block scripts %}
-    <script>
+<script>
     var font_base = {};
     function mudaFonte(escala) {
         var font_aumenta = { ".cabecalho h3": "", ".cabecalho h4": "", "a.badge-pill": "", ".item-noticia p.text-dark": "", ".item-noticia h2": "", ".item-noticia .resumo": "" };
@@ -71,5 +73,5 @@
             });
         }
     }
-    </script>
+</script>
 {% endblock scripts %}
