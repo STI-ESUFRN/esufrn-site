@@ -473,13 +473,7 @@ class Revista(SoftDeletableModel, TimeStampedModel):
         verbose_name="Capa da revista",
     )
     link = models.CharField("Link", null=True, blank=True, max_length=255)
-    file = models.FileField(
-        upload_to="revistas/",
-        verbose_name="Arquivo",
-        blank=True,
-        null=True,
-        max_length=255,
-    )
+    file = models.ForeignKey(Arquivos, verbose_name="Arquivo", on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
         if self.type == self.Type.DOCUMENT and not self.file:
