@@ -8,6 +8,7 @@ urlpatterns = [
     path("ckeditor/", include("ckeditor_uploader.urls")),
     path("", include("principal.urls")),
     path("dashboard/", include("dashboard.urls")),
+    path("eventos/", include("eventos.urls")),
     path("informatica/chamado/", include("chamado.urls")),
     path("informatica/reserva/", include("reserva.urls")),
     re_path(r"^api/", include("api.urls")),
