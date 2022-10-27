@@ -16,6 +16,7 @@ from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 from principal.forms import NewsletterForm
+from principal.helpers import emailToken, joinRange, paginator, qnt_page
 from principal.models import (
     Alerta,
     Blog,
@@ -26,10 +27,7 @@ from principal.models import (
     Newsletter,
     Paginas,
     Publicacoes,
-    Revista,
 )
-
-from .utils import emailToken, joinRange, paginator, qnt_page
 
 
 def pagina(request, path):
@@ -444,13 +442,3 @@ def publicacoes_outras(request):
         "crumbs": [{"name": "Publicações"}, {"name": "Outras publicações"}],
     }
     return render(request, "publicacoes.outraspublicacoes.html", context)
-
-
-def publicacoes_revistas(request):
-    settings.BOLD = ""
-
-    context = {
-        "crumbs": [{"name": "Publicações"}, {"name": "Revistas"}],
-        "revistas": Revista.objects.all(),
-    }
-    return render(request, "publicacoes.revista.html", context)

@@ -4,7 +4,8 @@ from assets.models import ESImage, File
 
 
 class ESImageAdmin(admin.ModelAdmin):
-    search_fields = ["id"]
+    search_fields = ["id", "high"]
+    readonly_fields = ["medium", "low"]
 
 
 class FileAdmin(admin.ModelAdmin):

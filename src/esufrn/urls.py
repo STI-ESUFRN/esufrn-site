@@ -9,6 +9,7 @@ urlpatterns = [
     path("", include("principal.urls")),
     path("dashboard/", include("dashboard.urls")),
     path("eventos/", include("eventos.urls")),
+    path("revistas/", include("revistas.urls")),
     path("informatica/chamado/", include("chamado.urls")),
     path("informatica/reserva/", include("reserva.urls")),
     re_path(r"^api/", include("api.urls")),

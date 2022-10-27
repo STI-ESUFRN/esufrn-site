@@ -10,7 +10,7 @@ from inventario.serializers import (
     PedidosSerializer,
 )
 from principal.decorators import allowed_users
-from principal.utils import paginate
+from principal.helpers import paginate
 
 decorators = [
     allowed_users(allowed_roles=["suporte"]),

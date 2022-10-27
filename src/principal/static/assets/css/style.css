@@ -141,6 +141,10 @@ hr {
   padding: 0;
 }
 
+.dropdown-item {
+  max-width: 350px;
+}
+
 .dropdown-item.active,
 .dropdown-item:active,
 .dropdown-item.hover,

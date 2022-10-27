@@ -12,7 +12,6 @@ from principal.models import (
     Newsletter,
     Paginas,
     Publicacoes,
-    Revista,
 )
 
 
@@ -100,12 +99,6 @@ class AdminAlerta(admin.ModelAdmin):
     search_fields = ["title", "content"]
 
 
-class AdminRevista(admin.ModelAdmin):
-    list_display = ["year", "subtitle"]
-    search_fields = ["year", "subtitle"]
-    list_filter = ["type"]
-
-
 admin.site.register(Blog, BlogAdmin)
 admin.site.register(Equipe, EquipeAdmin)
 admin.site.register(Publicacoes, PublicacoesAdmin)
@@ -116,4 +109,3 @@ admin.site.register(Newsletter, NewsletterAdmin)
 admin.site.register(Documentos, AdminDocumentos)
 admin.site.register(Mensagem, AdminMensagem)
 admin.site.register(Alerta, AdminAlerta)
-admin.site.register(Revista, AdminRevista)

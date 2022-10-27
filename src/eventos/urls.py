@@ -1,8 +1,7 @@
 from django.urls import path
 
-from eventos.views import evento, eventos
+from eventos.views import evento
 
 urlpatterns = [
-    path("", eventos, name="eventos"),
-    path("<int:pk>/", evento, name="evento"),
+    path("<slug:slug>/", evento, name="evento"),
 ]

@@ -12,13 +12,11 @@ from django.forms import ValidationError
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import strip_tags
-from model_utils.models import SoftDeletableModel, TimeStampedModel
 from multiselectfield import MultiSelectField
 from PIL import Image
 
-from core.validators import year_validator
 from esufrn.settings import MEDIA_ROOT
-from principal.utils import emailToken
+from principal.helpers import emailToken
 
 
 class Blog(models.Model):
@@ -458,40 +456,3 @@ class Alerta(models.Model):
         verbose_name = "Alerta"
         verbose_name_plural = "Alertas"
         ordering = ["-created_at"]
-
-
-class Revista(SoftDeletableModel, TimeStampedModel):
-    class Type(models.TextChoices):
-        LINK = "LNK", "Link"
-        DOCUMENT = "DOC", "Documento"
-
-    type = models.CharField("Tipo", max_length=4, choices=Type.choices)
-    year = models.IntegerField("Ano", validators=[year_validator])
-    subtitle = models.CharField("Subtítulo", max_length=255)
-    image = models.ImageField(
-        upload_to="revistas/capas",
-        verbose_name="Capa da revista",
-    )
-    link = models.CharField("Link", null=True, blank=True, max_length=255)
-    file = models.FileField(
-        upload_to="revistas/",
-        verbose_name="Arquivo",
-        blank=True,
-        null=True,
-        max_length=255,
-    )
-
-    def save(self, *args, **kwargs):
-        if self.type == self.Type.DOCUMENT and not self.file:
-            raise ValidationError(
-                "Este tipo de revista requer que seja especificado um arquivo"
-            )
-        if self.type == self.Type.LINK and not self.link:
-            raise ValidationError(
-                "Este tipo de revista requer que seja especificado um link"
-            )
-
-        return super().save(*args, **kwargs)
-
-    class Meta:
-        ordering = ["-created"]

@@ -1,6 +1,9 @@
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
+from django.urls import reverse
 from model_utils.models import SoftDeletableModel, TimeStampedModel
+
+from assets.models import File
 
 
 class Event(SoftDeletableModel, TimeStampedModel):
@@ -14,9 +17,22 @@ class Event(SoftDeletableModel, TimeStampedModel):
     contact = models.EmailField("Email", max_length=255, null=True, blank=True)
     coordination = models.CharField("Coordenação", max_length=255)
     target = models.TextField("Público alvo", null=True)
+    slug = models.SlugField(
+        "Atalho",
+        max_length=255,
+        help_text=(
+            "Este campo será preenchido automaticamente, ele representa a URL do"
+            " evento. Ele é único e nenhum outro evento deverá ter o mesmo atalho."
+        ),
+    )
+
+    def get_absolute_url(self):
+        return reverse("evento", kwargs={"slug": self.slug})
 
     class Meta:
         ordering = ["-created"]
+        verbose_name = "Evento"
+        verbose_name_plural = "Eventos"
 
 
 class AdditionalInformation(models.Model):
@@ -24,17 +40,20 @@ class AdditionalInformation(models.Model):
         Event, related_name="informations", on_delete=models.CASCADE
     )
     name = models.CharField("Informação", max_length=255)
-    details = RichTextUploadingField("Detalhes")
+    details = RichTextUploadingField("Detalhes", config_name="events")
 
     class Meta:
         ordering = ["event__id", "name"]
+        verbose_name = "Informação adicional"
+        verbose_name_plural = "Informações adicionais"
 
 
-class Attachment(TimeStampedModel):
+class Attachment(File):
     event = models.ForeignKey(
         Event, related_name="attachments", on_delete=models.CASCADE
     )
-    file = models.ForeignKey("assets.File", on_delete=models.CASCADE)
 
     class Meta:
         ordering = ["-created"]
+        verbose_name = "Anexo"
+        verbose_name_plural = "Anexos"

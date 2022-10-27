@@ -35,7 +35,7 @@ services:
 
   web:
     build: .
-    command: gunicorn esufrn.wsgi:application --workers 4 --threads 2 --bind 0.0.0.0:8000
+    command: gunicorn esufrn.wsgi:application --workers 4 --threads 2 --bind 0.0.0.0:8000 --reload
     restart: always
     expose:
       - 8000
@@ -48,6 +48,7 @@ services:
       - static-data:/usr/src/app/staticfiles
       - ./src/media:/usr/src/app/media
       - ./src/templates:/usr/src/app/templates:ro
+      - ./src/eventos/templates:/usr/src/app/eventos/templates:ro
     env_file:
       - ./.env
 
