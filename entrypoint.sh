@@ -12,6 +12,7 @@ then
 fi
 
 cd src &&
+python manage.py clearsessions &&
 python manage.py collectstatic --noinput &&
 python manage.py migrate --noinput
 
