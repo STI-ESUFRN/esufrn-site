@@ -11,7 +11,9 @@ then
     echo "MySQL started"
 fi
 
-python manage.py collectstatic --noinput
+cd src &&
+python manage.py collectstatic --noinput &&
 python manage.py migrate --noinput
 
+echo "$@"
 exec "$@"

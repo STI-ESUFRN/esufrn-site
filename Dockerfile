@@ -19,10 +19,9 @@ RUN sed -i 's/\r$//g' ./entrypoint.sh
 RUN chmod +x ./entrypoint.sh
 
 RUN mkdir -p \
-    $APP_HOME \
-    $APP_HOME/staticfiles \
-    $APP_HOME/media
+    $APP_HOME/src \
+    $APP_HOME/src/staticfiles \
+    $APP_HOME/src/media
 
-COPY ./src $APP_HOME
 
 ENTRYPOINT ["./entrypoint.sh"]
