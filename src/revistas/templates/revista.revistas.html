@@ -29,9 +29,9 @@
             <div class="row">
                 {% for revista in revistas %}
                     <div class="col-md-4">
-                        <a class="revista-link" href={{ revista.file.url }} target="_blank">
+                        <a class="revista-link" href={{ revista.file.url.url }} target="_blank">
                             <div class="card">
-                                <img class="card-img-top" src="{{ revista.image.url }}">
+                                <img class="card-img-top" src="{{ revista.image.medium.url }}">
                                 <div class="card-body">
                                     <h5 class="card-title">
                                         <b>{{ revista.year }}</b>

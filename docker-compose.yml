@@ -35,7 +35,7 @@ services:
 
   web:
     build: .
-    command: gunicorn esufrn.wsgi:application --workers 4 --threads 2 --bind 0.0.0.0:8000
+    command: gunicorn esufrn.wsgi:application --workers 4 --threads 2 --bind 0.0.0.0:8000 --reload
     restart: always
     expose:
       - 8000
@@ -45,9 +45,7 @@ services:
       - mysql
     volumes:
       - mysqld-data:/run/mysqld
-      - static-data:/usr/src/app/staticfiles
-      - ./src/media:/usr/src/app/media
-      - ./src/templates:/usr/src/app/templates:ro
+      - ./src:/usr/src/app/src
     env_file:
       - ./.env
 
@@ -63,7 +61,7 @@ services:
       - phpmyadmin
     volumes:
       - phpmyadmin-data:/var/www/html/phpmyadmin:ro
-      - static-data:/usr/share/nginx/html/staticfiles:ro
+      - ./src/staticfiles:/usr/share/nginx/html/staticfiles:ro
       - ./src/media:/usr/share/nginx/html/media:ro
       - ./src/templates:/usr/share/nginx/html/templates:ro
       - ./nginx/ssl:/ssl:ro
@@ -72,5 +70,3 @@ volumes:
   mysqld-data:
   mysql-data:
   phpmyadmin-data:
-  static-data:
-  media-data:

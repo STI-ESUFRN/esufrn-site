@@ -9,7 +9,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import View
 
 from principal.decorators import allowed_users
-from principal.utils import haveMore, paginate
+from principal.helpers import haveMore, paginate
 from reserva.models import (
     Classroom,
     PeriodReserve,
