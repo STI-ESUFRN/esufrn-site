@@ -10,12 +10,14 @@ WORKDIR $APP_HOME
 RUN apk update && \
     apk add gcc musl-dev mariadb-connector-c-dev
 
-COPY entrypoint.sh .
-RUN sed -i 's/\r$//g' ./entrypoint.sh
-RUN chmod +x ./entrypoint.sh
-
 COPY pyproject.toml poetry.lock ./
 RUN pip install poetry
 RUN poetry install --only main
 
-ENTRYPOINT ["./entrypoint.sh"]
+COPY entrypoint.sh .
+RUN sed -i 's/\r$//g' ./entrypoint.sh
+RUN chmod +x ./entrypoint.sh
+
+WORKDIR $APP_HOME/src
+
+ENTRYPOINT ["../entrypoint.sh"]

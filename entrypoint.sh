@@ -11,10 +11,9 @@ then
     echo "MySQL started"
 fi
 
-cd src &&
-python manage.py clearsessions &&
+python manage.py migrate --noinput &&
 python manage.py collectstatic --noinput &&
-python manage.py migrate --noinput
+python manage.py clearsessions
 
 echo "$@"
 exec "$@"
