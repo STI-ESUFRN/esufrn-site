@@ -27,13 +27,9 @@ def evento(request, slug):
 
 
 def eventos(request):
-    events = Event.available_objects.all()
-
-    concluded = request.GET.get("concluido")
-    if concluded == "true":
-        events = events.filter(date_end__lt=datetime.now().date())
-    elif concluded == "false":
-        events = events.filter(date_end__gte=datetime.now().date())
+    events = Event.available_objects.filter(
+        date_begin__gte=datetime.now().date(), date_end__lte=datetime.now().date()
+    )
 
     page = int(request.GET.get("page", "1"))
     result_obj, qnt, intervalo = paginator(page, events)
@@ -43,6 +39,26 @@ def eventos(request):
         "crumbs": [
             {"name": "Eventos"},
             {"name": "Em andamento"},
+        ],
+        "result_obj": result_obj,
+        "qnt": qnt,
+        "intervalo": intervalo,
+    }
+
+    return render(request, "eventos.eventos.html", context)
+
+
+def eventos_concluidos(request):
+    events = Event.available_objects.filter(date_end__lt=datetime.now().date())
+
+    page = int(request.GET.get("page", "1"))
+    result_obj, qnt, intervalo = paginator(page, events)
+
+    context = {
+        "events": events,
+        "crumbs": [
+            {"name": "Eventos"},
+            {"name": "Concluído"},
         ],
         "result_obj": result_obj,
         "qnt": qnt,
