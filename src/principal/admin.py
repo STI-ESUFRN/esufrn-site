@@ -31,7 +31,7 @@ class BlogAdmin(admin.ModelAdmin):
 
     search_fields = ["title", "subtitle"]
     list_filter = ["published_at", "author", "category", "isImportant"]
-    prepopulated_fields = {"slug": ["title"]}
+    exclude = ["slug"]
     inlines = [
         BlogAttachmentsInline,
     ]

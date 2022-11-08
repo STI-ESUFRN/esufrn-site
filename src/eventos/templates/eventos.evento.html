@@ -1,14 +1,20 @@
 {% extends "base.pagina.html" %}
 {% load static %}
 {% block head %}
-    <meta property="og:image"
-          content="{% if event.image %}{{ event.image.medium.url }}{% else %}{% static 'assets/imagens/logo.png' %}{% endif %}"/>
+    {% if event.image %}
+        <meta property="og:image" content="{{ event.image.medium.url }}"/>
+    {% else %}
+        <meta property="og:image" content="{% static 'assets/images/logo.png' %}"/>
+    {% endif %}
     <meta property="og:type" content="article" />
     <meta property="og:title" content="{{ event.name }}" />
 {% endblock head %}
 {% block styles %}
     <style>
-        table {width: 100%;}
+        table {
+            width: 100%;
+        }
+        
         td {
             max-width: 0;
             overflow: hidden;
@@ -16,10 +22,11 @@
             white-space: nowrap;
             table-layout: fixed;
         }
+        
         table th:nth-child(1) {
             width: 15%;
         }
-
+        
         table th:nth-child(3) {
             width: 5%;
         }
@@ -83,7 +90,7 @@
                 <b>Contato: </b><a href="mailto:{{ event.contact }}">{{ event.contact }}</a>
             </p>
             {% for information in event.informations.all %}<b>{{ information.name }}:</b>{{ information.details|safe }}{% endfor %}
-            {% if event.attachments %}
+            {% if event.attachments.exists %}
                 <table class="table table-hover mt-5">
                     <thead>
                         <tr>

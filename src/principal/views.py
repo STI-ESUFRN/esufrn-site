@@ -120,20 +120,19 @@ def noticias(request):
 def noticia(request, slug):
     try:
         news = Blog.objects.get(slug=slug)
-        attachments = BlogAttachments.objects.filter(blog=news)
         context = {
             "status": "success",
             "news": news,
-            "attachments": attachments,
             "crumbs": [
                 {"name": "Notícias", "link": reverse("noticias")},
                 {"name": news.title},
             ],
         }
+
         return render(request, "home.post.html", context)
 
-    except:
-        raise Http404()
+    except Blog.DoesNotExist:
+        raise Http404
 
 
 def instituicao_equipe(request):

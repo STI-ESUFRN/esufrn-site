@@ -1,12 +1,15 @@
 {% extends "base.pagina.html" %}
 {% load static %}
 {% block head %}
-    <meta property="og:image"
-          content="{% if news.image %}{{ news.image.url }}{% else %}{% static 'assets/imagens/logo.png' %}{% endif %}"/>
-    <meta property="og:type" content="article"/>
-    <meta property="og:title" content="{{ news.title }}"/>
-    <meta property="og:url" content="{{ news.get_absolute_url }}"/>
-    <meta property="og:description" content="{{ news.subtitle }}"/>
+    {% if news.image %}
+        <meta property="og:image" content="{{ news.image.url }}"/>
+    {% else %}
+        <meta property="og:image" content="{% static 'assets/images/logo.png' %}"/>
+    {% endif %}
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="{{ news.title }}" />
+    <meta property="og:url" content="{{ news.get_absolute_url }}" />
+    <meta property="og:description" content="{{ news.subtitle }}" />
 {% endblock head %}
 {% block title %}
     {{ news.title }} - Escola de Saúde da UFRN
@@ -21,13 +24,15 @@
                 <h4 class="text-uppercase my-3">Notícias</h4>
                 <h3>{{ news.title|mark|safe }}</h3>
                 <h5 class="text-muted my-4">{{ news.subtitle|mark|safe }}</h5>
-                <hr class="hr-escuro"/>
+                <hr class="hr-escuro" />
                 <p class="my-3 text-center text-sm-left">
-                    {% if news.category == "evento" %}<b>Data do evento: {{ news.event_date|date:'d N Y' }}</b>&nbsp &nbsp{% endif %}
-                    Publicado: {{ news.published_at|date:"d/m/y H:i" }} &nbsp &nbsp
-                    Última modificação: {{ news.modified_at|date:"d/m/y H:i" }} &nbsp &nbsp
-                    Autor: {{ news.author }}
-                    <br class="d-sm-none"/>
+                    <span class="mx-1">
+                        {% if news.category == "evento" %}<b>Data do evento: {{ news.event_date|date:'d N Y' }}</b>{% endif %}
+                    </span>
+                    <span class="mx-1">Publicado: {{ news.published_at|date:"d/m/y H:i" }}</span>
+                    <span class="mx-1">Última modificação: {{ news.modified_at|date:"d/m/y H:i" }}</span>
+                    <span class="mx-1">Autor: {{ news.author }}</span>
+                    <br class="d-sm-none" />
                     <span class="float-sm-right">
                         <a data-href="{{ news.get_absolute_url }}"
                            data-layout="button"
@@ -51,7 +56,7 @@
                         </a>
                     </span>
                 </p>
-                <hr class="hr-escuro"/>
+                <hr class="hr-escuro" />
             </div>
             <div class="container mt-4 corpo" style="word-wrap: break-word">
                 {% if news.image %}
@@ -64,7 +69,7 @@
                 {% endif %}
                 <div id="paragrafo-noticia">{{ news.news|mark|safe|linebreaks }}</div>
                 {% comment %} ANEXOS {% endcomment %}
-                {% if attachments %}
+                {% if news.attachments.exists %}
                     <table class="table table-hover mt-5">
                         <thead>
                             <tr>
@@ -73,7 +78,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for attachment in attachments %}
+                            {% for attachment in news.attachments.all %}
                                 <tr>
                                     <td>
                                         {% if attachment.file.published_at is not None %}
@@ -97,7 +102,7 @@
                 {% endif %}
             </div>
             <div class="container text-right">
-                <hr class="hr-escuro my-5"/>
+                <hr class="hr-escuro my-5" />
                 <a href="#" class="text-uppercase text-dark">Voltar ao topo <i class="fas fa-arrow-alt-circle-up"></i></a>
             </div>
         </article>
@@ -109,12 +114,13 @@
 {% endblock content %}
 {% block scripts %}
     <script>
-		(function (d, s, id) {
-			var js, fjs = d.getElementsByTagName(s)[0];
-			if (d.getElementById(id)) return;
-			js = d.createElement(s); js.id = id;
-			js.src = 'https://connect.facebook.net/pt_BR/sdk.js#xfbml=1&version=v2.11';
-			fjs.parentNode.insertBefore(js, fjs);
-		}(document, 'script', 'facebook-jssdk'));
+        function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s);
+            js.id = id;
+            js.src = 'https://connect.facebook.net/pt_BR/sdk.js#xfbml=1&version=v2.11';
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk');
     </script>
 {% endblock scripts %}

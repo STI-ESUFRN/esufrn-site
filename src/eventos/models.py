@@ -1,6 +1,7 @@
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from django.urls import reverse
+from django.utils.text import slugify
 from model_utils.models import SoftDeletableModel, TimeStampedModel
 
 from assets.models import File
@@ -26,6 +27,11 @@ class Event(SoftDeletableModel, TimeStampedModel):
         ),
     )
 
+    def save(self, *args, **kwargs):
+        self.slug = slugify(f"{self.name}-{self.created.date()}")
+
+        return super().save(*args, **kwargs)
+
     def get_absolute_url(self):
         return reverse("evento", kwargs={"slug": self.slug})
 
@@ -33,6 +39,9 @@ class Event(SoftDeletableModel, TimeStampedModel):
         ordering = ["-created"]
         verbose_name = "Evento"
         verbose_name_plural = "Eventos"
+
+    def __str__(self) -> str:
+        return self.name
 
 
 class AdditionalInformation(models.Model):
