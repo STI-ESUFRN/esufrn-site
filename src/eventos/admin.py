@@ -13,20 +13,20 @@ class AttachmentInline(admin.TabularInline):
 
 
 class EventAdmin(admin.ModelAdmin):
-    display_fields = ["id", "name", "date_begin", "date_end"]
-    prepopulated_fields = {"slug": ["name", "date_begin"]}
+    list_display = ["name", "date_begin", "date_end"]
     inlines = [
         AdditionalInformationInline,
         AttachmentInline,
     ]
+    exclude = ["slug"]
 
 
 class AdditionalInformationAdmin(admin.ModelAdmin):
-    display_fields = ["id", "name", "event"]
+    list_display = ["name", "event"]
 
 
 class AttachmentAdmin(admin.ModelAdmin):
-    display_fields = ["id", "event", "file"]
+    list_display = ["event", "url"]
 
 
 admin.site.register(Event, EventAdmin)

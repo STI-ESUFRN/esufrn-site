@@ -25,6 +25,9 @@ class ESImage(TimeStampedModel):
         verbose_name_plural = "Imagens"
         ordering = ["-created"]
 
+    def __str__(self) -> str:
+        return f"{os.path.basename(self.high.name)}"
+
 
 class File(TimeStampedModel):
     url = models.FileField(upload_to="files")
