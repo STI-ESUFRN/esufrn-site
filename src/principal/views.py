@@ -15,11 +15,11 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
-from .forms import NewsletterForm
-from .models import (
+from principal.forms import NewsletterForm
+from principal.helpers import emailToken, joinRange, paginator, qnt_page
+from principal.models import (
     Alerta,
     Blog,
-    BlogAttachments,
     Depoimentos,
     Documentos,
     Equipe,
@@ -27,7 +27,6 @@ from .models import (
     Paginas,
     Publicacoes,
 )
-from .utils import emailToken, joinRange, paginator, qnt_page
 
 
 def pagina(request, path):
@@ -120,20 +119,19 @@ def noticias(request):
 def noticia(request, slug):
     try:
         news = Blog.objects.get(slug=slug)
-        attachments = BlogAttachments.objects.filter(blog=news)
         context = {
             "status": "success",
             "news": news,
-            "attachments": attachments,
             "crumbs": [
                 {"name": "Notícias", "link": reverse("noticias")},
                 {"name": news.title},
             ],
         }
+
         return render(request, "home.post.html", context)
 
-    except:
-        raise Http404()
+    except Blog.DoesNotExist:
+        raise Http404
 
 
 def instituicao_equipe(request):
@@ -442,13 +440,3 @@ def publicacoes_outras(request):
         "crumbs": [{"name": "Publicações"}, {"name": "Outras publicações"}],
     }
     return render(request, "publicacoes.outraspublicacoes.html", context)
-
-
-def test_mail(request):
-    send_mail(
-        "test",
-        "test only",
-        settings.EMAIL_HOST_USER,
-        ["felipesena.m@gmail.com"],
-    )
-    return redirect("home")

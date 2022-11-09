@@ -12,11 +12,12 @@ from django.forms import ValidationError
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import strip_tags
+from django.utils.text import slugify
 from multiselectfield import MultiSelectField
 from PIL import Image
 
 from esufrn.settings import MEDIA_ROOT
-from principal.utils import emailToken
+from principal.helpers import emailToken
 
 
 class Blog(models.Model):
@@ -132,7 +133,7 @@ class Blog(models.Model):
 
     def save(self, *args, **kwargs):
         haveId = self.pk
-        super(Blog, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         if self.image:
             filepath = unquote(os.path.split(MEDIA_ROOT)[0] + self.image.url)
             picture = Image.open(filepath)
@@ -144,7 +145,10 @@ class Blog(models.Model):
                 quality=40,
             )
 
-        super(Blog, self).save(*args, **kwargs)
+        if not self.slug:
+            self.slug = slugify(f"{self.title}-{self.published_at.date()}")
+
+        super().save(*args, **kwargs)
 
         if haveId is None:
             self.send_newsletter()
@@ -218,7 +222,7 @@ class Arquivos(models.Model):
 
 
 class BlogAttachments(models.Model):
-    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
+    blog = models.ForeignKey(Blog, related_name="attachments", on_delete=models.CASCADE)
     file = models.ForeignKey(Arquivos, verbose_name="Arquivo", on_delete=models.CASCADE)
 
     class Meta:

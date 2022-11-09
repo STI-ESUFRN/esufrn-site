@@ -1,0 +1,121 @@
+{% extends "base.pagina.html" %}
+{% load static %}
+{% block head %}
+    {% if event.image %}
+        <meta property="og:image" content="{{ event.image.medium.url }}"/>
+    {% else %}
+        <meta property="og:image" content="{% static 'assets/images/logo.png' %}"/>
+    {% endif %}
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="{{ event.name }}" />
+{% endblock head %}
+{% block styles %}
+    <style>
+        table {
+            width: 100%;
+        }
+
+        td {
+            max-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            table-layout: fixed;
+        }
+
+        table th:nth-child(1) {
+            width: 15%;
+        }
+
+        table th:nth-child(3) {
+            width: 5%;
+        }
+    </style>
+{% endblock styles %}
+{% block content %}
+    <article>
+        <div class="container mt-5 text-center cabecalho">
+            <h4 class="text-uppercase my-3">Eventos</h4>
+            <h3>{{ event.name|safe }}</h3>
+            <hr class="hr-escuro" />
+            <p class="my-3 text-center text-sm-left">
+                Publicado: {{ event.created|date:"d/m/y H:i" }} &nbsp &nbsp
+                Última modificação: {{ event.modified|date:"d/m/y H:i" }} &nbsp &nbsp
+                <br class="d-sm-none" />
+                <span class="float-sm-right">
+                    <a data-href="{{ event.get_absolute_url }}"
+                       data-layout="button"
+                       data-size="large"
+                       data-mobile-iframe="false">
+                        <a class="btn text-white border-0 rounded-0"
+                           style="background-color: #0A62C4;
+                                  font-size: 12px;
+                                  display: inline;"
+                           target="_blank"
+                           href="https://www.facebook.com/sharer/sharer.php?u=http://www.escoladesaude.ufrn.br{{ event.get_absolute_url }}">
+                            <i class="fab fa-facebook-f"></i> Compartilhar</a>
+                    </a>
+                    <a href="https://api.whatsapp.com/send?text=http://www.escoladesaude.ufrn.br{{ event.get_absolute_url }}"
+                       target="_blank"
+                       class="btn text-white border-0 rounded-0"
+                       style="background-color: #25b966;
+                              font-size: 12px;
+                              display: inline;">
+                        <i class="fab fa-whatsapp"></i> Compartilhar
+                    </a>
+                </span>
+            </p>
+            <hr class="hr-escuro" />
+        </div>
+        <div class="container my-4 corpo" style="word-wrap: break-word">
+            <div class="text-center">
+                <img src="{{ event.image.high.url }}"
+                     alt="{{ event.name }} - ESUFRN"
+                     style="max-width:90%;
+                            max-height: 30%;"/>
+            </div>
+            <p>
+                <b>Período de realização: </b>{{ event.date_begin|date:"d/m/Y" }} à {{ event.date_end|date:"d/m/Y" }}
+            </p>
+            <p>
+                <b>Coordenação: </b>{{ event.coordination }}
+            </p>
+            <p>
+                <b>Público alvo: </b>{{ event.target }}
+            </p>
+            <p>
+                <b>Local: </b>{{ event.local }}
+            </p>
+            <p>
+                <b>Contato: </b><a href="mailto:{{ event.contact }}">{{ event.contact }}</a>
+            </p>
+            {% for information in event.informations.all %}<b>{{ information.name }}:</b>{{ information.details|safe }}{% endfor %}
+            {% if event.attachments.exists %}
+                <table class="table table-hover mt-5">
+                    <thead>
+                        <tr>
+                            <th>Publicado em</th>
+                            <th >Nome do documento</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for attachment in event.attachments.all %}
+                            <tr>
+                                <td>{{ attachment.created|date:"d/m/Y" }}</td>
+                                <td>
+                                    <a target="_blank" href="{{ attachment.url.url }}">{{ attachment.filename }}</a>
+                                </td>
+                                <td>
+                                    <a href="{{ attachment.url.url }}" download>
+                                        <i class="fas fa-download" aria-hidden="true"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </article>
+{% endblock content %}

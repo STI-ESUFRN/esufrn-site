@@ -1,0 +1,75 @@
+{% extends "base.pagina.html" %}
+{% load static %}
+{% load mytags %}
+{% block styles %}
+    <style>
+        .card-img-top {
+            width: 100%;
+            height: 15vw;
+            object-fit: cover;
+            object-position: top;
+        }
+        .revista-link{
+            text-decoration: none;
+            color: black;
+        }
+        .revista-link:hover{
+            text-decoration: none;
+            color: var(--es-green);
+        }
+    </style>
+{% endblock styles %}
+{% block content %}
+    <article>
+        <div class="container mt-5 text-center cabecalho">
+            <h3>Revista ESUFRN</h3>
+            <hr class="hr-escuro mt-5"/>
+        </div>
+        <div class="container mt-4 corpo">
+            <div class="row">
+                {% for revista in revistas %}
+                    <div class="col-md-4">
+                        <a class="revista-link" href={{ revista.file.url.url }} target="_blank">
+                            <div class="card">
+                                <img class="card-img-top" src="{{ revista.image.medium.url }}">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <b>{{ revista.year }}</b>
+                                    </h5>
+                                    <p class="card-text">{{ revista.subtitle }}</p>
+                                    {% comment %} <a href="#" class="btn btn-primary">Go somewhere</a> {% endcomment %}
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </article>
+{% endblock content %}
+{% block scripts %}
+    <script>
+    var font_base = {};
+    function mudaFonte(escala) {
+        var font_aumenta = { ".cabecalho h3": "", ".cabecalho h4": "", "a.badge-pill": "", ".item-noticia p.text-dark": "", ".item-noticia h2": "", ".item-noticia .resumo": "" };
+        $.each(font_aumenta, function (i, v) {
+            font_aumenta[i] = $(i).css("font-size")
+            font_aumenta[i] = font_aumenta[i].substring(0, font_aumenta[i].length - 2).toString();
+        });
+        jQuery.isEmptyObject(font_base) ? font_base = font_aumenta : NaN
+        if (escala == 1) {
+            $.each(font_aumenta, function (i, v) {
+                $(i).css({ "font-size": v * 0.8 })
+            });
+        } else if (escala == 2) {
+            $.each(font_aumenta, function (i, v) {
+                $(i).css({ "font-size": v * 1.3 })
+            });
+        } else {
+            $.each(font_base, function (i, v) {
+                $(i).css({ "font-size": v * 1 })
+            });
+        }
+    }
+    </script>
+{% endblock scripts %}

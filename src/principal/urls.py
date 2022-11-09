@@ -17,7 +17,6 @@ from principal.views import (
     noticias,
     pagina,
     publicacoes_outras,
-    test_mail,
 )
 
 urlpatterns = [
@@ -37,5 +36,4 @@ urlpatterns = [
     path("noticias/", noticias, name="noticias"),
     path("newsletter/unsubscribe", email_unsubscribe, name="unsubscribe"),
     path("newsletter/subscribe", email_subscribe, name="subscribe"),
-    path("test", test_mail, name="test"),
 ]

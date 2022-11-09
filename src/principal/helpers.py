@@ -47,7 +47,6 @@ def paginator(current_page, objects, epp=5):
 
 
 def qnt_page(qnt_ant, qnt_pos):
-
     if qnt_ant > qnt_pos:
         return qnt_ant
     else:
@@ -55,9 +54,7 @@ def qnt_page(qnt_ant, qnt_pos):
 
 
 def joinRange(rng1, rng2, qnt_page):
-
     if rng2 != range(1, 1) and rng1 != range(1, 1):
-
         if rng1[0] <= rng2[0]:
             rng = rng1
 
@@ -71,18 +68,16 @@ def joinRange(rng1, rng2, qnt_page):
 
         return rng
     else:
-
         if rng1 == range(1, 1):
-
             return rng2
         elif rng2 == range(1, 1):
-
             return rng1
 
 
 def emailToken(email):
     return hashlib.md5(
-        "[Jmh!&DKfY#u&l#4zvFXw5mV4iD(uEmUW]:{}".format(email.lower()).encode()
+        "[Jmh!&DKfY#u&l#4zvFXw5mV4iD(uEmUW]:{}".format(email.lower()).encode(),
+        usedforsecurity=False,
     ).hexdigest()
 
 

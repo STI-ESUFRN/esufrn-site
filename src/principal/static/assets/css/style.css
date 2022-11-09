@@ -1,3 +1,11 @@
+:root {
+  --es-grey: #B1B1B1;
+  --es-white: #F3F3F3;
+  --es-light-blue: #3F94C7;
+  --es-dark-blue: #003C62;
+  --es-green: #00999C;
+}
+
 body {
   overflow-x: hidden;
 }
@@ -131,6 +139,10 @@ hr {
 .dropdown-menu {
   border-radius: 0;
   padding: 0;
+}
+
+.dropdown-item {
+  max-width: 350px;
 }
 
 .dropdown-item.active,
