@@ -2,220 +2,238 @@
 {% load static %}
 {% load mytags %}
 {% block styles %}
-<style>
-    .secondary {
-        background-color: #0b3e61 !important;
-    }
+    <style>
+        .secondary {
+            background-color: #0b3e61 !important;
+        }
 
-    footer {
-        background-color: #0b3e61 !important;
-    }
+        footer {
+            background-color: #0b3e61 !important;
+        }
 
-    .dropdown-item.active,
-    .dropdown-item:active,
-    .dropdown-item.hover,
-    .dropdown-item:hover {
-        background-color: #082f49;
-    }
+        .dropdown-item.active,
+        .dropdown-item:active,
+        .dropdown-item.hover,
+        .dropdown-item:hover {
+            background-color: #082f49;
+        }
 
-    .dropbtn {
-        background-color: transparent;
-        border: none;
-    }
+        .dropbtn {
+            background-color: transparent;
+            border: none;
+        }
 
-    .custom-dropdown {
-        position: relative;
-        display: inline-block;
-    }
+        .custom-dropdown {
+            position: relative;
+            display: inline-block;
+        }
 
-    .custom-dropdown-menu {
-        display: none;
-        position: absolute;
-        background-color: white;
-        min-width: 160px;
-        border-color: rgba(0, 0, 0, 0.15);
-        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-        z-index: 1;
-    }
+        .custom-dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 160px;
+            border-color: rgba(0, 0, 0, 0.15);
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
 
-    .custom-dropdown-menu a {
-        color: black;
-        padding: 12px 16px;
-        text-decoration: none;
-        display: block;
-    }
+        .custom-dropdown-menu a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
 
-    .custom-dropdown-menu a:hover {
-        background-color: #ddd;
-    }
+        .custom-dropdown-menu a:hover {
+            background-color: #ddd;
+        }
 
-    .custom-dropdown:hover .custom-dropdown-menu {
-        display: block;
-        margin-top: 0;
-    }
+        .custom-dropdown:hover .custom-dropdown-menu {
+            display: block;
+            margin-top: 0;
+        }
 
-    .custom-dropdown:hover {
-        cursor: pointer;
-    }
+        .custom-dropdown:hover {
+            cursor: pointer;
+        }
 
-    a.active {
-        font-weight: bold;
-    }
-</style>
+        a.active {
+            font-weight: bold;
+        }
+    </style>
 {% endblock styles %}
 {% block content %}
-<article>
-    <div class="container my-4 cabecalho cat-inner">
-        {% comment %} <div class="d-inline mr-4">
-            EXIBINDO&nbsp;
-            <div class="dropdown custom-dropdown d-inline">
-                <button class="dropbtn m-0 p-0">
-                    <b>
-                        {% if request.GET.category %}
-                        {{ request.GET.category|upper }}S
-                        {% else %}
-                        TUDO
-                        {% endif %}
-                        <i class="fas fa-solid fa-caret-down"></i>
-                    </b>
-                </button>
-                <div class="dropdown-menu custom-dropdown-menu">
-                    <div class="text-center text-muted my-2">FILTRAR POR</div>
-                    {% with category=request.GET.category period=request.GET.period|getparam:'period' %}
-                    <a class="{{ category|active }}" href="{% url 'eventos' %}?{{ period }}">Tudo</a>
-                    <a class="{{ category|active:'concurso' }}"
-                        href="{% url 'eventos' %}?category=concurso{{ period }}">Concurso</a>
-                    <a class="{{ category|active:'evento' }}"
-                        href="{% url 'eventos' %}?category=evento{{ period }}">Evento</a>
-                    <a class="{{ category|active:'noticia' }}"
-                        href="{% url 'eventos' %}?category=noticia{{ period }}">Notícia</a>
-                    <a class="{{ category|active:'processo' }}"
-                        href="{% url 'eventos' %}?category=processo{{ period }}">Processo seletivo</a>
-                    {% endwith %}
-                </div>
+    <article>
+        <div class="container my-4 cabecalho cat-inner">
+            <div class="d-inline mr-4">
+                <span class="mx-1">EXIBINDO</span>
+                {% with current=request.GET.category period=request.GET.period|getparam:'period' %}
+                    <div class="dropdown custom-dropdown d-inline">
+                        <button class="dropbtn m-0 p-0">
+                            <b>
+                                {% for category in categories.options %}
+                                    {% if category.query == current %}{{ category.verbose_name_plural|upper }}{% endif %}
+                                {% endfor %}
+                                <i class="fas fa-solid fa-caret-down"></i>
+                            </b>
+                        </button>
+                        <div class="dropdown-menu custom-dropdown-menu">
+                            <div class="text-center text-muted my-2">FILTRAR POR</div>
+                            {% for category in categories.options %}
+                                <a class="{{ current|active:category.query }}"
+                                   href="{% url 'eventos' %}?{{ categories.parameter }}{{ category.query }}{{ period }}">{{ category.verbose_name }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endwith %}
             </div>
-        </div> {% endcomment %}
-        <div class="d-inline mr-4">
-            <div class="dropdown custom-dropdown">
-                <button class="dropbtn m-0 p-0">
-                    <b>
-                        FILTRAR POR DATA
-                        <i class="fas fa-solid fa-caret-down"></i>
-                    </b>
-                </button>
-                <div class="dropdown-menu custom-dropdown-menu">
-                    {% load mytags %}
-                    <div class="text-center text-muted my-2">POR PERÍODO</div>
-                    {% with period=request.GET.period category=request.GET.category|getparam:'category' %}
-                    <a class="{{ period|active }}" href="{% url 'eventos' %}?{{ category }}">Em qualquer data</a>
-                    <a class="{{ period|active:'hora' }}" href="{% url 'eventos' %}?period=hora{{ category }}">Na última
-                        hora</a>
-                    <a class="{{ period|active:'dia' }}" href="{% url 'eventos' %}?period=dia{{ category }}">Nas últimas
-                        24 horas</a>
-                    <a class="{{ period|active:'semana' }}" href="{% url 'eventos' %}?period=semana{{ category }}">Na
-                        última semana</a>
-                    <a class="{{ period|active:'mes' }}" href="{% url 'eventos' %}?period=mes{{ category }}">No último
-                        mês</a>
-                    <a class="{{ period|active:'ano' }}" href="{% url 'eventos' %}?period=ano{{ category }}">No último
-                        ano</a>
-                    {% endwith %}
+            <div class="d-inline mr-4">
+                <div class="dropdown custom-dropdown">
+                    <button class="dropbtn m-0 p-0">
+                        <b>
+                            FILTRAR POR DATA
+                            <i class="fas fa-solid fa-caret-down"></i>
+                        </b>
+                    </button>
+                    <div class="dropdown-menu custom-dropdown-menu">
+                        {% load mytags %}
+                        <div class="text-center text-muted my-2">POR PERÍODO</div>
+                        {% with period=request.GET.period category=request.GET.category|getparam:'category' %}
+                            <a class="{{ period|active }}" href="{% url 'eventos' %}?{{ category }}">Em qualquer data</a>
+                            <a class="{{ period|active:'hora' }}"
+                               href="{% url 'eventos' %}?period=hora{{ category }}">Na última
+                            hora</a>
+                            <a class="{{ period|active:'dia' }}"
+                               href="{% url 'eventos' %}?period=dia{{ category }}">Nas últimas
+                            24 horas</a>
+                            <a class="{{ period|active:'semana' }}"
+                               href="{% url 'eventos' %}?period=semana{{ category }}">Na
+                            última semana</a>
+                            <a class="{{ period|active:'mes' }}"
+                               href="{% url 'eventos' %}?period=mes{{ category }}">No último
+                            mês</a>
+                            <a class="{{ period|active:'ano' }}"
+                               href="{% url 'eventos' %}?period=ano{{ category }}">No último
+                            ano</a>
+                        {% endwith %}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    {% if events %}
-    <div class="container">
-        {% for i in events %}
-        <div class="row my-2">
-            <div class="col-lg-2 align-self-center text-center">
-                <img src="{% if i.image %}{{ i.image.low.url }}{% endif %}" style="object-fit: cover;" width="100%"
-                    height="120px" onerror="this.src='https://images2.imgbox.com/02/21/d1mWMGt6_o.png'" />
+        {% if events %}
+            <div class="container">
+                {% for i in events %}
+                    <div class="row my-2">
+                        <div class="col-lg-2 align-self-center text-center">
+                            <img src="{% if i.image %}{{ i.image.low.url }}{% endif %}"
+                                 style="object-fit: cover;"
+                                 width="100%"
+                                 height="120px"
+                                 onerror="this.src='https://images2.imgbox.com/02/21/d1mWMGt6_o.png'"/>
+                        </div>
+                        <div class="col-lg-10 align-self-center item-noticia pl-lg-0">
+                            <p class="mb-1 text-dark">{{ i.modified|date:"d/m/y H:i" }}</p>
+                            <a href="{{ i.get_absolute_url }}">
+                                <h2>{{ i.name }}</h2>
+                            </a>
+                            <p class="text-muted resumo">
+                                Data do evento:
+                                {% if i.date_begin != i.date_end %}
+                                    {{ i.date_begin|date:'d/m/Y' }} à {{ i.date_end|date:'d/m/Y' }}
+                                {% else %}
+                                    {{ i.date_begin|date:'d/m/Y' }}
+                                {% endif %}
+                            </p>
+                            <p class="text-muted resumo">{{ i.local }}</p>
+                        </div>
+                    </div>
+                    {% if not forloop.last %}<hr class="hr-escuro" />{% endif %}
+                {% endfor %}
             </div>
-            <div class="col-lg-10 align-self-center item-noticia pl-lg-0">
-                <p class="mb-1 text-dark">{{ i.modified|date:"d/m/y H:i" }}</p>
-                <a href="{{ i.get_absolute_url }}">
-                    <h2>{{ i.name }}</h2>
-                </a>
-                <p class="text-muted resumo">
-                    Data do evento:
-                    {% if i.date_begin != i.date_end %}
-                    {{ i.date_begin|date:'d/m/Y' }} à {{ i.date_end|date:'d/m/Y' }}
-                    {% else %}
-                    {{ i.date_begin|date:'d/m/Y' }}
+            <!-- PAGINADOR -->
+            <div class="container text-center text-uppercase mt-4">
+                {% with period=request.GET.period|getparam:'period' category=request.GET.category|getparam:'category' %}
+                    {% if pag > 4 %}
+                        <a class="a-clear mx-1"
+                           href="{% url 'eventos' %}?page=1{{ category }}{{ period }}">
+                            <button class="btn btn-outline-dark rounded-circle btn-pagination {{ pag|active:'1' }}">
+                                <p>1</p>
+                            </button>
+                        </a>
+                        <button class="mx-1 btn btn-outline-dark rounded-circle btn-pagination">
+                            <p>...</p>
+                        </button>
                     {% endif %}
-                </p>
-                <p class="text-muted resumo">{{ i.local }}</p>
+                    {% for i in rng %}
+                        <a class="a-clear mx-1"
+                           href="{% url 'eventos' %}?page={{ i }}{{ category }}{{ period }}">
+                            <button class="btn btn-outline-dark rounded-circle btn-pagination {{ pag|active:i }}">
+                                <p>{{ i }}</p>
+                            </button>
+                        </a>
+                    {% endfor %}
+                    {% if pag|add:3 < total %}
+                        <button class="mx-1 btn btn-outline-dark rounded-circle btn-pagination">
+                            <p>...</p>
+                        </button>
+                        <a class="a-clear mx-1"
+                           href="{% url 'eventos' %}?page={{ total }}{{ category }}{{ period }}">
+                            <button class="btn btn-outline-dark rounded-circle btn-pagination {{ pag|active:total }}">
+                                <p>{{ total }}</p>
+                            </button>
+                        </a>
+                    {% endif %}
+                {% endwith %}
             </div>
-        </div>
-        {% if not forloop.last %}
-        <hr class="hr-escuro" />{% endif %}
-        {% endfor %}
-    </div>
-    <!-- PAGINADOR -->
-    <div class="container text-center text-uppercase mt-4">
-        {% with period=request.GET.period|getparam:'period' category=request.GET.category|getparam:'category' %}
-        {% if pag > 4 %}
-        <a class="a-clear mx-1" href="{% url 'eventos' %}?page=1{{ category }}{{ period }}">
-            <button class="btn btn-outline-dark rounded-circle btn-pagination {{ pag|active:'1' }}">
-                <p>1</p>
-            </button>
-        </a>
-        <button class="mx-1 btn btn-outline-dark rounded-circle btn-pagination">
-            <p>...</p>
-        </button>
+        {% else %}
+            <div class="container text-center my-5">
+                <h2 class="mb-5">Nenhum evento foi encontrado!</h2>
+                <hr class="hr-escuro my-4" />
+            </div>
         {% endif %}
-        {% for i in rng %}
-        <a class="a-clear mx-1" href="{% url 'eventos' %}?page={{ i }}{{ category }}{{ period }}">
-            <button class="btn btn-outline-dark rounded-circle btn-pagination {{ pag|active:i }}">
-                <p>{{ i }}</p>
-            </button>
-        </a>
-        {% endfor %}
-        {% if pag|add:3 < total %} <button class="mx-1 btn btn-outline-dark rounded-circle btn-pagination">
-            <p>...</p>
-            </button>
-            <a class="a-clear mx-1" href="{% url 'eventos' %}?page={{ total }}{{ category }}{{ period }}">
-                <button class="btn btn-outline-dark rounded-circle btn-pagination {{ pag|active:total }}">
-                    <p>{{ total }}</p>
-                </button>
-            </a>
-            {% endif %}
-            {% endwith %}
-    </div>
-    {% else %}
-    <div class="container text-center my-5">
-        <h2 class="mb-5">Nenhum evento foi encontrado!</h2>
-        <hr class="hr-escuro my-4" />
-    </div>
-    {% endif %}
-    <div class="container text-right text-uppercase mt-5">
-        <a href="#" class="text-dark">Voltar ao topo <i class="fas fa-arrow-alt-circle-up"></i></a>
-    </div>
-</article>
+        <div class="container text-right text-uppercase mt-5">
+            <a href="#" class="text-dark">Voltar ao topo <i class="fas fa-arrow-alt-circle-up"></i></a>
+        </div>
+    </article>
 {% endblock content %}
 {% block scripts %}
-<script>
-    var font_base = {};
-    function mudaFonte(escala) {
-        var font_aumenta = { ".cabecalho h3": "", ".cabecalho h4": "", "a.badge-pill": "", ".item-noticia p.text-dark": "", ".item-noticia h2": "", ".item-noticia .resumo": "" };
-        $.each(font_aumenta, function (i, v) {
-            font_aumenta[i] = $(i).css("font-size")
-            font_aumenta[i] = font_aumenta[i].substring(0, font_aumenta[i].length - 2).toString();
-        });
-        jQuery.isEmptyObject(font_base) ? font_base = font_aumenta : NaN
-        if (escala == 1) {
-            $.each(font_aumenta, function (i, v) {
-                $(i).css({ "font-size": v * 0.8 })
+    <script>
+        var font_base = {};
+
+        function mudaFonte(escala) {
+            var font_aumenta = {
+                ".cabecalho h3": "",
+                ".cabecalho h4": "",
+                "a.badge-pill": "",
+                ".item-noticia p.text-dark": "",
+                ".item-noticia h2": "",
+                ".item-noticia .resumo": ""
+            };
+            $.each(font_aumenta, function(i, v) {
+                font_aumenta[i] = $(i).css("font-size")
+                font_aumenta[i] = font_aumenta[i].substring(0, font_aumenta[i].length - 2).toString();
             });
-        } else if (escala == 2) {
-            $.each(font_aumenta, function (i, v) {
-                $(i).css({ "font-size": v * 1.3 })
-            });
-        } else {
-            $.each(font_base, function (i, v) {
-                $(i).css({ "font-size": v * 1 })
-            });
+            jQuery.isEmptyObject(font_base) ? font_base = font_aumenta : NaN
+            if (escala == 1) {
+                $.each(font_aumenta, function(i, v) {
+                    $(i).css({
+                        "font-size": v * 0.8
+                    })
+                });
+            } else if (escala == 2) {
+                $.each(font_aumenta, function(i, v) {
+                    $(i).css({
+                        "font-size": v * 1.3
+                    })
+                });
+            } else {
+                $.each(font_base, function(i, v) {
+                    $(i).css({
+                        "font-size": v * 1
+                    })
+                });
+            }
         }
-    }
-</script>
+    </script>
 {% endblock scripts %}

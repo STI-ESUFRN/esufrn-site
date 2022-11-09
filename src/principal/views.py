@@ -20,7 +20,6 @@ from principal.helpers import emailToken, joinRange, paginator, qnt_page
 from principal.models import (
     Alerta,
     Blog,
-    BlogAttachments,
     Depoimentos,
     Documentos,
     Equipe,
