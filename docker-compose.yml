@@ -36,7 +36,7 @@ services:
 
   web:
     build: .
-    command: gunicorn esufrn.wsgi:application --worker-class=gevent --worker-connections=64 --workers=4 --bind 0.0.0.0:8000 --reload
+    command: gunicorn esufrn.wsgi:application --worker-class=gevent --worker-connections=64 --workers=4 --bind 0.0.0.0:8000
     restart: always
     expose:
       - 8000
