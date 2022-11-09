@@ -71,7 +71,7 @@ class Blog(models.Model):
     class Meta:
         verbose_name = "Notícia"
         verbose_name_plural = "Notícias"
-        ordering = ["-modified_at"]
+        ordering = ["-published_at"]
 
     def __str__(self):
         return self.title
