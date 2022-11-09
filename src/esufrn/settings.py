@@ -97,6 +97,10 @@ DATABASES = {
         "NAME": os.getenv("MYSQL_DATABASE"),
         "USER": os.getenv("MYSQL_USER"),
         "PASSWORD": os.getenv("MYSQL_PASSWORD"),
+        "OPTIONS": {
+            "charset": "utf8mb4",
+            "use_unicode": True,
+        },
     }
 }
 
