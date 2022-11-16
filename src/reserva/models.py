@@ -8,6 +8,7 @@ from django.db import models
 from django.forms import ValidationError
 from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
+from model_utils.models import SoftDeletableModel, TimeStampedModel
 from multiselectfield import MultiSelectField
 
 
@@ -101,7 +102,7 @@ class UserClassroom(models.Model):
         verbose_name_plural = "Responsáveis"
 
 
-class Reserve(models.Model):
+class Reserve(TimeStampedModel, SoftDeletableModel):
     classroom = models.ForeignKey(
         Classroom,
         verbose_name="Sala de aula",
@@ -109,12 +110,16 @@ class Reserve(models.Model):
         on_delete=models.CASCADE,
     )
     date = models.DateField("Data para a reserva")
-    created_at = models.DateTimeField("Data do pedido", auto_now_add=True)
-    refresh_at = models.DateTimeField("Data de atualização do pedido", auto_now=True)
     event = models.CharField("Evento", max_length=100, null=True)
 
-    SHIFT_CHOICES = (("M", "Manhã"), ("T", "Tarde"), ("N", "Noite"))
-    shift = models.CharField("Turno", choices=SHIFT_CHOICES, default="M", max_length=1)
+    class Shift(models.TextChoices):
+        MORNING = ("M", "Manhã")
+        AFTERNOON = ("T", "Tarde")
+        NIGHT = ("N", "Noite")
+
+    shift = models.CharField(
+        "Turno", choices=Shift.choices, default=Shift.MORNING, max_length=1
+    )
     cause = models.TextField("Justificativa", max_length=512, null=True, blank=True)
     equipment = models.CharField(
         "Equipamento multimídia", max_length=200, null=True, blank=True
@@ -123,9 +128,16 @@ class Reserve(models.Model):
     email = models.EmailField("E-mail", max_length=100)
     phone = models.CharField("Telefone", max_length=16, null=True, blank=True)
 
-    STATUS_CHOICES = (("A", "Aprovado"), ("R", "Rejeitado"), ("E", "Esperando"))
+    class Status(models.TextChoices):
+        APPROVED = ("A", "Aprovado")
+        REJECTED = ("R", "Rejeitado")
+        WAITING = ("E", "Esperando")
+
     status = models.CharField(
-        "Estado da reserva", choices=STATUS_CHOICES, default="E", max_length=1
+        "Estado da reserva",
+        choices=Status.choices,
+        default=Status.WAITING,
+        max_length=1,
     )
     obs = models.TextField("Observação", max_length=1000, null=True, blank=True)
     email_response = models.TextField("Resposta", null=True, blank=True)
@@ -146,12 +158,12 @@ class Reserve(models.Model):
         return str(self.classroom)
 
     def get_shift_name(self):
-        for index, row in self.SHIFT_CHOICES:
+        for index, row in self.Shift.choices:
             if index == self.shift:
                 return row
 
     def get_status_name(self):
-        for index, row in self.STATUS_CHOICES:
+        for index, row in self.Status.choices:
             if index == self.status:
                 return row
 
@@ -375,7 +387,7 @@ class Reserve(models.Model):
     class Meta:
         verbose_name = "Reserva pontual"
         verbose_name_plural = "Reservas pontuais"
-        ordering = ["-created_at"]
+        ordering = ["created"]
 
 
 class PeriodReserve(models.Model):
