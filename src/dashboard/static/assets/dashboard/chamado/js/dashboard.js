@@ -60,7 +60,7 @@ function patch(data) {
 	$(".loader-global").addClass("load");
 	$.ajax({
 		url: `/api/admin/chamados/${idSelecionado}/`,
-		type: 'PATCH',
+		type: "PATCH",
 		data: data,
 		success: function (reserve) {
 			if (reserve.status != "P") {

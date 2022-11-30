@@ -138,7 +138,7 @@ function getCalendar() {
 
     $.ajax({
         type: "GET",
-        url: `/api/calendario?year=${anoAtual}&month=${mesAtual}&classroom=${sala}`,
+        url: `/api/calendario/?year=${anoAtual}&month=${mesAtual}&classroom=${sala}`,
         dataType: "json",
         success: function (response) {
             calendario.updateCalendar(response, anoAtual, mesAtual);
@@ -233,7 +233,7 @@ $("#enviar-reserva").click(function (e) {
 
         $.ajax({
             type: "POST",
-            url: `/api/admin/reservas`,
+            url: `/api/admin/reservas/`,
             dataType: "json",
             data: serialized_data,
             success: function (response) {

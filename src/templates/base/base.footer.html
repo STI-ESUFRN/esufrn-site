@@ -1,11 +1,12 @@
 {% load static %}
 <style>
-    input.transparent-input{
-       background-color: #ffffff11 !important;
+    input.transparent-input {
+        background-color: #ffffff11 !important;
     }
-    input.transparent-input:focus{
+
+    input.transparent-input:focus {
         color: #ffffffff !important;
-     }
+    }
 </style>
 <footer class="mt-5">
     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1180.0361839143961!2d-35.2023323929017!3d-5.834074961214089!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7b2ff5f5dc3e34d%3A0xe6608f57294f3808!2sEscola%20de%20Sa%C3%BAde%20-%20ES%2FUFRN!5e0!3m2!1spt-BR!2sbr!4v1653324004771!5m2!1spt-BR!2sbr"
@@ -63,13 +64,13 @@
         <hr class="mt-4"/>
     </div>
     <div class="container text-white pt-4 link-resumo">
-        {% for item in mainItens %}
-            {% if item.main.footer and item.main.action_type == "hover" %}
+        {% for item in navbar_items %}
+            {% if item.footer and item.action_type == "hover" %}
                 <div>
-                    <h5>{{ item.main.name }}</h5>
-                    {% for sub in item.subs %}
-                        <a href="{{ sub.main.link }}">
-                            <p>{{ sub.main.name }}</p>
+                    <h5>{{ item.name }}</h5>
+                    {% for sub in item.subitems %}
+                        <a href="{{ sub.link }}">
+                            <p>{{ sub.name }}</p>
                         </a>
                     {% endfor %}
                 </div>

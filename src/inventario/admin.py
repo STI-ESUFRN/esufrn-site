@@ -1,8 +1,6 @@
 from django.contrib import admin
 
-from .models import Emprestimo, Maquina, Patrimonio, PatrimonioEmprestimo
-
-# Register your models here.
+from inventario.models import Emprestimo, Maquina, Patrimonio, PatrimonioEmprestimo
 
 
 class PatrimonioInline(admin.TabularInline):

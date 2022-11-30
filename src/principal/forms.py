@@ -1,10 +1,9 @@
 from django import forms
 
-from .models import Newsletter
+from principal.models import Newsletter
 
 
 class ContactES(forms.Form):
-
     name = forms.CharField(
         label="Nome",
         max_length=100,

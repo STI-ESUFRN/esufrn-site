@@ -2,24 +2,23 @@
 {% load static %}
 {% block styles %}
     <style>
-	table.table {
-		table-layout: fixed;
-	}
+        table.table {
+            table-layout: fixed;
+        }
 
-	table.table td {
-		overflow: hidden;
-		white-space: nowrap;
-		text-overflow: ellipsis;
-	}
+        table.table td {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
 
-	table.table th:first-child {
-		width: 25px;
-	}
+        table.table th:first-child {
+            width: 25px;
+        }
 
-	table.table th:nth-child(2) {
-		width: 25px;
-	}
-
+        table.table th:nth-child(2) {
+            width: 25px;
+        }
     </style>
 {% endblock styles %}
 {% block content %}
@@ -102,7 +101,7 @@
                             <small class="text-muted">Status:</small><span data-attribute="status"></span>
                         </p>
                         <h5 class="card-title">
-                            <small>Sala:</small> <b data-attribute="classroom.classroom_name"></b>
+                            <small>Sala:</small> <b data-attribute="classroom.full_name"></b>
                         </h5>
                         <p class="card-text">
                             <small>Evento:</small> <b data-attribute="event"></b>
@@ -110,7 +109,7 @@
                     </div>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">
-                            <small>Data:</small> <b data-attribute="date"></b>
+                            <small>Data:</small> <b date-format="DD/MM/YYYY" data-attribute="date"></b>
                         </li>
                         <li class="list-group-item">
                             <small>Turno:</small> <b data-attribute="shift_name"></b>
@@ -157,10 +156,10 @@
                            id="waitReserve"
                            data-status="E">Colocar em Espera</a>
                         <p class="m-0 mt-2">
-                            <small class="text-muted">Data do pedido: <span date-format="DD/MM/YYYY HH:mm" data-attribute="created_at"></span></small>
+                            <small class="text-muted">Data do pedido: <span date-format="DD/MM/YYYY HH:mm" data-attribute="created"></span></small>
                         </p>
                         <p class="m-0 mt-2">
-                            <small class="text-muted">Ultima Alteração: <span date-format="DD/MM/YYYY HH:mm" data-attribute="refresh_at"></span></small>
+                            <small class="text-muted">Ultima Alteração: <span date-format="DD/MM/YYYY HH:mm" data-attribute="modified"></span></small>
                         </p>
                     </div>
                 </div>

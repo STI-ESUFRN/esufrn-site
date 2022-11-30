@@ -65,7 +65,7 @@ function getCalendar() {
 
     $.ajax({
         type: "GET",
-        url: `/api/calendario?year=${anoAtual}&month=${mesAtual}&classroom=${sala}`,
+        url: `/api/calendario/?year=${anoAtual}&month=${mesAtual}&classroom=${sala}`,
         dataType: "json",
         success: function (response) {
             calendario.updateCalendar(response, anoAtual, mesAtual);
@@ -88,7 +88,7 @@ function updateList(pagina = 1) {
     filters = $("[data-filter]").serialize();
     $.ajax({
         type: "GET",
-        url: "/api/admin/periodos",
+        url: "/api/admin/periodos/",
         data: `${filters}&page=${pagina}`,
         success: function (response) {
             $.each(response.data, (index, value) => {
@@ -97,7 +97,7 @@ function updateList(pagina = 1) {
                 let status_fa = $('<td />', { class: 'text-center px-0 pl-2', html: `<i class="${value.status == "A" ? "fa fa-check-circle text-success" : value.status == "R" ? "fa fa-times-circle text-danger" : "fa fa-solid fa-clock text-warning"}">` });
                 let calendar_fa = $("<td />", { class: "text-center", html: `<i class="fas fa-calendar" aria-hidden="true"></i>` });
                 let classname = $("<td />", { text: value.classname });
-                let classroom = $("<td />", { text: value.classroom.classroom_name });
+                let classroom = $("<td />", { text: value.classroom.full_name });
 
 
                 let shift = $("<td />", {
@@ -152,7 +152,7 @@ function updateDetails() {
     $("#editButton").attr("href", `/dashboard/periodo/editar/${currentPeriod}`);
     $.ajax({
         type: "GET",
-        url: `/api/admin/periodos/${currentPeriod}`,
+        url: `/api/admin/periodos/${currentPeriod}/`,
         success: function (response) {
             fillAttributes(response);
 
@@ -175,12 +175,12 @@ function updateDetails() {
                 sala = _sala;
                 anoAtual = _anoAtual;
                 mesAtual = _mesAtual;
-                $("#sala-selec").text(response.classroom.classroom_name);
+                $("#sala-selec").text(response.classroom.full_name);
                 getCalendar();
             }
 
             $.ajax({
-                url: `/api/admin/periodos/${response.id}/dias`,
+                url: `/api/admin/periodos/${response.id}/dias/`,
                 type: "GET",
                 success: function (response) {
                     $("#perioddays").html('');
@@ -225,7 +225,7 @@ function updateDetails() {
 function updateDay(elem) {
     $.ajax({
         type: "PUT",
-        url: `/api/admin/periodos/${currentPeriod}/dias/${elem.attr("data-day-id")}`,
+        url: `/api/admin/periodos/${currentPeriod}/dias/${elem.attr("data-day-id")}/`,
         data: {
             status: elem.attr("data-day-active") == "true" ? "false" : "true"
         },
@@ -244,8 +244,8 @@ function updateDay(elem) {
 
 function update(data) {
     $.ajax({
-        url: "/api/admin/periodos/" + currentPeriod,
-        type: 'PUT',
+        url: `/api/admin/periodos/${currentPeriod}/`,
+        type: "PUT",
         data: data,
         success: function (response) {
             $(".loader-global").removeClass("load");
@@ -287,7 +287,7 @@ $("[data-filter]").change(function () {
 $("#deletePeriod").click(function () {
     $.ajax({
         type: "DELETE",
-        url: `/api/admin/periodos/${currentPeriod}`,
+        url: `/api/admin/periodos/${currentPeriod}/`,
         success: function (response) {
             if (response.status == "success") {
                 updateList(actualPage);

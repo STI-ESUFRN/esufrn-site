@@ -7,6 +7,12 @@ from django.forms import ValidationError
 from django.http import Http404, JsonResponse, QueryDict
 from django.utils.decorators import method_decorator
 from django.views.generic import View
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import permissions, viewsets
+from rest_framework.decorators import action
+from rest_framework.filters import OrderingFilter
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
 
 from principal.decorators import allowed_users
 from principal.helpers import haveMore, paginate
@@ -25,7 +31,71 @@ from reserva.serializers import (
     ReserveSerializer,
 )
 
-# Create your views here.
+
+class IsFromReserve(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.groups.filter(name="reserva").exists()
+
+
+class IsSuperAdmin(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_superuser
+
+
+class ReservaViewSet(viewsets.ModelViewSet):
+    serializer_class = ReserveSerializer
+    queryset = Reserve.available_objects.all()
+    permission_classes = [
+        IsAuthenticated,
+        IsFromReserve | IsSuperAdmin,
+    ]
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_fields = {
+        "classroom": ["exact"],
+        "status": ["exact"],
+        "created": ["exact", "lte", "gte"],
+    }
+    ordering_fields = ["created"]
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return super().get_queryset()
+
+        classrooms = self.request.user.classrooms.all().values("classroom")
+        return super().get_queryset().filter(classroom__in=classrooms)
+
+    @action(detail=False, methods=["post"], permission_classes=[AllowAny])
+    def realizar_reserva(self, request, pk=None):
+        serializer = self.get_serializer(request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=["get"])
+    def historico(self, request, pk=None):
+        queryset = self.get_queryset().filter(
+            status__in=[Reserve.Status.REJECTED, Reserve.Status.APPROVED]
+        )
+        page = self.paginate_queryset(queryset)
+
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=["get"])
+    def dashboard(self, request, pk=None):
+        queryset = self.get_queryset().filter(status=Reserve.Status.WAITING)
+        page = self.paginate_queryset(queryset)
+
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
 
 reserve_decorators = [
     allowed_users(allowed_roles=["reserva"]),
@@ -102,14 +172,12 @@ class reservasAdminView(View):
         if user.is_superuser:
             classrooms = Classroom.objects.all()
         else:
-            classrooms = UserClassroom.objects.filter(user=request.user).values_list(
-                "classroom", flat=True
-            )
+            classrooms = request.user.classrooms.all()
 
         reserves = (
             Reserve.objects.filter(classroom__in=classrooms)
             .exclude(status="E")
-            .order_by("created_at" if orde == "dec" else "-created_at")
+            .order_by("created" if orde == "dec" else "-created")
         )
 
         if request.GET.get("status"):
@@ -246,7 +314,7 @@ class reservaAdminView(View):
 
             serializador = ReserveSerializer(result, many=False)
             return JsonResponse(serializador.data, safe=False)
-        except:
+        except Reserve.DoesNotExist:
             raise Http404()
 
     def put(self, request, *args, **kwargs):
@@ -422,7 +490,7 @@ class periodAdminView(View):
                 serializador = PeriodReserveBasicSerializer(result, many=False)
                 return JsonResponse(serializador.data, safe=False)
 
-        except:
+        except PeriodReserve.DoesNotExist:
             return JsonResponse(
                 {"message": "Arquivo não esiste", "status": "error"},
                 safe=False,
@@ -528,7 +596,7 @@ class periodDayAdminView(View):
 
             return JsonResponse(serializador.data, safe=False)
 
-        except:
+        except PeriodReserveDay.DoesNotExist:
             return JsonResponse(
                 {"message": "Não existe", "status": "error"}, safe=False
             )

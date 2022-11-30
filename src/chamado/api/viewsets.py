@@ -4,10 +4,9 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 
 from api.pagination import StdResultsSetPagination
+from chamado.api.permissions import GroupSuporte
+from chamado.api.serializers import ChamadoAdminSerializer, ChamadoSerializer
 from chamado.models import Chamado
-
-from .permissions import GroupSuporte
-from .serializers import ChamadoAdminSerializer, ChamadoSerializer
 
 
 class ChamadoViewSet(

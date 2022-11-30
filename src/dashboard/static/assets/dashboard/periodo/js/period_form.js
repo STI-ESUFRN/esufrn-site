@@ -58,7 +58,7 @@ function getCalendar() {
 
     $.ajax({
         type: "GET",
-        url: `/api/calendario?year=${anoAtual}&month=${mesAtual}&classroom=${sala}`,
+        url: `/api/calendario/?year=${anoAtual}&month=${mesAtual}&classroom=${sala}`,
         success: function (response) {
             calendario.updateCalendar(response, anoAtual, mesAtual);
         }

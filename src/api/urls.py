@@ -4,8 +4,8 @@ from api.views import contatosView, contatoView, search
 
 urlpatterns = [
     path("busca/", search, name="search"),
-    path("contato", contatosView.as_view()),
-    path("contato/<int:pk>", contatoView.as_view()),
+    path("contato/", contatosView.as_view()),
+    path("contato/<int:pk>/", contatoView.as_view()),
     # API DE RESERVA DE SALAS
     path("", include("reserva.api.urls")),
     # API DE CHAMADOS

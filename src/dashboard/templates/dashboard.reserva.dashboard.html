@@ -3,7 +3,7 @@
 {% block styles %}
     <link rel="stylesheet" href="{% static 'assets/css/reserva.style.css' %}"/>
     <style>
-        table.table th:nth-child(1){
+        table.table th:nth-child(1) {
             width: 20px;
         }
     </style>
@@ -42,7 +42,7 @@
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">
-                        <small>Sala:</small> <b data-attribute="classroom.classroom_name">---</b>
+                        <small>Sala:</small> <b data-attribute="classroom.full_name">---</b>
                     </h5>
                     <p class="card-text">
                         <small>Evento:</small> <b data-attribute="event">---</b>
@@ -117,12 +117,12 @@
                        data-status="R">Rejeitar Reserva</a>
                     <p class="m-0 mt-2">
                         <small class="text-muted" title="Data que o solicitante submeteu o chamado">
-                            Data do pedido: <span date-format="DD/MM/YYYY HH:mm" data-attribute="created_at">---</span>
+                            Data do pedido: <span date-format="DD/MM/YYYY HH:mm" data-attribute="created">---</span>
                         </small>
                     </p>
                     <p class="m-0 mt-2">
                         <small class="text-muted">
-                            Ultima Alteração: <span date-format="DD/MM/YYYY HH:mm" data-attribute="refresh_at">---</span>
+                            Ultima Alteração: <span date-format="DD/MM/YYYY HH:mm" data-attribute="modified">---</span>
                         </small>
                     </p>
                 </div>
@@ -139,7 +139,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="text-center">
-                        Uso da sala: <b><span data-attribute="classroom.classroom_name"></span></b>
+                        Uso da sala: <b><span data-attribute="classroom.full_name"></span></b>
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i></span>

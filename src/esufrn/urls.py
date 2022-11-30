@@ -12,7 +12,7 @@ urlpatterns = [
     path("revistas/", include("revistas.urls")),
     path("informatica/chamado/", include("chamado.urls")),
     path("informatica/reserva/", include("reserva.urls")),
-    re_path(r"^api/", include("api.urls")),
+    re_path("api/", include("api.urls")),
 ]
 
 if settings.DEBUG:

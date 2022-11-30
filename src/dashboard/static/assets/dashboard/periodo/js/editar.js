@@ -29,7 +29,7 @@ $("#enviar-reserva").click(function (e) {
         let id = $("[name=id]").val();
         $.ajax({
             type: "PUT",
-            url: `/api/admin/periodos/${id}`,
+            url: `/api/admin/periodos/${id}/`,
             data: serialized_data,
             success: function (response) {
                 if (response.status == "success") {

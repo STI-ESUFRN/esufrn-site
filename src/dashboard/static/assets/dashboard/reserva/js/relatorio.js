@@ -33,7 +33,7 @@ function update() {
         });
         $.ajax({
             type: "GET",
-            url: `/api/calendario?year=${anoAtual}&month=${mesAtual}&classroom=${id}&status=A`,
+            url: `/api/calendario/?year=${anoAtual}&month=${mesAtual}&classroom=${id}&status=A`,
             dataType: "json",
             success: function (response) {
                 calendario.updateCalendar(response, anoAtual, mesAtual);

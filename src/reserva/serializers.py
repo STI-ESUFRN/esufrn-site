@@ -1,47 +1,52 @@
 from rest_framework import serializers
 
+from core.fields import PrimaryKeyRelatedFieldWithSerializer
 from reserva.models import Classroom, PeriodReserve, PeriodReserveDay, Reserve
 
 
 class ClassroomSerializer(serializers.ModelSerializer):
-    classroom_name = serializers.SerializerMethodField()
-
-    def get_classroom_name(self, obj):
-        return obj.get_classroom_name()
-
-    floor_name = serializers.SerializerMethodField()
-
-    def get_floor_name(self, obj):
-        return obj.get_floor_name()
-
-    type_name = serializers.SerializerMethodField()
-
-    def get_type_name(self, obj):
-        return obj.get_type_name()
-
     class Meta:
         model = Classroom
-        exclude = ()
-        fields = "__all__"
+        fields = [
+            "id",
+            "name",
+            "full_name",
+            "acronym",
+            "type",
+            "number",
+            "days_required",
+            "justification_required",
+            "floor",
+        ]
 
 
 class ReserveSerializer(serializers.ModelSerializer):
-    classroom = ClassroomSerializer(read_only=False)
-
-    shift_name = serializers.SerializerMethodField()
-
-    def get_shift_name(self, obj):
-        return obj.get_shift_name()
-
-    status_name = serializers.SerializerMethodField()
-
-    def get_status_name(self, obj):
-        return obj.get_status_name()
+    classroom = PrimaryKeyRelatedFieldWithSerializer(
+        ClassroomSerializer, queryset=Classroom.objects.all()
+    )
 
     class Meta:
         model = Reserve
-        exclude = ()
-        fields = "__all__"
+        fields = [
+            "id",
+            "classroom",
+            "date",
+            "event",
+            "shift",
+            "cause",
+            "equipment",
+            "requester",
+            "email",
+            "phone",
+            "status",
+            "obs",
+            "email_response",
+            "declare",
+            "admin_created",
+            "created",
+            "modified",
+            "is_removed",
+        ]
 
 
 class ReservePublicSerializer(serializers.ModelSerializer):

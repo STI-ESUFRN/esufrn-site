@@ -11,8 +11,8 @@ function updateDash(data = []) {
 
 		let fa_calendar = $('<td />', { class: "text-center px-0", html: v.admin_created ? '<i class="fas fa-key"></i>' : '<i class="far fa-calendar-alt"></i>' });
 
-		let classroom = $('<td />', { text: v.classroom.classroom_name });
-		let criado_ha_date = new Date(v.created_at);
+		let classroom = $('<td />', { text: v.classroom.full_name });
+		let criado_ha_date = new Date(v.created);
 		let criado_ha = criado_ha_date.toLocaleDateString();
 		let event = $('<td />', { text: v.event, title: v.event });
 		let requester = $('<td />', { text: v.requester, title: v.requester });
@@ -37,8 +37,8 @@ function refreshData(pagina = 1) {
 	filters = $("[data-filter]").serialize();
 
 	$.ajax({
-		url: "/api/admin/reservas",
 		type: "GET",
+		url: "/api/admin/reservas/",
 		data: `${filters}&page=${pagina}`,
 		success: function (data) {
 			data[1]['have_more'] ? $("#load-antigo").attr("disabled", false) : $("#load-antigo").attr("disabled", true)
@@ -88,8 +88,8 @@ $("#load-recente").click(function (e) {
 // ------------------------------------------------------------------- Update
 function update(data) {
 	$.ajax({
-		url: "/api/admin/reservas/" + idSelected,
-		type: 'PUT',
+		url: `/api/admin/reservas/${idSelected}/`,
+		type: "PUT",
 		data: data,
 		success: function (response) {
 			$(".loader-global").removeClass("load");

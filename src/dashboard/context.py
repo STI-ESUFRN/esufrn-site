@@ -1,11 +1,9 @@
-from dashboard.models import DashboardItens, DashboardSubItens
+from dashboard.models import DashboardItens
+from dashboard.serializers import DashboardItemSerializer
 
 
 def dashboardMenuItens(request):
-    mainItens = DashboardItens.objects.all()
-    mainList = []
-    for item in mainItens:
-        sub = DashboardSubItens.objects.all().filter(menu=item.id)
-        mainList.append({"main": item, "subs": sub})
+    items = DashboardItens.objects.all()
+    serializer = DashboardItemSerializer(items, many=True)
 
-    return {"dashbordItens": mainList}
+    return {"dashboard_navbar_items": serializer.data}

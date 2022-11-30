@@ -1,15 +1,17 @@
 {% extends "dashboard.base.html" %}
 {% block styles %}
     <style>
-    table.table {
-        table-layout: fixed;
-    }
-    table.custom-table th:first-child {
-        width: 20px;
-    }
-    table.custom-table th:nth-child(2) {
-        width: 20px;
-    }
+        table.table {
+            table-layout: fixed;
+        }
+        
+        table.custom-table th:first-child {
+            width: 20px;
+        }
+        
+        table.custom-table th:nth-child(2) {
+            width: 20px;
+        }
     </style>
 {% endblock styles %}
 {% block content %}
@@ -38,52 +40,70 @@
 {% block scripts %}
     <script>
         var currentPatrimonio = undefined;
-        function updateList(){
+        
+        function updateList() {
             $.ajax({
-                type:"GET",
-                url:"/api/admin/patrimonios",
-                success:function(response){
-                    $.each(response, function(index, e){
-                        let row = $("<tr />", {"data-id-patrimonio":e.id});
-                        let fa1col = $("<td />",{"class":"text-center"});
-                        let fa1 = $("<i />", {class:e.status == "D" ? "fas fa-check-circle text-success" : "fas fa-times-circle text-danger"});
+                type: "GET",
+                url: "/api/admin/patrimonios/",
+                success: function(response) {
+                    $.each(response, function(index, e) {
+                        let row = $("<tr />", {
+                            "data-id-patrimonio": e.id
+                        });
+                        let fa1col = $("<td />", {
+                            "class": "text-center"
+                        });
+                        let fa1 = $("<i />", {
+                            class: e.status == "D" ? "fas fa-check-circle text-success" : "fas fa-times-circle text-danger"
+                        });
                         fa1col.append(fa1);
-                        let fa2col = $("<td />",{"class":"text-center"});
+                        let fa2col = $("<td />", {
+                            "class": "text-center"
+                        });
                         let fa2 = $("<i />");
-                        switch(e.category){
+                        switch (e.category) {
                             case 'N':
-                            fa2.attr("class","fas fa-laptop");
-                            break;
+                                fa2.attr("class", "fas fa-laptop");
+                                break;
                             case 'C':
-                            fa2.attr("class","fas fa-desktop");
-                            break;
+                                fa2.attr("class", "fas fa-desktop");
+                                break;
                             case 'E':
-                            fa2.attr("class", "fas fa-plug");
-                            break;
+                                fa2.attr("class", "fas fa-plug");
+                                break;
                         }
                         fa2col.append(fa2);
-                        let model = $("<td />", {text:e.model});
-                        let dmp = $("<td />", {text:e.dmp});
-                        let status = $("<td />", {text:e.status == "D" ? "Disponível" : "Emprestado"});
-                        let category = $("<td />", {text:e.category_name});
-
+                        let model = $("<td />", {
+                            text: e.model
+                        });
+                        let dmp = $("<td />", {
+                            text: e.dmp
+                        });
+                        let status = $("<td />", {
+                            text: e.status == "D" ? "Disponível" : "Emprestado"
+                        });
+                        let category = $("<td />", {
+                            text: e.category_name
+                        });
+        
                         row.append(fa1col, fa2col, model, dmp, category, status);
                         $("#patrimonio-list").append(row);
                     });
-                    $("[data-id-patrimonio]").click(function(e){
+                    $("[data-id-patrimonio]").click(function(e) {
                         e.preventDefault();
-                        currentPatrimonio=e.currentTarget.dataset.idPatrimonio;
+                        currentPatrimonio = e.currentTarget.dataset.idPatrimonio;
                         showDetails();
                     });
                 }
             });
         }
-        function showDetails(){
+        
+        function showDetails() {
             $.ajax({
-                type:"GET",
-                url:`/api/admin/patrimonios/${currentPatrimonio}`,
-                success:function(response){
-                    $("[data-attribute]").each(function () {
+                type: "GET",
+                url: `/api/admin/patrimonios/${currentPatrimonio}/`,
+                success: function(response) {
+                    $("[data-attribute]").each(function() {
                         let attrvalue = response;
                         $.map($(this).attr("data-attribute").split('.'), (value, index) => {
                             attrvalue = attrvalue[value];

@@ -9,9 +9,10 @@ from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.decorators.cache import never_cache
 
+from dashboard.utils import getDashContext
 from principal.decorators import allowed_users, authenticated_user, unauthenticated_user
 from principal.forms import siginForm
-from principal.models import Mensagem
+from principal.models import Message
 from reserva.models import (
     Classroom,
     PeriodReserve,
@@ -19,10 +20,6 @@ from reserva.models import (
     Reserve,
     UserClassroom,
 )
-
-from .utils import getDashContext
-
-# Create your views here.
 
 
 # REGISTRATION
@@ -79,7 +76,7 @@ def logoutView(request):
 # HOME
 @login_required(login_url="/dashboard/login")
 def dashboardHome(request):
-    messages = Mensagem.objects.all()
+    messages = Message.objects.all()
     now = datetime.now()
 
     shift = None

@@ -1,11 +1,10 @@
-from .models import DashboardItens, DashboardSubItens
+from dashboard.models import DashboardItens
+from dashboard.serializers import DashboardItemSerializer
 
 
 def getDashContext(context, menuName, current=None):
     menu = DashboardItens.objects.get(name=menuName)
-    context["current"] = {
-        "main": menu,
-        "subs": DashboardSubItens.objects.all().filter(menu=menu.id),
-    }
+    serializer = DashboardItemSerializer(menu)
+    context["current"] = serializer.data
     if current:
         context["current_sub"] = current

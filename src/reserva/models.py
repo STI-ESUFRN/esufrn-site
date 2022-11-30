@@ -15,12 +15,15 @@ from multiselectfield import MultiSelectField
 class Classroom(models.Model):
     name = models.CharField("Nome da sala", max_length=64, blank=True, null=True)
     acronym = models.CharField("Acrônimo", null=True, blank=True, max_length=16)
-    TIPO_CHOICES = (
-        ("sal", "Sala de aula"),
-        ("lab", "Laboratório"),
-        ("aud", "Auditório"),
+
+    class ClassroomTypes(models.TextChoices):
+        CLASSROOM = "sal", "Sala de aula"
+        LABORATORY = "lab", "Laboratório"
+        AUDITORIUM = "aud", "Auditório"
+
+    type = models.CharField(
+        "Tipo de sala", max_length=3, choices=ClassroomTypes.choices
     )
-    type = models.CharField("Tipo de sala", max_length=3, choices=TIPO_CHOICES)
     number = models.CharField("Número da sala", max_length=10)
 
     days_required = models.IntegerField(
@@ -30,29 +33,40 @@ class Classroom(models.Model):
         "Requer justificativa de uso", default=False
     )
 
-    FLOOR_CHOICES = (
-        ("0", "Térreo"),
-        ("1", "1º Andar"),
-        # ("2", "2º Andar"),
+    class Floors(models.TextChoices):
+        GROUND = "0", "Térreo"
+        ST_FLOOR = "1", "1º Andar"
+
+    floor = models.CharField(
+        "Andar", max_length=25, choices=Floors.choices, default=Floors.GROUND
     )
-    floor = models.CharField("Andar", max_length=25, choices=FLOOR_CHOICES, default="0")
 
-    def __str__(self):
-        return self.get_classroom_name()
-
-    def get_classroom_name(self):
+    @property
+    def full_name(self):
         if self.name:
             return self.name + " - " + str(self.number)
 
         return self.get_type_name() + " - " + str(self.number)
 
-    def get_floor_name(self):
-        for index, row in self.FLOOR_CHOICES:
-            if index == self.floor:
-                return row
+    def __str__(self):
+        if self.name:
+            return self.name
+
+        return self.get_type_name() + " - " + str(self.number)
+
+    # def get_classroom_name(self):
+    #     if self.name:
+    #         return self.name + " - " + str(self.number)
+
+    #     return self.get_type_name() + " - " + str(self.number)
+
+    # def get_floor_name(self):
+    #     for index, row in self.FLOOR_CHOICES:
+    #         if index == self.floor:
+    #             return row
 
     def get_type_name(self):
-        for index, row in self.TIPO_CHOICES:
+        for index, row in self.ClassroomTypes.choices:
             if index == self.type:
                 return row
 
@@ -73,9 +87,17 @@ class Classroom(models.Model):
 
 
 class UserClassroom(models.Model):
-    user = models.ForeignKey(User, verbose_name="Responsável", on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        User,
+        verbose_name="Responsável",
+        related_name="classrooms",
+        on_delete=models.CASCADE,
+    )
     classroom = models.ForeignKey(
-        Classroom, verbose_name="Sala", on_delete=models.CASCADE
+        Classroom,
+        verbose_name="Sala",
+        related_name="responsible",
+        on_delete=models.CASCADE,
     )
 
     def get_user_email(self):
@@ -390,7 +412,7 @@ class Reserve(TimeStampedModel, SoftDeletableModel):
         ordering = ["created"]
 
 
-class PeriodReserve(models.Model):
+class PeriodReserve(TimeStampedModel, SoftDeletableModel):
     STATUS_CHOICES = (("A", "Aprovado"), ("R", "Rejeitado"), ("E", "Esperando"))
 
     classroom = models.ForeignKey(
@@ -430,9 +452,6 @@ class PeriodReserve(models.Model):
     weekdays = MultiSelectField(
         "Dias da semana", choices=sorted(DAYS_OF_THE_WEEK), max_length=14
     )
-
-    created_at = models.DateTimeField("Data da reserva", auto_now_add=True)
-    refresh_at = models.DateTimeField("Data de atualização da reserva", auto_now=True)
 
     classname = models.CharField("Nome da turma", max_length=100)
     classcode = models.CharField("Código do componente", max_length=16, null=True)

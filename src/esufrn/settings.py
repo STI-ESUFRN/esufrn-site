@@ -100,6 +100,7 @@ DATABASES = {
         "OPTIONS": {
             "charset": "utf8mb4",
             "use_unicode": True,
+            "init_command": "SET foreign_key_checks = 0;",
         },
     }
 }

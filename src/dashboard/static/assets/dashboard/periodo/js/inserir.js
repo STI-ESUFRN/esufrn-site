@@ -24,7 +24,7 @@ $("#enviar-reserva").click(function (e) {
 
 		$.ajax({
 			type: "POST",
-			url: '/api/admin/periodos',
+			url: '/api/admin/periodos/',
 			data: serialized_data,
 			success: function (response) {
 				if (response.status == "success") {

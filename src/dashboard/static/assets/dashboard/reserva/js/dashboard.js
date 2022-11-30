@@ -24,7 +24,7 @@ function getCalendar() {
 
 	$.ajax({
 		type: "GET",
-		url: `/api/calendario?year=${anoAtual}&month=${mesAtual}&classroom=${salaAtual}`,
+		url: `/api/calendario/?year=${anoAtual}&month=${mesAtual}&classroom=${salaAtual}`,
 		dataType: "json",
 		success: function (response) {
 			calendario.updateCalendar(response, anoAtual, mesAtual);
@@ -41,6 +41,7 @@ function updateDash(data = []) {
 	localData = data
 
 	$("#lista-de-chamados").html("");
+	console.log(data);
 	$.each(data, function (i, v) {
 		let a = $('<tr />', { "data-id-chamado": v.id });
 		let fa = $('<td />', { "class": 'text-center px-0 pl-2' });
@@ -48,10 +49,10 @@ function updateDash(data = []) {
 		fa.append(a2);
 
 		let now = new Date();
-		let criado_ha_date = new Date(v.created_at);
+		let criado_ha_date = new Date(v.created);
 		let criado_ha = criado_ha_date.toISOString();
 		let date = $("<td />", { text: moment(v.date).format("DD/MM/YYYY"), class: "text-center" });
-		let classroom = $('<td />', { text: v.classroom.classroom_name });
+		let classroom = $('<td />', { text: v.classroom.full_name });
 		let event = $('<td />', { text: v.event });
 		let requester = $('<td />', { text: v.requester });
 		let elapsed = $('<td />', { class: `text-center font-weight-bold ${(now - criado_ha_date) > 1200000 ? "text-danger" : ""}`, });
@@ -117,8 +118,8 @@ function fillReserve(id) {
 
 function update(data) {
 	$.ajax({
-		url: "/api/admin/reservas/" + idSelecionado,
-		type: 'PUT',
+		url: `/api/admin/reservas/${idSelecionado}/`,
+		type: "PUT",
 		data: data,
 		success: function (response) {
 			$(".loader-global").removeClass("load");
