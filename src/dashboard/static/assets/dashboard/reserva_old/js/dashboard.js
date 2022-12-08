@@ -24,7 +24,7 @@ function getCalendar() {
 
 	$.ajax({
 		type: "GET",
-		url: `/api/reservas/calendario?year=${anoAtual}&month=${mesAtual}&classroom=${salaAtual}`,
+		url: `/api/calendario/?year=${anoAtual}&month=${mesAtual}&classroom=${salaAtual}`,
 		dataType: "json",
 		success: function (response) {
 			calendario.updateCalendar(response, anoAtual, mesAtual);
@@ -38,28 +38,30 @@ var localData = [];
 var idSelecionado = undefined;
 
 function updateDash(data = []) {
-	localData = data;
+	localData = data
 
 	$("#lista-de-chamados").html("");
-	$.each(data["results"], function (i, reserve) {
-		let a = $('<tr />', { "data-id-chamado": reserve.id });
+	console.log(data);
+	$.each(data, function (i, v) {
+		let a = $('<tr />', { "data-id-chamado": v.id });
 		let fa = $('<td />', { "class": 'text-center px-0 pl-2' });
 		let a2 = $('<i />', { "class": 'far fa-calendar-alt text-warning' });
 		fa.append(a2);
 
 		let now = new Date();
-		let date = $("<td />", { text: moment(reserve.date).format("DD/MM/YYYY"), class: "text-center" });
-		let classroom = $('<td />', { text: reserve.classroom.full_name });
-		let event = $('<td />', { text: reserve.event });
-		let requester = $('<td />', { text: reserve.requester });
-		let criado_ha_date = new Date(reserve.created);
+		let criado_ha_date = new Date(v.created);
 		let criado_ha = criado_ha_date.toISOString();
+		let date = $("<td />", { text: moment(v.date).format("DD/MM/YYYY"), class: "text-center" });
+		let classroom = $('<td />', { text: v.classroom.full_name });
+		let event = $('<td />', { text: v.event });
+		let requester = $('<td />', { text: v.requester });
 		let elapsed = $('<td />', { class: `text-center font-weight-bold ${(now - criado_ha_date) > 1200000 ? "text-danger" : ""}`, });
 		let ago = $('<time />', { text: criado_ha, class: "timeago", dateTime: criado_ha });
 		elapsed.append(ago);
 
 		a.append(fa, event, classroom, requester, date, elapsed);
 		$("#lista-de-chamados").append(a);
+
 	});
 	$(".timeago").timeago();
 
@@ -70,22 +72,36 @@ function updateDash(data = []) {
 }
 
 function refreshData(force = false, ring = true) {
-	$.get("/api/reservas/dashboard", function (data, textStatus, jqXHR) {
-		if (JSON.stringify(localData) != JSON.stringify(data) || force) {
+	$.get("/api/reservas", function (data, textStatus, jqXHR) {
+		if ((localData.length != data.length) || force) {
 			updateDash(data);
 			if (ring) {
 				playAudio();
 			}
-			$("#badgeChamados").text(data.count);
+			$("#badgeChamados").text(data.length);
+		} else {
+			var idArray = [];
+			$.each(localData, function (i, v) {
+				idArray.push(v.id);
+			});
+			$.each(data, function (i, v) {
+				if (!v.id in idArray) {
+					updateDash(data);
+					playAudio();
+					$("#badgeChamados").text(data.length);
+					return;
+				}
+			});
 		}
 	});
 }
 
 
 function fillReserve(id) {
+
 	$("#detalhes").hide();
 
-	var reserve = Object.assign({}, localData["results"].filter((v) => v.id == id)[0]);
+	var reserve = Object.assign({}, localData.filter((v) => v.id == id)[0]);
 	fillAttributes(reserve);
 
 	idSelecionado = reserve.id;
@@ -102,8 +118,8 @@ function fillReserve(id) {
 
 function update(data) {
 	$.ajax({
-		url: `/api/reservas/${idSelecionado}/`,
-		type: "PATCH",
+		url: `/api/admin/reservas/${idSelecionado}/`,
+		type: "PUT",
 		data: data,
 		success: function (response) {
 			$(".loader-global").removeClass("load");

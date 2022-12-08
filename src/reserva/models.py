@@ -1,12 +1,8 @@
-import threading
-from datetime import datetime, timedelta
+from datetime import timedelta
 
-from django.conf import settings
 from django.contrib.auth.models import User
-from django.core.mail import send_mail
 from django.db import models
 from django.forms import ValidationError
-from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 from model_utils.models import SoftDeletableModel, TimeStampedModel
 from multiselectfield import MultiSelectField
@@ -131,24 +127,24 @@ class Reserve(TimeStampedModel, SoftDeletableModel):
         related_name="reserves",
         on_delete=models.CASCADE,
     )
+    event = models.CharField("Evento", max_length=100)
+    requester = models.CharField("Nome do solicitante", max_length=100)
+
     date = models.DateField("Data para a reserva")
-    event = models.CharField("Evento", max_length=100, null=True)
 
     class Shift(models.TextChoices):
         MORNING = ("M", "Manhã")
         AFTERNOON = ("T", "Tarde")
         NIGHT = ("N", "Noite")
 
-    shift = models.CharField(
-        "Turno", choices=Shift.choices, default=Shift.MORNING, max_length=1
-    )
+    shift = models.CharField("Turno", choices=Shift.choices, max_length=1)
+    email = models.EmailField("E-mail", max_length=100)
+    phone = models.CharField("Telefone", max_length=16, null=True, blank=True)
+
     cause = models.TextField("Justificativa", max_length=512, null=True, blank=True)
     equipment = models.CharField(
         "Equipamento multimídia", max_length=200, null=True, blank=True
     )
-    requester = models.CharField("Nome do solicitante", max_length=100)
-    email = models.EmailField("E-mail", max_length=100)
-    phone = models.CharField("Telefone", max_length=16, null=True, blank=True)
 
     class Status(models.TextChoices):
         APPROVED = ("A", "Aprovado")
@@ -188,223 +184,6 @@ class Reserve(TimeStampedModel, SoftDeletableModel):
         for index, row in self.Status.choices:
             if index == self.status:
                 return row
-
-    def clean_form(self):
-        if not self.pk:
-            if self.classroom.type == "lab" and not self.declare:
-                raise ValidationError(
-                    "Este tipo de sala requer que o usuário declare que esteja presente"
-                    " um docente no momento da aula."
-                )
-
-            if self.classroom.justification_required and not self.cause:
-                raise ValidationError(
-                    "Este tipo de sala requer que o usuário informe uma justificativa"
-                    " para seu uso."
-                )
-
-            if self.shift == "M":
-                time = "12:30"
-            elif self.shift == "T":
-                time = "18:30"
-            else:
-                time = "22:15"
-
-            date = datetime.strptime("{} {}".format(self.date, time), "%Y-%m-%d %H:%M")
-            now = datetime.today()
-
-            diff = (date - now).days
-            if diff < 0:
-                raise ValidationError(
-                    "Você não pode reservar uma sala para uma data passada."
-                )
-
-            if diff < self.classroom.days_required:
-                raise ValidationError(
-                    "Você não pode reservar esta sala para a data informada: A reserva"
-                    " para esta sala requer antecedência de {} dia{}.".format(
-                        self.classroom.days_required,
-                        "s" if self.classroom.days_required > 1 else "",
-                    )
-                )
-
-    def clean(self):
-        if self.status == "A":
-            reserves = Reserve.objects.filter(
-                date=self.date,
-                status="A",
-                classroom=self.classroom,
-                shift=self.shift,
-            ).exclude(id=self.id)
-            periodreserves = PeriodReserveDay.objects.filter(
-                date=self.date,
-                period__status="A",
-                period__classroom=self.classroom,
-                shift=self.shift,
-            ).exclude(active=False)
-
-            if reserves or periodreserves:
-                raise ValidationError(
-                    "Já existe uma reserva aprovada para o dia {} - {}{}".format(
-                        self.date.strftime("%d/%m/%Y"),
-                        self.get_shift_name(),
-                        "."
-                        if self.admin_created
-                        else (
-                            ". Por favor, entre em contato com a secretaria a fim de"
-                            " viabilizarmos outro dia para esta reserva."
-                        ),
-                    )
-                )
-
-    def save(self, *args, **kwargs):
-        pk = self.pk
-
-        if not self.admin_created:
-            self.clean_form()
-        self.clean()
-
-        super(Reserve, self).save(*args, **kwargs)
-
-        if pk is None:
-            self.notify_admin()
-            self.notify_requester()
-
-    def update(self, **kwargs):
-        self.__dict__.update(kwargs)
-        self.save()
-
-    def notify_admin(self):
-        subject = "Reserva de {}: {}".format(
-            self.classroom.get_type_name().lower(), self.classroom
-        )
-        message = """
-            Uma solicitação de reserva de sala foi realizada.
-            Por favor realizar a validação.<br/>
-            Sala: {0}<br/>
-            Data: {1}<br/>
-            Evento: {2}<br/>
-            Turno: {3}<br/>
-            Equipamento/Software: {4}<br/>
-            Solicitante: {5}<br/>
-            Email do solicitante: {6}<br/>
-            Telefone: {7}
-        """.format(
-            self.classroom,
-            self.date,
-            self.event,
-            self.shift,
-            self.equipment,
-            self.requester,
-            self.email,
-            self.phone,
-        )
-
-        context = {"message": message}
-        msg = render_to_string("base.email_conversation.html", context)
-
-        recipients = UserClassroom.objects.filter(classroom=self.classroom)
-        recipient_list = []
-        for recipient in recipients:
-            recipient_list.append(recipient.user.email)
-
-        threading.Thread(
-            target=send_mail,
-            args=(
-                (
-                    subject,
-                    message,
-                    settings.EMAIL_HOST_USER,
-                    recipient_list,
-                    False,
-                    None,
-                    None,
-                    None,
-                    msg,
-                )
-            ),
-        ).start()
-
-    def notify_requester(self):
-        subject = "Reserva de {}: {}".format(
-            self.classroom.get_type_name().lower(), self.classroom
-        )
-        message = """
-            Solicitação de reserva de sala feita com sucesso. Aguarde a validação.<br/>
-            Sala: {0}<br/>
-            Data: {1}<br/>
-            Evento: {2}<br/>
-            Turno: {3}<br/>
-            Equipamento/Software: {4}<br/>
-            Solicitante: {5}
-        """.format(
-            self.classroom,
-            self.date,
-            self.event,
-            self.shift,
-            self.equipment,
-            self.requester,
-        )
-
-        context = {"message": message}
-        msg = render_to_string("base.email_conversation.html", context)
-        threading.Thread(
-            target=send_mail,
-            args=(
-                (
-                    subject,
-                    "",
-                    settings.EMAIL_HOST_USER,
-                    [self.email],
-                    False,
-                    None,
-                    None,
-                    None,
-                    msg,
-                )
-            ),
-        ).start()
-
-    def notify(self):
-        title = "Reserva de {}".format(self.classroom)
-        message = (
-            "Senhor(a) {}, sua solicitação de reserva para <b>{}</b> no dia {} de {}"
-            " ({}) foi <b>{}</b>. {}".format(
-                self.requester.split()[0],
-                self.classroom,
-                self.date.strftime("%d"),
-                _(self.date.strftime("%B")),
-                self.get_shift_name().lower(),
-                "aprovada" if self.status == "A" else "rejeitada",
-                ""
-                if self.status == "A"
-                else (
-                    "Por favor, entre em contato com a Secretaria da Direção de Ensino"
-                    " a fim de viabilizarmos um possível acordo ou troca de reservas."
-                ),
-            )
-        )
-        context = {
-            "message": message,
-            "opitional": self.email_response,
-        }
-        msg = render_to_string("base.email_conversation.html", context)
-        threading.Thread(
-            target=send_mail,
-            args=(
-                (
-                    title,
-                    "",
-                    settings.EMAIL_HOST_USER,
-                    [self.email],
-                    False,
-                    None,
-                    None,
-                    None,
-                    msg,
-                )
-            ),
-        ).start()
 
     class Meta:
         verbose_name = "Reserva pontual"

@@ -8,7 +8,7 @@ from django.http import Http404, JsonResponse, QueryDict
 from django.utils.decorators import method_decorator
 from django.views.generic import View
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import permissions, viewsets
+from rest_framework import mixins, permissions, viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -42,7 +42,13 @@ class IsSuperAdmin(permissions.BasePermission):
         return request.user.is_superuser
 
 
-class ReservaViewSet(viewsets.ModelViewSet):
+class ReservaViewSet(
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet,
+):
     serializer_class = ReserveSerializer
     queryset = Reserve.available_objects.all()
     permission_classes = [
@@ -51,7 +57,7 @@ class ReservaViewSet(viewsets.ModelViewSet):
     ]
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_fields = {
-        "classroom": ["exact"],
+        "classroom__id": ["exact"],
         "status": ["exact"],
         "created": ["exact", "lte", "gte"],
     }
@@ -65,14 +71,18 @@ class ReservaViewSet(viewsets.ModelViewSet):
         return super().get_queryset().filter(classroom__in=classrooms)
 
     @action(detail=False, methods=["post"], permission_classes=[AllowAny])
-    def realizar_reserva(self, request, pk=None):
-        serializer = self.get_serializer(request.data)
+    def cadastrar(self, request, pk=None):
+        serializer = self.get_serializer(
+            data=request.data, context={"request": request}
+        )
         serializer.is_valid(raise_exception=True)
+        serializer.save()
+
         return Response(serializer.data)
 
     @action(detail=False, methods=["get"])
     def historico(self, request, pk=None):
-        queryset = self.get_queryset().filter(
+        queryset = self.filter_queryset(self.get_queryset()).filter(
             status__in=[Reserve.Status.REJECTED, Reserve.Status.APPROVED]
         )
         page = self.paginate_queryset(queryset)

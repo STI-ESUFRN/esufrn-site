@@ -14,14 +14,17 @@ from reserva.api.views import (
 )
 
 appname = "reservas"
+
 router = DefaultRouter()
-router.register("api2/reservas", ReservaViewSet, basename="reservas")
+
+router.register("reservas", ReservaViewSet, basename="reservas")
 
 urlpatterns = [
-    path("calendario/", calendarioView.as_view()),  # (PÚBLICO) get
-    path("admin/reservas/", reservasAdminView.as_view()),  # get, post
-    path("admin/reservas/<int:pk>/", reservaAdminView.as_view()),  # get, put, delete
-    path("reservas/", reservasView.as_view()),  # get, (PÚBLICO) post
+    path("", include(router.urls)),
+    path("reservas/calendario/", calendarioView.as_view()),  # (PÚBLICO) get
+    # path("admin/reservas/", reservasAdminView.as_view()),  # get, post
+    # path("admin/reservas/<int:pk>/", reservaAdminView.as_view()),  # get, put, delete
+    # path("reservas/", reservasView.as_view()),  # get, (PÚBLICO) post
     path("admin/periodos/", periodsAdminView.as_view()),  # get, post
     path(
         "admin/periodos/<int:period_pk>/", periodAdminView.as_view()
@@ -30,5 +33,4 @@ urlpatterns = [
     path(
         "admin/periodos/<int:period_pk>/dias/<int:pk>/", periodDayAdminView.as_view()
     ),  # get, put
-    path("", include(router.urls)),
 ]
