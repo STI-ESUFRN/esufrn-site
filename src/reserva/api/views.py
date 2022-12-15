@@ -51,10 +51,11 @@ class ReservaViewSet(
 ):
     serializer_class = ReserveSerializer
     queryset = Reserve.available_objects.all()
-    permission_classes = [
-        IsAuthenticated,
-        IsFromReserve | IsSuperAdmin,
-    ]
+    # permission_classes = [
+    #     IsAuthenticated,
+    #     IsFromReserve | IsSuperAdmin,
+    # ]
+    permission_classes = [AllowAny]
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_fields = {
         "classroom__id": ["exact"],

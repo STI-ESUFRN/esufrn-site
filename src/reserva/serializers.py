@@ -52,7 +52,8 @@ class ReserveSerializer(serializers.ModelSerializer):
         ]
 
     def validate_cause(self, cause):
-        if self.classroom.justification_required and not self.cause:
+        classroom = Classroom.objects.get(id=self.context["request"].data["classroom"])
+        if classroom.justification_required and not self.cause:
             raise ValidationError(
                 "Este tipo de sala requer que o usuário informe uma justificativa"
                 " para seu uso."
@@ -60,10 +61,9 @@ class ReserveSerializer(serializers.ModelSerializer):
         return cause
 
     def validate_declare(self, declare):
-        if (
-            self.context["request"].data["classroom"].type == "lab"
-            and not self.context["request"].data["declare"]
-        ):
+        classroom = Classroom.objects.get(id=self.context["request"].data["classroom"])
+        print("--->>> " + str(self.context["request"].data["declare"]))
+        if classroom.type == "lab" and not self.context["request"].data["declare"]:
             raise ValidationError(
                 "Este tipo de sala requer que o usuário declare que esteja presente"
                 " um docente no momento da aula."
@@ -121,7 +121,7 @@ class ReserveSerializer(serializers.ModelSerializer):
                         self.instance.date.strftime("%d/%m/%Y"),
                         self.instance.get_shift_name(),
                         "."
-                        if self.admin_created
+                        if self.instance.admin_created
                         else (
                             ". Por favor, entre em contato com a secretaria a fim de"
                             " viabilizarmos outro dia para esta reserva."

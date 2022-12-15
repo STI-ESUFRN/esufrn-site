@@ -57,7 +57,7 @@ $("#classroom").change(function () {
     selected = $("#classroom option:selected");
 
     type = selected.attr("data-type");
-    term = $("#form-reserva [name=confirm]");
+    term = $("#form-reserva [name=declare]");
     if (type == "lab") {
         term.parent().prop("hidden", false);
         term.prop('required', true);
@@ -200,7 +200,7 @@ $("#enviar-reserva").click(function (e) {
     class_type = selected.attr("data-type");
     justification_required = selected.attr("data-justification_required") === undefined ? false : true;
 
-    form_confirm = $("#form-reserva [name=confirm]");
+    form_confirm = $("#form-reserva [name=declare]");
     error += validate(form_confirm, (class_type == "lab" && form_confirm.is(":checked")) || class_type != "lab");
 
     $("#form-reserva [name=date]").map(function () {
@@ -226,14 +226,15 @@ $("#enviar-reserva").click(function (e) {
     error += validate(form_shift, form_shift.filter(":checked").val());
 
     if (!error) {
-        serialized_data = $("#form-reserva [name!=date]").serialize();
+        serialized_data = $("#form-reserva [name!=date][name!=daclare]").serialize();
+        serialized_data += "&declare=" + (serialized_data["declare"] == "on");
         serialized_data += "&date=" + $("#form-reserva [name=date]").map(function () {
             return $(this).val();
         }).get().join(',');
 
         $.ajax({
             type: "POST",
-            url: `/api/admin/reservas/`,
+            url: `/api/reservas/`,
             dataType: "json",
             data: serialized_data,
             success: function (response) {

@@ -107,17 +107,13 @@ function update(data) {
 		data: data,
 		success: function (response) {
 			$(".loader-global").removeClass("load");
-			if (response.status == "success") {
-				refreshData(true);
-				$("#detalhes").fadeTo("fast", 0).slideUp();
-				showMessage(response.message, "alert-success");
-			} else {
-				showMessage(response.message, "alert-danger");
-			}
+			refreshData(true);
+			$("#detalhes").fadeTo("fast", 0).slideUp();
+			showMessage("Reserva atualizada com sucesso.", "alert-success");
 		},
 		error: function (err) {
 			$(".loader-global").removeClass("load");
-			showMessage(err.responseJSON.message, "alert-" + (response.status == "success" ? "success" : "danger"));
+			showMessage(err.responseJSON.status[0], "alert-" + (err.status == "success" ? "success" : "danger"));
 		}
 	});
 }

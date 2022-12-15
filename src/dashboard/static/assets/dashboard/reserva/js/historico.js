@@ -1,50 +1,54 @@
-
 var localData = [];
-function updateDash(data = []) {
-	localData = data[0];
-	$("#lista-de-chamados").html("");
-	$.each(data[0], function (i, v) {
-		let row = $('<tr />', { "data-id-chamado": v.id });
-		let fa = $('<td />', { "class": 'text-center px-0' });
-		let a2 = $('<i />', { "class": v.status == "A" ? 'fas fa-check-circle text-success' : 'fas fa-times-circle text-danger' });
-		fa.append(a2);
+var next = undefined;
+var previous = undefined;
+function refreshData(url = undefined) {
+	if (!url) {
+		let filters = $("[data-filter]").serialize();
+		url = `/api/reservas/?${filters}`;
+	}
 
-		let fa_calendar = $('<td />', { class: "text-center px-0", html: v.admin_created ? '<i class="fas fa-key"></i>' : '<i class="far fa-calendar-alt"></i>' });
+	$("#load-antigo,#load-recente").attr("disabled", true);
+	$.get(url, (response) => {
+		localData = response["results"];
+		$("#lista-de-chamados").html("");
+		$.each(localData, function (i, v) {
+			let row = $('<tr />', { "data-id-chamado": v.id });
+			let fa = $('<td />', { "class": 'text-center px-0' });
+			let a2 = $('<i />', { "class": v.status == "A" ? 'fas fa-check-circle text-success' : 'fas fa-times-circle text-danger' });
+			fa.append(a2);
 
-		let classroom = $('<td />', { text: v.classroom.full_name });
-		let criado_ha_date = new Date(v.created);
-		let criado_ha = criado_ha_date.toLocaleDateString();
-		let event = $('<td />', { text: v.event, title: v.event });
-		let requester = $('<td />', { text: v.requester, title: v.requester });
-		let e1 = $('<td />', { text: criado_ha, title: criado_ha, class: "font-weight-bold text-center" });
+			let fa_calendar = $('<td />', { class: "text-center px-0", html: v.admin_created ? '<i class="fas fa-key"></i>' : '<i class="far fa-calendar-alt"></i>' });
 
-		row.append(fa, fa_calendar, classroom, event, requester, e1);
-		$("#lista-de-chamados").append(row);
-	});
-	$(".timeago").timeago();
+			let classroom = $('<td />', { text: v.classroom.full_name });
+			let criado_ha_date = new Date(v.created);
+			let criado_ha = criado_ha_date.toLocaleDateString();
+			let event = $('<td />', { text: v.event, title: v.event });
+			let requester = $('<td />', { text: v.requester, title: v.requester });
+			let e1 = $('<td />', { text: criado_ha, title: criado_ha, class: "font-weight-bold text-center" });
 
-	$("tr[data-id-chamado]").click(function (e) {
-		e.preventDefault();
-		fillReserve(e.currentTarget.dataset.idChamado);
+			row.append(fa, fa_calendar, classroom, event, requester, e1);
+			$("#lista-de-chamados").append(row);
+		});
+		$(".timeago").timeago();
+
+		$("tr[data-id-chamado]").click(function (e) {
+			e.preventDefault();
+			fillReserve(e.currentTarget.dataset.idChamado);
+		});
+
+		next = response.next;
+		updateButton(next, "#load-antigo");
+
+		previous = response.previous;
+		updateButton(previous, "#load-recente");
 	});
 }
-
-var actualPage = 0;
-function refreshData(pagina = 1) {
-	actualPage = pagina
-	actualPage == 1 ? $("#load-recente").attr("disabled", true) : $("#load-recente").attr("disabled", false)
-
-	filters = $("[data-filter]").serialize();
-
-	$.ajax({
-		type: "GET",
-		url: "/api/admin/reservas/",
-		data: `${filters}&page=${pagina}`,
-		success: function (data) {
-			data[1]['have_more'] ? $("#load-antigo").attr("disabled", false) : $("#load-antigo").attr("disabled", true)
-			updateDash(data);
-		}
-	});
+function updateButton(data, button) {
+	if (data) {
+		$(button).attr("disabled", false);
+	} else {
+		$(button).attr("disabled", true);
+	}
 }
 
 var idSelected = undefined;
@@ -71,39 +75,37 @@ function fillReserve(id) {
 
 $("#filtro, #ordem").change(function (e) {
 	e.preventDefault();
-	refreshData("1");
+	refreshData();
 });
 
 $("#load-antigo").click(function (e) {
 	e.preventDefault();
-	refreshData(String(parseInt(actualPage) + 1));
+	refreshData(next);
 });
 
 $("#load-recente").click(function (e) {
 	e.preventDefault();
-	refreshData(String(parseInt(actualPage) - 1));
+	refreshData(previous);
 });
 
 
 // ------------------------------------------------------------------- Update
 function update(data) {
+	console.log(data);
 	$.ajax({
-		url: `/api/admin/reservas/${idSelected}/`,
-		type: "PUT",
+		url: `/api/reservas/${idSelected}/`,
+		type: "PATCH",
 		data: data,
 		success: function (response) {
 			$(".loader-global").removeClass("load");
-			if (response.status == "success") {
-				refreshData();
-				$("#detalhes").fadeTo("fast", 0).slideUp();
-				showMessage(response.message, "alert-success");
-			} else {
-				showMessage(response.message, "alert-danger");
-			}
+			refreshData();
+			$("#detalhes").fadeTo("fast", 0).slideUp();
+			showMessage(response.message, "alert-success");
 		},
 		error: function (err) {
+			console.log(err);
 			$(".loader-global").removeClass("load");
-			showMessage(err.responseJSON.message, "alert-danger");
+			showMessage(err.responseJSON["details"][0], "alert-danger");
 		}
 	});
 }

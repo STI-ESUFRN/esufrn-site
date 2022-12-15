@@ -3,15 +3,15 @@
 {% block styles %}
     <link rel="stylesheet" href="{% static 'assets/css/reserva.style.css' %}"/>
     <style>
-	#reservation-calendar table {
-		table-layout: auto;
-	}
-
-	@media (min-width: 992px) {
-		.modal-lg {
-			max-width: 80%;
-		}
-	}
+        #reservation-calendar table {
+            table-layout: auto;
+        }
+        
+        @media (min-width: 992px) {
+            .modal-lg {
+                max-width: 80%;
+            }
+        }
     </style>
 {% endblock styles %}
 {% block content %}
@@ -40,8 +40,8 @@
                     {% endfor %}
                 </select>
                 <div class="form-check my-2" id="term" hidden>
-                    <input type="checkbox" class="form-check-input" id="confirm" name="confirm"/>
-                    <label class="form-check-label" for="confirm">
+                    <input type="checkbox" class="form-check-input" id="declare" name="declare"/>
+                    <label class="form-check-label" for="declare">
                         Marcando esta caixa, você declara que o laboratório contará com a supervisão
                         de um <strong>docente</strong> no momento da aula. *
                     </label>

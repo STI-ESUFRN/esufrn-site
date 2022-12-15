@@ -51,7 +51,6 @@ MIDDLEWARE = [
 ]
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
-
 CSRF_TRUSTED_ORIGINS = os.environ.get(
     "CSRF_TRUSTED_ORIGINS", "http://* https://*"
 ).split(" ")
@@ -59,6 +58,7 @@ CSRF_COOKIE_SECURE = int(os.environ.get("CSRF_COOKIE_SECURE", False))
 SESSION_COOKIE_SECURE = int(os.environ.get("SESSION_COOKIE_SECURE", False))
 
 # SECURE_SSL_REDIRECT = True
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 CORS_ORIGIN_ALLOW_ALL = True
 # CORS_ALLOWED_ORIGINS = [
