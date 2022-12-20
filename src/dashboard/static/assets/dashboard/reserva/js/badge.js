@@ -4,9 +4,9 @@ var numberCalls = 0;
 function refreshBadge(ring = true) {
     $.get("/api/reservas/dashboard/",
         function (data, t, j) {
-            if (data.count != numberCalls) {
-                numberCalls = data.count
-                $("#badgeChamados").text(data.count)
+            if (data.length != numberCalls) {
+                numberCalls = data.length
+                $("#badgeChamados").text(data.length)
                 if (ring) {
                     playAudio();
                 }

@@ -226,11 +226,14 @@ $("#enviar-reserva").click(function (e) {
     error += validate(form_shift, form_shift.filter(":checked").val());
 
     if (!error) {
-        serialized_data = $("#form-reserva [name!=date][name!=daclare]").serialize();
-        serialized_data += "&declare=" + (serialized_data["declare"] == "on");
-        serialized_data += "&date=" + $("#form-reserva [name=date]").map(function () {
-            return $(this).val();
-        }).get().join(',');
+        serialized_array = $("#form-reserva [name!=date][name!=declare][name!=status]").serializeArray();
+        let serialized_data = {};
+        for (key in serialized_array) {
+            serialized_data[serialized_array[key]["name"]] = serialized_array[key]["value"];
+        }
+        serialized_data["declare"] = $("#form-reserva [name=declare]").is(":checked");
+        serialized_data["status"] = $("#form-reserva [name=status]").is(":checked") ? "A" : "E";
+        serialized_data["date"] = moment($("#form-reserva [name=date]").val(), "DD-MM-YYYY").format("YYYY-MM-DD");
 
         $.ajax({
             type: "POST",
@@ -238,13 +241,17 @@ $("#enviar-reserva").click(function (e) {
             dataType: "json",
             data: serialized_data,
             success: function (response) {
-                if (response.status == "success") {
-                    showMessage(response.message, "alert-success");
-                    formReset();
-                } else {
-                    showMessage(response.message, "alert-danger");
+                showMessage("Reserva(s) realizada(s) com sucesso.", "alert-success");
+                formReset();
+            },
+            error: function (response) {
+                console.log(response)
+                $("#errors").html('');
+                for (const [key, value] of Object.entries(response.responseJSON)) {
+                    $(`#form-reserva [name=${key}]`).addClass("is-invalid");
                 }
             }
+
         });
     } else {
         showMessage("Corrija os erros", "alert-warning");

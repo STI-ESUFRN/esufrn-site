@@ -6,14 +6,10 @@ from reserva.models import Reserve
 
 
 @receiver(post_save, sender=Reserve)
-def notify_reserve(instance, created, **kwargs):
+def notify_reserve(sender, instance, created, **kwargs):
     if created:
         notify_admin(instance)
         notify_requester(instance)
-        print("nay")
 
-    elif (
-        instance.status != Reserve.objects.get(id=instance.id).status
-        and instance.status == Reserve.Status.APPROVED
-    ):
+    elif instance.status != Reserve.objects.get(id=instance.id).status:
         notify_done(instance)

@@ -8,6 +8,9 @@ from reserva.models import Classroom, PeriodReserve, PeriodReserveDay, Reserve
 
 
 class ClassroomSerializer(serializers.ModelSerializer):
+    type_display = serializers.CharField(source="get_type_display", read_only=True)
+    floor_display = serializers.CharField(source="get_floor_display", read_only=True)
+
     class Meta:
         model = Classroom
         fields = [
@@ -16,10 +19,12 @@ class ClassroomSerializer(serializers.ModelSerializer):
             "full_name",
             "acronym",
             "type",
+            "type_display",
             "number",
             "days_required",
             "justification_required",
             "floor",
+            "floor_display",
         ]
 
 
@@ -27,6 +32,8 @@ class ReserveSerializer(serializers.ModelSerializer):
     classroom = PrimaryKeyRelatedFieldWithSerializer(
         ClassroomSerializer, queryset=Classroom.objects.all()
     )
+    shift_display = serializers.CharField(source="get_shift_display", read_only=True)
+    status_display = serializers.CharField(source="get_status_display", read_only=True)
 
     class Meta:
         model = Reserve
@@ -36,12 +43,14 @@ class ReserveSerializer(serializers.ModelSerializer):
             "date",
             "event",
             "shift",
+            "shift_display",
             "cause",
             "equipment",
             "requester",
             "email",
             "phone",
             "status",
+            "status_display",
             "obs",
             "email_response",
             "declare",
@@ -50,6 +59,11 @@ class ReserveSerializer(serializers.ModelSerializer):
             "modified",
             "is_removed",
         ]
+        extra_kwargs = {
+            "admin_created": {
+                "read_only": True,
+            },
+        }
 
     def validate_cause(self, cause):
         classroom = Classroom.objects.get(id=self.context["request"].data["classroom"])
@@ -62,7 +76,6 @@ class ReserveSerializer(serializers.ModelSerializer):
 
     def validate_declare(self, declare):
         classroom = Classroom.objects.get(id=self.context["request"].data["classroom"])
-        print("--->>> " + str(self.context["request"].data["declare"]))
         if classroom.type == "lab" and not self.context["request"].data["declare"]:
             raise ValidationError(
                 "Este tipo de sala requer que o usuário declare que esteja presente"
@@ -135,7 +148,18 @@ class ReserveSerializer(serializers.ModelSerializer):
 class ReservePublicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reserve
-        fields = ("date", "classroom", "event", "status", "shift")
+        fields = [
+            "date",
+            "classroom",
+            "event",
+            "status",
+            "shift",
+        ]
+        extra_kwargs = {
+            "status": {
+                "read_only": True,
+            },
+        }
 
 
 class PeriodReserveDaySerializer(serializers.ModelSerializer):

@@ -2,9 +2,10 @@ import math
 from datetime import datetime
 from functools import reduce
 
+from django.db import transaction
 from django.db.models import Q
 from django.forms import ValidationError
-from django.http import Http404, JsonResponse, QueryDict
+from django.http import JsonResponse, QueryDict
 from django.utils.decorators import method_decorator
 from django.views.generic import View
 from django_filters.rest_framework import DjangoFilterBackend
@@ -15,14 +16,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from principal.decorators import allowed_users
-from principal.helpers import haveMore, paginate
-from reserva.models import (
-    Classroom,
-    PeriodReserve,
-    PeriodReserveDay,
-    Reserve,
-    UserClassroom,
-)
+from principal.helpers import paginate
+from reserva.models import Classroom, PeriodReserve, PeriodReserveDay, Reserve
 from reserva.serializers import (
     PeriodReserveBasicSerializer,
     PeriodReserveDayPublicSerializer,
@@ -51,25 +46,31 @@ class ReservaViewSet(
 ):
     serializer_class = ReserveSerializer
     queryset = Reserve.available_objects.all()
-    # permission_classes = [
-    #     IsAuthenticated,
-    #     IsFromReserve | IsSuperAdmin,
-    # ]
-    permission_classes = [AllowAny]
+    permission_classes = [
+        IsAuthenticated,
+        IsFromReserve | IsSuperAdmin,
+    ]
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_fields = {
-        "classroom__id": ["exact"],
+        "classroom": ["exact"],
         "status": ["exact"],
         "created": ["exact", "lte", "gte"],
     }
     ordering_fields = ["created"]
 
+    def get_serializer_class(self):
+        if self.action == "cadastrar":
+            return ReservePublicSerializer
+
+        return super().get_serializer_class()
+
     def get_queryset(self):
+        queryset = super().get_queryset()
         if self.request.user.is_superuser:
-            return super().get_queryset()
+            return queryset
 
         classrooms = self.request.user.classrooms.all().values("classroom")
-        return super().get_queryset().filter(classroom__in=classrooms)
+        return queryset.filter(classroom__in=classrooms)
 
     @action(detail=False, methods=["post"], permission_classes=[AllowAny])
     def cadastrar(self, request, pk=None):
@@ -82,22 +83,17 @@ class ReservaViewSet(
         return Response(serializer.data)
 
     @action(detail=False, methods=["get"])
-    def historico(self, request, pk=None):
-        queryset = self.filter_queryset(self.get_queryset()).filter(
-            status__in=[Reserve.Status.REJECTED, Reserve.Status.APPROVED]
-        )
-        page = self.paginate_queryset(queryset)
-
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+    def dashboard(self, request, pk=None):
+        queryset = self.get_queryset()
+        queryset = self.filter_queryset(queryset).filter(status=Reserve.Status.WAITING)
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
     @action(detail=False, methods=["get"])
-    def dashboard(self, request, pk=None):
-        queryset = self.get_queryset().filter(status=Reserve.Status.WAITING)
+    def historico(self, request, pk=None):
+        queryset = self.get_queryset()
+        queryset = self.filter_queryset(queryset).exclude(status=Reserve.Status.WAITING)
         page = self.paginate_queryset(queryset)
 
         if page is not None:
@@ -108,9 +104,6 @@ class ReservaViewSet(
         return Response(serializer.data)
 
 
-reserve_decorators = [
-    allowed_users(allowed_roles=["reserva"]),
-]
 period_decorators = [
     allowed_users(allowed_roles=["reserva", "coordenacao"]),
 ]
@@ -163,212 +156,6 @@ class calendarioView(View):
 
         except Exception as e:
             return JsonResponse({"message": f"{str(e)}", "status": "error"}, safe=False)
-
-
-# RESERVAS
-
-
-@method_decorator(reserve_decorators, name="dispatch")
-class reservasAdminView(View):
-    def get(self, request, *args, **kwargs):
-        orde = request.GET.get("orde", "dec")
-        page = int(request.GET.get("page", "1"))
-
-        mergeResult = []
-        mergeJson = {"page": page, "total_page": 0, "have_more": False}
-
-        npp = 8
-
-        user = request.user
-        if user.is_superuser:
-            classrooms = Classroom.objects.all()
-        else:
-            classrooms = request.user.classrooms.all()
-
-        reserves = (
-            Reserve.objects.filter(classroom__in=classrooms)
-            .exclude(status="E")
-            .order_by("created" if orde == "dec" else "-created")
-        )
-
-        if request.GET.get("status"):
-            reserves = reserves.filter(status=request.GET.get("status"))
-
-        serializador = ReserveSerializer(paginate(reserves, page, npp), many=True)
-        mergeResult += serializador.data
-
-        mergeJson["have_more"] = haveMore(reserves.count(), npp, page)
-
-        paginatedResults = [mergeResult] + [mergeJson]
-        return JsonResponse(paginatedResults, safe=False)
-
-    def post(self, request, *args, **kwargs):
-        instClass = Classroom.objects.get(id=request.POST["classroom"])
-
-        # date = datetime.strptime(request.POST["date"], "%d-%m-%Y").date()
-        dates = request.POST.get("date").split(",")
-        declare = True if request.POST.get("confirm") == "on" else False
-
-        status = "A" if request.POST.get("status") == "on" else "E"
-
-        reserves = []
-        try:
-            for date in dates:
-                reserve = Reserve.objects.create(
-                    classroom=instClass,
-                    date=datetime.strptime(date, "%d-%m-%Y").date(),
-                    event=request.POST["event"],
-                    shift=request.POST["shift"],
-                    equipment=request.POST["equipment"],
-                    requester=request.POST["requester"],
-                    email=request.POST["email"],
-                    phone=request.POST["phone"],
-                    status=status,
-                    declare=declare,
-                    obs=request.POST["obs"],
-                    admin_created=True,
-                )
-                reserves.append(reserve)
-            return JsonResponse(
-                {
-                    "message": "Solicitação cadastrada com sucesso!",
-                    "status": "success",
-                },
-                safe=False,
-            )
-
-        except Exception as e:
-            for reserve in reserves:
-                reserve.delete()
-
-            try:
-                return JsonResponse(
-                    {"message": "{}".format(next(iter(e))), "status": "error"},
-                    safe=False,
-                    status=200,
-                )
-            except:
-                return JsonResponse(
-                    {"message": "{}".format(e), "status": "error"},
-                    safe=False,
-                    status=200,
-                )
-
-
-class reservasView(View):
-    @method_decorator(reserve_decorators)
-    def get(self, request, *args, **kwargs):
-        user = request.user
-        if user.is_superuser:
-            classrooms = Classroom.objects.all()
-        else:
-            classrooms = UserClassroom.objects.filter(user=request.user).values_list(
-                "classroom", flat=True
-            )
-
-        reserves = Reserve.objects.filter(classroom__in=classrooms, status="E")
-
-        serializador = ReserveSerializer(reserves, many=True)
-        return JsonResponse(serializador.data, safe=False)
-
-    def post(self, request, *args, **kwargs):
-        classroom = Classroom.objects.get(id=request.POST["classroom"])
-
-        date = datetime.strptime(request.POST["date"], "%d-%m-%Y").date()
-
-        try:
-            Reserve.objects.create(
-                classroom=classroom,
-                date=date,
-                event=request.POST["event"],
-                shift=request.POST["shift"],
-                equipment=request.POST["equipment"],
-                requester=request.POST["requester"],
-                email=request.POST["email"],
-                phone=request.POST["phone"],
-                cause=request.POST.get("cause"),
-                declare=request.POST.get("confirm") == "on",
-            )
-
-            return JsonResponse(
-                {
-                    "message": (
-                        "Solicitação realizada com sucesso! Espere a confirmação da"
-                        " reserva por email."
-                    ),
-                    "status": "success",
-                },
-                safe=False,
-            )
-
-        except Exception as e:
-            try:
-                return JsonResponse(
-                    {"message": "{}".format(next(iter(e))), "status": "error"},
-                    safe=False,
-                    status=200,
-                )
-            except:
-                return JsonResponse(
-                    {"message": "{}".format(e), "status": "error"},
-                    safe=False,
-                    status=200,
-                )
-
-
-# @method_decorator(csrf_exempt, name='dispatch')
-@method_decorator(reserve_decorators, name="dispatch")
-class reservaAdminView(View):
-    def get(self, request, *args, **kwargs):
-        try:
-            result = Reserve.objects.get(id=kwargs["pk"])
-
-            serializador = ReserveSerializer(result, many=False)
-            return JsonResponse(serializador.data, safe=False)
-        except Reserve.DoesNotExist:
-            raise Http404()
-
-    def put(self, request, *args, **kwargs):
-        PUT = QueryDict(request.body)
-
-        try:
-            reserve = Reserve.objects.get(id=kwargs["pk"])
-
-            status = PUT.get("status")
-            msg = PUT.get("msg")
-            if status is not None and status != reserve.status:
-                reserve.update(status=status, email_response=msg)
-                reserve.notify()
-
-            obs = PUT.get("obs")
-            if obs is not None:
-                reserve.update(obs=obs)
-
-            return JsonResponse(
-                {"message": "Arquivo atualizado com sucesso!", "status": "success"},
-                safe=False,
-            )
-
-        except Exception as e:
-            try:
-                return JsonResponse(
-                    {"message": "{}".format(next(iter(e))), "status": "error"},
-                    safe=False,
-                )
-            except:
-                return JsonResponse(
-                    {"message": "{}".format(e), "status": "error"}, safe=False
-                )
-
-    def delete(self, request, *args, **kwargs):
-        try:
-            Reserve.objects.get(id=self.kwargs["pk"]).delete()
-            return JsonResponse(
-                {"message": "Arquivo excluído com sucesso", "status": "success"}
-            )
-
-        except Exception as e:
-            return JsonResponse({"message": e, "status": "error"})
 
 
 # PERÍODOS

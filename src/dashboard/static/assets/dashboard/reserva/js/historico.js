@@ -4,7 +4,7 @@ var previous = undefined;
 function refreshData(url = undefined) {
 	if (!url) {
 		let filters = $("[data-filter]").serialize();
-		url = `/api/reservas/?${filters}`;
+		url = `/api/reservas/historico?${filters}`;
 	}
 
 	$("#load-antigo,#load-recente").attr("disabled", true);
@@ -100,7 +100,8 @@ function update(data) {
 			$(".loader-global").removeClass("load");
 			refreshData();
 			$("#detalhes").fadeTo("fast", 0).slideUp();
-			showMessage(response.message, "alert-success");
+			console.log(response);
+			showMessage("Alterado com sucesso.", "alert-success");
 		},
 		error: function (err) {
 			console.log(err);

@@ -41,7 +41,7 @@ function updateDash(data = []) {
 	localData = data;
 
 	$("#lista-de-chamados").html("");
-	$.each(data["results"], function (i, reserve) {
+	$.each(data, function (i, reserve) {
 		let a = $('<tr />', { "data-id-chamado": reserve.id });
 		let fa = $('<td />', { "class": 'text-center px-0 pl-2' });
 		let a2 = $('<i />', { "class": 'far fa-calendar-alt text-warning' });
@@ -76,7 +76,7 @@ function refreshData(force = false, ring = true) {
 			if (ring) {
 				playAudio();
 			}
-			$("#badgeChamados").text(data.count);
+			$("#badgeChamados").text(data.length);
 		}
 	});
 }
@@ -85,7 +85,7 @@ function refreshData(force = false, ring = true) {
 function fillReserve(id) {
 	$("#detalhes").hide();
 
-	var reserve = Object.assign({}, localData["results"].filter((v) => v.id == id)[0]);
+	var reserve = Object.assign({}, localData.filter((v) => v.id == id)[0]);
 	fillAttributes(reserve);
 
 	idSelecionado = reserve.id;

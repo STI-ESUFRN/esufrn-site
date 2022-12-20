@@ -121,6 +121,17 @@ class UserClassroom(models.Model):
 
 
 class Reserve(TimeStampedModel, SoftDeletableModel):
+    class Shift(models.TextChoices):
+        MORNING = ("M", "Manhã")
+        AFTERNOON = ("T", "Tarde")
+        NIGHT = ("N", "Noite")
+
+    class Status(models.TextChoices):
+        APPROVED = ("A", "Aprovado")
+        REJECTED = ("R", "Rejeitado")
+        WAITING = ("E", "Esperando")
+        DONE = ("C", "Concluído")
+
     classroom = models.ForeignKey(
         Classroom,
         verbose_name="Sala de aula",
@@ -129,28 +140,14 @@ class Reserve(TimeStampedModel, SoftDeletableModel):
     )
     event = models.CharField("Evento", max_length=100)
     requester = models.CharField("Nome do solicitante", max_length=100)
-
     date = models.DateField("Data para a reserva")
-
-    class Shift(models.TextChoices):
-        MORNING = ("M", "Manhã")
-        AFTERNOON = ("T", "Tarde")
-        NIGHT = ("N", "Noite")
-
     shift = models.CharField("Turno", choices=Shift.choices, max_length=1)
     email = models.EmailField("E-mail", max_length=100)
     phone = models.CharField("Telefone", max_length=16, null=True, blank=True)
-
     cause = models.TextField("Justificativa", max_length=512, null=True, blank=True)
     equipment = models.CharField(
         "Equipamento multimídia", max_length=200, null=True, blank=True
     )
-
-    class Status(models.TextChoices):
-        APPROVED = ("A", "Aprovado")
-        REJECTED = ("R", "Rejeitado")
-        WAITING = ("E", "Esperando")
-
     status = models.CharField(
         "Estado da reserva",
         choices=Status.choices,
@@ -167,7 +164,6 @@ class Reserve(TimeStampedModel, SoftDeletableModel):
             " um docente no momento da aula."
         ),
     )
-
     admin_created = models.BooleanField(
         verbose_name="Criado pela administração", default=False
     )
