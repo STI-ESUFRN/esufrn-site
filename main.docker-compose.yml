@@ -1,0 +1,10 @@
+version: '3.9'
+
+services:
+  web:
+    command: gunicorn esufrn.wsgi:application --worker-class=gevent --worker-connections=64 --workers=4 --bind 0.0.0.0:8000
+
+  nginx:
+    ports:
+      - "80:80"
+      - "443:443"
