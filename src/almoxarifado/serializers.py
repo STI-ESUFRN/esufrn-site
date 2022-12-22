@@ -17,3 +17,9 @@ class MaterialSerializer(serializers.ModelSerializer):
             "modified",
             "is_removed",
         ]
+
+    def create(self, validated_data):
+        instance = super().create(validated_data)
+        instance.generate_qr(self.context["request"])
+
+        return instance
