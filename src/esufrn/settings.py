@@ -1,4 +1,5 @@
 import os
+
 from dotenv import load_dotenv
 
 load_dotenv(override=True)
@@ -25,6 +26,7 @@ INSTALLED_APPS = [
     "assets",
     "principal",
     "dashboard",
+    "almoxarifado",
     "reserva",
     "chamado",
     "eventos",
@@ -55,9 +57,9 @@ MIDDLEWARE = [
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
 
-CSRF_TRUSTED_ORIGINS = os.getenv(
-    "CSRF_TRUSTED_ORIGINS", "http://* https://*"
-).split(" ")
+CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "http://* https://*").split(
+    " "
+)
 CSRF_COOKIE_SECURE = int(os.getenv("CSRF_COOKIE_SECURE", False))
 SESSION_COOKIE_SECURE = int(os.getenv("SESSION_COOKIE_SECURE", False))
 
@@ -100,8 +102,8 @@ DATABASES = {
         "NAME": os.getenv("MYSQL_DATABASE"),
         "USER": os.getenv("MYSQL_USER"),
         "PASSWORD": os.getenv("MYSQL_PASSWORD"),
-        'HOST': 'localhost',  
-        'PORT': '3306',
+        "HOST": "localhost",
+        "PORT": "3306",
         "OPTIONS": {
             "charset": "utf8mb4",
             "use_unicode": True,
@@ -305,6 +307,6 @@ REST_FRAMEWORK = {
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379",
+        "LOCATION": "redis://redis:6379",
     }
 }

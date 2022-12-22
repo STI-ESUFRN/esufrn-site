@@ -18,6 +18,8 @@ COPY entrypoint.sh .
 RUN sed -i 's/\r$//g' ./entrypoint.sh
 RUN chmod +x ./entrypoint.sh
 
+COPY .env .
+
 WORKDIR $APP_HOME/src
 
 ENTRYPOINT ["../entrypoint.sh"]

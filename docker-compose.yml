@@ -33,28 +33,26 @@ services:
       - mysql
     volumes:
       - phpmyadmin-data:/var/www/html
-    
+
   redis:
     image: redis
-    ports:
-      - 6379:6379
+    expose:
+      - 6379
     volumes:
       - redis-data:/data
-        
+
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8001
+    command: python manage.py runserver 0.0.0.0:8000
     restart: always
-    expose:
-      - 8000
     ports:
-      - 587:587
+      - 8000:8000
     depends_on:
       - mysql
+      - redis
     volumes:
       - mysqld-data:/run/mysqld
       - ./src:/usr/src/app/src
-
   # nginx:
   #   build:
   #     context: nginx
