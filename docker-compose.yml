@@ -53,22 +53,6 @@ services:
     volumes:
       - mysqld-data:/run/mysqld
       - ./src:/usr/src/app/src
-  # nginx:
-  #   build:
-  #     context: nginx
-  #   restart: always
-  #   ports:
-  #     - 8000:80
-  #     - 8001:443
-  #   depends_on:
-  #     - web
-  #     - phpmyadmin
-  #   volumes:
-  #     - phpmyadmin-data:/var/www/html/phpmyadmin:ro
-  #     - ./src/staticfiles:/usr/share/nginx/html/staticfiles:ro
-  #     - ./src/media:/usr/share/nginx/html/media:ro
-  #     - ./src/templates:/usr/share/nginx/html/templates:ro
-  #     - ./nginx/ssl:/ssl:ro
 
 volumes:
   mysqld-data:

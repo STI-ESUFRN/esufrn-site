@@ -1,14 +1,14 @@
- - [ ] Configuração do ambiente para produção
-   - [ ] Configuração do user root do MySQL
- - [x] Configuração do phpmyadmin
-   - [x] Configuração dos volumes
- - [ ] Configuração dos outros projetos além do site através de ProxyPass
- - [x] Configuração do SSL
-   - [x] Ouvir em ambas as portas: 80 e 443
-   - [x] Adicionar chaves e certificados necessários para a autenticação
- - [x] Configuração do Gunicorn para produção
- - [ ] Concluir a migração dos modelos da dashboard para APIViews ou similar do DRF
- - [ ] Configuração do serviço de Email (Mensageiro)
- - [ ] Configurar testes de API
- - [ ] Verificar pacotes inutilizados do Poetry
- - [ ] Atualizar documentação
+- [ ] Configuração do ambiente para produção
+  - [ ] Configuração do user root do MySQL
+- [x] Configuração do phpmyadmin
+  - [x] Configuração dos volumes
+- [ ] Configuração dos outros projetos além do site através de ProxyPass
+- [x] Configuração do SSL
+  - [x] Ouvir em ambas as portas: 80 e 443
+  - [x] Adicionar chaves e certificados necessários para a autenticação
+- [x] Configuração do Gunicorn para produção
+- [ ] Concluir a migração dos modelos da dashboard para APIViews ou similar do DRF
+- [ ] Configuração do serviço de Email (Mensageiro)
+- [ ] Configurar testes de API
+- [ ] Verificar pacotes inutilizados do Poetry
+- [ ] Atualizar documentação

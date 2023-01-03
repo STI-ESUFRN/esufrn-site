@@ -3,6 +3,8 @@ from django.urls import path
 
 from dashboard.views import (
     ResetPasswordView,
+    almoxarifadoEditar,
+    almoxarifadoHome,
     chamadoHistorico,
     chamadoHome,
     chamadoInserir,
@@ -40,6 +42,8 @@ urlpatterns = [
     path("inventario/", inventarioHome),
     path("inventario/emprestimo", inventarioEmprestimo, name="inventario_emprestimo"),
     path("inventario/patrimonio", inventarioPatrimonio, name="inventario_patrimonio"),
+    path("almoxarifado/", almoxarifadoHome, name="almoxarifado_home"),
+    path("almoxarifado/item/<int:pk>/", almoxarifadoEditar, name="almoxarifado_editar"),
     path("login/", loginView, name="login"),
     path("logout/", logoutView, name="logout"),
     path("password-reset/", ResetPasswordView.as_view(), name="password_reset"),

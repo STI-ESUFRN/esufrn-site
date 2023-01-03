@@ -1,0 +1,21 @@
+{% extends "dashboard.base.html" %}
+{% load static %}
+{% block styles %}
+{% endblock styles %}
+{% block content %}
+    {{ item.name }}
+    <br/>
+    {{ item.expiration }}
+    <br/>
+    {{ item.type }}
+    <br/>
+    {{ item.quantity }}
+    <br/>
+    {{ item.received_date }}
+    <br/>
+    <img src="{{ item.qr.high.url }}" alt=""/>
+    <br/>
+{% endblock content %}
+{% block scripts %}
+    <script src="{% static 'assets/dashboard/js/ajax_csrf.js' %}"></script>
+{% endblock scripts %}

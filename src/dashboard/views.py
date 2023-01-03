@@ -346,3 +346,26 @@ def periodoEditar(request, pk):
     cursos = PeriodReserve.get_courses()
     context = {"period": period, "salas": salas, "cursos": cursos}
     return render(request, "dashboard.periodo.editar.html", context)
+
+
+almoxarifado_roles = ["suporte", "almoxarifado"]
+
+from almoxarifado.models import Material
+
+
+@login_required(login_url="/dashboard/login")
+@allowed_users(allowed_roles=almoxarifado_roles)
+def almoxarifadoHome(request):
+    items = Material.available_objects.all()
+    context = {"items": items}
+    getDashContext(context, "Almoxarifado", "dashboard")
+    return render(request, "dashboard.almoxarifado.dashboard.html", context)
+
+
+@login_required(login_url="/dashboard/login")
+@allowed_users(allowed_roles=almoxarifado_roles)
+def almoxarifadoEditar(request, pk=None):
+    item = Material.available_objects.get(id=pk)
+    context = {"item": item}
+    getDashContext(context, "Almoxarifado", "dashboard")
+    return render(request, "dashboard.almoxarifado.editar.html", context)

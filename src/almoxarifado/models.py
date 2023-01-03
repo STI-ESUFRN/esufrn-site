@@ -16,10 +16,19 @@ class Material(TimeStampedModel, SoftDeletableModel):
         CONSUMABLE = "C", "Consumível"
 
     name = models.CharField("Nome", max_length=255)
-    expiration = models.DateField("Data de validade", null=True, blank=True)
     type = models.CharField("Tipo", choices=Type.choices, max_length=1)
+    alert_below = models.IntegerField("Nível crítico", null=True, blank=True)
+
+    class Meta:
+        verbose_name = "Material"
+        verbose_name_plural = "Materiais"
+        ordering = ["-created"]
+
+
+class MaterialInstance(TimeStampedModel):
+    material = models.ForeignKey(Material, on_delete=models.CASCADE)
+    expiration = models.DateField("Data de validade", null=True, blank=True)
     quantity = models.IntegerField("Quantidade disponível")
-    received_date = models.DateField("Recebido em")
     qr = models.ForeignKey(
         "assets.ESImage", on_delete=models.PROTECT, null=True, editable=False
     )
@@ -27,7 +36,7 @@ class Material(TimeStampedModel, SoftDeletableModel):
     def generate_qr(self, request):
         qr = qrcode.make(
             request.build_absolute_uri(
-                reverse("almoxarifado:materials-detail", kwargs={"pk": self.id})
+                reverse("almoxarifado_editar", kwargs={"pk": self.id})
             )
         )
         stream = BytesIO()
@@ -47,6 +56,21 @@ class Material(TimeStampedModel, SoftDeletableModel):
         self.save()
 
     class Meta:
-        verbose_name = "Material"
-        verbose_name_plural = "Materiais"
+        verbose_name = "Instância"
+        verbose_name_plural = "Instâncias"
         ordering = ["-created"]
+
+
+class History(TimeStampedModel):
+    class TypeChoices(models.TextChoices):
+        REMOVAL = "R", "Remoção"
+        ADDITION = "A", "Adição"
+
+    instance = models.ForeignKey(MaterialInstance, on_delete=models.CASCADE)
+    quantity = models.IntegerField("Quantidade disponível")
+    type = models.CharField("Tipo", max_length=1, choices=TypeChoices.choices)
+
+    class Meta:
+        verbose_name = "Histórico de material"
+        verbose_name_plural = "Histórico de materiais"
+        ordering = ["instance__id", "-created"]
