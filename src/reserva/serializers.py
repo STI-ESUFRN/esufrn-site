@@ -65,9 +65,38 @@ class ReserveSerializer(serializers.ModelSerializer):
             },
         }
 
+    def validate(self, attrs):
+        reserves = Reserve.objects.filter(
+            date=attrs["date"],
+            status=Reserve.Status.APPROVED,
+            classroom=attrs["classroom"],
+            shift=attrs["shift"],
+        )
+        periodreserves = PeriodReserveDay.objects.filter(
+            date=attrs["date"],
+            period__status=Reserve.Status.APPROVED,
+            period__classroom=attrs["classroom"],
+            shift=attrs["shift"],
+        ).exclude(active=False)
+
+        if self.instance:
+            reserves = reserves.exclude(id=attrs["id"])
+
+        if (
+            not self.instance
+            or (self.instance and self.instance.status != Reserve.Status.REJECTED)
+        ) and (reserves or periodreserves):
+            raise ValidationError(
+                "Já existe uma reserva aprovada para o dia {} - {}.".format(
+                    attrs["date"].strftime("%d/%m/%Y"),
+                    attrs["shift"],
+                )
+            )
+        return super().validate(attrs)
+
     def validate_cause(self, cause):
         classroom = Classroom.objects.get(id=self.context["request"].data["classroom"])
-        if classroom.justification_required and not self.cause:
+        if classroom.justification_required and not cause:
             raise ValidationError(
                 "Este tipo de sala requer que o usuário informe uma justificativa"
                 " para seu uso."
@@ -92,7 +121,7 @@ class ReserveSerializer(serializers.ModelSerializer):
             time = "22:15"
 
         relative_date = datetime.strptime(
-            "{} {}".format(self.context["request"].data["date"], time), "%Y-%m-%d %H:%M"
+            f"{self.context['request'].data['date']} {time}", "%Y-%m-%d %H:%M"
         )
         now = datetime.today()
 
@@ -105,47 +134,17 @@ class ReserveSerializer(serializers.ModelSerializer):
         classroom = Classroom.objects.get(id=self.context["request"].data["classroom"])
         if diff < classroom.days_required:
             raise ValidationError(
-                "A reserva para esta sala requer antecedência de {} dia{}.".format(
-                    classroom.days_required,
-                    "s" if classroom.days_required > 1 else "",
-                )
+                "A reserva para esta sala requer antecedência de"
+                f" {classroom.days_required} dia{'s' if classroom.days_required > 1 else ''}."
             )
 
         return date
 
-    def validate_status(self, status):
-        if self.instance and self.instance.status == Reserve.Status.APPROVED:
-            reserves = Reserve.objects.filter(
-                date=self.instance.date,
-                status=Reserve.Status.APPROVED,
-                classroom=self.instance.classroom,
-                shift=self.instance.shift,
-            ).exclude(id=self.instance.id)
-            periodreserves = PeriodReserveDay.objects.filter(
-                date=self.instance.date,
-                period__status=Reserve.Status.APPROVED,
-                period__classroom=self.instance.classroom,
-                shift=self.instance.shift,
-            ).exclude(active=False)
-
-            if reserves or periodreserves:
-                raise ValidationError(
-                    "Já existe uma reserva aprovada para o dia {} - {}{}".format(
-                        self.instance.date.strftime("%d/%m/%Y"),
-                        self.instance.get_shift_name(),
-                        "."
-                        if self.instance.admin_created
-                        else (
-                            ". Por favor, entre em contato com a secretaria a fim de"
-                            " viabilizarmos outro dia para esta reserva."
-                        ),
-                    )
-                )
-
-        return status
-
 
 class ReservePublicSerializer(serializers.ModelSerializer):
+    shift_display = serializers.CharField(source="get_shift_display", read_only=True)
+    status_display = serializers.CharField(source="get_status_display", read_only=True)
+
     class Meta:
         model = Reserve
         fields = [
@@ -153,13 +152,42 @@ class ReservePublicSerializer(serializers.ModelSerializer):
             "classroom",
             "event",
             "status",
+            "status_display",
             "shift",
+            "shift_display",
         ]
         extra_kwargs = {
             "status": {
                 "read_only": True,
             },
         }
+
+    def validate(self, attrs):
+        reserves = Reserve.objects.filter(
+            date=attrs["date"],
+            status=Reserve.Status.APPROVED,
+            classroom=attrs["classroom"],
+            shift=attrs["shift"],
+        )
+        periodreserves = PeriodReserveDay.objects.filter(
+            date=attrs["date"],
+            period__status=Reserve.Status.APPROVED,
+            period__classroom=attrs["classroom"],
+            shift=attrs["shift"],
+        )
+
+        if reserves or periodreserves:
+            raise ValidationError(
+                "Já existe uma reserva aprovada para o dia {} - {}{}".format(
+                    attrs["date"].strftime("%d/%m/%Y"),
+                    attrs["shift"],
+                    (
+                        ". Por favor, entre em contato com a secretaria a fim de"
+                        " viabilizarmos outro dia para esta reserva."
+                    ),
+                ),
+            )
+        return super().validate(attrs)
 
 
 class PeriodReserveDaySerializer(serializers.ModelSerializer):
