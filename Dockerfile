@@ -10,8 +10,8 @@ WORKDIR $APP_HOME
 RUN apk update && \
     apk add gcc musl-dev mariadb-connector-c-dev
 
-COPY pyproject.toml poetry.lock ./
 RUN pip install poetry
+COPY pyproject.toml poetry.lock ./
 RUN poetry install --only main
 
 COPY entrypoint.sh .

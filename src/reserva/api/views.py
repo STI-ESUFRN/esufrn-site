@@ -314,8 +314,9 @@ class reservaAdminView(View):
 
             serializador = ReserveSerializer(result, many=False)
             return JsonResponse(serializador.data, safe=False)
-        except Reserve.DoesNotExist:
-            raise Http404()
+
+        except Reserve.DoesNotExist as e:
+            raise Http404(e)
 
     def put(self, request, *args, **kwargs):
         PUT = QueryDict(request.body)

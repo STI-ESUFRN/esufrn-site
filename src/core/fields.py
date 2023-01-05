@@ -7,6 +7,6 @@ class PrimaryKeyRelatedFieldWithSerializer(serializers.PrimaryKeyRelatedField):
         super().__init__(**kwargs)
 
     def to_representation(self, value):
-        instance = self.queryset.get(pk=value.pk)
+        item = self.queryset.get(pk=value.pk)
 
-        return self.representation_serializer(instance).data
+        return self.representation_serializer(item).data

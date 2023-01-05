@@ -1,21 +1,19 @@
 from django.contrib import admin
 
-from almoxarifado.models import Material, MaterialInstance
+from almoxarifado.models import Material
 
 
-class MaterialInstanceAdmin(admin.ModelAdmin):
+class MaterialAdmin(admin.ModelAdmin):
     list_display = [
         "name",
-        "expiration",
         "quantity",
+        "number",
     ]
-    search_fields = ["name"]
     readonly_fields = ["qr"]
 
-    def save_model(self, request, obj, form, change) -> None:
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
         obj.generate_qr(request)
-        return super().save_model(request, obj, form, change)
 
 
-admin.site.register(MaterialInstance, MaterialInstanceAdmin)
-admin.site.register(Material)
+admin.site.register(Material, MaterialAdmin)

@@ -7,7 +7,8 @@ app_name = "almoxarifado"
 
 router = DefaultRouter()
 
-router.register("", MaterialViewSet, basename="materials")
+router.register("materiais", MaterialViewSet, basename="materials")
+
 
 urlpatterns = [
     path("", include(router.urls)),

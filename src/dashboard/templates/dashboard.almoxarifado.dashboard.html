@@ -1,21 +1,48 @@
 {% extends "dashboard.base.html" %}
 {% load static %}
+{% load mathfilters %}
 {% block styles %}
 {% endblock styles %}
 {% block content %}
     {% for item in items %}
-        {{ item.name }}
+        Material: {{ item.material.name }}
         <br/>
-        {{ item.expiration }}
+        Localização: {{ item.location|default_if_none:'Não especificado' }}
         <br/>
-        {{ item.type }}
+        Validade: {{ item.expiration|default_if_none:"Não se aplica/Indeterminado" }}
         <br/>
-        {{ item.quantity }}
+        Tipo: {{ item.material.type }}
         <br/>
-        {{ item.received_date }}
+        Recebido em: {{ item.received_at }}
         <br/>
-        {{ item.qr }}
+        QR:
+        <img src="{{ item.qr.high.url }}" alt=""/>
         <br/>
+        Quantidade:
+        {% if item.material.alert_below %}
+            <div class="progress">
+                <div class="progress-bar {% if item.quantity < item.material.alert_below %}bg-danger{% elif item.warn %}bg-warning{% endif %}"
+                     role="progressbar"
+                     style="width:{{ item.relative_percentage }}%"
+                     aria-valuenow="{{ item.quantity }}"
+                     aria-valuemin="0"
+                     aria-valuemax="{{ item.material.reference }}">
+                    {{ item.quantity }} itens restantes
+                </div>
+            </div>
+        {% endif %}
+        Histórico:
+        <br/>
+        {% for log in item.history.all %}
+            Em {{ log.created }}, foram
+            {% if log.quantity > 0 %}
+                adicionadas
+            {% else %}
+                removidas
+            {% endif %}
+            {{ log.quantity|abs }} deste material no inventário.
+            <br/>
+        {% endfor %}
     {% endfor %}
 {% endblock content %}
 {% block scripts %}

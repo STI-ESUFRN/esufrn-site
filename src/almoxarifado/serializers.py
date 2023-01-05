@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.serializers import ValidationError
 
 from almoxarifado.models import Material
 
@@ -8,18 +9,42 @@ class MaterialSerializer(serializers.ModelSerializer):
         model = Material
         fields = [
             "id",
-            "name",
+            "alert_below",
+            "brand",
+            "description",
             "expiration",
-            "type",
+            "location",
+            "name",
+            "number",
+            "qr",
             "quantity",
-            "received_date",
+            "received_at",
+            "reference",
+            "type",
             "created",
             "modified",
-            "is_removed",
         ]
+
+    def validate_number(self, number):
+        if (
+            self.context["request"].data["type"] == Material.Types.PERMANENT
+            and not number
+        ):
+            raise ValidationError(
+                "Este tipo de material requer que seja especificado um número de"
+                " tombamento",
+                "permanent_non_specified_number",
+            )
+
+        return number
 
     def create(self, validated_data):
         instance = super().create(validated_data)
         instance.generate_qr(self.context["request"])
 
         return instance
+
+    def update(self, instance, validated_data):
+        instance.create_log(self.context["request"])
+
+        return super().update(instance, validated_data)

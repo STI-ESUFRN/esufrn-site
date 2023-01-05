@@ -5,10 +5,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import PasswordResetView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Count, Min
+from django.http import Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.decorators.cache import never_cache
 
+from almoxarifado.models import Material
 from dashboard.utils import getDashContext
 from principal.decorators import allowed_users, authenticated_user, unauthenticated_user
 from principal.forms import siginForm
@@ -350,13 +352,11 @@ def periodoEditar(request, pk):
 
 almoxarifado_roles = ["suporte", "almoxarifado"]
 
-from almoxarifado.models import Material
-
 
 @login_required(login_url="/dashboard/login")
 @allowed_users(allowed_roles=almoxarifado_roles)
 def almoxarifadoHome(request):
-    items = Material.available_objects.all()
+    items = Material.objects.all()
     context = {"items": items}
     getDashContext(context, "Almoxarifado", "dashboard")
     return render(request, "dashboard.almoxarifado.dashboard.html", context)
@@ -364,8 +364,28 @@ def almoxarifadoHome(request):
 
 @login_required(login_url="/dashboard/login")
 @allowed_users(allowed_roles=almoxarifado_roles)
-def almoxarifadoEditar(request, pk=None):
-    item = Material.available_objects.get(id=pk)
+def almoxarifadoEditar(request, pk):
+    try:
+        item = Material.objects.get(id=pk)
+
+    except Material.DoesNotExist as e:
+        raise Http404(e)
+
     context = {"item": item}
-    getDashContext(context, "Almoxarifado", "dashboard")
     return render(request, "dashboard.almoxarifado.editar.html", context)
+
+
+@login_required(login_url="/dashboard/login")
+@allowed_users(allowed_roles=almoxarifado_roles)
+def almoxarifadoInserirMaterialConsumivel(request):
+    context = {}
+    getDashContext(context, "Almoxarifado", "inserir_material")
+    return render(request, "dashboard.almoxarifado.consumivel.inserir.html", context)
+
+
+@login_required(login_url="/dashboard/login")
+@allowed_users(allowed_roles=almoxarifado_roles)
+def almoxarifadoInserirMaterialPermanente(request):
+    context = {}
+    getDashContext(context, "Almoxarifado", "inserir_material")
+    return render(request, "dashboard.almoxarifado.permanente.inserir.html", context)
