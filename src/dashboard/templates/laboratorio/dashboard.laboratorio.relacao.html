@@ -1,0 +1,189 @@
+{% extends "dashboard.base.html" %}
+{% load static %}
+{% block styles %}
+    <style>
+        table.table th:nth-child(1) {
+            width: 8%;
+        }
+        
+        table.table th:nth-child(2) {
+            width: 20%;
+        }
+        
+        table.table th:nth-child(3) {
+            width: 18%;
+        }
+        
+        table.table th:nth-child(4) {
+            width: 10%;
+        }
+        
+        table.table th:nth-child(5) {
+            width: 24%;
+        }
+        
+        table.table th:nth-child(6) {
+            width: 20%;
+        }
+        
+        .table thead tr th,
+        .table tbody tr td {
+            border: 1px solid black !important;
+            vertical-align: middle;
+        }
+        
+        table {
+            page-break-inside: auto !important;
+        }
+        
+        tr {
+            page-break-inside: avoid;
+            page-break-after: auto !important;
+        }
+        
+        td {
+            white-space: normal !important;
+        }
+        
+        thead {
+            display: table-header-group !important;
+        }
+        
+        .doc * {
+            font-family: "Times New Roman", Times, serif !important;
+            font-size: 14pt;
+        }
+        
+        .doc-head * {
+            font-size: 16pt;
+        }
+    </style>
+{% endblock styles %}
+{% block content %}
+    <div class="no-print">
+        <div class="mb-2 text-center">
+            <h3>Relação de materiais do laboratório</h3>
+            <div class="row justify-content-end">
+                <div class="col-auto">
+                    <button type="button"
+                            class="btn mb-1 btn-outline-primary btn-sm"
+                            onclick="window.print();return false;">
+                        Imprimir <i class="fas fa-print" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <form id="filters">
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <input class="form-control rounded-0"
+                           placeholder="Buscar"
+                           type="text"
+                           name="search"
+                           data-filter/>
+                </div>
+                <div class="form-group col-md-2">
+                    <select class="form-control rounded-0" name="type" data-filter>
+                        <option selected value="C">
+                            Consumível
+                        </option>
+                        <option value="P">
+                            Permanente
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="doc">
+        <table class="table table-bordered">
+            <caption>Emitido em: {% now "d/m/Y" %} às {% now "H:i" %}</caption>
+            <thead>
+                <tr>
+                    <th class="text-center">Nome</th>
+                    <th class="text-center">Tombo</th>
+                    <th class="text-center">Marca</th>
+                    <th class="text-center">Quantidade</th>
+                    <th class="text-center">Validade</th>
+                    <th class="text-center">QR</th>
+                </tr>
+            </thead>
+            <tbody id="materials">
+                {% comment %} AJAX {% endcomment %}
+            </tbody>
+        </table>
+    </div>
+    <div class="no-print mt-5">
+        <hr />
+        <div class="row justify-content-end">
+            <div class="col-auto">
+                <button type="button"
+                        class="btn mb-1 btn-outline-secondary btn-sm"
+                        onclick="backTop();">
+                    Voltar para o topo <i class="fas fa-arrow-up" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="col-auto">
+                <button type="button"
+                        class="btn mb-1 btn-outline-primary btn-sm"
+                        onclick="window.print();return false;">
+                    Imprimir <i class="fas fa-print" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+{% block scripts %}
+    <script>
+        $("#filters").submit(function(e) {
+            e.preventDefault();
+        });
+        
+        $("[data-filter]").change(function() {
+            getMaterials();
+        });
+        
+        function getMaterials() {
+            let filters = $("[data-filter]").serialize();
+            let url = `/api/laboratorio/materiais/?${filters}`;
+            console.log(url);
+            $.get(url, (response) => {
+                let materials = $("#materials");
+                materials.html("");
+                response.forEach((item) => {
+                    let row = $("<tr />");
+        
+                    let name = $("<td />", {
+                        "text": item.name,
+                        "class": "py-0"
+                    });
+                    let number = $("<td />", {
+                        "text": item.number,
+                        "class": "py-0 text-center"
+                    });
+                    let brand = $("<td />", {
+                        "text": item.brand,
+                        "class": "py-0 text-center"
+                    });
+                    let quantity = $("<td />", {
+                        "text": item.quantity,
+                        "class": "py-0 text-center"
+                    });
+                    let expiration = $("<td />", {
+                        "text": item.expiration,
+                        "class": "py-0 text-center"
+                    });
+                    let qr = $("<td />", {
+                        "html": `<img class="img-fluid" src="${item.qr.medium}" alt=""/>`,
+                        "class": "py-1 text-center"
+                    });
+        
+                    row.append(name, number, brand, quantity, expiration, qr);
+                    materials.append(row);
+                });
+            });
+        }
+        
+        getMaterials();
+    </script>
+{% endblock scripts %}

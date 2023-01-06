@@ -1,9 +1,9 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from almoxarifado.views import MaterialViewSet
+from laboratorio.views import MaterialViewSet
 
-app_name = "almoxarifado"
+app_name = "laboratorio"
 
 router = DefaultRouter()
 

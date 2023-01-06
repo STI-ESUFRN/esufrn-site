@@ -5,7 +5,7 @@
 {% block content %}
     <form autocomplete="off" id="form-item">
         {% csrf_token %}
-        <input type="hidden" name="type" value="C"/>
+        <input type="hidden" name="type" value="P"/>
         <div class="form-row">
             <div class="form-group col-md-8">
                 <label>
@@ -22,7 +22,9 @@
         </div>
         <div class="form-row">
             <div class="form-group col-md-12">
-                <label>Descrição</label>
+                <label>
+                    <b>Descrição</b>
+                </label>
                 <textarea class="form-control rounded-0"
                           name="description"
                           id="description"
@@ -42,15 +44,14 @@
                 <div class="invalid-feedback" for="quantity"></div>
             </div>
             <div class="form-group col-md-3">
-                <label >Data de validade</label>
-                <input class="form-control rounded-0 mb-1"
-                       name="expiration"
-                       data-mask="00-00-0000"
-                       data-toggle="datepicker"
-                       required
-                       autocomplete="off"
-                       maxlength="10"/>
-                <div class="invalid-feedback" for="expiration"></div>
+                <label>
+                    <b>Tombo</b>
+                </label>
+                <input class="form-control rounded-0"
+                       type="number"
+                       name="number"
+                       id="number"/>
+                <div class="invalid-feedback" for="number"></div>
             </div>
         </div>
         <div class="form-row">
@@ -76,25 +77,9 @@
                        required/>
                 <div class="invalid-feedback" for="location"></div>
             </div>
-            <div class="form-group col-md-3">
-                <label>Quantidade crítica</label>
-                <input type="number"
-                       class="form-control rounded-0"
-                       name="alert_below"
-                       value="50"/>
-                <div class="invalid-feedback" for="alert_below"></div>
-            </div>
-            <div class="form-group col-md-3">
-                <label>Valor de referência</label>
-                <input type="number"
-                       class="form-control rounded-0"
-                       name="reference"
-                       value="250"/>
-                <div class="invalid-feedback" for="reference"></div>
-            </div>
         </div>
         <div class="text-center mt-4">
-            <button id="enviar-instancia" class="btn btn-dark rounded-0">Registrar material consumível</button>
+            <button id="enviar-instancia" class="btn btn-dark rounded-0">Registrar material permanente</button>
         </div>
     </form>
 {% endblock content %}
@@ -124,7 +109,7 @@
         
             $.ajax({
                 type: "POST",
-                url: "/api/almoxarifado/materiais/",
+                url: "/api/laboratorio/materiais/",
                 dataType: "json",
                 data: serialized_data,
                 success: function(response) {
@@ -132,10 +117,9 @@
                     $("#form-item").trigger("reset");
                 },
                 error(response) {
-                    console.log(response);
                     $.map(response.responseJSON, (value, label) => {
                         $(`#form-item [name=${label}]`).addClass("is-invalid");
-                        let feedback = $(`.invalid-feedback[for=${label}]`);
+                        let feedback = $(`.invalid-feedback[for=${label}]`); 
                         feedback.html("");
                         value.forEach((message) => {
                             error = $("<p />", {

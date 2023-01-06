@@ -26,7 +26,7 @@ INSTALLED_APPS = [
     "assets",
     "principal",
     "dashboard",
-    "almoxarifado",
+    "laboratorio",
     "reserva",
     "chamado",
     "eventos",

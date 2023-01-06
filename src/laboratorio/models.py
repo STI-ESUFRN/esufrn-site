@@ -40,7 +40,7 @@ class Material(TimeStampedModel):
     def generate_qr(self, request):
         qr = qrcode.make(
             request.build_absolute_uri(
-                reverse("almoxarifado_editar", kwargs={"pk": self.id})
+                reverse("material_editar", kwargs={"pk": self.id})
             )
         )
         stream = BytesIO()
@@ -61,13 +61,11 @@ class Material(TimeStampedModel):
 
     @property
     def warn(self):
-        return (
-            self.quantity / (self.material.reference - self.material.alert_below) < 0.25
-        )
+        return self.quantity / (self.reference - self.alert_below) < 0.40
 
     @property
     def relative_percentage(self):
-        return int(self.quantity / self.material.reference * 100)
+        return int(self.quantity / self.reference * 100)
 
     class Meta:
         verbose_name = "Instância"

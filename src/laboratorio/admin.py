@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from almoxarifado.models import Material
+from laboratorio.models import Material
 
 
 class MaterialAdmin(admin.ModelAdmin):

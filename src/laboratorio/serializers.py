@@ -1,10 +1,17 @@
 from rest_framework import serializers
 from rest_framework.serializers import ValidationError
 
-from almoxarifado.models import Material
+from assets.models import ESImage
+from assets.serializers import ESImageSerializer
+from core.fields import PrimaryKeyRelatedFieldWithSerializer
+from laboratorio.models import Material
 
 
 class MaterialSerializer(serializers.ModelSerializer):
+    qr = PrimaryKeyRelatedFieldWithSerializer(
+        ESImageSerializer, queryset=ESImage.objects.all(), required=False
+    )
+
     class Meta:
         model = Material
         fields = [
