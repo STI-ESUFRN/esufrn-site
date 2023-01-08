@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 
 from dateutil.relativedelta import relativedelta
-from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from django.shortcuts import render
 from django.utils import timezone
@@ -24,8 +23,8 @@ def evento(request, slug):
 
         return render(request, "eventos.evento.html", context)
 
-    except ObjectDoesNotExist:
-        raise Http404()
+    except Event.DoesNotExist as e:
+        raise Http404(e)
 
 
 def eventos(request):

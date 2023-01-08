@@ -1,0 +1,22 @@
+version: '3.9'
+
+services:
+  web:
+    command: gunicorn esufrn.wsgi:application --worker-class=gevent --worker-connections=64 --workers=4 --bind 0.0.0.0:8000
+
+  nginx:
+    build:
+      context: nginx
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - web
+      - phpmyadmin
+    volumes:
+      - phpmyadmin-data:/var/www/html/phpmyadmin:ro
+      - ./src/staticfiles:/usr/share/nginx/html/staticfiles:ro
+      - ./src/media:/usr/share/nginx/html/media:ro
+      - ./src/templates:/usr/share/nginx/html/templates:ro
+      - ./nginx/ssl:/ssl:ro
