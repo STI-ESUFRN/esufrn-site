@@ -6,12 +6,12 @@ from django.contrib.auth.models import User
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
 from django.urls import reverse
-from model_utils.models import TimeStampedModel
+from model_utils.models import SoftDeletableModel, TimeStampedModel
 
 from assets.models import ESImage
 
 
-class Material(TimeStampedModel):
+class Material(SoftDeletableModel, TimeStampedModel):
     class Types(models.TextChoices):
         PERMANENT = "P", "Permanente"
         CONSUMABLE = "C", "Consumível"
@@ -37,6 +37,19 @@ class Material(TimeStampedModel):
         "assets.ESImage", on_delete=models.PROTECT, null=True, editable=False
     )
 
+    @property
+    def warn(self):
+        return self.quantity / (self.reference - self.alert_below) < 0.40
+
+    @property
+    def relative_percentage(self):
+        return int(self.quantity / self.reference * 100)
+
+    class Meta:
+        verbose_name = "Instância"
+        verbose_name_plural = "Instâncias"
+        ordering = ["-created"]
+
     def generate_qr(self, request):
         qr = qrcode.make(
             request.build_absolute_uri(
@@ -59,19 +72,6 @@ class Material(TimeStampedModel):
 
         self.save()
 
-    @property
-    def warn(self):
-        return self.quantity / (self.reference - self.alert_below) < 0.40
-
-    @property
-    def relative_percentage(self):
-        return int(self.quantity / self.reference * 100)
-
-    class Meta:
-        verbose_name = "Instância"
-        verbose_name_plural = "Instâncias"
-        ordering = ["-created"]
-
     def create_log(self, request, **kwargs):
         if not self.pk:
             History.objects.create(
@@ -82,19 +82,24 @@ class Material(TimeStampedModel):
 
         else:
             obj = Material.objects.get(id=self.id)
-            quantity = self.quantity - obj.quantity
-            if quantity:
+            if obj.quantity != self.quantity:
                 History.objects.create(
                     user=request.user,
                     item=self,
-                    quantity=quantity,
+                    quantity=self.quantity,
+                    prev_quantity=obj.quantity,
                 )
 
 
 class History(TimeStampedModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     item = models.ForeignKey(Material, on_delete=models.CASCADE, related_name="history")
-    quantity = models.IntegerField("Quantidade disponível")
+    quantity = models.IntegerField("Quantidade atualizada")
+    prev_quantity = models.IntegerField("Quantidade anterior", default=0)
+
+    @property
+    def diff(self):
+        return self.quantity - self.prev_quantity
 
     class Meta:
         verbose_name = "Histórico de material"

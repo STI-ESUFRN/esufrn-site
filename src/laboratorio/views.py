@@ -1,5 +1,5 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import mixins, viewsets
+from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
@@ -15,10 +15,11 @@ class MaterialViewSet(
     mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
     viewsets.GenericViewSet,
 ):
     permission_classes = [IsAuthenticated, GroupLaboratorio]
-    queryset = Material.objects.all()
+    queryset = Material.available_objects.all()
     serializer_class = MaterialSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = {
@@ -36,4 +37,20 @@ class MaterialViewSet(
             return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=["post"])
+    def add(self, request, pk=None):
+        obj = self.get_object()
+        obj.quantity = obj.quantity + int(request.data["quantity"])
+        if obj.quantity < 0:
+            return Response(
+                {"quantity": ["A quantidade do material não pode ser negativa"]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        obj.create_log(request)
+        obj.save()
+
+        serializer = self.get_serializer(obj)
         return Response(serializer.data)

@@ -1,0 +1,122 @@
+<form autocomplete="off" id="form-item">
+    <input name="id"
+           type="hidden"
+           {% if item %} value="{{ item.id }}"{% endif %}/>
+    <div class="form-row">
+        <div class="form-group col-md-8">
+            <label>
+                <b>Nome</b>
+            </label>
+            <input class="form-control rounded-0"
+                   type="text"
+                   name="name"
+                   {% if item %} value="{{ item.name }}"{% endif %}/>
+            <div class="invalid-feedback" for="name"></div>
+        </div>
+        <div class="form-group col-md-4">
+            <label>Marca</label>
+            <input class="form-control rounded-0"
+                   type="text"
+                   name="brand"
+                   id="brand"
+                   {% if item %} value="{{ item.brand }}"{% endif %}/>
+            <div class="invalid-feedback" for="brand"></div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-12">
+            <label>Descrição</label>
+            <textarea class="form-control rounded-0" name="description" id="description" rows="5">{% if item %}{{ item.description }}{% endif %}</textarea>
+            <div class="invalid-feedback" for="description"></div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label>
+                <b>Quantidade</b>
+            </label>
+            <input class="form-control rounded-0"
+                   type="number"
+                   name="quantity"
+                   id="quantity"
+                   {% if item %} value="{{ item.quantity }}"{% endif %}/>
+            <div class="invalid-feedback" for="quantity"></div>
+        </div>
+        <div class="form-group col-md-3">
+            <label>
+                <b>Tombo</b>
+            </label>
+            <input class="form-control rounded-0"
+                   type="number"
+                   name="number"
+                   id="number"
+                   {% if item %} value="{{ item.number }}"{% endif %}/>
+            <div class="invalid-feedback" for="number"></div>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Data de validade</label>
+            <input class="form-control rounded-0 mb-1"
+                   name="expiration"
+                   data-mask="00-00-0000"
+                   data-toggle="datepicker"
+                   required
+                   autocomplete="off"
+                   maxlength="10"
+                   {% if item %} value="{{ item.expiration|default_if_none:'' }}"{% endif %}/>
+            <div class="invalid-feedback" for="expiration"></div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label>Data de recebimento</label>
+            <input class="form-control rounded-0 mb-1"
+                   name="received_at"
+                   data-mask="00-00-0000"
+                   data-toggle="datepicker"
+                   required
+                   autocomplete="off"
+                   maxlength="10"
+                   {% if item %} value="{{ item.received_at|default_if_none:'' }}"{% endif %}/>
+            <div class="invalid-feedback" for="received_at"></div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label>Localização</label>
+            <input class="form-control rounded-0"
+                   type="text"
+                   name="location"
+                   id="location"
+                   {% if item %} value="{{ item.location }}"{% endif %}/>
+            <div class="invalid-feedback" for="location"></div>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Quantidade crítica</label>
+            <input class="form-control rounded-0"
+                   type="number"
+                   name="alert_below"
+                   id="alert_below"
+                   {% if item %} value="{{ item.alert_below }}"{% endif %}/>
+            <div class="invalid-feedback" for="alert_below"></div>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Valor de referência</label>
+            <input class="form-control rounded-0"
+                   type="number"
+                   name="reference"
+                   id="reference"
+                   {% if item %} value="{{ item.reference }}"{% endif %}/>
+            <div class="invalid-feedback" for="reference"></div>
+        </div>
+    </div>
+    <div class="text-center mt-4">
+        <button id="atualizar-instancia" class="btn btn-dark rounded-0">
+            Atualizar material
+            {% if item.type == 'C' %}
+                consumível
+            {% else %}
+                permanente
+            {% endif %}
+        </button>
+    </div>
+</form>

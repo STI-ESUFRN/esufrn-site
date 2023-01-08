@@ -34,7 +34,7 @@ class MaterialSerializer(serializers.ModelSerializer):
 
     def validate_number(self, number):
         if (
-            self.context["request"].data["type"] == Material.Types.PERMANENT
+            self.context["request"].data.get("type", None) == Material.Types.PERMANENT
             and not number
         ):
             raise ValidationError(
@@ -44,6 +44,14 @@ class MaterialSerializer(serializers.ModelSerializer):
             )
 
         return number
+
+    def validate_quantity(self, quantity):
+        if quantity < 0:
+            raise ValidationError(
+                "A quantidade não pode ser negativa", "negative_quantity"
+            )
+
+        return quantity
 
     def create(self, validated_data):
         instance = super().create(validated_data)
