@@ -1,11 +1,15 @@
 import os
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SECRET_KEY = os.environ.get("SECRET_KEY")
-DEBUG = int(os.environ.get("DEBUG", True))
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(" ")
+from dotenv import load_dotenv
 
-HTML_MINIFY = int(os.environ.get("MINIFY", False))
+load_dotenv(override=True)
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SECRET_KEY = os.getenv("SECRET_KEY")
+DEBUG = int(os.getenv("DEBUG", True))
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "*").split(" ")
+
+HTML_MINIFY = int(os.getenv("MINIFY", False))
 
 INSTALLED_APPS = [
     # other
@@ -22,6 +26,7 @@ INSTALLED_APPS = [
     "assets",
     "principal",
     "dashboard",
+    "laboratorio",
     "reserva",
     "chamado",
     "eventos",
@@ -35,6 +40,7 @@ INSTALLED_APPS = [
     "ckeditor",
     "ckeditor_uploader",
     "corsheaders",
+    "mathfilters",
 ]
 
 MIDDLEWARE = [
@@ -51,11 +57,12 @@ MIDDLEWARE = [
 ]
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
-CSRF_TRUSTED_ORIGINS = os.environ.get(
-    "CSRF_TRUSTED_ORIGINS", "http://* https://*"
-).split(" ")
-CSRF_COOKIE_SECURE = int(os.environ.get("CSRF_COOKIE_SECURE", False))
-SESSION_COOKIE_SECURE = int(os.environ.get("SESSION_COOKIE_SECURE", False))
+
+CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "http://* https://*").split(
+    " "
+)
+CSRF_COOKIE_SECURE = int(os.getenv("CSRF_COOKIE_SECURE", False))
+SESSION_COOKIE_SECURE = int(os.getenv("SESSION_COOKIE_SECURE", False))
 
 # SECURE_SSL_REDIRECT = True
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
@@ -97,6 +104,8 @@ DATABASES = {
         "NAME": os.getenv("MYSQL_DATABASE"),
         "USER": os.getenv("MYSQL_USER"),
         "PASSWORD": os.getenv("MYSQL_PASSWORD"),
+        "HOST": "localhost",
+        "PORT": "3306",
         "OPTIONS": {
             "charset": "utf8mb4",
             "use_unicode": True,
@@ -278,23 +287,30 @@ ADMINS = [
 ]
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = os.environ.get("EMAIL_HOST")
-EMAIL_PORT = os.environ.get("EMAIL_PORT")
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+EMAIL_PORT = os.getenv("EMAIL_PORT")
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", default="")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", default="")
 
-CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL")
-CONTACT_EMAIL_SUPORTE = os.environ.get("CONTACT_EMAIL_SUPORTE")
+CONTACT_EMAIL = os.getenv("CONTACT_EMAIL")
+CONTACT_EMAIL_SUPORTE = os.getenv("CONTACT_EMAIL_SUPORTE")
 
 BOLD = ""
 
 REST_FRAMEWORK = {
-    "DEFAULT_RENDERER_CLASSES": os.environ.get(
+    "DEFAULT_RENDERER_CLASSES": os.getenv(
         "REST_RENDERERS",
         "rest_framework.renderers.JSONRenderer "
         "rest_framework.renderers.BrowsableAPIRenderer",
     ).split(" "),
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 8,
+}
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": "redis://redis:6379",
+    }
 }

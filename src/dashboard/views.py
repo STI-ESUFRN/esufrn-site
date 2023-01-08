@@ -5,11 +5,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import PasswordResetView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Count, Min
+from django.http import Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.decorators.cache import never_cache
 
 from dashboard.utils import getDashContext
+from laboratorio.models import Material
 from principal.decorators import allowed_users, authenticated_user, unauthenticated_user
 from principal.forms import siginForm
 from principal.models import Message
@@ -115,7 +117,7 @@ chamados_roles = ["suporte"]
 def chamadoHome(request):
     context = {}
     getDashContext(context, "Chamados", "dashboard")
-    return render(request, "dashboard.chamado.dashboard.html", context)
+    return render(request, "chamado/dashboard.chamado.dashboard.html", context)
 
 
 @login_required(login_url="/dashboard/login")
@@ -123,7 +125,7 @@ def chamadoHome(request):
 def chamadoHistorico(request):
     context = {}
     getDashContext(context, "Chamados", "historico")
-    return render(request, "dashboard.chamado.historico.html", context)
+    return render(request, "chamado/dashboard.chamado.historico.html", context)
 
 
 @login_required(login_url="/dashboard/login")
@@ -131,7 +133,7 @@ def chamadoHistorico(request):
 def chamadoInserir(request):
     context = {}
     getDashContext(context, "Chamados", "chamado")
-    return render(request, "dashboard.chamado.inserir.html", context)
+    return render(request, "chamado/dashboard.chamado.inserir.html", context)
 
 
 # INVENTÁRIO
@@ -149,7 +151,7 @@ def inventarioHome(request):
 def inventarioEmprestimo(request):
     context = {}
     getDashContext(context, "Inventário", "inventario_emprestimo")
-    return render(request, "dashboard.inventario.emprestimo.html", context)
+    return render(request, "inventario/dashboard.inventario.emprestimo.html", context)
 
 
 @login_required(login_url="/dashboard/login")
@@ -157,7 +159,7 @@ def inventarioEmprestimo(request):
 def inventarioPatrimonio(request):
     context = {}
     getDashContext(context, "Inventário", "inventario_patrimonio")
-    return render(request, "dashboard.inventario.patrimonio.html", context)
+    return render(request, "inventario/dashboard.inventario.patrimonio.html", context)
 
 
 # RESERVAS
@@ -169,7 +171,7 @@ reserva_roles = ["reserva", "suporte"]
 def reservaHome(request):
     context = {}
     getDashContext(context, "Reservas", "reserva_dashboard")
-    return render(request, "dashboard.reserva.dashboard.html", context)
+    return render(request, "reserva/dashboard.reserva.dashboard.html", context)
 
 
 @login_required(login_url="/dashboard/login")
@@ -177,7 +179,7 @@ def reservaHome(request):
 def reservaHistorico(request):
     context = {}
     getDashContext(context, "Reservas", "reserva_historico")
-    return render(request, "dashboard.reserva.historico.html", context)
+    return render(request, "reserva/dashboard.reserva.historico.html", context)
 
 
 @login_required(login_url="/dashboard/login")
@@ -189,7 +191,7 @@ def reservaInserir(request):
     salas = Classroom.objects.filter(id__in=user_classroomns)
     context = {"salas": salas}
     getDashContext(context, "Reservas", "inserir_reserva")
-    return render(request, "dashboard.reserva.inserir.html", context)
+    return render(request, "reserva/dashboard.reserva.inserir.html", context)
 
 
 @login_required(login_url="/dashboard/login")
@@ -206,7 +208,7 @@ def reservaRelatorio(request):
         "sala": sala,
     }
     getDashContext(context, "Reservas", "relatorio")
-    return render(request, "dashboard.reserva.relatorio.html", context)
+    return render(request, "reserva/dashboard.reserva.relatorio.html", context)
 
 
 # PERÍODOS
@@ -226,7 +228,7 @@ def periodoInserir(request):
     cursos = PeriodReserve.get_courses()
     context = {"salas": salas, "cursos": cursos}
     getDashContext(context, "Períodos", "inserir_periodo")
-    return render(request, "dashboard.periodo.inserir.html", context)
+    return render(request, "periodo/dashboard.periodo.inserir.html", context)
 
 
 @login_required(login_url="/dashboard/login")
@@ -262,7 +264,7 @@ def periodoHistorico(request):
         "periodos": periodos,
     }
     getDashContext(context, "Períodos", "editar_periodo")
-    return render(request, "dashboard.periodo.historico.html", context)
+    return render(request, "periodo/dashboard.periodo.historico.html", context)
 
 
 @login_required(login_url="/dashboard/login")
@@ -335,7 +337,7 @@ def periodoLista(request):
         "periodos": periodos,
     }
     getDashContext(context, "Períodos", "periodo_relatorio")
-    return render(request, "dashboard.periodo.lista.html", context)
+    return render(request, "periodo/dashboard.periodo.lista.html", context)
 
 
 @login_required(login_url="/dashboard/login")
@@ -345,4 +347,68 @@ def periodoEditar(request, pk):
     salas = Classroom.objects.all()
     cursos = PeriodReserve.get_courses()
     context = {"period": period, "salas": salas, "cursos": cursos}
-    return render(request, "dashboard.periodo.editar.html", context)
+    return render(request, "periodo/dashboard.periodo.editar.html", context)
+
+
+material_roles = ["suporte", "material"]
+
+
+@login_required(login_url="/dashboard/login")
+@allowed_users(allowed_roles=material_roles)
+def materialConsumivelHome(request):
+    context = {}
+    getDashContext(context, "Laboratorio", "consumable_dashboard")
+    return render(
+        request, "laboratorio/dashboard.laboratorio.consumivel.dashboard.html", context
+    )
+
+
+@login_required(login_url="/dashboard/login")
+@allowed_users(allowed_roles=material_roles)
+def materialPermanenteHome(request):
+    context = {}
+    getDashContext(context, "Laboratorio", "permanent_dashboard")
+    return render(
+        request, "laboratorio/dashboard.laboratorio.permanente.dashboard.html", context
+    )
+
+
+@login_required(login_url="/dashboard/login")
+@allowed_users(allowed_roles=material_roles)
+def materialEditar(request, pk):
+    try:
+        item = Material.objects.get(id=pk)
+
+    except Material.DoesNotExist as e:
+        raise Http404(e)
+
+    context = {"item": item}
+    return render(request, "laboratorio/dashboard.laboratorio.editar.html", context)
+
+
+@login_required(login_url="/dashboard/login")
+@allowed_users(allowed_roles=material_roles)
+def materialInserirMaterialConsumivel(request):
+    context = {}
+    getDashContext(context, "Laboratorio", "inserir_consumivel")
+    return render(
+        request, "laboratorio/dashboard.laboratorio.consumivel.inserir.html", context
+    )
+
+
+@login_required(login_url="/dashboard/login")
+@allowed_users(allowed_roles=material_roles)
+def materialInserirMaterialPermanente(request):
+    context = {}
+    getDashContext(context, "Laboratorio", "inserir_permanente")
+    return render(
+        request, "laboratorio/dashboard.laboratorio.permanente.inserir.html", context
+    )
+
+
+@login_required(login_url="/dashboard/login")
+def materialRelacao(request):
+    materials = Material.objects.all()
+    context = {"materials": materials}
+    getDashContext(context, "Laboratorio", "relacao")
+    return render(request, "laboratorio/dashboard.laboratorio.relacao.html", context)

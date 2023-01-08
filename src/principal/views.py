@@ -121,8 +121,8 @@ def noticia(request, slug):
 
         return render(request, "home.post.html", context)
 
-    except News.DoesNotExist:
-        raise Http404
+    except News.DoesNotExist as e:
+        raise Http404(e)
 
 
 def instituicao_equipe(request):

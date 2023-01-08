@@ -1,0 +1,142 @@
+{% extends "dashboard.base.html" %}
+{% load static %}
+{% load mathfilters %}
+{% block styles %}
+{% endblock styles %}
+{% block content %}
+    <div class="row">
+        <div class="col-8">
+            <div class="card rounded-0">
+                <div class="card-header head-table border-0 rounded-0">
+                    <b><i class="fas fa-paper-plane mr-2"></i>Itens permanentes disponíveis</b>
+                </div>
+                <div class="card-body p-0" style="overflow-x: auto;">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr class="capt-table">
+                                <th class="border-0 text-center" scope="col"></th>
+                                <th class="border-0" scope="col">Nome</th>
+                                <th class="border-0" scope="col">Marca</th>
+                                <th class="border-0" scope="col">Tombo</th>
+                                <th class="border-0" scope="col">Quantidade</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-de-itens">
+                            {% comment %} AJAX {% endcomment %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card-group" id="detalhes" style="display: none;opacity: 0;">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-header head-table border-0 rounded-0">
+                        <b><i class="fas fa-info mr-2"></i>Detalhes do Material</b>
+                        <button id="detalhes-dismiss" type="button" class="close" aria-label="Close">
+                            <span aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i></span>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <small>Nome:</small> <b data-attribute="name"></b>
+                        </h5>
+                        <p class="card-text">
+                            <small>Quantidade:</small> <b data-attribute="quantity"></b>
+                        </p>
+                        <p class="card-text">
+                            <small>Descrição:</small> <b data-attribute="description"></b>
+                        </p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <small>Marca:</small> <b data-attribute="brand"></b>
+                        </li>
+                        <li class="list-group-item">
+                            <small>Localização:</small> <b data-attribute="location"></b>
+                        </li>
+                        <li class="list-group-item">
+                            <small>Tombamento:</small> <b data-attribute="number"></b>
+                        </li>
+                        <li class="list-group-item">
+                            <small>
+                                <p class="my-0">
+                                    Data de validade: <span date-format="DD/MM/YYYY" data-attribute="expiration"></span>
+                                </p>
+                            </small>
+                            <small>
+                                <p class="my-0">
+                                    Recebido em: <span date-format="DD/MM/YYYY" data-attribute="received_at"></span>
+                                </p>
+                            </small>
+                            <img id="qr" class="img-fluid" src="" alt=""/>
+                        </li>
+                    </ul>
+                    <div class="card-footer border-top-0">
+                        <p class="m-0 mt-2">
+                            <small class="text-muted">Data do Chamado: <span date-format="DD/MM/YYYY HH:mm" data-attribute="created"></span></small>
+                        </p>
+                        <p class="m-0 mt-2">
+                            <small class="text-muted">Ultima Alteração: <span date-format="DD/MM/YYYY HH:mm" data-attribute="modified"></span></small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+{% block scripts %}
+    <script src="{% static 'assets/dashboard/js/ajax_csrf.js' %}"></script>
+    <script>
+        var idSelecionado = undefined;
+        
+        function fillItem(id) {
+            $("#detalhes").hide();
+        
+            idSelecionado = id;
+            $.get(`/api/laboratorio/materiais/${id}/`, (response) => {
+                fillAttributes(response);
+                $("#qr").attr("src", response.qr.medium);
+                $("#detalhes").fadeTo("fast", 0).fadeTo("fast", 1).show();
+            });
+        }
+        $.ajax({
+            url: "/api/laboratorio/materiais/dashboard/?type=P",
+            type: "GET",
+            success: function(response) {
+                console.log(response)
+                $("#lista-de-itens").html("");
+                $.each(response, (index, item) => {
+                    let row = $('<tr />', {
+                        "data-id-item": item.id
+                    });
+        
+                    let icon = $('<td />', {
+                        "class": 'text-center px-0 pl-2',
+                        "html": `<i class="fas fa-user-cog text-warning"></i>`
+                    });
+                    let name = $("<td />", {
+                        "text": item.name
+                    });
+                    let quantity = $("<td />", {
+                        "text": item.quantity
+                    });
+                    let number = $("<td />", {
+                        "text": item.number
+                    });
+                    let brand = $("<td />", {
+                        "text": item.brand
+                    });
+        
+                    row.append(icon, name, brand, number, quantity);
+                    $("#lista-de-itens").append(row);
+                });
+        
+                $("tr[data-id-item]").click(function(e) {
+                    e.preventDefault();
+                    fillItem(e.currentTarget.dataset.idItem);
+                });
+            }
+        });
+    </script>
+{% endblock scripts %}
