@@ -107,12 +107,12 @@
             months: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
             daysMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S']
         });
-        
-        
+
+
         $("#form-item [name]").change(function() {
             $(this).removeClass("is-invalid");
         });
-        
+
         $("#enviar-instancia").click(function(e) {
             e.preventDefault();
             let serialized_array = $("#form-item").serializeArray();
@@ -121,7 +121,7 @@
                 serialized_data[serialized_array[key]["name"]] = serialized_array[key]["value"];
             }
             serialized_data["received_at"] = serialized_data["received_at"] ? moment($("#form-item [name=received_at]").val(), "DD-MM-YYYY").format("YYYY-MM-DD") : "";
-        
+
             $.ajax({
                 type: "POST",
                 url: "/api/laboratorio/materiais/",
@@ -132,7 +132,6 @@
                     $("#form-item").trigger("reset");
                 },
                 error(response) {
-                    console.log(response);
                     $.map(response.responseJSON, (value, label) => {
                         $(`#form-item [name=${label}]`).addClass("is-invalid");
                         let feedback = $(`.invalid-feedback[for=${label}]`);

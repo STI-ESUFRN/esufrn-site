@@ -16,16 +16,12 @@ class ChamadoViewSet(
     serializer_class = ChamadoSerializer
 
 
-from rest_framework.permissions import AllowAny
-
-
 class ChamadoAdminViewSet(viewsets.ModelViewSet):
     serializer_class = ChamadoAdminSerializer
     queryset = Chamado.objects.all()
     pagination_class = StdResultsSetPagination
     permission_classes = [
         IsAuthenticated & GroupSuporte,
-        # AllowAny
     ]
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_fields = {

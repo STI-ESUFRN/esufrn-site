@@ -19,6 +19,7 @@ from principal.decorators import allowed_users
 from principal.helpers import paginate
 from reserva.models import Classroom, PeriodReserve, PeriodReserveDay, Reserve
 from reserva.serializers import (
+    CreateReserveSerializer,
     PeriodReserveBasicSerializer,
     PeriodReserveDayPublicSerializer,
     PeriodReserveDaySerializer,
@@ -60,7 +61,7 @@ class ReservaViewSet(
 
     def get_serializer_class(self):
         if self.action == "cadastrar":
-            return ReservePublicSerializer
+            return CreateReserveSerializer
 
         return super().get_serializer_class()
 

@@ -80,7 +80,7 @@ class ReserveSerializer(serializers.ModelSerializer):
         ).exclude(active=False)
 
         if self.instance:
-            reserves = reserves.exclude(id=attrs["id"])
+            reserves = reserves.exclude(id=self.instance.id)
 
         if (
             not self.instance
@@ -95,53 +95,82 @@ class ReserveSerializer(serializers.ModelSerializer):
         return super().validate(attrs)
 
     def validate_cause(self, cause):
-        classroom = Classroom.objects.get(id=self.context["request"].data["classroom"])
-        if classroom.justification_required and not cause:
-            raise ValidationError(
-                "Este tipo de sala requer que o usuário informe uma justificativa"
-                " para seu uso."
+        if "classroom" in self.context["request"].data:
+            classroom = Classroom.objects.get(
+                id=self.context["request"].data["classroom"]
             )
+            if classroom.justification_required and not cause:
+                raise ValidationError(
+                    "Este tipo de sala requer que o usuário informe uma justificativa"
+                    " para seu uso."
+                )
         return cause
 
     def validate_declare(self, declare):
-        classroom = Classroom.objects.get(id=self.context["request"].data["classroom"])
-        if classroom.type == "lab" and not self.context["request"].data["declare"]:
-            raise ValidationError(
-                "Este tipo de sala requer que o usuário declare que esteja presente"
-                " um docente no momento da aula."
+        if "classroom" in self.context["request"].data:
+            classroom = Classroom.objects.get(
+                id=self.context["request"].data["classroom"]
             )
+            if classroom.type == "lab" and not self.context["request"].data.get(
+                "declare", False
+            ):
+                raise ValidationError(
+                    "Este tipo de sala requer que o usuário declare que esteja presente"
+                    " um docente no momento da aula."
+                )
         return declare
 
     def validate_date(self, date):
-        if self.context["request"].data["shift"] == "M":
-            time = "12:30"
-        elif self.context["request"].data["shift"] == "T":
-            time = "18:30"
-        else:
-            time = "22:15"
+        if "shift" in self.context["request"].data:
+            if self.context["request"].data["shift"] == "M":
+                time = "12:30"
+            elif self.context["request"].data["shift"] == "T":
+                time = "18:30"
+            else:
+                time = "22:15"
 
-        relative_date = datetime.strptime(
-            f"{self.context['request'].data['date']} {time}", "%Y-%m-%d %H:%M"
-        )
-        now = datetime.today()
-
-        diff = (relative_date - now).days
-        if diff < 0:
-            raise ValidationError(
-                "Você não pode reservar uma sala para uma data passada."
+            relative_date = datetime.strptime(
+                f"{self.context['request'].data['date']} {time}", "%Y-%m-%d %H:%M"
             )
+            now = datetime.today()
 
-        classroom = Classroom.objects.get(id=self.context["request"].data["classroom"])
-        if diff < classroom.days_required:
-            raise ValidationError(
-                "A reserva para esta sala requer antecedência de"
-                f" {classroom.days_required} dia{'s' if classroom.days_required > 1 else ''}."
-            )
+            diff = (relative_date - now).days
+            if diff < 0:
+                raise ValidationError(
+                    "Você não pode reservar uma sala para uma data passada."
+                )
+
+            if "classroom" in self.context["request"].data:
+                classroom = Classroom.objects.get(
+                    id=self.context["request"].data["classroom"]
+                )
+                if diff < classroom.days_required:
+                    raise ValidationError(
+                        "A reserva para esta sala requer antecedência de"
+                        f" {classroom.days_required} dia{'s' if classroom.days_required > 1 else ''}."
+                    )
 
         return date
 
 
-class ReservePublicSerializer(serializers.ModelSerializer):
+class CreateReserveSerializer(ReserveSerializer):
+    class Meta:
+        model = Reserve
+        fields = [
+            "classroom",
+            "date",
+            "event",
+            "shift",
+            "cause",
+            "equipment",
+            "requester",
+            "email",
+            "phone",
+            "declare",
+        ]
+
+
+class ReservePublicSerializer(ReserveSerializer):
     shift_display = serializers.CharField(source="get_shift_display", read_only=True)
     status_display = serializers.CharField(source="get_status_display", read_only=True)
 
@@ -161,33 +190,6 @@ class ReservePublicSerializer(serializers.ModelSerializer):
                 "read_only": True,
             },
         }
-
-    def validate(self, attrs):
-        reserves = Reserve.objects.filter(
-            date=attrs["date"],
-            status=Reserve.Status.APPROVED,
-            classroom=attrs["classroom"],
-            shift=attrs["shift"],
-        )
-        periodreserves = PeriodReserveDay.objects.filter(
-            date=attrs["date"],
-            period__status=Reserve.Status.APPROVED,
-            period__classroom=attrs["classroom"],
-            shift=attrs["shift"],
-        )
-
-        if reserves or periodreserves:
-            raise ValidationError(
-                "Já existe uma reserva aprovada para o dia {} - {}{}".format(
-                    attrs["date"].strftime("%d/%m/%Y"),
-                    attrs["shift"],
-                    (
-                        ". Por favor, entre em contato com a secretaria a fim de"
-                        " viabilizarmos outro dia para esta reserva."
-                    ),
-                ),
-            )
-        return super().validate(attrs)
 
 
 class PeriodReserveDaySerializer(serializers.ModelSerializer):

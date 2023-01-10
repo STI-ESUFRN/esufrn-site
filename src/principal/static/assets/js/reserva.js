@@ -152,7 +152,7 @@ $.fn.tag = function () {
     return this[0].outerHTML.replace(this.html(), "");
 };
 
-$("#form-reserva input").change(function () {
+$("#form-reserva [name]").change(function () {
     $(this).removeClass("is-invalid");
 });
 
@@ -161,110 +161,42 @@ $("#enviar-reserva").click(function (e) {
     e.preventDefault();
 
     $("#status-message").html("");
-    $("#form-reserva input").removeClass("is-invalid");
+    $("#form-reserva [name]").removeClass("is-invalid");
 
-    error = false;
-
-    form_classroom = $("#form-reserva [name=classroom]");
-    error += validate(form_classroom, form_classroom.val());
-
-    selected = form_classroom.find(":selected");
-    class_type = selected.attr("data-type");
-    justification_required =
-        selected.attr("data-justification_required") === undefined
-            ? false
-            : true;
-
-    form_confirm = $("#form-reserva [name=confirm]");
-    error += validate(
-        form_confirm,
-        (class_type == "lab" && form_confirm.is(":checked")) ||
-            class_type != "lab"
-    );
-
-    form_date = $("#form-reserva [name=date]");
-    error += validate(form_date, form_date.val() && form_date.val().isDate());
-
-    form_event = $("#form-reserva [name=event]");
-    error += validate(form_event, form_event.val());
-
-    form_requester = $("#form-reserva [name=requester]");
-    error += validate(form_requester, form_requester.val());
-
-    form_email = $("#form-reserva [name=email]");
-    error += validate(
-        form_email,
-        form_email.val() && form_email.val().isEmail()
-    );
-
-    form_phone = $("#form-reserva [name=phone]");
-    error += validate(
-        form_phone,
-        form_phone.val() && form_phone.val().isPhone()
-    );
-
-    form_cause = $("#form-reserva [name=cause]");
-    error += validate(
-        form_cause,
-        (form_cause.val() && justification_required) || !justification_required
-    );
-
-    form_shift = $("#form-reserva [name=shift]");
-    error += validate(form_shift, form_shift.filter(":checked").val());
-
-    if (!error) {
-        serialized_array = $("#form-reserva").serializeArray();
-        let serialized_data = {};
-        for (key in serialized_array) {
-            serialized_data[serialized_array[key]["name"]] =
-                serialized_array[key]["value"];
-        }
-        serialized_data["date"] = moment(
-            $("#form-reserva [name=date]").val(),
-            "DD-MM-YYYY"
-        ).format("YYYY-MM-DD");
-        $.ajax({
-            type: "POST",
-            url: `/api/reservas/cadastrar/`,
-            dataType: "json",
-            data: serialized_data,
-            success: function (response) {
-                $("#status-message").html(`
-					<div class="rounded-0 alert alert-success alert-dismissible fade show" role="alert">
-						<strong>Reserva solicitada com sucesso</strong>
-						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-							<span aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i></span>
-						</button>
-					</div>
-				`);
-                $("#form-reserva").trigger("reset");
-                $("#sala-disp").prop("disabled", true);
-                resetDate();
-            },
-            error: function (response) {
-                $("#status-message").html("");
-                $.map(response.responseJSON, (e) => {
-                    e.forEach((message) => {
-                        $("#status-message").append(`
-							<div class="rounded-0 alert alert-warning alert-dismissible fade show" role="alert">
-								<strong>${message}</strong>
-								<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-									<span aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i></span>
-								</button>
-							</div>
-						`);
-                    });
-                });
-            },
-        });
-    } else {
-        $("#status-message").html(`
-			<div class="rounded-0 alert alert-warning alert-dismissible fade show" role="alert">
-				<strong>Corrija os erros</strong>
-				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-					<span aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i></span>
-				</button>
-			</div>
-		`);
-    }
+    serialized_data = $("#form-reserva").serializeREST();
+    $.ajax({
+        type: "POST",
+        url: `/api/reservas/cadastrar/`,
+        dataType: "json",
+        data: serialized_data,
+        success: function (response) {
+            $("#status-message").html(`
+                <div class="rounded-0 alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>Reserva solicitada com sucesso</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i></span>
+                    </button>
+                </div>
+            `);
+            $("#form-reserva").trigger("reset");
+            $("#sala-disp").prop("disabled", true);
+            resetDate();
+        },
+        error: function (response) {
+            $("#form-reserva").fillErrors(
+                response.responseJSON,
+                "status-message",
+                function (message) {
+                    $("#status-message").append(`
+                        <div class="rounded-0 alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong>${message}</strong>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i></span>
+                            </button>
+                        </div>
+                    `);
+                }
+            );
+        },
+    });
 });

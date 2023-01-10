@@ -89,10 +89,10 @@
     <script src="{% static 'assets/dashboard/js/ajax_csrf.js' %}"></script>
     <script>
         var idSelecionado = undefined;
-        
+
         function fillItem(id) {
             $("#detalhes").hide();
-        
+
             idSelecionado = id;
             $.get(`/api/laboratorio/materiais/${id}/`, (response) => {
                 fillAttributes(response);
@@ -104,13 +104,12 @@
             url: "/api/laboratorio/materiais/dashboard/?type=C",
             type: "GET",
             success: function(response) {
-                console.log(response)
                 $("#lista-de-itens").html("");
                 $.each(response, (index, item) => {
                     let row = $('<tr />', {
                         "data-id-item": item.id
                     });
-        
+
                     let icon = $('<td />', {
                         "class": 'text-center px-0 pl-2',
                         "html": `<i class="fas fa-user-cog text-warning"></i>`
@@ -127,11 +126,11 @@
                     let brand = $("<td />", {
                         "text": item.brand
                     });
-        
+
                     row.append(icon, name, brand, expiration, quantity);
                     $("#lista-de-itens").append(row);
                 });
-        
+
                 $("tr[data-id-item]").click(function(e) {
                     e.preventDefault();
                     fillItem(e.currentTarget.dataset.idItem);

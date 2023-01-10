@@ -5,55 +5,55 @@
         table.table th:nth-child(1) {
             width: 8%;
         }
-        
+
         table.table th:nth-child(2) {
             width: 20%;
         }
-        
+
         table.table th:nth-child(3) {
             width: 18%;
         }
-        
+
         table.table th:nth-child(4) {
             width: 10%;
         }
-        
+
         table.table th:nth-child(5) {
             width: 24%;
         }
-        
+
         table.table th:nth-child(6) {
             width: 20%;
         }
-        
+
         .table thead tr th,
         .table tbody tr td {
             border: 1px solid black !important;
             vertical-align: middle;
         }
-        
+
         table {
             page-break-inside: auto !important;
         }
-        
+
         tr {
             page-break-inside: avoid;
             page-break-after: auto !important;
         }
-        
+
         td {
             white-space: normal !important;
         }
-        
+
         thead {
             display: table-header-group !important;
         }
-        
+
         .doc * {
             font-family: "Times New Roman", Times, serif !important;
             font-size: 14pt;
         }
-        
+
         .doc-head * {
             font-size: 16pt;
         }
@@ -138,21 +138,20 @@
         $("#filters").submit(function(e) {
             e.preventDefault();
         });
-        
+
         $("[data-filter]").change(function() {
             getMaterials();
         });
-        
+
         function getMaterials() {
             let filters = $("[data-filter]").serialize();
             let url = `/api/laboratorio/materiais/?${filters}`;
-            console.log(url);
             $.get(url, (response) => {
                 let materials = $("#materials");
                 materials.html("");
                 response.forEach((item) => {
                     let row = $("<tr />");
-        
+
                     let name = $("<td />", {
                         "text": item.name,
                         "class": "py-0"
@@ -177,13 +176,13 @@
                         "html": `<img class="img-fluid" src="${item.qr.high}" alt=""/>`,
                         "class": "py-1 text-center"
                     });
-        
+
                     row.append(name, number, brand, quantity, expiration, qr);
                     materials.append(row);
                 });
             });
         }
-        
+
         getMaterials();
     </script>
 {% endblock scripts %}
