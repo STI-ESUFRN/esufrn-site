@@ -3,88 +3,176 @@
 {% block styles %}
 {% endblock styles %}
 {% block content %}
-    <form autocomplete="off" id="form-item">
-        {% csrf_token %}
-        <input type="hidden" name="type" value="P"/>
-        <div class="form-row">
-            <div class="form-group col-md-8">
-                <label>
-                    <b>Nome</b>
-                </label>
-                <input class="form-control rounded-0" type="text" name="name"/>
-                <div class="invalid-feedback" for="name"></div>
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-anchor" aria-hidden="true"></i> Inserir material permanente
+        </div>
+        <div class="card-body">
+            <form autocomplete="off" id="form-item">
+                {% csrf_token %}
+                <input type="hidden" name="type" value="P"/>
+                <div class="form-row">
+                    <div class="form-group col-md-8">
+                        <label>
+                            <b>Nome</b>
+                        </label>
+                        <input class="form-control rounded-0" type="text" name="name"/>
+                        <div class="invalid-feedback" for="name"></div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Marca</label>
+                        <input class="form-control rounded-0" type="text" name="brand" id="brand"/>
+                        <div class="invalid-feedback" for="brand"></div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label>
+                            <b>Status</b>
+                        </label>
+                        <select class="form-control rounded-0" name="status" id="status">
+                        </select>
+                        <div class="invalid-feedback" for="name"></div>
+                    </div>
+                    <div class="form-group col-md-8">
+                        <label>
+                            <b>Categoria</b>
+                        </label>
+                        <div class="d-flex">
+                            <select class="form-control rounded-0 mr-1" name="category" id="category">
+                                <option selected disabled>
+                                    Selecione uma categoria
+                                </option>
+                            </select>
+                            <button class="btn mx-1"
+                                    data-toggle="modal"
+                                    data-target="#new-category-modal"
+                                    id="add-category">
+                                <i class="fas fa-plus" aria-hidden="true"></i>
+                            </button>
+                            <button class="btn ml-1" id="del-category">
+                                <i class="fas fa-trash" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <div class="invalid-feedback" for="name"></div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label>
+                            <b>Descrição</b>
+                        </label>
+                        <textarea class="form-control rounded-0"
+                                  name="description"
+                                  id="description"
+                                  rows="5"></textarea>
+                        <div class="invalid-feedback" for="description"></div>
+                    </div>
+                </div>
+                <hr/>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label>
+                            <b>Tombo</b>
+                        </label>
+                        <input class="form-control rounded-0"
+                               type="number"
+                               name="number"
+                               id="number"/>
+                        <div class="invalid-feedback" for="number"></div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Localização</label>
+                        <input type="text"
+                               class="form-control rounded-0"
+                               name="location"
+                               placeholder="Localização"
+                               required/>
+                        <div class="invalid-feedback" for="location"></div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label>Data de recebimento</label>
+                        <input class="form-control rounded-0 mb-1"
+                               name="received_at"
+                               data-mask="00-00-0000"
+                               data-toggle="datepicker"
+                               required
+                               autocomplete="off"
+                               maxlength="10"
+                               date-field/>
+                        <div class="invalid-feedback" for="received_at"></div>
+                    </div>
+                </div>
+                <hr/>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label>Observações</label>
+                        <textarea class="form-control rounded-0" name="comments" id="comments" rows="5"></textarea>
+                        <div class="invalid-feedback" for="comments"></div>
+                    </div>
+                </div>
+                <div id="form-errors"></div>
             </div>
-            <div class="form-group col-md-4">
-                <label>Marca</label>
-                <input class="form-control rounded-0" type="text" name="brand" id="brand"/>
-                <div class="invalid-feedback" for="brand"></div>
+        </form>
+        <div class="card-footer">
+            <div class="text-center">
+                <button id="enviar-instancia" class="btn btn-dark rounded-0">Registrar material permanente</button>
             </div>
         </div>
-        <div class="form-row">
-            <div class="form-group col-md-12">
-                <label>
-                    <b>Descrição</b>
-                </label>
-                <textarea class="form-control rounded-0"
-                          name="description"
-                          id="description"
-                          rows="5"></textarea>
-                <div class="invalid-feedback" for="description"></div>
+    </div>
+    <div class="modal fade"
+         id="new-category-modal"
+         tabindex="-1"
+         role="dialog"
+         aria-labelledby="new-category-modalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="new-category-modalLabel">Criar uma nova categoria</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="form-category">
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <label>Nome</label>
+                                <input type="text"
+                                       class="form-control rounded-0"
+                                       name="name"
+                                       placeholder="Nome"
+                                       required/>
+                                <div class="invalid-feedback" for="name"></div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <label>Descrição</label>
+                                <textarea class="form-control rounded-0"
+                                          name="description"
+                                          id="description"
+                                          rows="5"></textarea>
+                                <div class="invalid-feedback" for="description"></div>
+                            </div>
+                        </div>
+                        <div id="errors"></div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="create-category">Salvar</button>
+                </div>
             </div>
         </div>
-        <div class="form-row">
-            <div class="form-group col-md-3">
-                <label>
-                    <b>Quantidade</b>
-                </label>
-                <input class="form-control rounded-0"
-                       type="number"
-                       name="quantity"
-                       id="quantity"/>
-                <div class="invalid-feedback" for="quantity"></div>
-            </div>
-            <div class="form-group col-md-3">
-                <label>
-                    <b>Tombo</b>
-                </label>
-                <input class="form-control rounded-0"
-                       type="number"
-                       name="number"
-                       id="number"/>
-                <div class="invalid-feedback" for="number"></div>
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group col-md-4">
-                <label>Data de recebimento</label>
-                <input class="form-control rounded-0 mb-1"
-                       name="received_at"
-                       data-mask="00-00-0000"
-                       data-toggle="datepicker"
-                       required
-                       autocomplete="off"
-                       maxlength="10"/>
-                <div class="invalid-feedback" for="received_at"></div>
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group col-md-4">
-                <label>Localização</label>
-                <input type="text"
-                       class="form-control rounded-0"
-                       name="location"
-                       placeholder="Localização"
-                       required/>
-                <div class="invalid-feedback" for="location"></div>
-            </div>
-        </div>
-        <div class="text-center mt-4">
-            <button id="enviar-instancia" class="btn btn-dark rounded-0">Registrar material permanente</button>
-        </div>
-    </form>
+    </div>
 {% endblock content %}
 {% block scripts %}
     <script src="{% static 'assets/dashboard/js/ajax_csrf.js' %}"></script>
+    <script src="{% static 'assets/js/response.js' %}"></script>
     <script src="{% static 'assets/dashboard/js/jquery.mask.js' %}"></script>
     <script>
         $('[data-toggle="datepicker"]').datepicker({
@@ -92,24 +180,110 @@
             months: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
             daysMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S']
         });
-        
-        
+
         $("#form-item [name]").change(function() {
             $(this).removeClass("is-invalid");
         });
-        
+
+        $("#add-category").click(function(e) {
+            e.preventDefault();
+        });
+
+        $("#del-category").click(function(e) {
+            e.preventDefault();
+            $("#form-errors").html("");
+            $.ajax({
+                url: `/api/laboratorio/categories/${$("#category").val()}/`,
+                type: "DELETE",
+                success: function(response) {
+                    getCategories();
+                },
+                error: function(response) {
+                    showMessage()
+                    $("#form-item").fillErrors(
+                        response.responseJSON,
+                        message => showMessage(message, "alert-danger")
+                    );
+                }
+            })
+        });
+
+        function getCategories() {
+            $.ajax({
+                url: "/api/laboratorio/categories/",
+                type: "GET",
+                success: function(response) {
+                    $("#category").html("");
+                    response.forEach(value => {
+                        let opt = $("<option />", {
+                            "value": value.id,
+                            "text": value.name
+                        });
+                        $("#category").append(opt);
+                    });
+                },
+                error: function(response) {
+                    $("#form-item").fillErrors(
+                        response.responseJSON,
+                        message => showMessage(message, "alert-danger")
+                    );
+                }
+            });
+        }
+
+        function showNonFieldErrorMessage(message, div_id) {
+            let e = $("<p />", {
+                "text": message,
+                "class": "text-danger"
+            });
+            $(`#${div_id}`).append(e);
+        }
+
+        $("#create-category").click(function(e) {
+            e.preventDefault();
+
+            serialized_data = $("#form-category").serializeREST();
+            $.ajax({
+                url: "/api/laboratorio/categories/",
+                type: "POST",
+                data: serialized_data,
+                success: function(response) {
+                    getCategories();
+                    $('#new-category-modal').modal("hide");
+                    $("#form-category").trigger("reset");
+                },
+                error: function(response) {
+                    $("#form-category").fillErrors(
+                        response.responseJSON,
+                        message => showNonFieldErrorMessage(message, "errors")
+                    );
+                }
+            })
+        })
+
+        function getStatuses() {
+            $.ajax({
+                url: "/api/laboratorio/permanents/",
+                type: "OPTIONS",
+                success: function(response) {
+                    $.map(response.actions.POST.status.choices, (value, index) => {
+                        let v = $("<option />", {
+                            "value": value.value,
+                            "text": value.display_name
+                        });
+                        $("#status").append(v);
+                    })
+                }
+            });
+        }
+
         $("#enviar-instancia").click(function(e) {
             e.preventDefault();
-            let serialized_array = $("#form-item").serializeArray();
-            let serialized_data = {};
-            for (key in serialized_array) {
-                serialized_data[serialized_array[key]["name"]] = serialized_array[key]["value"];
-            }
-            serialized_data["received_at"] = serialized_data["received_at"] ? moment($("#form-item [name=received_at]").val(), "DD-MM-YYYY").format("YYYY-MM-DD") : "";
-        
+
+            let serialized_data = $("#form-item").serializeREST();
             $.ajax({
                 type: "POST",
-                url: "/api/laboratorio/materiais/",
+                url: "/api/laboratorio/permanents/",
                 dataType: "json",
                 data: serialized_data,
                 success: function(response) {
@@ -117,19 +291,17 @@
                     $("#form-item").trigger("reset");
                 },
                 error(response) {
-                    $.map(response.responseJSON, (value, label) => {
-                        $(`#form-item [name=${label}]`).addClass("is-invalid");
-                        let feedback = $(`.invalid-feedback[for=${label}]`); 
-                        feedback.html("");
-                        value.forEach((message) => {
-                            error = $("<p />", {
-                                "html": message
-                            });
-                            feedback.append(error);
-                        });
-                    });
+                    $("#form-item").fillErrors(
+                        response.responseJSON,
+                        message => showMessage(message, "alert-danger")
+                    );
                 }
             })
         });
+
+        $(document).ready(function() {
+            getStatuses();
+            getCategories();
+        })
     </script>
 {% endblock scripts %}

@@ -2,7 +2,7 @@ from dashboard.models import DashboardItens
 from dashboard.serializers import DashboardItemSerializer
 
 
-def getDashContext(context, menuName, current=None):
+def get_dash_context(context, menuName, current=None):
     try:
         menu = DashboardItens.objects.get(name=menuName)
         serializer = DashboardItemSerializer(menu)

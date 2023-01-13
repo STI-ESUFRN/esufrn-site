@@ -8,31 +8,36 @@ $.fn.serializeREST = function (
         .find("[name]:not([date-field])")
         .serializeArray();
     for (key in serialized_array) {
-        serialized_data[serialized_array[key]["name"]] =
-            serialized_array[key]["value"];
+        let value = serialized_array[key]["value"];
+        if (value) {
+            serialized_data[serialized_array[key]["name"]] = value;
+        }
     }
 
     let serialized_dates = $(this).find("[name][date-field]").serializeArray();
     for (key in serialized_dates) {
-        serialized_data[serialized_dates[key]["name"]] = moment(
-            serialized_dates[key]["value"],
-            input_date_format
-        ).format(output_date_format);
+        let value = serialized_dates[key]["value"];
+        if (value) {
+            serialized_data[serialized_dates[key]["name"]] = moment(
+                value,
+                input_date_format
+            ).format(output_date_format);
+        }
     }
     return serialized_data;
 };
 
-$.fn.fillErrors = function (data, non_field_div_id, non_field_behavior) {
-    $(`#${non_field_div_id}`).html("");
+$.fn.fillErrors = function (data, non_field_behavior) {
     $.map(data, (value, key) => {
         obj = $(this).find(`[name=${key}]`);
-        if (obj) {
+        if (obj.length) {
             obj.addClass("is-invalid");
             let feedback = $(this).find(`.invalid-feedback[for=${key}]`);
             feedback.html("");
             value.forEach((message) => {
                 error = $("<p />", {
                     html: message,
+                    class: "m-0",
                 });
                 feedback.append(error);
             });

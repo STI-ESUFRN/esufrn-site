@@ -4,11 +4,11 @@ from rest_framework.serializers import ValidationError
 from assets.models import ESImage
 from assets.serializers import ESImageSerializer
 from core.fields import PrimaryKeyRelatedFieldWithSerializer
-from laboratorio.models import Material
+from laboratorio.models import Category, Consumable, Material, Permanent
 
 
 class MaterialSerializer(serializers.ModelSerializer):
-    qr = PrimaryKeyRelatedFieldWithSerializer(
+    qr_code = PrimaryKeyRelatedFieldWithSerializer(
         ESImageSerializer, queryset=ESImage.objects.all(), required=False
     )
 
@@ -16,42 +16,16 @@ class MaterialSerializer(serializers.ModelSerializer):
         model = Material
         fields = [
             "id",
-            "alert_below",
-            "brand",
-            "description",
-            "expiration",
-            "location",
             "name",
-            "number",
-            "qr",
-            "quantity",
+            "description",
+            "brand",
             "received_at",
-            "reference",
-            "type",
+            "location",
+            "comments",
+            "qr_code",
             "created",
             "modified",
         ]
-
-    def validate_number(self, number):
-        if (
-            self.context["request"].data.get("type", None) == Material.Types.PERMANENT
-            and not number
-        ):
-            raise ValidationError(
-                "Este tipo de material requer que seja especificado um número de"
-                " tombamento",
-                "permanent_non_specified_number",
-            )
-
-        return number
-
-    def validate_quantity(self, quantity):
-        if quantity < 0:
-            raise ValidationError(
-                "A quantidade não pode ser negativa", "negative_quantity"
-            )
-
-        return quantity
 
     def create(self, validated_data):
         instance = super().create(validated_data)
@@ -63,3 +37,46 @@ class MaterialSerializer(serializers.ModelSerializer):
         instance.create_log(self.context["request"])
 
         return super().update(instance, validated_data)
+
+
+class ConsumableSerializer(MaterialSerializer):
+    class Meta(MaterialSerializer.Meta):
+        model = Consumable
+        fields = MaterialSerializer.Meta.fields + [
+            "alert_below",
+            "reference",
+            "quantity",
+            "expiration",
+            "warn",
+            "relative_percentage",
+        ]
+
+    def validate_quantity(self, quantity):
+        if quantity < 0:
+            raise ValidationError(
+                "A quantidade não pode ser negativa", "negative_quantity"
+            )
+
+        return quantity
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ["id", "name"]
+
+
+class PermanentSerializer(MaterialSerializer):
+    status_display = serializers.CharField(source="get_status_display", read_only=True)
+    category = PrimaryKeyRelatedFieldWithSerializer(
+        CategorySerializer, queryset=Category.objects.all()
+    )
+
+    class Meta(MaterialSerializer.Meta):
+        model = Permanent
+        fields = MaterialSerializer.Meta.fields + [
+            "number",
+            "category",
+            "status",
+            "status_display",
+        ]
