@@ -2,29 +2,118 @@
 {% load static %}
 {% load mathfilters %}
 {% block styles %}
+    <style>
+        table.table {
+            table-layout: fixed;
+        }
+
+        table.table th:nth-child(1) {
+            width: 30px;
+        }
+    </style>
 {% endblock styles %}
 {% block content %}
-    <div class="row">
-        <div class="col-8">
-            <div class="card rounded-0">
-                <div class="card-header head-table border-0 rounded-0">
-                    <b><i class="fas fa-paper-plane mr-2"></i>Itens consumíveis disponíveis</b>
+    <div class="d-flex justify-content-between">
+        <div>
+            <a class="btn btn-secondary rounded-0 mb-0 mx-2"
+               href="{% url 'material_consumivel_inserir' %}"
+               role="button">
+                <i class="fas fa-plus mr-2" aria-hidden="true"></i> Inserir material de consumo
+            </a>
+        </div>
+        <div>
+            <form id="filters">
+                <div class="form-row">
+                    <div class="form-group col">
+                        <input class="form-control rounded-0"
+                               placeholder="Buscar"
+                               type="text"
+                               name="search"
+                               data-filter/>
+                    </div>
                 </div>
-                <div class="card-body p-0" style="overflow-x: auto;">
-                    <table class="table table-hover mb-0">
-                        <thead>
-                            <tr class="capt-table">
-                                <th class="border-0 text-center" scope="col"></th>
-                                <th class="border-0" scope="col">Nome</th>
-                                <th class="border-0" scope="col">Marca</th>
-                                <th class="border-0" scope="col">Validade</th>
-                                <th class="border-0" scope="col">Quantidade</th>
-                            </tr>
-                        </thead>
-                        <tbody id="lista-de-itens">
-                            {% comment %} AJAX {% endcomment %}
-                        </tbody>
-                    </table>
+            </form>
+        </div>
+    </div>
+    <hr class="mt-0"/>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="accordion">
+                <div class="card rounded-0 mb-2">
+                    <div class="card-header head-table border-0 rounded-0" id="headingOne">
+                        <h5 class="mb-0">
+                            <a data-toggle="collapse"
+                               data-target="#critico"
+                               aria-expanded="true"
+                               aria-controls="critico">
+                                <b><i class="fas fa-exclamation-triangle mr-2"></i> Itens consumíveis em nível crítico</b>
+                            </a>
+                        </h5>
+                    </div>
+                    <div id="critico"
+                         class="collapse show"
+                         aria-labelledby="headingOne"
+                         data-parent="#accordion">
+                        <div class="card-body p-0" style="overflow-x: auto;">
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr class="capt-table">
+                                        <th class="border-0 text-center" scope="col"></th>
+                                        <th class="border-0" scope="col">Nome</th>
+                                        <th class="border-0" scope="col">Marca</th>
+                                        <th class="border-0" scope="col">Validade</th>
+                                        <th class="border-0" scope="col">Quantidade</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="lista-de-itens-alerta">
+                                    {% comment %} AJAX {% endcomment %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="card rounded-0 my-2">
+                    <div class="card-header head-table border-0 rounded-0" id="headingTwo">
+                        <h5 class="mb-0">
+                            <a data-toggle="collapse"
+                               data-target="#disponiveis"
+                               aria-expanded="true"
+                               aria-controls="disponiveis">
+                                <b><i class="fas fa-info-circle mr-2"></i> Itens consumíveis disponíveis</b>
+                            </a>
+                        </h5>
+                    </div>
+                    <div id="disponiveis"
+                         class="collapse show"
+                         aria-labelledby="headingTwo"
+                         data-parent="#accordion">
+                        <div class="card-body p-0" style="overflow-x: auto;">
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr class="capt-table">
+                                        <th class="border-0 text-center" scope="col"></th>
+                                        <th class="border-0" scope="col">Nome</th>
+                                        <th class="border-0" scope="col">Marca</th>
+                                        <th class="border-0" scope="col">Validade</th>
+                                        <th class="border-0" scope="col">Quantidade</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="lista-de-itens">
+                                    {% comment %} AJAX {% endcomment %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card-footer">
+                            <div class="text-center w-100">
+                                <button id="load-anterior" class="btn rounded-0">
+                                    <i class="fas fa-arrow-alt-circle-left"></i> Anterior
+                                </button>
+                                <button id="load-proxima" class="btn rounded-0">
+                                    Próxima <i class="fas fa-arrow-alt-circle-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -54,9 +143,6 @@
                         </li>
                         <li class="list-group-item">
                             <small>Localização:</small> <b data-attribute="location"></b>
-                        </li>
-                        <li class="list-group-item">
-                            <small>Tombamento:</small> <b data-attribute="number"></b>
                         </li>
                         <li class="list-group-item">
                             <small>
@@ -94,48 +180,146 @@
             $("#detalhes").hide();
 
             idSelecionado = id;
-            $.get(`/api/laboratorio/materiais/${id}/`, (response) => {
+            $.get(`/api/laboratorio/consumables/${id}/`, (response) => {
                 fillAttributes(response);
-                $("#qr").attr("src", response.qr.medium);
+                $("#qr").attr("src", response.qr_code.medium);
                 $("#detalhes").fadeTo("fast", 0).fadeTo("fast", 1).show();
             });
         }
-        $.ajax({
-            url: "/api/laboratorio/materiais/dashboard/?type=C",
-            type: "GET",
-            success: function(response) {
-                $("#lista-de-itens").html("");
-                $.each(response, (index, item) => {
-                    let row = $('<tr />', {
-                        "data-id-item": item.id
-                    });
 
-                    let icon = $('<td />', {
-                        "class": 'text-center px-0 pl-2',
-                        "html": `<i class="fas fa-user-cog text-warning"></i>`
-                    });
-                    let name = $("<td />", {
-                        "text": item.name
-                    });
-                    let quantity = $("<td />", {
-                        "text": item.quantity
-                    });
-                    let expiration = $("<td />", {
-                        "text": item.expiration
-                    });
-                    let brand = $("<td />", {
-                        "text": item.brand
-                    });
-
-                    row.append(icon, name, brand, expiration, quantity);
-                    $("#lista-de-itens").append(row);
-                });
-
-                $("tr[data-id-item]").click(function(e) {
-                    e.preventDefault();
-                    fillItem(e.currentTarget.dataset.idItem);
-                });
+        function updateButton(data, button) {
+            if (data) {
+                $(button).attr("disabled", false);
+            } else {
+                $(button).attr("disabled", true);
             }
+        }
+
+        function getAllMaterials(url = undefined) {
+            if (!url) {
+                let filters = $("[data-filter]").serialize();
+                url = `/api/laboratorio/consumables/dashboard/?${filters}`;
+            }
+            console.log(url);
+            $.ajax({
+                url: url,
+                type: "GET",
+                success: function(response) {
+                    console.log(response);
+                    $("#lista-de-itens").html("");
+                    $.each(response.results, (index, item) => {
+                        let row = $('<tr />', {
+                            "data-id-item": item.id
+                        });
+
+                        let icon = $('<td />', {
+                            "class": 'text-center px-0 pl-2',
+                            "html": `<i class="fas fa-qrcode text-warning"></i>`
+                        });
+                        let name = $("<td />", {
+                            "text": item.name
+                        });
+                        let quantity = $("<td />", {
+                            "text": item.quantity,
+                            "class": item.quantity <= item.alert_below ? "text-danger" : ""
+                        });
+                        let expiration = $("<td />", {
+                            "text": item.expiration
+                        });
+                        let brand = $("<td />", {
+                            "text": item.brand
+                        });
+
+                        row.append(icon, name, brand, expiration, quantity);
+                        $("#lista-de-itens").append(row);
+                    });
+
+                    $("tr[data-id-item]").click(function(e) {
+                        e.preventDefault();
+                        fillItem(e.currentTarget.dataset.idItem);
+                    });
+
+                    next = response.next;
+                    updateButton(next, "#load-proxima");
+
+                    previous = response.previous;
+                    updateButton(previous, "#load-anterior");
+                }
+            });
+        }
+
+        function getWarnMaterials() {
+            let filters = $("[data-filter]").serialize();
+            $.ajax({
+                url: `/api/laboratorio/consumables/alert/?${filters}`,
+                type: "GET",
+                success: function(response) {
+                    $("#lista-de-itens-alerta").html("");
+                    $.each(response, (index, item) => {
+                        let row = $('<tr />', {
+                            "data-id-item": item.id
+                        });
+
+                        let icon = $('<td />', {
+                            "class": 'text-center px-0 pl-2',
+                            "html": `<i class="fas fa-barcode text-warning"></i>`
+                        });
+                        let name = $("<td />", {
+                            "text": item.name
+                        });
+                        let quantity = $("<td />", {
+                            "text": item.quantity,
+                            "class": item.quantity <= item.alert_below ? "text-danger" : ""
+                        });
+                        let expiration = $("<td />", {
+                            "text": item.expiration
+                        });
+                        let brand = $("<td />", {
+                            "text": item.brand
+                        });
+
+                        row.append(icon, name, brand, expiration, quantity);
+                        $("#lista-de-itens-alerta").append(row);
+                    });
+
+                    $("tr[data-id-item]").click(function(e) {
+                        e.preventDefault();
+                        fillItem(e.currentTarget.dataset.idItem);
+                    });
+                }
+            });
+        }
+
+        $("#detalhes-dismiss").click(() => {
+            $("#detalhes").fadeTo("fast", 0).slideUp();
+        });
+
+        function getMaterials() {
+            getAllMaterials();
+            getWarnMaterials();
+        }
+        $(document).ready(function() {
+            getMaterials();
+        });
+
+        $("#filters").submit(function(e) {
+            e.preventDefault();
+        });
+
+        $("[data-filter]").change(function() {
+            getMaterials();
+        });
+
+        var next = undefined;
+        var previous = undefined;
+        $("#load-anterior").click(function(e) {
+            e.preventDefault();
+            getAllMaterials(previous);
+        });
+
+        $("#load-proxima").click(function(e) {
+            e.preventDefault();
+            getAllMaterials(next);
         });
     </script>
 {% endblock scripts %}

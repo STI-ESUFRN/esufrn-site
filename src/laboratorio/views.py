@@ -1,8 +1,9 @@
+from django.db.models import F
 from django.db.models.deletion import ProtectedError
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
-from rest_framework.filters import SearchFilter
+from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -19,12 +20,28 @@ class ConsumableViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, GroupLaboratorio]
     queryset = Consumable.available_objects.all()
     serializer_class = ConsumableSerializer
-    filter_backends = [SearchFilter]
+    filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ["name", "description", "comments", "brand", "location"]
+    ordering_fields = ["expiration", "created"]
 
     @action(detail=False, methods=["get"])
     def dashboard(self, request, pk=None):
         queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=["get"])
+    def alert(self, request, pk=None):
+        queryset = self.filter_queryset(
+            self.get_queryset().filter(quantity__lte=F("alert_below"))
+        )
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
@@ -56,7 +73,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
         try:
             response = super().destroy(request, *args, **kwargs)
 
-        except ProtectedError as e:
+        except ProtectedError:
             return Response(
                 {
                     "non_field_errors": [

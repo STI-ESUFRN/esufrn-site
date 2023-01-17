@@ -6,7 +6,8 @@ from dashboard.laboratorio.views import (
     create_permanent_material_view,
     materials_list_view,
     permanent_materials_view,
-    update_material_view,
+    update_consumable_view,
+    update_permanent_view,
 )
 
 urlpatterns = [
@@ -16,12 +17,13 @@ urlpatterns = [
         create_consumable_material_view,
         name="material_consumivel_inserir",
     ),
+    path("consumivel/<int:pk>/", update_consumable_view, name="consumivel_editar"),
     path("permanente/", permanent_materials_view),
     path(
         "permanente/inserir/",
         create_permanent_material_view,
         name="material_permanente_inserir",
     ),
+    path("permanente/<int:pk>/", update_permanent_view, name="permanente_editar"),
     path("relacao/", materials_list_view),
-    path("item/<int:pk>/", update_material_view, name="material_editar"),
 ]

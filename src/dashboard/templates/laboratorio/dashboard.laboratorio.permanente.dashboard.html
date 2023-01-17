@@ -94,14 +94,14 @@
             $("#detalhes").hide();
 
             idSelecionado = id;
-            $.get(`/api/laboratorio/materiais/${id}/`, (response) => {
+            $.get(`/api/laboratorio/permanent/${id}/`, (response) => {
                 fillAttributes(response);
-                $("#qr").attr("src", response.qr.medium);
+                $("#qr").attr("src", response.qr_code.medium);
                 $("#detalhes").fadeTo("fast", 0).fadeTo("fast", 1).show();
             });
         }
         $.ajax({
-            url: "/api/laboratorio/materiais/dashboard/?type=P",
+            url: "/api/laboratorio/permanent/dashboard/?type=P",
             type: "GET",
             success: function(response) {
                 $("#lista-de-itens").html("");

@@ -3,7 +3,7 @@ from django.http import Http404
 from django.shortcuts import render
 
 from dashboard.helpers import get_dash_context
-from laboratorio.models import Material
+from laboratorio.models import Consumable, Material, Permanent
 from principal.decorators import allowed_users
 
 material_roles = ["suporte", "material"]
@@ -51,15 +51,32 @@ def create_permanent_material_view(request):
 
 @login_required(login_url="/dashboard/login")
 @allowed_users(allowed_roles=material_roles)
-def update_material_view(request, pk):
+def update_consumable_view(request, pk):
     try:
-        item = Material.objects.get(id=pk)
+        item = Consumable.objects.get(id=pk)
 
-    except Material.DoesNotExist as err:
+    except Consumable.DoesNotExist as err:
         raise Http404(err) from err
 
     context = {"item": item}
-    return render(request, "laboratorio/dashboard.laboratorio.editar.html", context)
+    return render(
+        request, "laboratorio/dashboard.laboratorio.consumivel.editar.html", context
+    )
+
+
+@login_required(login_url="/dashboard/login")
+@allowed_users(allowed_roles=material_roles)
+def update_permanent_view(request, pk):
+    try:
+        item = Permanent.objects.get(id=pk)
+
+    except Permanent.DoesNotExist as err:
+        raise Http404(err) from err
+
+    context = {"item": item}
+    return render(
+        request, "laboratorio/dashboard.laboratorio.permanente.editar.html", context
+    )
 
 
 @login_required(login_url="/dashboard/login")
