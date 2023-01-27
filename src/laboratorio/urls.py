@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 
 from laboratorio.views import CategoryViewSet, ConsumableViewSet, PermanentViewSet
 
-app_name = "laboratorio"
+app_name = "laboratory"
 
 router = DefaultRouter()
 

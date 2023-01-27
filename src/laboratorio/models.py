@@ -8,6 +8,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from model_utils.models import SoftDeletableModel, TimeStampedModel
+from PIL import ImageOps
 
 from assets.models import ESImage
 from laboratorio.helpers import send_alert_email
@@ -34,7 +35,12 @@ class Material(SoftDeletableModel, TimeStampedModel):
         raise NotImplementedError
 
     def generate_qr(self, request):
-        qr_code = qrcode.make(request.build_absolute_uri(self.get_url()))
+        data = request.build_absolute_uri(self.get_url())
+        border = (10, 10, 10, 10)
+        qr_code = ImageOps.expand(
+            qrcode.make(data, border=5), border=border, fill="black"
+        )
+
         stream = BytesIO()
         qr_code.save(stream, format="PNG", optimize=True)
 
@@ -91,7 +97,7 @@ class Consumable(Material):
         return super().save(*args, **kwargs)
 
     def get_url(self):
-        return reverse("consumivel_editar", kwargs={"pk": self.id})
+        return reverse("update_consumable", kwargs={"pk": self.id})
 
     def create_log(self, request, **kwargs):
         if not self.pk:
@@ -158,4 +164,4 @@ class Permanent(Material):
         ordering = ["-created"]
 
     def get_url(self):
-        return reverse("permanente_editar", kwargs={"pk": self.id})
+        return reverse("update_permanent", kwargs={"pk": self.id})

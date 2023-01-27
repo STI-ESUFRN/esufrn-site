@@ -34,6 +34,7 @@ $.fn.fillErrors = function (data, non_field_behavior) {
             obj.addClass("is-invalid");
             let feedback = $(this).find(`.invalid-feedback[for=${key}]`);
             feedback.html("");
+            feedback.css("display", "block");
             value.forEach((message) => {
                 error = $("<p />", {
                     html: message,

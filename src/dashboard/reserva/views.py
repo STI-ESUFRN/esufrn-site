@@ -10,7 +10,7 @@ reserva_roles = ["reserva", "suporte"]
 
 @login_required(login_url="/dashboard/login")
 @allowed_users(allowed_roles=reserva_roles)
-def reservaHome(request):
+def reserve_home(request):
     context = {}
     get_dash_context(context, "Reservas", "reserva_dashboard")
     return render(request, "reserva/dashboard.reserva.dashboard.html", context)
@@ -18,7 +18,7 @@ def reservaHome(request):
 
 @login_required(login_url="/dashboard/login")
 @allowed_users(allowed_roles=reserva_roles)
-def reservaHistorico(request):
+def reserve_history(request):
     context = {}
     get_dash_context(context, "Reservas", "reserva_historico")
     return render(request, "reserva/dashboard.reserva.historico.html", context)
@@ -26,7 +26,7 @@ def reservaHistorico(request):
 
 @login_required(login_url="/dashboard/login")
 @allowed_users(allowed_roles=reserva_roles)
-def reservaInserir(request):
+def create_reserve(request):
     user_classroomns = UserClassroom.objects.filter(user=request.user).values_list(
         "classroom", flat=True
     )
@@ -38,7 +38,7 @@ def reservaInserir(request):
 
 @login_required(login_url="/dashboard/login")
 @allowed_users(allowed_roles=reserva_roles)
-def reservaRelatorio(request):
+def reserve_report(request):
     salas = Classroom.objects.all()
     classroom_id = request.GET.get("classroom")
     sala = None

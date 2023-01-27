@@ -4,7 +4,8 @@ from rest_framework.serializers import ValidationError
 from assets.models import ESImage
 from assets.serializers import ESImageSerializer
 from core.fields import PrimaryKeyRelatedFieldWithSerializer
-from laboratorio.models import Category, Consumable, Material, Permanent
+from core.serializers import UserSerializer
+from laboratorio.models import Category, Consumable, History, Material, Permanent
 
 
 class MaterialSerializer(serializers.ModelSerializer):
@@ -33,11 +34,6 @@ class MaterialSerializer(serializers.ModelSerializer):
 
         return instance
 
-    def update(self, instance, validated_data):
-        instance.create_log(self.context["request"])
-
-        return super().update(instance, validated_data)
-
 
 class ConsumableSerializer(MaterialSerializer):
     class Meta(MaterialSerializer.Meta):
@@ -51,6 +47,11 @@ class ConsumableSerializer(MaterialSerializer):
             "relative_percentage",
         ]
 
+    def update(self, instance, validated_data):
+        instance.create_log(self.context["request"])
+
+        return super().update(instance, validated_data)
+
     def validate_quantity(self, quantity):
         if quantity < 0:
             raise ValidationError(
@@ -63,7 +64,7 @@ class ConsumableSerializer(MaterialSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ["id", "name"]
+        fields = ["id", "name", "description"]
 
 
 class PermanentSerializer(MaterialSerializer):
@@ -79,4 +80,20 @@ class PermanentSerializer(MaterialSerializer):
             "category",
             "status",
             "status_display",
+        ]
+
+
+class HistorySerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
+    class Meta:
+        model = History
+        fields = [
+            "id",
+            "user",
+            "quantity",
+            "prev_quantity",
+            "diff",
+            "created",
+            "modified",
         ]

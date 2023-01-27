@@ -9,5 +9,5 @@ urlpatterns = [
     path("", include("reserva.api.urls")),
     path("", include("chamado.api.urls")),
     path("", include("inventario.api.urls")),
-    path("laboratorio/", include("laboratorio.urls")),
+    path("laboratory/", include("laboratorio.urls")),
 ]

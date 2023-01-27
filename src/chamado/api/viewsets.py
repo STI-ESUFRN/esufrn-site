@@ -21,7 +21,8 @@ class ChamadoAdminViewSet(viewsets.ModelViewSet):
     queryset = Chamado.objects.all()
     pagination_class = StdResultsSetPagination
     permission_classes = [
-        IsAuthenticated & GroupSuporte,
+        IsAuthenticated,
+        GroupSuporte,
     ]
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_fields = {

@@ -11,13 +11,13 @@ periodo_roles = ["reserva", "suporte", "coordenacao"]
 
 @login_required(login_url="/dashboard/login")
 @allowed_users(allowed_roles=periodo_roles)
-def periodoHome(request):
-    return redirect("periodo_historico")
+def periodo_home(request):
+    return redirect("period_history")
 
 
 @login_required(login_url="/dashboard/login")
 @allowed_users(allowed_roles=periodo_roles)
-def periodoInserir(request):
+def create_period(request):
     salas = Classroom.objects.all()
     cursos = PeriodReserve.get_courses()
     context = {"salas": salas, "cursos": cursos}
@@ -27,7 +27,7 @@ def periodoInserir(request):
 
 @login_required(login_url="/dashboard/login")
 @allowed_users(allowed_roles=periodo_roles)
-def periodoHistorico(request):
+def period_history(request):
     reservas = PeriodReserve.objects.all()
 
     professores = (
@@ -63,7 +63,7 @@ def periodoHistorico(request):
 
 @login_required(login_url="/dashboard/login")
 @allowed_users(allowed_roles=periodo_roles)
-def periodoLista(request):
+def list_periods(request):
     course = request.GET.get("course")
     period = request.GET.get("period")
     class_period = request.GET.get("class_period")
@@ -136,7 +136,7 @@ def periodoLista(request):
 
 @login_required(login_url="/dashboard/login")
 @allowed_users(allowed_roles=periodo_roles)
-def periodoEditar(request, pk):
+def update_period(request, pk):
     period = PeriodReserve.objects.get(id=pk)
     salas = Classroom.objects.all()
     cursos = PeriodReserve.get_courses()

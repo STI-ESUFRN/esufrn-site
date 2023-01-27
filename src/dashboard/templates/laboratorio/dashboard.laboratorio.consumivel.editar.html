@@ -186,7 +186,7 @@
         $("#deletePeriod").click(function(e) {
             $.ajax({
                 type: "DELETE",
-                url: `/api/laboratorio/consumable/${$("#form-item [name=id]").val()}/`,
+                url: `/api/laboratory/consumable/${$("#form-item [name=id]").val()}/`,
                 success: function(response) {
                     window.location.replace("/dashboard");
                 },
@@ -199,7 +199,7 @@
         function atualizarQuantidade(serialized_data) {
             $.ajax({
                 type: "POST",
-                url: `/api/laboratorio/consumable/${$("#form-item [name=id]").val()}/add/`,
+                url: `/api/laboratory/consumables/${$("#form-item [name=id]").val()}/add/`,
                 dataType: "json",
                 data: serialized_data,
                 success: function(response) {
@@ -255,7 +255,7 @@
 
             $.ajax({
                 type: "PATCH",
-                url: `/api/laboratorio/consumable/${$("#form-item [name=id]").val()}/`,
+                url: `/api/laboratory/consumable/${$("#form-item [name=id]").val()}/`,
                 dataType: "json",
                 data: serialized_data,
                 success: function(response) {

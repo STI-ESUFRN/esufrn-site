@@ -10,7 +10,6 @@ class MaterialAdmin(admin.ModelAdmin):
     readonly_fields = ["qr_code"]
 
     def save_model(self, request, obj, form, change):
-        obj.create_log(request)
         super().save_model(request, obj, form, change)
         obj.generate_qr(request)
 
@@ -36,7 +35,6 @@ class PermanentAdmin(MaterialAdmin):
     readonly_fields = ["qr_code"]
 
     def save_model(self, request, obj, form, change):
-        obj.create_log(request)
         super().save_model(request, obj, form, change)
         obj.generate_qr(request)
 

@@ -7,11 +7,13 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from core.pagination import CustomPagination
 from laboratorio.models import Category, Consumable, Permanent
 from laboratorio.permissions import GroupLaboratorio
 from laboratorio.serializers import (
     CategorySerializer,
     ConsumableSerializer,
+    HistorySerializer,
     PermanentSerializer,
 )
 
@@ -21,8 +23,15 @@ class ConsumableViewSet(viewsets.ModelViewSet):
     queryset = Consumable.available_objects.all()
     serializer_class = ConsumableSerializer
     filter_backends = [SearchFilter, OrderingFilter]
+    pagination_class = CustomPagination
     search_fields = ["name", "description", "comments", "brand", "location"]
     ordering_fields = ["expiration", "created"]
+
+    @action(detail=True, methods=["get"])
+    def history(self, request, pk=None):
+        instance = self.get_object()
+        serializer = HistorySerializer(instance.history, many=True)
+        return Response(serializer.data)
 
     @action(detail=False, methods=["get"])
     def dashboard(self, request, pk=None):
@@ -76,7 +85,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
         except ProtectedError:
             return Response(
                 {
-                    "non_field_errors": [
+                    "category": [
                         "Não foi possível apagar esta instância pois existem materiais"
                         " categorizados como tal."
                     ]
@@ -91,8 +100,10 @@ class PermanentViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, GroupLaboratorio]
     queryset = Permanent.available_objects.all()
     serializer_class = PermanentSerializer
+    pagination_class = CustomPagination
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = {
         "category": ["exact"],
+        "status": ["exact"],
     }
     search_fields = ["name", "number", "description", "comments", "brand", "location"]

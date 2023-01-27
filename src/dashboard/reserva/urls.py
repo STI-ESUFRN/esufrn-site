@@ -1,15 +1,15 @@
 from django.urls import path
 
 from dashboard.reserva.views import (
-    reservaHistorico,
-    reservaHome,
-    reservaInserir,
-    reservaRelatorio,
+    create_reserve,
+    reserve_history,
+    reserve_home,
+    reserve_report,
 )
 
 urlpatterns = [
-    path("", reservaHome),
-    path("historico/", reservaHistorico),
-    path("inserir/", reservaInserir),
-    path("relatorio/", reservaRelatorio),
+    path("", reserve_home),
+    path("historico/", reserve_history),
+    path("inserir/", create_reserve),
+    path("relatorio/", reserve_report),
 ]

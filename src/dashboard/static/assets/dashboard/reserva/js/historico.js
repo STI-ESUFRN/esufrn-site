@@ -118,7 +118,9 @@ function update(data) {
         },
         error: function (err) {
             $(".loader-global").removeClass("load");
-            showMessage(err.responseJSON["details"][0], "alert-danger");
+            $.each(err.responseJSON["details"], (e) => {
+                showMessage(e, "alert-danger");
+            });
         },
     });
 }

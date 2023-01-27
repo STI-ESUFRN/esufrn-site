@@ -1,17 +1,17 @@
 from django.urls import path
 
 from dashboard.periodo.views import (
-    periodoEditar,
-    periodoHistorico,
-    periodoHome,
-    periodoInserir,
-    periodoLista,
+    create_period,
+    list_periods,
+    period_history,
+    periodo_home,
+    update_period,
 )
 
 urlpatterns = [
-    path("", periodoHome),
-    path("historico/", periodoHistorico, name="periodo_historico"),
-    path("inserir/", periodoInserir, name="periodo_inserir"),
-    path("lista/", periodoLista, name="periodo_lista"),
-    path("editar/<int:pk>/", periodoEditar, name="periodo_editar"),
+    path("", periodo_home),
+    path("historico/", period_history, name="period_history"),
+    path("inserir/", create_period),
+    path("lista/", list_periods),
+    path("editar/<int:pk>/", update_period),
 ]

@@ -13,10 +13,11 @@
     </style>
 {% endblock styles %}
 {% block content %}
-    <div class="d-flex justify-content-between">
+    <div class="d-flex justify-content-between px-2">
         <div>
-            <a class="btn btn-secondary rounded-0 mb-0 mx-2"
-               href="{% url 'material_consumivel_inserir' %}"
+            <a class="btn btn-secondary rounded-0 m-0"
+               data-toggle="modal"
+               data-target="#add-material"
                role="button">
                 <i class="fas fa-plus mr-2" aria-hidden="true"></i> Inserir material de consumo
             </a>
@@ -43,14 +44,14 @@
                     <div class="card-header head-table border-0 rounded-0" id="headingOne">
                         <h5 class="mb-0">
                             <a data-toggle="collapse"
-                               data-target="#critico"
+                               data-target="#critical-materials-collapse"
                                aria-expanded="true"
-                               aria-controls="critico">
-                                <b><i class="fas fa-exclamation-triangle mr-2"></i> Itens consumíveis em nível crítico</b>
+                               aria-controls="critical-materials-collapse">
+                                <b><i class="fas fa-exclamation-triangle mr-2"></i> Itens consumíveis em nível crítico: <span id="critical-materials-count"></span></b>
                             </a>
                         </h5>
                     </div>
-                    <div id="critico"
+                    <div id="critical-materials-collapse"
                          class="collapse show"
                          aria-labelledby="headingOne"
                          data-parent="#accordion">
@@ -65,25 +66,25 @@
                                         <th class="border-0" scope="col">Quantidade</th>
                                     </tr>
                                 </thead>
-                                <tbody id="lista-de-itens-alerta">
+                                <tbody id="critical-materials-list">
                                     {% comment %} AJAX {% endcomment %}
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
-                <div class="card rounded-0 my-2">
+                <div id="card-material" class="card rounded-0 my-2">
                     <div class="card-header head-table border-0 rounded-0" id="headingTwo">
                         <h5 class="mb-0">
                             <a data-toggle="collapse"
-                               data-target="#disponiveis"
+                               data-target="#materials-collapse"
                                aria-expanded="true"
-                               aria-controls="disponiveis">
-                                <b><i class="fas fa-info-circle mr-2"></i> Itens consumíveis disponíveis</b>
+                               aria-controls="materials-collapse">
+                                <b><i class="fa-solid fa-mask-face mr-2"></i> Itens consumíveis disponíveis: <span id="material-count"></span></b>
                             </a>
                         </h5>
                     </div>
-                    <div id="disponiveis"
+                    <div id="materials-collapse"
                          class="collapse show"
                          aria-labelledby="headingTwo"
                          data-parent="#accordion">
@@ -98,18 +99,18 @@
                                         <th class="border-0" scope="col">Quantidade</th>
                                     </tr>
                                 </thead>
-                                <tbody id="lista-de-itens">
+                                <tbody id="materials-list">
                                     {% comment %} AJAX {% endcomment %}
                                 </tbody>
                             </table>
                         </div>
                         <div class="card-footer">
                             <div class="text-center w-100">
-                                <button id="load-anterior" class="btn rounded-0">
-                                    <i class="fas fa-arrow-alt-circle-left"></i> Anterior
+                                <button id="load-previous" class="btn rounded-0">
+                                    <i class="fa-solid fa-circle-arrow-left"></i> Anterior
                                 </button>
-                                <button id="load-proxima" class="btn rounded-0">
-                                    Próxima <i class="fas fa-arrow-alt-circle-right"></i>
+                                <button id="load-next" class="btn rounded-0">
+                                    Próxima <i class="fa-solid fa-circle-arrow-right"></i>
                                 </button>
                             </div>
                         </div>
@@ -118,51 +119,111 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card-group" id="detalhes" style="display: none;opacity: 0;">
+            <div class="card-group" id="details" style="display: none;opacity: 0;">
                 <div class="card" style="width: 18rem;">
                     <div class="card-header head-table border-0 rounded-0">
                         <b><i class="fas fa-info mr-2"></i>Detalhes do Material</b>
-                        <button id="detalhes-dismiss" type="button" class="close" aria-label="Close">
+                        <button id="details-dismiss" type="button" class="close" aria-label="Close">
                             <span aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i></span>
                         </button>
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">
+                        <h5 class="card-title mb-2">
                             <small>Nome:</small> <b data-attribute="name"></b>
                         </h5>
-                        <p class="card-text">
-                            <small>Quantidade:</small> <b data-attribute="quantity"></b>
-                        </p>
-                        <p class="card-text">
+                        <p class="card-text m-0">
                             <small>Descrição:</small> <b data-attribute="description"></b>
                         </p>
                     </div>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">
-                            <small>Marca:</small> <b data-attribute="brand"></b>
+                            <p class="card-text m-0">
+                                <small>Marca:</small> <b data-attribute="brand"></b>
+                            </p>
+                            <p class="card-text m-0">
+                                <small>Quantidade:</small> <b data-attribute="quantity"></b>
+                            </p>
+                            <p class="card-text m-0">
+                                <small>
+                                    Data de validade: <span date-format="DD/MM/YYYY" data-attribute="expiration"></span>
+                                </small>
+                            </p>
                         </li>
+                    </ul>
+                    <ul class="list-group list-group-flush">
                         <li class="list-group-item">
                             <small>Localização:</small> <b data-attribute="location"></b>
-                        </li>
-                        <li class="list-group-item">
-                            <small>
-                                <p class="my-0">
-                                    Data de validade: <span date-format="DD/MM/YYYY" data-attribute="expiration"></span>
-                                </p>
-                            </small>
                             <small>
                                 <p class="my-0">
                                     Recebido em: <span date-format="DD/MM/YYYY" data-attribute="received_at"></span>
                                 </p>
                             </small>
-                            <img id="qr" class="img-fluid" src="" alt=""/>
                         </li>
                     </ul>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <small class="text-muted">Observações sobre o material:</small>
+                            <textarea class="form-control mb-3"
+                                      rows="4"
+                                      placeholder="Escrever observação"
+                                      data-attribute="comments"></textarea>
+                            <a href="#"
+                               class="btn mb-1 btn-outline-primary btn-sm"
+                               id="patch-comment">Salvar observação <i class="fa-solid fa-floppy-disk"></i></a>
+                        </li>
+                    </ul>
+                    <div id="accordion">
+                        <div class="card rounded-0">
+                            <div class="card-header" id="card-material-history">
+                                <h5 class="mb-0">
+                                    <a data-toggle="collapse"
+                                       data-target="#collapse-material-history"
+                                       aria-expanded="true"
+                                       aria-controls="collapse-material-history">
+                                        Histórico <i class="fas fa-history" aria-hidden="true"></i>
+                                    </a>
+                                </h5>
+                            </div>
+                            <div id="collapse-material-history"
+                                 class="collapse"
+                                 aria-labelledby="card-material-history"
+                                 data-parent="#accordion">
+                                <div id="material-history"
+                                     class="card-body"
+                                     style="max-height: 200px;
+                                            overflow-y: scroll"></div>
+                            </div>
+                        </div>
+                        <div class="card rounded-0">
+                            <div class="card-header" id="card-actions">
+                                <h5 class="mb-0">
+                                    <a data-toggle="collapse"
+                                       data-target="#collapse-actions"
+                                       aria-expanded="true"
+                                       aria-controls="collapse-actions">
+                                        Ações <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                </h5>
+                            </div>
+                            <div id="collapse-actions"
+                                 class="collapse"
+                                 aria-labelledby="card-actions"
+                                 data-parent="#accordion">
+                                <div class="card-body">
+                                    <button class="btn btn-danger"
+                                            data-toggle="modal"
+                                            data-target="#deleteConfirm">
+                                        Apagar <i class="fas fa-trash" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="card-footer border-top-0">
-                        <p class="m-0 mt-2">
+                        <p class="m-0">
                             <small class="text-muted">Data de criação: <span date-format="DD/MM/YYYY HH:mm" data-attribute="created"></span></small>
                         </p>
-                        <p class="m-0 mt-2">
+                        <p class="m-0">
                             <small class="text-muted">Ultima Alteração: <span date-format="DD/MM/YYYY HH:mm" data-attribute="modified"></span></small>
                         </p>
                     </div>
@@ -170,156 +231,185 @@
             </div>
         </div>
     </div>
+    <div id="deleteConfirm" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar exclusão</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Tem certeza que deseja apagar este material?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+                    <button id="delete-material"
+                            type="button"
+                            class="btn btn-danger"
+                            data-dismiss="modal">
+                        Apagar <i class="fas fa-trash" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="add-material" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Inserir novo material de consumo
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">
+                            <i class="fas fa-times" aria-hidden="true"></i></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form autocomplete="off" id="create-material-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="type" value="C"/>
+                        <div class="form-row">
+                            <div class="form-group col-md-8">
+                                <label>
+                                    <b>Nome</b>
+                                </label>
+                                <input class="form-control rounded-0" type="text" name="name"/>
+                                <div class="invalid-feedback" for="name">
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>
+                                    Marca
+                                </label>
+                                <input class="form-control rounded-0" type="text" name="brand" id="brand"/>
+                                <div class="invalid-feedback" for="brand">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label>
+                                    <b>Descrição</b>
+                                </label>
+                                <textarea class="form-control rounded-0"
+                                          name="description"
+                                          id="description"
+                                          rows="5"></textarea>
+                                <div class="invalid-feedback" for="description">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label>
+                                    <b>Quantidade</b>
+                                </label>
+                                <input class="form-control rounded-0"
+                                       type="number"
+                                       name="quantity"
+                                       id="quantity"/>
+                                <div class="invalid-feedback" for="quantity">
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label >
+                                    Data de validade
+                                </label>
+                                <input class="form-control rounded-0 mb-1"
+                                       name="expiration"
+                                       data-mask="00-00-0000"
+                                       data-toggle="datepicker"
+                                       required
+                                       autocomplete="off"
+                                       maxlength="10"/>
+                                <div class="invalid-feedback" for="expiration">
+                                </div>
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label>
+                                    Data de recebimento
+                                </label>
+                                <input class="form-control rounded-0 mb-1"
+                                       name="received_at"
+                                       data-mask="00-00-0000"
+                                       data-toggle="datepicker"
+                                       required
+                                       autocomplete="off"
+                                       maxlength="10"
+                                       date-field/>
+                                <div class="invalid-feedback" for="received_at">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label>
+                                    Localização
+                                </label>
+                                <input type="text"
+                                       class="form-control rounded-0"
+                                       name="location"
+                                       placeholder="Localização"
+                                       required/>
+                                <div class="invalid-feedback" for="location">
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>
+                                    Quantidade crítica
+                                </label>
+                                <input type="number"
+                                       class="form-control rounded-0"
+                                       name="alert_below"
+                                       value="50"/>
+                                <div class="invalid-feedback" for="alert_below">
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>
+                                    Valor de referência
+                                </label>
+                                <input type="number"
+                                       class="form-control rounded-0"
+                                       name="reference"
+                                       value="250"/>
+                                <div class="invalid-feedback" for="reference">
+                                </div>
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label>
+                                    Observações
+                                </label>
+                                <textarea class="form-control rounded-0" name="comments" id="comments" rows="5"></textarea>
+                                <div class="invalid-feedback" for="comments">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        Cancelar
+                    </button>
+                    <button id="create-material" type="button" class="btn btn-primary">
+                        Salvar <i class="fa-solid fa-floppy-disk"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock content %}
 {% block scripts %}
     <script src="{% static 'assets/dashboard/js/ajax_csrf.js' %}"></script>
-    <script>
-        var idSelecionado = undefined;
-
-        function fillItem(id) {
-            $("#detalhes").hide();
-
-            idSelecionado = id;
-            $.get(`/api/laboratorio/consumables/${id}/`, (response) => {
-                fillAttributes(response);
-                $("#qr").attr("src", response.qr_code.medium);
-                $("#detalhes").fadeTo("fast", 0).fadeTo("fast", 1).show();
-            });
-        }
-
-        function updateButton(data, button) {
-            if (data) {
-                $(button).attr("disabled", false);
-            } else {
-                $(button).attr("disabled", true);
-            }
-        }
-
-        function getAllMaterials(url = undefined) {
-            if (!url) {
-                let filters = $("[data-filter]").serialize();
-                url = `/api/laboratorio/consumables/dashboard/?${filters}`;
-            }
-            console.log(url);
-            $.ajax({
-                url: url,
-                type: "GET",
-                success: function(response) {
-                    console.log(response);
-                    $("#lista-de-itens").html("");
-                    $.each(response.results, (index, item) => {
-                        let row = $('<tr />', {
-                            "data-id-item": item.id
-                        });
-
-                        let icon = $('<td />', {
-                            "class": 'text-center px-0 pl-2',
-                            "html": `<i class="fas fa-qrcode text-warning"></i>`
-                        });
-                        let name = $("<td />", {
-                            "text": item.name
-                        });
-                        let quantity = $("<td />", {
-                            "text": item.quantity,
-                            "class": item.quantity <= item.alert_below ? "text-danger" : ""
-                        });
-                        let expiration = $("<td />", {
-                            "text": item.expiration
-                        });
-                        let brand = $("<td />", {
-                            "text": item.brand
-                        });
-
-                        row.append(icon, name, brand, expiration, quantity);
-                        $("#lista-de-itens").append(row);
-                    });
-
-                    $("tr[data-id-item]").click(function(e) {
-                        e.preventDefault();
-                        fillItem(e.currentTarget.dataset.idItem);
-                    });
-
-                    next = response.next;
-                    updateButton(next, "#load-proxima");
-
-                    previous = response.previous;
-                    updateButton(previous, "#load-anterior");
-                }
-            });
-        }
-
-        function getWarnMaterials() {
-            let filters = $("[data-filter]").serialize();
-            $.ajax({
-                url: `/api/laboratorio/consumables/alert/?${filters}`,
-                type: "GET",
-                success: function(response) {
-                    $("#lista-de-itens-alerta").html("");
-                    $.each(response, (index, item) => {
-                        let row = $('<tr />', {
-                            "data-id-item": item.id
-                        });
-
-                        let icon = $('<td />', {
-                            "class": 'text-center px-0 pl-2',
-                            "html": `<i class="fas fa-barcode text-warning"></i>`
-                        });
-                        let name = $("<td />", {
-                            "text": item.name
-                        });
-                        let quantity = $("<td />", {
-                            "text": item.quantity,
-                            "class": item.quantity <= item.alert_below ? "text-danger" : ""
-                        });
-                        let expiration = $("<td />", {
-                            "text": item.expiration
-                        });
-                        let brand = $("<td />", {
-                            "text": item.brand
-                        });
-
-                        row.append(icon, name, brand, expiration, quantity);
-                        $("#lista-de-itens-alerta").append(row);
-                    });
-
-                    $("tr[data-id-item]").click(function(e) {
-                        e.preventDefault();
-                        fillItem(e.currentTarget.dataset.idItem);
-                    });
-                }
-            });
-        }
-
-        $("#detalhes-dismiss").click(() => {
-            $("#detalhes").fadeTo("fast", 0).slideUp();
-        });
-
-        function getMaterials() {
-            getAllMaterials();
-            getWarnMaterials();
-        }
-        $(document).ready(function() {
-            getMaterials();
-        });
-
-        $("#filters").submit(function(e) {
-            e.preventDefault();
-        });
-
-        $("[data-filter]").change(function() {
-            getMaterials();
-        });
-
-        var next = undefined;
-        var previous = undefined;
-        $("#load-anterior").click(function(e) {
-            e.preventDefault();
-            getAllMaterials(previous);
-        });
-
-        $("#load-proxima").click(function(e) {
-            e.preventDefault();
-            getAllMaterials(next);
-        });
-    </script>
+    <script src="{% static 'assets/js/response.js' %}"></script>
+    <script src="{% static 'assets/dashboard/laboratorio/consumiveis/js/dashboard.js' %}"></script>
 {% endblock scripts %}
