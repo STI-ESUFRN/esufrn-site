@@ -3,15 +3,15 @@
 {% block styles %}
     <link rel="stylesheet" href="{% static 'assets/css/reserva.style.css' %}"/>
     <style>
-	#reservation-calendar table {
-		table-layout: auto;
-	}
-
-	@media (min-width: 992px) {
-		.modal-lg {
-			max-width: 80%;
-		}
-	}
+        #reservation-calendar table {
+            table-layout: auto;
+        }
+        
+        @media (min-width: 992px) {
+            .modal-lg {
+                max-width: 80%;
+            }
+        }
     </style>
 {% endblock styles %}
 {% block content %}
@@ -40,8 +40,8 @@
                     {% endfor %}
                 </select>
                 <div class="form-check my-2" id="term" hidden>
-                    <input type="checkbox" class="form-check-input" id="confirm" name="confirm"/>
-                    <label class="form-check-label" for="confirm">
+                    <input type="checkbox" class="form-check-input" id="declare" name="declare"/>
+                    <label class="form-check-label" for="declare">
                         Marcando esta caixa, você declara que o laboratório contará com a supervisão
                         de um <strong>docente</strong> no momento da aula. *
                     </label>
@@ -56,42 +56,20 @@
                             disabled>
                         Consultar disponibilidade <i class="fas fa-calendar ml-2" aria-hidden="true"></i>
                     </button>
-                    <!-- <button id="sala-disp-spreadsheet" type="button" class="btn btn-primary" data-toggle="modal" data-target="#spreadsheetModal" disabled>
-                    Consultar formulário <i class="fas fa-calendar ml-2" aria-hidden="true"></i>
-                </button> -->
                 </div>
             </div>
             <div class="form-group col-md-6">
                 <label for="inputAddress">
                     <b>Data</b>
                 </label>
-                <div class="row">
-                    <div class="col-10 pr-1" id="add-data-box">
-                        <input class="form-control rounded-0 mb-1"
-                               name="date"
-                               data-mask="00-00-0000"
-                               data-toggle="datepicker"
-                               required
-                               autocomplete="off"
-                               maxlength="10"/>
-                    </div>
-                    <div class="col-2 pl-1">
-                        <button type="button"
-                                id="add-data"
-                                class="btn btn-dark rounded-0 w-100"
-                                title="Adicionar Data">+</button>
-                    </div>
-                </div>
-                <small class="form-text text-muted">Para adicionar outra data para o mesmo evento, clique no botão "+"</small>
+                <input class="form-control rounded-0 mb-1"
+                       name="date"
+                       data-mask="00-00-0000"
+                       data-toggle="datepicker"
+                       required
+                       autocomplete="off"
+                       maxlength="10"/>
             </div>
-            {% comment %} <div class="form-group col-md-6">
-                <label for="inputAddress">
-                    <b>Data *</b>
-                </label>
-                <input class="form-control rounded-0" name="date" data-mask="00-00-0000" data-toggle="datepicker" required/>
-                <div class="invalid-feedback">Informe uma data.</div>
-                <!-- <small class="form-text text-muted">É importante conferir o ambiente da sala com a direção antes da reserva</small> -->
-            </div> {% endcomment %}
         </div>
         <div class="form-group">
             <label for="inputAddress2">
@@ -181,8 +159,6 @@
                        placeholder="Telefone para contato"
                        required/>
                 <div class="invalid-feedback">Informe um número de celular válido.</div>
-                <!-- <small id="emailHelp" class="form-text text-muted">Por favor, digite no seguinte formato
-                            "(xx) x xxxx-xxxx"</small> -->
             </div>
         </div>
         <div class="form-group" hidden>

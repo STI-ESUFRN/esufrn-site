@@ -65,6 +65,7 @@ CSRF_COOKIE_SECURE = int(os.getenv("CSRF_COOKIE_SECURE", False))
 SESSION_COOKIE_SECURE = int(os.getenv("SESSION_COOKIE_SECURE", False))
 
 # SECURE_SSL_REDIRECT = True
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 CORS_ORIGIN_ALLOW_ALL = True
 # CORS_ALLOWED_ORIGINS = [
@@ -303,6 +304,8 @@ REST_FRAMEWORK = {
         "rest_framework.renderers.JSONRenderer "
         "rest_framework.renderers.BrowsableAPIRenderer",
     ).split(" "),
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 8,
 }
 
 CACHES = {
