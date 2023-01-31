@@ -1,12 +1,18 @@
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 
 from dashboard.helpers import get_dash_context
 from laboratorio.models import Consumable, Permanent
 from principal.decorators import allowed_users
 
 material_roles = ["suporte", "material"]
+
+
+@login_required(login_url="/dashboard/login")
+@allowed_users(allowed_roles=material_roles)
+def home_view(request):
+    return redirect("consumable_dashboard")
 
 
 @login_required(login_url="/dashboard/login")

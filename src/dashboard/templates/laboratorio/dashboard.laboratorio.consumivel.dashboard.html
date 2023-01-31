@@ -6,9 +6,13 @@
         table.table {
             table-layout: fixed;
         }
-
+        
         table.table th:nth-child(1) {
             width: 30px;
+        }
+        
+        .datepicker-container {
+            z-index: 1600 !important;
         }
     </style>
 {% endblock styles %}
@@ -36,7 +40,7 @@
             </form>
         </div>
     </div>
-    <hr class="mt-0"/>
+    <hr class="mt-0" />
     <div class="row">
         <div class="col-md-8">
             <div class="accordion">
@@ -47,7 +51,8 @@
                                data-target="#critical-materials-collapse"
                                aria-expanded="true"
                                aria-controls="critical-materials-collapse">
-                                <b><i class="fas fa-exclamation-triangle mr-2"></i> Itens consumíveis em nível crítico: <span id="critical-materials-count"></span></b>
+                                <b><i class="fas fa-exclamation-triangle mr-2"></i> Itens consumíveis em nível crítico:
+                                    <span id="critical-materials-count"></span></b>
                             </a>
                         </h5>
                     </div>
@@ -190,8 +195,7 @@
                                  data-parent="#accordion">
                                 <div id="material-history"
                                      class="card-body"
-                                     style="max-height: 200px;
-                                            overflow-y: scroll"></div>
+                                     style="max-height: 200px; overflow-y: scroll"></div>
                             </div>
                         </div>
                         <div class="card rounded-0">
@@ -315,7 +319,7 @@
                                 </div>
                             </div>
                             <div class="form-group col-md-3">
-                                <label >
+                                <label>
                                     Data de validade
                                 </label>
                                 <input class="form-control rounded-0 mb-1"
@@ -410,6 +414,7 @@
 {% endblock content %}
 {% block scripts %}
     <script src="{% static 'assets/dashboard/js/ajax_csrf.js' %}"></script>
+    <script src="{% static 'assets/dashboard/js/form_validate.js' %}"></script>
     <script src="{% static 'assets/js/response.js' %}"></script>
     <script src="{% static 'assets/dashboard/laboratorio/consumiveis/js/dashboard.js' %}"></script>
 {% endblock scripts %}
