@@ -35,26 +35,20 @@ class Chamado(SoftDeletableModel, TimeStampedModel):
         else:
             self.solved_at = None
 
-        super(Chamado, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
         if pk is None:
             self.notify()
 
     def notify(self):
-        message = """
+        message = f"""
             Um novo chamado foi cadastrado no sistema.<br/>
-            Título: {0}<br/>
-            Descrição: {1}<br/>
-            Solicitante: {2}<br/>
-            Curso: {3}<br/>
-            Contato: {4}
-        """.format(
-            self.title,
-            self.description,
-            self.requester,
-            self.course,
-            self.contact,
-        )
+            Título: {self.title}<br/>
+            Descrição: {self.description}<br/>
+            Solicitante: {self.requester}<br/>
+            Curso: {self.course}<br/>
+            Contato: {self.contact}
+        """
 
         context = {"message": message}
         msg = render_to_string("base.email_conversation.html", context)
@@ -63,9 +57,7 @@ class Chamado(SoftDeletableModel, TimeStampedModel):
             target=send_mail,
             args=(
                 (
-                    "Sistema de Chamados: {0}".format(
-                        self.title,
-                    ),
+                    f"Sistema de Chamados: {self.title}",
                     "",
                     settings.EMAIL_HOST_USER,
                     [settings.CONTACT_EMAIL_SUPORTE],

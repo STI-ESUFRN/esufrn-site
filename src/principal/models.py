@@ -132,7 +132,7 @@ class News(models.Model):
         threading.Thread(target=send).start()
 
     def save(self, *args, **kwargs):
-        haveId = self.pk
+        have_id = self.pk
         super().save(*args, **kwargs)
         if self.image:
             filepath = unquote(os.path.split(MEDIA_ROOT)[0] + self.image.url)
@@ -150,7 +150,7 @@ class News(models.Model):
 
         super().save(*args, **kwargs)
 
-        if haveId is None:
+        if have_id is None:
             self.send_newsletter()
 
 
@@ -272,7 +272,7 @@ class Newsletter(models.Model):
 
     def save(self, *args, **kwargs):
         self.clean()
-        super(Newsletter, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
 class Testimonial(models.Model):
@@ -384,7 +384,7 @@ class Message(models.Model):
         pk = self.pk
         self.clean()
 
-        super(Message, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
         if not pk:
             self.notify()
