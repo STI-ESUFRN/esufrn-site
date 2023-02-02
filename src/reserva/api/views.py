@@ -2,16 +2,15 @@ import math
 from datetime import datetime
 from functools import reduce
 
-from django.db import transaction
 from django.db.models import Q
 from django.forms import ValidationError
 from django.http import JsonResponse, QueryDict
 from django.utils.decorators import method_decorator
 from django.views.generic import View
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import mixins, permissions, viewsets
+from rest_framework import permissions, viewsets
 from rest_framework.decorators import action
-from rest_framework.filters import OrderingFilter
+from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
@@ -38,25 +37,26 @@ class IsSuperAdmin(permissions.BasePermission):
         return request.user.is_superuser
 
 
-class ReservaViewSet(
-    mixins.ListModelMixin,
-    mixins.CreateModelMixin,
-    mixins.RetrieveModelMixin,
-    mixins.UpdateModelMixin,
-    viewsets.GenericViewSet,
-):
+class ReserveViewSet(viewsets.ModelViewSet):
     serializer_class = ReserveSerializer
     queryset = Reserve.available_objects.all()
     permission_classes = [
         IsAuthenticated,
         IsFromReserve | IsSuperAdmin,
     ]
-    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filter_backends = [SearchFilter, DjangoFilterBackend, OrderingFilter]
     filterset_fields = {
         "classroom": ["exact"],
         "status": ["exact"],
-        "created": ["exact", "lte", "gte"],
     }
+    search_fields = [
+        "event",
+        "requester",
+        "cause",
+        "equipment",
+        "obs",
+        "email_response",
+    ]
     ordering_fields = ["created"]
 
     def get_serializer_class(self):

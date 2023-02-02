@@ -127,10 +127,11 @@ class Reserve(TimeStampedModel, SoftDeletableModel):
         NIGHT = ("N", "Noite")
 
     class Status(models.TextChoices):
-        APPROVED = ("A", "Aprovado")
-        REJECTED = ("R", "Rejeitado")
         WAITING = ("E", "Esperando")
-        DONE = ("C", "Concluído")
+        CANCELED = ("C", "Cancelado")
+        REJECTED = ("R", "Rejeitado")
+        APPROVED = ("A", "Aprovado")
+        DONE = ("D", "Concluído")
 
     classroom = models.ForeignKey(
         Classroom,
@@ -167,6 +168,35 @@ class Reserve(TimeStampedModel, SoftDeletableModel):
     admin_created = models.BooleanField(
         verbose_name="Criado pela administração", default=False
     )
+
+    def clean(self) -> None:
+        reserves = Reserve.objects.filter(
+            date=self.date,
+            status=Reserve.Status.APPROVED,
+            classroom=self.classroom,
+            shift=self.shift,
+        )
+        periodreserves = PeriodReserveDay.objects.filter(
+            date=self.date,
+            period__status=Reserve.Status.APPROVED,
+            period__classroom=self.classroom,
+            shift=self.shift,
+        ).exclude(active=False)
+
+        if self.pk:
+            reserves = reserves.exclude(id=self.pk)
+
+        if (not self.pk or (self.pk and self.status != Reserve.Status.REJECTED)) and (
+            reserves or periodreserves
+        ):
+            raise ValidationError(
+                "Já existe uma reserva aprovada para o dia"
+                f" {self.date.strftime('%d/%m/%Y')} - {self.shift}."
+            )
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        return super().save(*args, **kwargs)
 
     def __str__(self):
         return str(self.classroom)

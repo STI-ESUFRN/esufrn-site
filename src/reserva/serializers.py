@@ -65,35 +65,6 @@ class ReserveSerializer(serializers.ModelSerializer):
             },
         }
 
-    def validate(self, attrs):
-        reserves = Reserve.objects.filter(
-            date=attrs["date"],
-            status=Reserve.Status.APPROVED,
-            classroom=attrs["classroom"],
-            shift=attrs["shift"],
-        )
-        periodreserves = PeriodReserveDay.objects.filter(
-            date=attrs["date"],
-            period__status=Reserve.Status.APPROVED,
-            period__classroom=attrs["classroom"],
-            shift=attrs["shift"],
-        ).exclude(active=False)
-
-        if self.instance:
-            reserves = reserves.exclude(id=self.instance.id)
-
-        if (
-            not self.instance
-            or (self.instance and self.instance.status != Reserve.Status.REJECTED)
-        ) and (reserves or periodreserves):
-            raise ValidationError(
-                "Já existe uma reserva aprovada para o dia {} - {}.".format(
-                    attrs["date"].strftime("%d/%m/%Y"),
-                    attrs["shift"],
-                )
-            )
-        return super().validate(attrs)
-
     def validate_cause(self, cause):
         if "classroom" in self.context["request"].data:
             classroom = Classroom.objects.get(

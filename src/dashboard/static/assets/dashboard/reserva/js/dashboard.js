@@ -159,7 +159,7 @@ $("#detalhes-dismiss").click(function () {
     $("#detalhes").fadeTo("fast", 0).slideUp();
 });
 
-$("#confirmReserve, #rejectReserve").click(function (e) {
+$("[data-submit=reserve]").click(function (e) {
     e.preventDefault();
     $(".loader-global").addClass("load");
     update({

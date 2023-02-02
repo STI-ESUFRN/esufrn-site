@@ -109,12 +109,16 @@
                               title="Essa mensagem será adicionada no corpo do Email enviado ao solicitante.&#10;Este campo pode ser em branco."></textarea>
                     <a href="#"
                        class="btn mb-1 btn-outline-success btn-sm"
-                       id="confirmReserve"
+                       data-submit="reserve"
                        data-status="A">Aprovar Reserva</a>
                     <a href="#"
                        class="btn mb-1 btn-outline-danger btn-sm"
-                       id="rejectReserve"
+                       data-submit="reserve"
                        data-status="R">Rejeitar Reserva</a>
+                    <a href="#"
+                       class="btn mb-1 btn-outline-secondary btn-sm"
+                       data-submit="reserve"
+                       data-status="C">Cancelar Reserva</a>
                     <p class="m-0 mt-2">
                         <small class="text-muted" title="Data que o solicitante submeteu o chamado">
                             Data do pedido: <span date-format="DD/MM/YYYY HH:mm" data-attribute="created">---</span>
