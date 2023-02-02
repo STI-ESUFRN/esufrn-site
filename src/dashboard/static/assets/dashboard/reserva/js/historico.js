@@ -18,7 +18,9 @@ function refreshData(url = undefined) {
                 class:
                     v.status == "A"
                         ? "fas fa-check-circle text-success"
-                        : "fas fa-times-circle text-danger",
+                        : v.status == "R"
+                        ? "fas fa-times-circle text-danger"
+                        : "fas fa-solid fa-circle-minus text-secondary",
             });
             fa.append(a2);
 
@@ -26,24 +28,20 @@ function refreshData(url = undefined) {
                 class: "text-center px-0",
                 html: v.admin_created
                     ? '<i class="fas fa-key"></i>'
-                    : '<i class="far fa-calendar-alt"></i>',
+                    : '<i class="fas fa-calendar-alt"></i>',
             });
-
             let classroom = $("<td />", { text: v.classroom.full_name });
-            let criado_ha_date = new Date(v.created);
-            let criado_ha = criado_ha_date.toLocaleDateString();
             let event = $("<td />", { text: v.event, title: v.event });
             let requester = $("<td />", {
                 text: v.requester,
                 title: v.requester,
             });
-            let e1 = $("<td />", {
-                text: criado_ha,
-                title: criado_ha,
+            let date = $("<td />", {
+                text: moment(v.date).format("DD/MM/YYYY"),
                 class: "font-weight-bold text-center",
             });
 
-            row.append(fa, fa_calendar, classroom, event, requester, e1);
+            row.append(fa, fa_calendar, classroom, event, requester, date);
             $("#lista-de-chamados").append(row);
         });
         $(".timeago").timeago();
@@ -80,19 +78,18 @@ function fillReserve(id) {
     let v = $("[data-attribute=status]");
     if (v.text() == "A") {
         v.html('Aceito <i class="fas fa-check-circle text-success"></i>');
-    } else {
+    } else if (v.text() == "R") {
         v.html('Rejeitado <i class="fas fa-times-circle text-danger"></i>');
+    } else {
+        v.html(
+            'Cancelado <i class="fas fa-solid fa-circle-stop text-secondary"></i>'
+        );
     }
 
     $("#detalhes").fadeTo("fast", 0).fadeTo("fast", 1).show();
 }
 
 // ------------------------------------------------------------------- Listeners
-
-$("#filtro, #ordem").change(function (e) {
-    e.preventDefault();
-    refreshData();
-});
 
 $("#load-antigo").click(function (e) {
     e.preventDefault();
@@ -124,7 +121,7 @@ function update(data) {
         },
     });
 }
-$("#confirmReserve, #rejectReserve, #waitReserve").click(function (e) {
+$("[data-submit=reserve]").click(function (e) {
     e.preventDefault();
     $(".loader-global").addClass("load");
     update({

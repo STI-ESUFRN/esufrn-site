@@ -2,7 +2,7 @@ from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
 from reserva.api.views import (
-    ReservaViewSet,
+    ReserveViewSet,
     calendarioView,
     periodAdminView,
     periodDayAdminView,
@@ -14,7 +14,7 @@ appname = "reservas"
 
 router = DefaultRouter()
 
-router.register("reservas", ReservaViewSet, basename="reservas")
+router.register("reservas", ReserveViewSet, basename="reservas")
 
 urlpatterns = [
     path("reservas/calendario/", calendarioView.as_view()),  # (PÚBLICO) get

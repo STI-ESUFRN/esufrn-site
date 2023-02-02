@@ -24,25 +24,47 @@
 {% block content %}
     <div class="row">
         <div class="col-md-3 mb-3">
-            <select class="form-control form-control-sm" data-filter name="orde">
-                <option value="cre" selected>
-                    Ver mais recentes primeiro
+            <input class="form-control form-control-sm rounded-0"
+                   placeholder="Buscar"
+                   type="text"
+                   data-filter
+                   name="search"/>
+        </div>
+        <div class="col-md-3 mb-3">
+            <select class="form-control form-control-sm" data-filter name="classroom">
+                <option value="" selected>
+                    Todas as salas
                 </option>
-                <option value="dec">
-                    Ver mais antigos primeiro
+                {% for sala in salas %}
+                    <option value="{{ sala.id }}">
+                        {{ sala }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3 mb-3">
+            <select class="form-control form-control-sm" data-filter name="ordering">
+                <option value="-created" selected>
+                    Mais recentes primeiro
+                </option>
+                <option value="created">
+                    Mais antigos primeiro
                 </option>
             </select>
         </div>
         <div class="col-md-3 mb-3">
             <select class="form-control form-control-sm" data-filter name="status">
                 <option value="" selected>
-                    Ver todas as reservas
+                    Todas as reservas
                 </option>
                 <option value="A">
-                    Ver apenas reservas aprovadas
+                    Apenas reservas aprovadas
                 </option>
                 <option value="R">
-                    Ver apenas reservas rejeitadas
+                    Apenas reservas rejeitadas
+                </option>
+                <option value="C">
+                    Apenas reservas canceladas
                 </option>
             </select>
         </div>
@@ -142,18 +164,23 @@
                         <textarea id="reserve-email"
                                   class="form-control mb-3"
                                   rows="2"
-                                  data-attribute="email_response"></textarea>
+                                  data-attribute="email_response"
+                                  disabled></textarea>
                         <a href="#"
                            class="btn mb-1 btn-outline-success btn-sm"
-                           id="confirmReserve"
+                           data-submit="reserve"
                            data-status="A">Confirmar</a>
                         <a href="#"
                            class="btn mb-1 btn-outline-danger btn-sm"
-                           id="rejectReserve"
+                           data-submit="reserve"
                            data-status="R">Rejeitar</a>
                         <a href="#"
+                           class="btn mb-1 btn-outline-secondary btn-sm"
+                           data-submit="reserve"
+                           data-status="C">Cancelar</a>
+                        <a href="#"
                            class="btn mb-1 btn-outline-warning btn-sm"
-                           id="waitReserve"
+                           data-submit="reserve"
                            data-status="E">Colocar em Espera</a>
                         <p class="m-0 mt-2">
                             <small class="text-muted">Data do pedido: <span date-format="DD/MM/YYYY HH:mm" data-attribute="created"></span></small>

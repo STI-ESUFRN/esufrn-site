@@ -16,4 +16,4 @@ class DayOfTheWeekField(models.CharField):
     def __init__(self, *args, **kwargs):
         kwargs["choices"] = tuple(sorted(DAY_OF_THE_WEEK.items()))
         kwargs["max_length"] = 1
-        super(DayOfTheWeekField, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)

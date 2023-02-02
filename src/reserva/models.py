@@ -74,7 +74,7 @@ class Classroom(models.Model):
 
     def save(self, *args, **kwargs):
         self.clean()
-        super(Classroom, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Sala"
@@ -113,7 +113,7 @@ class UserClassroom(models.Model):
     def save(self, *args, **kwargs):
         self.clean()
 
-        super(UserClassroom, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Responsável"
@@ -127,10 +127,11 @@ class Reserve(TimeStampedModel, SoftDeletableModel):
         NIGHT = ("N", "Noite")
 
     class Status(models.TextChoices):
-        APPROVED = ("A", "Aprovado")
-        REJECTED = ("R", "Rejeitado")
         WAITING = ("E", "Esperando")
-        DONE = ("C", "Concluído")
+        CANCELED = ("C", "Cancelado")
+        REJECTED = ("R", "Rejeitado")
+        APPROVED = ("A", "Aprovado")
+        DONE = ("D", "Concluído")
 
     classroom = models.ForeignKey(
         Classroom,
@@ -167,6 +168,35 @@ class Reserve(TimeStampedModel, SoftDeletableModel):
     admin_created = models.BooleanField(
         verbose_name="Criado pela administração", default=False
     )
+
+    def clean(self) -> None:
+        reserves = Reserve.objects.filter(
+            date=self.date,
+            status=Reserve.Status.APPROVED,
+            classroom=self.classroom,
+            shift=self.shift,
+        )
+        periodreserves = PeriodReserveDay.objects.filter(
+            date=self.date,
+            period__status=Reserve.Status.APPROVED,
+            period__classroom=self.classroom,
+            shift=self.shift,
+        ).exclude(active=False)
+
+        if self.pk:
+            reserves = reserves.exclude(id=self.pk)
+
+        if (not self.pk or (self.pk and self.status != Reserve.Status.REJECTED)) and (
+            reserves or periodreserves
+        ):
+            raise ValidationError(
+                "Já existe uma reserva aprovada para o dia"
+                f" {self.date.strftime('%d/%m/%Y')} - {self.shift}."
+            )
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        return super().save(*args, **kwargs)
 
     def __str__(self):
         return str(self.classroom)
@@ -275,9 +305,10 @@ class PeriodReserve(TimeStampedModel, SoftDeletableModel):
 
     obs = models.TextField("Observação", max_length=1000, null=True, blank=True)
 
-    def get_courses():
+    @classmethod
+    def get_courses(cls):
         courses = []
-        for index, row in PeriodReserve.COURSE_CHOICES:
+        for index, row in cls.COURSE_CHOICES:
             courses.append((index, row))
 
         return courses
@@ -288,18 +319,18 @@ class PeriodReserve(TimeStampedModel, SoftDeletableModel):
                 return row
 
     def get_weekdays(self):
-        list = []
+        weekdays = []
         for index, row in sorted(self.DAYS_OF_THE_WEEK):
             if index in self.weekdays:
-                list.append(row)
-        return list
+                weekdays.append(row)
+        return weekdays
 
     def get_numeric_weekdays(self):
-        list = []
+        weekdays = []
         for index, row in sorted(self.NUMERIC_DAYS_OF_THE_WEEK):
             if index in self.weekdays:
-                list.append(row)
-        return list
+                weekdays.append(row)
+        return weekdays
 
     def get_days(self):
         return (
@@ -319,7 +350,7 @@ class PeriodReserve(TimeStampedModel, SoftDeletableModel):
 
     def __str__(self):
         if self.classcode:
-            return "{}: {}".format(self.classcode, self.classname)
+            return f"{self.classcode}: {self.classname}"
         else:
             return self.classname
 
@@ -359,9 +390,9 @@ class PeriodReserve(TimeStampedModel, SoftDeletableModel):
         if reserves or period_reserves:
             dates = ""
             for i in reserves:
-                dates += "{} - {}, ".format(i.date.strftime("%d/%m/%Y"), i.shift)
+                dates += f"{i.date.strftime('%d/%m/%Y')} - {i.shift}, "
             for i in period_reserves:
-                dates += "{} - {}, ".format(i.date.strftime("%d/%m/%Y"), i.shift)
+                dates += f"{i.date.strftime('%d/%m/%Y')} - {i.shift}, "
 
             raise ValidationError(
                 "Já existe uma reserva aprovada para o{0} dia{0}: ".format(
@@ -390,15 +421,12 @@ class PeriodReserve(TimeStampedModel, SoftDeletableModel):
             start_date += delta
 
     def save(self, *args, **kwargs):
-        weekdays = []
-        for i in self.weekdays:
-            weekdays.append(int(i))
-        self.weekdays = weekdays
+        self.weekdays = [int(i) for i in self.weekdays]
 
         if self.status == "A":
             self.check_days()
 
-        super(PeriodReserve, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self.create_days()
 
     def update(self, **kwargs):
@@ -473,14 +501,13 @@ class PeriodReserveDay(models.Model):
 
             if reserves or periodreserves:
                 raise ValidationError(
-                    "Já existe uma reserva aprovada para o dia {}".format(
-                        self.date.strftime("%d-%m-%Y")
-                    )
+                    "Já existe uma reserva aprovada para o dia"
+                    f" {self.date.strftime('%d-%m-%Y')}"
                 )
 
-    def save(self, **kwargs):
+    def save(self, *args, **kwargs):
         self.clean()
-        super(PeriodReserveDay, self).save(**kwargs)
+        super().save(*args, **kwargs)
 
     def update(self, *args, **kwargs):
         self.__dict__.update(kwargs)

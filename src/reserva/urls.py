@@ -1,7 +1,7 @@
 from django.urls import path
 
-from reserva.views import homeReserva
+from reserva.views import home_reserva
 
 urlpatterns = [
-    path("inserir/", homeReserva),
+    path("inserir/", home_reserva),
 ]

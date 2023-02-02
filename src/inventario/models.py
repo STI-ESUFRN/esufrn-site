@@ -9,7 +9,6 @@ from reserva.models import Classroom
 
 
 class Patrimonio(models.Model):
-
     model = models.CharField(verbose_name="Modelo", max_length=64)
     dmp = models.CharField(
         verbose_name="Tombamento", max_length=64, null=True, blank=True
@@ -47,20 +46,19 @@ class Patrimonio(models.Model):
             patrimony=self, loan__return_date__isnull=True
         ):
             raise ValidationError(
-                "Não é possível emprestar {}: patrimônio já foi emprestado".format(self)
+                f"Não é possível emprestar {self}: patrimônio já foi emprestado"
             )
 
     def save(self, *args, **kwargs):
         self.clean()
 
-        super(Patrimonio, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        return "{} ({})".format(self.model, self.dmp)
+        return f"{self.model} ({self.dmp})"
 
 
 class Maquina(models.Model):
-
     patrimony = models.ForeignKey(
         Patrimonio, verbose_name="Patrimônio", on_delete=models.CASCADE
     )
@@ -133,7 +131,7 @@ class Emprestimo(models.Model):
         elif self.status == "D":
             self.return_date = datetime.now()
 
-        super(Emprestimo, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def update(self, *args, **kwargs):
         self.__dict__.update(kwargs)

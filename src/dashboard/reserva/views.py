@@ -19,7 +19,16 @@ def reserve_home(request):
 @login_required(login_url="/dashboard/login")
 @allowed_users(allowed_roles=reserva_roles)
 def reserve_history(request):
-    context = {}
+    if request.user.is_superuser:
+        salas = Classroom.objects.all()
+
+    else:
+        user_classroomns = UserClassroom.objects.filter(user=request.user).values_list(
+            "classroom", flat=True
+        )
+        salas = Classroom.objects.filter(id__in=user_classroomns)
+
+    context = {"salas": salas}
     get_dash_context(context, "Reservas", "reserva_historico")
     return render(request, "reserva/dashboard.reserva.historico.html", context)
 
@@ -27,10 +36,15 @@ def reserve_history(request):
 @login_required(login_url="/dashboard/login")
 @allowed_users(allowed_roles=reserva_roles)
 def create_reserve(request):
-    user_classroomns = UserClassroom.objects.filter(user=request.user).values_list(
-        "classroom", flat=True
-    )
-    salas = Classroom.objects.filter(id__in=user_classroomns)
+    if request.user.is_superuser:
+        salas = Classroom.objects.all()
+
+    else:
+        user_classroomns = UserClassroom.objects.filter(user=request.user).values_list(
+            "classroom", flat=True
+        )
+        salas = Classroom.objects.filter(id__in=user_classroomns)
+
     context = {"salas": salas}
     get_dash_context(context, "Reservas", "inserir_reserva")
     return render(request, "reserva/dashboard.reserva.inserir.html", context)

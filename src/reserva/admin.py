@@ -56,36 +56,15 @@ class AdminReserve(admin.ModelAdmin):
     ]
     list_filter = ["status", "classroom", "shift", "date"]
 
-    def reserve_approve(modeladmin, request, queryset):
-        queryset.update(status="A")
-
-    reserve_approve.short_description = "Marcar reservas selecionadas como aprovadas"
-
-    def reserve_decline(modeladmin, request, queryset):
-        queryset.update(status="R")
-
-    reserve_decline.short_description = "Marcar reservas selecionadas como rejeitadas"
-
-    actions = [reserve_approve, reserve_decline]
-
     def save_model(self, request, obj, form, change):
         if "status" in form.changed_data:
             if obj.status is not None:
                 obj.notify()
 
-        super(AdminReserve, self).save_model(request, obj, form, change)
+        super().save_model(request, obj, form, change)
 
 
 admin.site.register(Reserve, AdminReserve)
-
-
-# class AdminProfile(admin.ModelAdmin):
-#     list_display = ['user', 'level']
-#     search_fields = ['user']
-#     list_filter = ['user']
-
-
-# admin.site.register(Profile, AdminProfile)
 
 
 class AdminPeriodReserve(admin.ModelAdmin):
