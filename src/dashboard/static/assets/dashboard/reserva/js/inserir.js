@@ -181,7 +181,7 @@ function getCalendar() {
 
     $.ajax({
         type: "GET",
-        url: `/api/reservas/calendario/?year=${anoAtual}&month=${mesAtual}&classroom=${sala}`,
+        url: `/api/calendar/?date__year=${anoAtual}&date__month=${mesAtual}&classroom=${sala}`,
         dataType: "json",
         success: function (response) {
             calendario.updateCalendar(response, anoAtual, mesAtual);

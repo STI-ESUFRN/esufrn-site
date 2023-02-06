@@ -12,12 +12,15 @@
         table.custom-table th:first-child {
             width: 20px;
         }
+
         table.custom-table th:nth-child(2) {
             width: 20px;
         }
-        table.tl-fixed{
+
+        table.tl-fixed {
             table-layout: fixed;
         }
+
         .bg-escola {
             color: #ffffff;
             background-color: #0b3e61;
@@ -25,129 +28,29 @@
     </style>
 {% endblock styles %}
 {% block content %}
-    {% comment %} <div id="period-list"> {% endcomment %}
-    <div class="card rounded-0 mb-2 ">
-        <div class="card-header text-center bg-escola">
-            <b>Buscar Períodos</b>
-        </div>
-        <div class="card-body">
-            <div class="row mb-2">
-                <div class="col-md-6">
-                    <label>Buscar:</label>
-                    <input class="form-control form-control-sm " data-filter name="search"/>
-                    <small class="text-muted">Pressione ENTER ou saia deste campo para buscar</small>
-                </div>
-                <div class="col-md-6">
-                    <label>Curso:</label>
-                    <select class="form-control form-control-sm " data-filter name="course">
-                        <option value="" selected>
-                            Todos os cursos
-                        </option>
-                        {% for index, name in cursos %}
-                            {% if name %}
-                                <option value="{{ index }}">
-                                    {{ name }}
-                                </option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
+    <div id="accordion">
+        <div class="card rounded-0 mb-2">
+            <div class="card-header text-center bg-escola"
+                 id="filter-heading"
+                 data-toggle="collapse"
+                 data-target="#filter-collapse"
+                 aria-expanded="true"
+                 aria-controls="filter-collapse">
+                <h5 class="mb-0">
+                    <b>Filtrar Períodos <i class="fa-solid fa-filter"></i></b>
+                </h5>
+            </div>
+            <div id="filter-collapse"
+                 class="collapse"
+                 aria-labelledby="filter-heading"
+                 data-parent="#accordion">
+                <div class="card-body">{% include "periodo/dashboard.periodo.historico.filters.html" %}</div>
+                <div class="card-footer p-1 text-muted text-right">
+                    <button id="limpa-filtro"
+                            type="button"
+                            class="btn btn-outline-secondary btn-sm">Limpar filtros</button>
                 </div>
             </div>
-            <div class="row my-2">
-                <div class="col-md-6">
-                    <label>Professor:</label>
-                    <select class="form-control form-control-sm " data-filter name="requester">
-                        <option value="" selected>
-                            Todos os professores
-                        </option>
-                        {% for professor in professores %}
-                            <option value="{{ professor }}">
-                                {{ professor }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-6">
-                    <label>Sala:</label>
-                    <select class="form-control form-control-sm " data-filter name="classroom">
-                        <option value="" selected>
-                            Todas as salas
-                        </option>
-                        {% for sala in salas %}
-                            <option value="{{ sala.id }}">
-                                {{ sala }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-            <div class="row mt-2">
-                <div class="col-md-3">
-                    <label>Turno:</label>
-                    <select class="form-control form-control-sm " data-filter name="shift">
-                        <option value="" selected>
-                            Todos os turnos
-                        </option>
-                        <option value="M">
-                            Manhã
-                        </option>
-                        <option value="T">
-                            Tarde
-                        </option>
-                        <option value="N">
-                            Noite
-                        </option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label>Status:</label>
-                    <select class="form-control form-control-sm " data-filter name="status">
-                        <option value="" selected>
-                            Todos os períodos
-                        </option>
-                        <option value="A">
-                            Apenas períodos em vigor
-                        </option>
-                        <option value="R">
-                            Apenas períodos cancelados
-                        </option>
-                        <option value="E">
-                            Apenas períodos pendentes
-                        </option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label>Turma:</label>
-                    <select class="form-control form-control-sm " data-filter name="class_period">
-                        <option value="" selected>
-                            Todas as turmas
-                        </option>
-                        {% for turma in turmas %}
-                            <option value="{{ turma }}">
-                                {{ turma }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label>Período:</label>
-                    <select class="form-control form-control-sm " data-filter name="period">
-                        <option value="" selected>
-                            Todos os períodos
-                        </option>
-                        {% for periodo in periodos %}
-                            <option value="{{ periodo }}">
-                                {{ periodo }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div class="card-footer p-1 text-muted text-right">
-            <button id="limpa-filtro"
-                    type="button"
-                    class="btn btn-outline-secondary btn-sm">Limpar filtros</button>
         </div>
     </div>
     <div class="card rounded-0">
@@ -175,21 +78,14 @@
         </div>
     </div>
     <div class="text-center w-100">
-        <button id="load-recente" class="btn rounded-0 mt-4">
-            <i class="fas fa-arrow-alt-circle-left"></i> Mais Recente
+        <button id="load-previous" class="btn rounded-0 mt-4">
+            <i class="fas fa-arrow-alt-circle-left"></i> Anterior
         </button>
-        <button id="load-antigo" class="btn rounded-0 mt-4">
-            Mais Antigo <i class="fas fa-arrow-alt-circle-right"></i>
+        <button id="load-next" class="btn rounded-0 mt-4">
+            Próxima <i class="fas fa-arrow-alt-circle-right"></i>
         </button>
     </div>
-    {% comment %} </div> {% endcomment %}
     <div id="period-details" class="mt-4" style="display: none;">
-        {% comment %}
-        <button id="back-to-list" class="btn rounded-0">
-            <i class="fas fa-arrow-alt-circle-left"></i> Voltar
-        </button>
-        <hr/>
-        {% endcomment %}
         <div class="card">
             <div class="card-header head-table border-0 rounded-0">
                 <div class="row">
@@ -220,7 +116,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <small>Curso:</small> <b data-attribute="course_name"></b>
+                        <small>Curso:</small> <b data-attribute="course"></b>
                     </div>
                 </div>
                 <div class="row">
@@ -244,15 +140,15 @@
                 <hr/>
                 <div class="row">
                     <div class="col-12">
-                        <small>Dias:</small> <b id="weekdays"></b>
+                        <small>Dias:</small> <b data-attribute="weekdays"></b>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-6">
-                        <small>Turno:</small> <b id="shift"></b>
+                        <small>Turno:</small> <b data-attribute="shift"></b>
                     </div>
                     <div class="col-6">
-                        <small>Carga horária:</small> <b id="workload"></b>
+                        <small>Carga horária:</small> <b data-attribute="workload"></b>
                     </div>
                 </div>
                 <div class="row">
@@ -427,6 +323,5 @@
     </div>
 {% endblock content %}
 {% block scripts %}
-    <script src="{% static 'assets/dashboard/js/ajax_csrf.js' %}"></script>
     <script src="{% static 'assets/dashboard/periodo/js/historico.js' %}"></script>
 {% endblock scripts %}

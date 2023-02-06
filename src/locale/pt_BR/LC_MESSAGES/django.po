@@ -1,0 +1,67 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-02-05 03:11-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: chamado/models.py:14
+msgid "Resolved"
+msgstr "Resolvido"
+
+#: chamado/models.py:15
+msgid "Not resolved"
+msgstr "Não resolvido"
+
+#: chamado/models.py:16
+msgid "Pending"
+msgstr "Pendente"
+
+#: core/validators.py:9
+msgid "Invalid year"
+msgstr "Ano inválido"
+
+#: principal/templatetags/mytags.py:47 principal/templatetags/mytags.py:51
+msgid "and"
+msgstr "e"
+
+#: reserva/fields.py:5 reserva/models.py:165
+msgid "Monday"
+msgstr "Segunda"
+
+#: reserva/fields.py:6 reserva/models.py:166
+msgid "Tuesday"
+msgstr "Terça"
+
+#: reserva/fields.py:7 reserva/models.py:167
+msgid "Wednesday"
+msgstr "Quarta"
+
+#: reserva/fields.py:8 reserva/models.py:168
+msgid "Thursday"
+msgstr "Quinta"
+
+#: reserva/fields.py:9 reserva/models.py:169
+msgid "Friday"
+msgstr "Sexta"
+
+#: reserva/fields.py:10 reserva/models.py:170
+msgid "Saturday"
+msgstr "Sábado"
+
+#: reserva/fields.py:11 reserva/models.py:171
+msgid "Sunday"
+msgstr "Domingo"

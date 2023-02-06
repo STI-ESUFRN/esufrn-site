@@ -1,12 +1,6 @@
 from django.contrib import admin
 
-from reserva.models import (
-    Classroom,
-    PeriodReserve,
-    PeriodReserveDay,
-    Reserve,
-    UserClassroom,
-)
+from reserva.models import Classroom, Period, Reserve, ReserveDay, UserClassroom
 
 # Register your models here.
 
@@ -23,15 +17,9 @@ class AdminClassroom(admin.ModelAdmin):
     ]
 
 
-admin.site.register(Classroom, AdminClassroom)
-
-
 class AdminUserClassroom(admin.ModelAdmin):
     list_display = ["user", "get_user_email", "classroom"]
     list_filter = ["user", "classroom"]
-
-
-admin.site.register(UserClassroom, AdminUserClassroom)
 
 
 class AdminReserve(admin.ModelAdmin):
@@ -39,12 +27,9 @@ class AdminReserve(admin.ModelAdmin):
         "classroom",
         "date",
         "shift",
-        # "equipment",
         "requester",
         "email",
         "status",
-        # "event",
-        # "phone",
     ]
     exclude = ["tag"]
     search_fields = [
@@ -62,9 +47,6 @@ class AdminReserve(admin.ModelAdmin):
                 obj.notify()
 
         super().save_model(request, obj, form, change)
-
-
-admin.site.register(Reserve, AdminReserve)
 
 
 class AdminPeriodReserve(admin.ModelAdmin):
@@ -113,14 +95,15 @@ class AdminPeriodReserve(admin.ModelAdmin):
     )
 
 
-admin.site.register(PeriodReserve, AdminPeriodReserve)
+class AdminReserveDay(admin.ModelAdmin):
+    list_display = ["date", "shift"]
+    search_fields = ["date"]
+    list_filter = ["shift"]
+    readonly_fields = ["date"]
 
 
-class AdminPeriodReserveDay(admin.ModelAdmin):
-    list_display = ["get_period_classroom", "date", "get_period_requester", "shift"]
-    search_fields = ["period", "date"]
-    list_filter = ["period", "period__requester", "period__classroom", "shift"]
-    readonly_fields = ["period", "date"]
-
-
-admin.site.register(PeriodReserveDay, AdminPeriodReserveDay)
+admin.site.register(Reserve, AdminReserve)
+admin.site.register(Classroom, AdminClassroom)
+admin.site.register(UserClassroom, AdminUserClassroom)
+admin.site.register(Period, AdminPeriodReserve)
+admin.site.register(ReserveDay, AdminReserveDay)

@@ -1,30 +1,26 @@
 from django.urls import include, path
-from rest_framework.routers import DefaultRouter
+from rest_framework_nested import routers
 
 from reserva.api.views import (
+    CalendarViewSet,
+    PeriodViewset,
+    ReserveDayViewSet,
     ReserveViewSet,
-    calendarioView,
-    periodAdminView,
-    periodDayAdminView,
-    periodDaysAdminView,
-    periodsAdminView,
 )
 
-appname = "reservas"
+app_name = "reserves"
 
-router = DefaultRouter()
 
-router.register("reservas", ReserveViewSet, basename="reservas")
+router = routers.SimpleRouter()
+router.register("periods", PeriodViewset, basename="periodos")
+router.register("reserves", ReserveViewSet, basename="reservas")
+router.register("calendar", CalendarViewSet, basename="calendar")
+
+period_router = routers.NestedSimpleRouter(router, "periods", lookup="period")
+period_router.register("days", ReserveDayViewSet, basename="days")
+
 
 urlpatterns = [
-    path("reservas/calendario/", calendarioView.as_view()),  # (PÚBLICO) get
     path("", include(router.urls)),
-    path("admin/periodos/", periodsAdminView.as_view()),  # get, post
-    path(
-        "admin/periodos/<int:period_pk>/", periodAdminView.as_view()
-    ),  # get, put, delete
-    path("admin/periodos/<int:period_pk>/dias/", periodDaysAdminView.as_view()),  # get
-    path(
-        "admin/periodos/<int:period_pk>/dias/<int:pk>/", periodDayAdminView.as_view()
-    ),  # get, put
+    path("", include(period_router.urls)),
 ]

@@ -12,7 +12,7 @@ from dashboard.forms import SiginForm
 from dashboard.helpers import get_dash_context
 from principal.decorators import authenticated_user, unauthenticated_user
 from principal.models import Message
-from reserva.models import PeriodReserveDay, Reserve
+from reserva.models import Reserve, ReserveDay
 
 
 # REGISTRATION
@@ -44,9 +44,9 @@ def login_view(request):
         if user:
             login(request, user)
 
-            next = request.GET.get("next")
-            if next:
-                return redirect(next)
+            next_url = request.GET.get("next")
+            if next_url:
+                return redirect(next_url)
 
             return redirect("dashboard_home")
         else:
@@ -86,7 +86,7 @@ def home_view(request):
     classes = []
     if shift:
         events = Reserve.objects.filter(date=now.date(), shift=shift, status="A")
-        classes = PeriodReserveDay.objects.filter(
+        classes = ReserveDay.objects.filter(
             date=now.date(), shift=shift, period__status="A", active=True
         )
 

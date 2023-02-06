@@ -96,6 +96,9 @@ TEMPLATES = [
     }
 ]
 
+LOCALE_PATHS = (os.path.join(os.path.dirname(os.path.realpath(__name__)), "locale"),)
+
+
 WSGI_APPLICATION = "esufrn.wsgi.application"
 
 DATABASES = {

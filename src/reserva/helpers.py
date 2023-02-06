@@ -1,5 +1,5 @@
 from django.template.loader import render_to_string
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext as _
 
 from core.helpers import send_mail_async
 from reserva.models import Reserve, UserClassroom

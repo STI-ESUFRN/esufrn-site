@@ -3,8 +3,9 @@ from datetime import datetime
 from rest_framework import serializers
 from rest_framework.serializers import ValidationError
 
-from core.fields import PrimaryKeyRelatedFieldWithSerializer
-from reserva.models import Classroom, PeriodReserve, PeriodReserveDay, Reserve
+from core.fields import MultiSelectField, PrimaryKeyRelatedFieldWithSerializer
+from reserva.enums import Shift
+from reserva.models import Classroom, Period, Reserve, ReserveDay
 
 
 class ClassroomSerializer(serializers.ModelSerializer):
@@ -118,7 +119,8 @@ class ReserveSerializer(serializers.ModelSerializer):
                 if diff < classroom.days_required:
                     raise ValidationError(
                         "A reserva para esta sala requer antecedência de"
-                        f" {classroom.days_required} dia{'s' if classroom.days_required > 1 else ''}."
+                        f" {classroom.days_required} "
+                        f"dia{'s' if classroom.days_required > 1 else ''}."
                     )
 
         return date
@@ -142,12 +144,16 @@ class CreateReserveSerializer(ReserveSerializer):
 
 
 class ReservePublicSerializer(ReserveSerializer):
+    classroom = PrimaryKeyRelatedFieldWithSerializer(
+        ClassroomSerializer, queryset=Classroom.objects.all()
+    )
     shift_display = serializers.CharField(source="get_shift_display", read_only=True)
     status_display = serializers.CharField(source="get_status_display", read_only=True)
 
     class Meta:
         model = Reserve
         fields = [
+            "id",
             "date",
             "classroom",
             "event",
@@ -163,63 +169,58 @@ class ReservePublicSerializer(ReserveSerializer):
         }
 
 
-class PeriodReserveDaySerializer(serializers.ModelSerializer):
-    status = serializers.SerializerMethodField()
-
-    def get_status(self, obj):
-        return obj.period.status
-
-    shift_name = serializers.SerializerMethodField()
-
-    def get_shift_name(self, obj):
-        return obj.get_shift_name()
-
-    event = serializers.SerializerMethodField()
-
-    def get_event(self, obj):
-        return str(obj.period)
+class PeriodSerializer(serializers.ModelSerializer):
+    classroom = PrimaryKeyRelatedFieldWithSerializer(
+        ClassroomSerializer, queryset=Classroom.objects.all()
+    )
+    shift = MultiSelectField(choices=Shift.choices)
+    weekdays = MultiSelectField(choices=Period.Weekdays.choices)
+    course_display = serializers.CharField(source="get_course_display", read_only=True)
 
     class Meta:
-        model = PeriodReserveDay
-        exclude = ()
-        fields = "__all__"
+        model = Period
+        fields = [
+            "id",
+            "classroom",
+            "status",
+            "date_begin",
+            "date_end",
+            "workload",
+            "weekdays",
+            "classname",
+            "classcode",
+            "course",
+            "course_display",
+            "period",
+            "class_period",
+            "shift",
+            "requester",
+            "email",
+            "phone",
+            "equipment",
+            "obs",
+        ]
+
+    def create(self, validated_data):
+        return self.Meta.model.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance = super().update(instance, validated_data)
+        self.Meta.model.objects.ensure_days(instance)
+        return instance
 
 
-class PeriodReserveDayPublicSerializer(serializers.ModelSerializer):
-    status = serializers.SerializerMethodField()
-
-    def get_status(self, obj):
-        return obj.period.status
-
-    shift_name = serializers.SerializerMethodField()
-
-    def get_shift_name(self, obj):
-        return obj.get_shift_name()
-
-    event = serializers.SerializerMethodField()
-
-    def get_event(self, obj):
-        return str(obj.period)
-
-    class Meta:
-        model = PeriodReserveDay
-        fields = ["status", "event", "date", "shift", "shift_name"]
-
-
-class PeriodReserveBasicSerializer(serializers.ModelSerializer):
-    classroom = serializers.SerializerMethodField()
-
-    def get_classroom(self, obj):
-        classroom = Classroom.objects.get(id=obj.classroom.id)
-        serializer = ClassroomSerializer(classroom, many=False)
-        return serializer.data
-
-    course_name = serializers.SerializerMethodField()
-
-    def get_course_name(self, obj):
-        return obj.get_course_name()
+class ReserveDaySerializer(serializers.ModelSerializer):
+    classroom = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
-        model = PeriodReserve
-        exclude = ()
-        fields = "__all__"
+        model = ReserveDay
+        fields = [
+            "id",
+            "date",
+            "shift",
+            "classroom",
+            "active",
+            "status",
+            "event",
+        ]
