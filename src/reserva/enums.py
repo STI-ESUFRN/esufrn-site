@@ -9,7 +9,7 @@ class Shift(models.TextChoices):
 
 class Status(models.TextChoices):
     WAITING = ("E", "Esperando")
-    CANCELED = ("C", "Cancelado")
-    REJECTED = ("R", "Rejeitado")
-    APPROVED = ("A", "Aprovado")
-    DONE = ("D", "Concluído")
+    CANCELED = ("C", "Cancelada")
+    REJECTED = ("R", "Rejeitada")
+    APPROVED = ("A", "Aprovada")
+    DONE = ("D", "Concluída")

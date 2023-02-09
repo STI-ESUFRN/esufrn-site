@@ -37,12 +37,17 @@ class Classroom(models.Model):
         "Andar", max_length=25, choices=Floor.choices, default=Floor.GROUND
     )
 
+    class Meta:
+        verbose_name = "Sala"
+        verbose_name_plural = "Salas"
+        ordering = ["floor", "number"]
+
     @property
     def full_name(self):
         if self.name:
             return f"{self.name} - {self.number}"
 
-        return f"{self.get_type_display()} - {self.number}"
+        return f"{self.Type(self.type).label} - {self.number}"
 
     def __str__(self):
         return self.full_name
@@ -61,11 +66,6 @@ class Classroom(models.Model):
     def save(self, *args, **kwargs):
         self.clean()
         super().save(*args, **kwargs)
-
-    class Meta:
-        verbose_name = "Sala"
-        verbose_name_plural = "Salas"
-        ordering = ["floor", "number"]
 
 
 class UserClassroom(models.Model):

@@ -2,40 +2,31 @@ from django.template.loader import render_to_string
 from django.utils.translation import gettext as _
 
 from core.helpers import send_mail_async
+from reserva.enums import Shift, Status
 from reserva.models import Reserve, UserClassroom
 
 
 def notify_admin(reserve: Reserve):
-    subject = "Reserva de {}: {}".format(
-        reserve.classroom.get_type_name().lower(), reserve.classroom
-    )
-    message = """
+    subject = f"Reserva de {reserve.classroom}"
+    message = f"""
         Uma solicitação de reserva de sala foi realizada.
         Por favor realizar a validação.<br/>
-        Sala: {0}<br/>
-        Data: {1}<br/>
-        Evento: {2}<br/>
-        Turno: {3}<br/>
-        Equipamento/Software: {4}<br/>
-        Solicitante: {5}<br/>
-        Email do solicitante: {6}<br/>
-        Telefone: {7}
-    """.format(
-        reserve.classroom,
-        reserve.date,
-        reserve.event,
-        reserve.shift,
-        reserve.equipment,
-        reserve.requester,
-        reserve.email,
-        reserve.phone,
-    )
+        Sala: {reserve.classroom}<br/>
+        Data: {reserve.date}<br/>
+        Evento: {reserve.event}<br/>
+        Turno: {reserve.shift}<br/>
+        Equipamento/Software: {reserve.equipment}<br/>
+        Solicitante: {reserve.requester}<br/>
+        Email do solicitante: {reserve.email}<br/>
+        Telefone: {reserve.phone}
+    """
 
     context = {"message": message}
     msg = render_to_string("base.email_conversation.html", context)
 
     responsibles = UserClassroom.objects.filter(classroom=reserve.classroom)
     recipient_list = [recipient.user.email for recipient in responsibles]
+
     send_mail_async(
         subject=subject,
         recipient_list=recipient_list,
@@ -44,28 +35,20 @@ def notify_admin(reserve: Reserve):
 
 
 def notify_requester(reserve: Reserve):
-    subject = "Reserva de {}: {}".format(
-        reserve.classroom.get_type_name().lower(), reserve.classroom
-    )
-    message = """
+    subject = f"Reserva de {reserve.classroom}"
+    message = f"""
         Solicitação de reserva de sala feita com sucesso. Aguarde a validação.<br/>
-        Sala: {0}<br/>
-        Data: {1}<br/>
-        Evento: {2}<br/>
-        Turno: {3}<br/>
-        Equipamento/Software: {4}<br/>
-        Solicitante: {5}
-    """.format(
-        reserve.classroom,
-        reserve.date,
-        reserve.event,
-        reserve.shift,
-        reserve.equipment,
-        reserve.requester,
-    )
+        Sala: {reserve.classroom}<br/>
+        Data: {reserve.date}<br/>
+        Evento: {reserve.event}<br/>
+        Turno: {Shift(reserve.shift).label}<br/>
+        Equipamento/Software: {reserve.equipment}<br/>
+        Solicitante: {reserve.requester}
+    """
 
     context = {"message": message}
     msg = render_to_string("base.email_conversation.html", context)
+
     send_mail_async(
         subject=subject,
         recipient_list=[reserve.email],
@@ -74,29 +57,25 @@ def notify_requester(reserve: Reserve):
 
 
 def notify_done(reserve: Reserve):
-    title = "Reserva de {}".format(reserve.classroom)
+    rejected_message = (
+        "Por favor, entre em contato com a Secretaria da Direção de Ensino a fim de"
+        " viabilizarmos um possível acordo ou troca de reservas."
+    )
+
+    title = f"Reserva de {reserve.classroom}"
     message = (
-        "Senhor(a) {}, sua solicitação de reserva para <b>{}</b> no dia {} de {}"
-        " ({}) foi <b>{}</b>. {}".format(
-            reserve.requester.split()[0],
-            reserve.classroom,
-            reserve.date.strftime("%d"),
-            _(reserve.date.strftime("%B")),
-            reserve.get_shift_name().lower(),
-            "aprovada" if reserve.status == "A" else "rejeitada",
-            ""
-            if reserve.status == "A"
-            else (
-                "Por favor, entre em contato com a Secretaria da Direção de Ensino"
-                " a fim de viabilizarmos um possível acordo ou troca de reservas."
-            ),
-        )
+        f"Senhor(a) {reserve.requester.split()[0]}, sua solicitação de reserva para"
+        f" <b>{reserve.classroom}</b> no dia {reserve.date.strftime('%d')} de"
+        f" {_(reserve.date.strftime('%B'))} ({Shift(reserve.shift).label}) foi"
+        f" <b>{Status(reserve.status).label}</b>."
+        f" {'' if reserve.status == Status.APPROVED else rejected_message}"
     )
     context = {
         "message": message,
         "opitional": reserve.email_response,
     }
     msg = render_to_string("base.email_conversation.html", context)
+
     send_mail_async(
         subject=title,
         recipient_list=[reserve.email],

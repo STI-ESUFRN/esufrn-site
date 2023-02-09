@@ -1,5 +1,5 @@
 var options = undefined;
-function getOptions(callback_function) {
+function getOptions(callback_function, ...args) {
     if (!baseUrl) {
         console.warn("Can't get options: baseUrl is not defined");
         return;
@@ -11,7 +11,7 @@ function getOptions(callback_function) {
         success: function (response) {
             options = response;
             getOptionChoices();
-            callback_function();
+            callback_function(...args);
         },
     });
 }

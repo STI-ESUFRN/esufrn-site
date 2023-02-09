@@ -4,7 +4,7 @@ var previous = undefined;
 function refreshData(url = undefined) {
     if (!url) {
         let filters = $("[data-filter]").serialize();
-        url = `/api/reservas/historico?${filters}`;
+        url = `/api/reserves/historico?${filters}`;
     }
 
     $("#load-antigo,#load-recente").attr("disabled", true);
@@ -104,7 +104,7 @@ $("#load-recente").click(function (e) {
 // ------------------------------------------------------------------- Update
 function update(data) {
     $.ajax({
-        url: `/api/reservas/${idSelected}/`,
+        url: `/api/reserves/${idSelected}/`,
         type: "PATCH",
         data: data,
         success: function (response) {
