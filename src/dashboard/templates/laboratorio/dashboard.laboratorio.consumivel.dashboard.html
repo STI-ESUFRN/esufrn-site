@@ -10,6 +10,10 @@
         table.table th:nth-child(1) {
             width: 30px;
         }
+
+        .datepicker-container {
+            z-index: 1600 !important;
+        }
     </style>
 {% endblock styles %}
 {% block content %}
@@ -36,7 +40,7 @@
             </form>
         </div>
     </div>
-    <hr class="mt-0"/>
+    <hr class="mt-0" />
     <div class="row">
         <div class="col-md-8">
             <div class="accordion">
@@ -47,7 +51,8 @@
                                data-target="#critical-materials-collapse"
                                aria-expanded="true"
                                aria-controls="critical-materials-collapse">
-                                <b><i class="fas fa-exclamation-triangle mr-2"></i> Itens consumíveis em nível crítico: <span id="critical-materials-count"></span></b>
+                                <b><i class="fas fa-exclamation-triangle mr-2"></i> Itens consumíveis em nível crítico:
+                                    <span id="critical-materials-count"></span></b>
                             </a>
                         </h5>
                     </div>
@@ -315,7 +320,7 @@
                                 </div>
                             </div>
                             <div class="form-group col-md-3">
-                                <label >
+                                <label>
                                     Data de validade
                                 </label>
                                 <input class="form-control rounded-0 mb-1"
