@@ -83,8 +83,8 @@ class Consumable(Material):
     available_objects = ConsumableManager()
 
     class Meta:
-        verbose_name = "Material permanente"
-        verbose_name_plural = "Materiais permanentes"
+        verbose_name = "Material de consumo"
+        verbose_name_plural = "Materiais de consumo"
         ordering = ["-created"]
 
     def save(self, *args, **kwargs):

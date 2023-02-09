@@ -2,12 +2,19 @@ from django.contrib import admin
 
 from dashboard.models import DashboardItens, DashboardSubItens
 
+
 # Register your models here.
+class DashboardSubItensInline(admin.StackedInline):
+    model = DashboardSubItens
+    extra = 1
 
 
 class DashboardItensAdmin(admin.ModelAdmin):
     list_display = ["name", "order"]
     search_fields = ["name", "link"]
+    inlines = [
+        DashboardSubItensInline,
+    ]
 
 
 admin.site.register(DashboardItens, DashboardItensAdmin)
