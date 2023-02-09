@@ -36,6 +36,7 @@ $.fn.serializeREST = function (
     let serialized_values = $(this)
         .find("[name]:not([date-field])")
         .serializeArray();
+
     let serialized_dates = [];
     $(this)
         .find("[name][date-field]")

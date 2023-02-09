@@ -53,9 +53,6 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    <small>Tombo:</small> <b>{{ item.number }}</b>
-                </div>
-                <div class="col-6">
                     <small>Validade:</small> <b>{{ item.expiration|default_if_none:"Não especificado/Indeterminado" }}</b>
                 </div>
             </div>
@@ -83,45 +80,49 @@
             <p>
                 <b>Ações:</b>
             </p>
-            <form id="atualizar-quantidade">
-                <div class="form-row">
-                    <div class="form-group col-md-4">
-                        <small class="text-muted">Atualizar quantidade</small>
-                        <input class="form-control rounded-0"
-                               type="number"
-                               name="quantity"
-                               id="quantity"/>
-                        <div class="invalid-feedback" for="quantity"></div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="text-center mt-4">
-                                    <a href="#" class="btn mb-1 btn-outline-success btn-sm" id="adicionar">Adicionar</a>
+            <div class="row">
+                <div class="col-md-6">
+                    <form id="atualizar-quantidade">
+                        <div class="form-row">
+                            <small class="text-muted">Atualizar quantidade</small>
+                            <input class="form-control rounded-0"
+                                   type="number"
+                                   name="quantity"
+                                   id="quantity"/>
+                            <div class="invalid-feedback" for="quantity"></div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="text-center mt-4">
+                                        <a href="#" class="btn mb-1 btn-outline-success btn-sm" id="adicionar">Adicionar</a>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="text-center mt-4">
-                                    <a href="#" class="btn mb-1 btn-outline-danger btn-sm" id="remover">Remover</a>
+                                <div class="col-md-6">
+                                    <div class="text-center mt-4">
+                                        <a href="#" class="btn mb-1 btn-outline-danger btn-sm" id="remover">Remover</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
-            </form>
-            <p>
-                <b>Histórico:</b>
-            </p>
-            {% for log in item.history.all %}
-                Em {{ log.created }}, <b>{{ log.user.username }}</b>
-                <strong>
-                    {% if log.diff > 0 %}
-                        <span class="text-success">adicionou</span>
-                    {% else %}
-                        <span class="text-danger">removeu</span>
-                    {% endif %}
-                </strong>
-                {{ log.diff|abs }} unidade{{ log.diff|abs|pluralize }} deste material no inventário (anterior: {{ log.prev_quantity }}).
-                <br/>
-            {% endfor %}
+                <div class="col-md-6">
+                    <p>
+                        <b>Histórico:</b>
+                    </p>
+                    {% for log in item.history.all %}
+                        Em {{ log.created }}, <b>{{ log.user.username }}</b>
+                        <strong>
+                            {% if log.diff > 0 %}
+                                <span class="text-success">adicionou</span>
+                            {% else %}
+                                <span class="text-danger">removeu</span>
+                            {% endif %}
+                        </strong>
+                        {{ log.diff|abs }} unidade{{ log.diff|abs|pluralize }} deste material no inventário (anterior: {{ log.prev_quantity }}).
+                        <br/>
+                    {% endfor %}
+                </div>
+            </div>
             <p class="m-0 mt-2">
                 <small class="text-muted">Data de criação: {{ item.created }}</small>
             </p>
