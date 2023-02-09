@@ -4,7 +4,7 @@ from django.shortcuts import redirect, render
 
 from dashboard.helpers import get_dash_context
 from principal.decorators import allowed_users
-from reserva.models import Classroom, PeriodReserve
+from reserva.models import Classroom, Period
 
 periodo_roles = ["reserva", "suporte", "coordenacao"]
 
@@ -19,7 +19,7 @@ def periodo_home(request):
 @allowed_users(allowed_roles=periodo_roles)
 def create_period(request):
     salas = Classroom.objects.all()
-    cursos = PeriodReserve.get_courses()
+    cursos = Period.Course.choices
     context = {"salas": salas, "cursos": cursos}
     get_dash_context(context, "Períodos", "inserir_periodo")
     return render(request, "periodo/dashboard.periodo.inserir.html", context)
@@ -28,34 +28,9 @@ def create_period(request):
 @login_required(login_url="/dashboard/login")
 @allowed_users(allowed_roles=periodo_roles)
 def period_history(request):
-    reservas = PeriodReserve.objects.all()
-
-    professores = (
-        reservas.order_by("requester").values_list("requester", flat=True).distinct()
-    )
-    idsalas = (
-        reservas.order_by("classroom").values_list("classroom", flat=True).distinct()
-    )
-    turmas = (
-        reservas.order_by("class_period")
-        .values_list("class_period", flat=True)
-        .distinct()
-    )
-    periodos = reservas.order_by("period").values_list("period", flat=True).distinct()
-
-    courses = PeriodReserve.get_courses()
-
-    salas = []
-    for sala in idsalas:
-        salas.append(Classroom.objects.get(id=sala))
-
     context = {
-        "reservas": reservas,
-        "professores": professores,
-        "cursos": courses,
-        "salas": salas,
-        "turmas": turmas,
-        "periodos": periodos,
+        "cursos": Period.Course.choices,
+        "salas": Classroom.objects.all(),
     }
     get_dash_context(context, "Períodos", "editar_periodo")
     return render(request, "periodo/dashboard.periodo.historico.html", context)
@@ -68,7 +43,7 @@ def list_periods(request):
     period = request.GET.get("period")
     class_period = request.GET.get("class_period")
 
-    base = PeriodReserve.objects.all()
+    base = Period.objects.all()
     if course:
         base = base.filter(course=course)
     if period:
@@ -88,9 +63,9 @@ def list_periods(request):
     )
 
     period_groups = []
-    courses = PeriodReserve.get_courses()
+    courses = Period.Course.choices
     for group in groups:
-        periods = PeriodReserve.objects.filter(
+        periods = Period.objects.filter(
             course=group["course"],
             period=group["period"],
             class_period=group["class_period"],
@@ -115,14 +90,14 @@ def list_periods(request):
             }
         )
 
-    reservas = PeriodReserve.objects.all()
+    reservas = Period.objects.all()
     turmas = (
         reservas.order_by("class_period")
         .values_list("class_period", flat=True)
         .distinct()
     )
     periodos = reservas.order_by("period").values_list("period", flat=True).distinct()
-    courses = PeriodReserve.get_courses()
+    courses = Period.Course.choices
 
     context = {
         "period_groups": period_groups,
@@ -137,8 +112,8 @@ def list_periods(request):
 @login_required(login_url="/dashboard/login")
 @allowed_users(allowed_roles=periodo_roles)
 def update_period(request, pk):
-    period = PeriodReserve.objects.get(id=pk)
+    period = Period.objects.get(id=pk)
     salas = Classroom.objects.all()
-    cursos = PeriodReserve.get_courses()
+    cursos = Period.Course.choices
     context = {"period": period, "salas": salas, "cursos": cursos}
     return render(request, "periodo/dashboard.periodo.editar.html", context)

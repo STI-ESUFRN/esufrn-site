@@ -4,11 +4,11 @@
         table.table {
             table-layout: fixed;
         }
-        
+
         table.custom-table th:first-child {
             width: 20px;
         }
-        
+
         table.custom-table th:nth-child(2) {
             width: 20px;
         }
@@ -40,7 +40,7 @@
 {% block scripts %}
     <script>
         var currentPatrimonio = undefined;
-        
+
         function updateList() {
             $.ajax({
                 type: "GET",
@@ -85,7 +85,7 @@
                         let category = $("<td />", {
                             text: e.category_name
                         });
-        
+
                         row.append(fa1col, fa2col, model, dmp, category, status);
                         $("#patrimonio-list").append(row);
                     });
@@ -97,7 +97,7 @@
                 }
             });
         }
-        
+
         function showDetails() {
             $.ajax({
                 type: "GET",

@@ -392,9 +392,7 @@ class Message(models.Model):
     def notify(self):
         message = (
             "Alguém entrou em contato usando o formulário de contato de nosso"
-            " site.\n\nNome: {}\nContato: {}\n\n  {}".format(
-                self.name, self.contact, self.message
-            )
+            f" site.\n\nNome: {self.name}\nContato: {self.contact}\n\n  {self.message}"
         )
 
         threading.Thread(

@@ -1,25 +1,29 @@
-from datetime import timedelta
-
 from django.contrib.auth.models import User
 from django.db import models
-from django.forms import ValidationError
-from django.utils.translation import gettext_lazy as _
+from django.db.models import Q
+from django.utils.translation import gettext as _
 from model_utils.models import SoftDeletableModel, TimeStampedModel
 from multiselectfield import MultiSelectField
+from rest_framework.exceptions import ValidationError
+
+from reserva.enums import Shift, Status
+from reserva.managers import PeriodManager, ReserveManager
 
 
 class Classroom(models.Model):
-    name = models.CharField("Nome da sala", max_length=64, blank=True, null=True)
-    acronym = models.CharField("Acrônimo", null=True, blank=True, max_length=16)
-
-    class ClassroomTypes(models.TextChoices):
+    class Type(models.TextChoices):
         CLASSROOM = "sal", "Sala de aula"
         LABORATORY = "lab", "Laboratório"
         AUDITORIUM = "aud", "Auditório"
 
-    type = models.CharField(
-        "Tipo de sala", max_length=3, choices=ClassroomTypes.choices
-    )
+    class Floor(models.TextChoices):
+        GROUND = "0", "Térreo"
+        ST_FLOOR = "1", "1º Andar"
+
+    name = models.CharField("Nome da sala", max_length=64, blank=True, null=True)
+    acronym = models.CharField("Acrônimo", null=True, blank=True, max_length=16)
+
+    type = models.CharField("Tipo de sala", max_length=3, choices=Type.choices)
     number = models.CharField("Número da sala", max_length=10)
 
     days_required = models.IntegerField(
@@ -29,57 +33,39 @@ class Classroom(models.Model):
         "Requer justificativa de uso", default=False
     )
 
-    class Floors(models.TextChoices):
-        GROUND = "0", "Térreo"
-        ST_FLOOR = "1", "1º Andar"
-
     floor = models.CharField(
-        "Andar", max_length=25, choices=Floors.choices, default=Floors.GROUND
+        "Andar", max_length=25, choices=Floor.choices, default=Floor.GROUND
     )
-
-    @property
-    def full_name(self):
-        if self.name:
-            return self.name + " - " + str(self.number)
-
-        return self.get_type_name() + " - " + str(self.number)
-
-    def __str__(self):
-        if self.name:
-            return self.name
-
-        return self.get_type_name() + " - " + str(self.number)
-
-    # def get_classroom_name(self):
-    #     if self.name:
-    #         return self.name + " - " + str(self.number)
-
-    #     return self.get_type_name() + " - " + str(self.number)
-
-    # def get_floor_name(self):
-    #     for index, row in self.FLOOR_CHOICES:
-    #         if index == self.floor:
-    #             return row
-
-    def get_type_name(self):
-        for index, row in self.ClassroomTypes.choices:
-            if index == self.type:
-                return row
-
-    def clean(self):
-        if self.acronym and not self.name:
-            raise ValidationError(
-                "Caso informada um acrônimo, por favor informar também o nome da sala."
-            )
-
-    def save(self, *args, **kwargs):
-        self.clean()
-        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Sala"
         verbose_name_plural = "Salas"
         ordering = ["floor", "number"]
+
+    @property
+    def full_name(self):
+        if self.name:
+            return f"{self.name} - {self.number}"
+
+        return f"{self.Type(self.type).label} - {self.number}"
+
+    def __str__(self):
+        return self.full_name
+
+    def clean(self):
+        if self.acronym and not self.name:
+            raise ValidationError(
+                {
+                    "name": [
+                        "Caso informada um acrônimo, por favor informar também o nome"
+                        " da sala."
+                    ]
+                }
+            )
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
 
 
 class UserClassroom(models.Model):
@@ -103,40 +89,24 @@ class UserClassroom(models.Model):
 
     def clean(self):
         if not self.user.email:
-            raise ValidationError("O responsável precisa ter um email associado a ele.")
-
-        if UserClassroom.objects.filter(
-            user=self.user, classroom=self.classroom
-        ).exclude(id=self.id):
-            raise ValidationError("Esta entrada já existe.")
+            raise ValidationError(
+                {"user": ["O responsável precisa ter um email associado a ele."]}
+            )
 
     def save(self, *args, **kwargs):
         self.clean()
-
         super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Responsável"
         verbose_name_plural = "Responsáveis"
+        unique_together = ["user", "classroom"]
 
 
 class Reserve(TimeStampedModel, SoftDeletableModel):
-    class Shift(models.TextChoices):
-        MORNING = ("M", "Manhã")
-        AFTERNOON = ("T", "Tarde")
-        NIGHT = ("N", "Noite")
-
-    class Status(models.TextChoices):
-        WAITING = ("E", "Esperando")
-        CANCELED = ("C", "Cancelado")
-        REJECTED = ("R", "Rejeitado")
-        APPROVED = ("A", "Aprovado")
-        DONE = ("D", "Concluído")
-
     classroom = models.ForeignKey(
         Classroom,
         verbose_name="Sala de aula",
-        related_name="reserves",
         on_delete=models.CASCADE,
     )
     event = models.CharField("Evento", max_length=100)
@@ -169,47 +139,10 @@ class Reserve(TimeStampedModel, SoftDeletableModel):
         verbose_name="Criado pela administração", default=False
     )
 
-    def clean(self) -> None:
-        reserves = Reserve.objects.filter(
-            date=self.date,
-            status=Reserve.Status.APPROVED,
-            classroom=self.classroom,
-            shift=self.shift,
-        )
-        periodreserves = PeriodReserveDay.objects.filter(
-            date=self.date,
-            period__status=Reserve.Status.APPROVED,
-            period__classroom=self.classroom,
-            shift=self.shift,
-        ).exclude(active=False)
-
-        if self.pk:
-            reserves = reserves.exclude(id=self.pk)
-
-        if (not self.pk or (self.pk and self.status != Reserve.Status.REJECTED)) and (
-            reserves or periodreserves
-        ):
-            raise ValidationError(
-                "Já existe uma reserva aprovada para o dia"
-                f" {self.date.strftime('%d/%m/%Y')} - {self.shift}."
-            )
-
-    def save(self, *args, **kwargs):
-        self.clean()
-        return super().save(*args, **kwargs)
+    objects = ReserveManager()
 
     def __str__(self):
         return str(self.classroom)
-
-    def get_shift_name(self):
-        for index, row in self.Shift.choices:
-            if index == self.shift:
-                return row
-
-    def get_status_name(self):
-        for index, row in self.Status.choices:
-            if index == self.status:
-                return row
 
     class Meta:
         verbose_name = "Reserva pontual"
@@ -217,18 +150,37 @@ class Reserve(TimeStampedModel, SoftDeletableModel):
         ordering = ["created"]
 
 
-class PeriodReserve(TimeStampedModel, SoftDeletableModel):
-    STATUS_CHOICES = (("A", "Aprovado"), ("R", "Rejeitado"), ("E", "Esperando"))
+class Period(TimeStampedModel, SoftDeletableModel):
+    class Course(models.TextChoices):
+        ESU01 = "ESU01", "Técnico em Enfermagem"
+        ESU02 = "ESU02", "Técnico em Registros e Informações em Saúde"
+        ESU06 = "ESU06", "Técnico em Vigilância em Saúde"
+        ESU05 = "ESU05", "Técnico em Agente Comunitário de Saúde"
+        ESU07 = "ESU07", "Técnico em Massoterapia"
+        ESU10 = "ESU10", "Graduação Tecnológica em Gestão Hospitalar"
+        MPPSE = "MPPSE", "Mestrado Profissional"
+        ENF = "ENF", "Outros"
+
+    class Weekdays(models.TextChoices):
+        MONDAY = "1", _("Monday")
+        TUESDAY = "2", _("Tuesday")
+        WEDNESDAY = "3", _("Wednesday")
+        THURSDAY = "4", _("Thursday")
+        FRIDAY = "5", _("Friday")
+        SATURDAY = "6", _("Saturday")
+        SUNDAY = "7", _("Sunday")
 
     classroom = models.ForeignKey(
         Classroom,
         verbose_name="Sala de aula",
-        related_name="period_reserves",
         on_delete=models.CASCADE,
     )
 
     status = models.CharField(
-        "Estado da reserva", choices=STATUS_CHOICES, default="E", max_length=1
+        "Estado da reserva",
+        choices=Status.choices,
+        default=Status.WAITING,
+        max_length=1,
     )
 
     date_begin = models.DateField("Início do período")
@@ -236,57 +188,17 @@ class PeriodReserve(TimeStampedModel, SoftDeletableModel):
 
     workload = models.IntegerField("Carga horária", null=True)
 
-    NUMERIC_DAYS_OF_THE_WEEK = {
-        ("1", "2ª"),
-        ("2", "3ª"),
-        ("3", "4ª"),
-        ("4", "5ª"),
-        ("5", "6ª"),
-        ("6", "7"),
-        ("7", "1"),
-    }
-    DAYS_OF_THE_WEEK = {
-        ("1", _("Monday")),
-        ("2", _("Tuesday")),
-        ("3", _("Wednesday")),
-        ("4", _("Thursday")),
-        ("5", _("Friday")),
-        ("6", _("Saturday")),
-        ("7", _("Sunday")),
-    }
-    weekdays = MultiSelectField(
-        "Dias da semana", choices=sorted(DAYS_OF_THE_WEEK), max_length=14
-    )
+    weekdays = MultiSelectField("Dias da semana", choices=Weekdays.choices)
 
     classname = models.CharField("Nome da turma", max_length=100)
-    classcode = models.CharField("Código do componente", max_length=16, null=True)
-    COURSE_CHOICES = (
-        ("ESU01", "Técnico em Enfermagem"),
-        ("ESU02", "Técnico em Registros e Informações em Saúde"),
-        ("ESU06", "Técnico em Vigilância em Saúde"),
-        ("ESU05", "Técnico em Agente Comunitário de Saúde"),
-        ("ESU07", "Técnico em Massoterapia"),
-        ("ESU10", "Graduação Tecnológica em Gestão Hospitalar"),
-        ("MPPSE", "Mestrado Profissional"),
-        ("ENF", "Outros"),
-    )
-    course = models.CharField(
-        "Nome do curso", choices=COURSE_CHOICES, max_length=8, null=True
-    )
+    classcode = models.CharField("Código do componente", max_length=16)
 
-    period = models.CharField("Período letivo", max_length=8, default="2022.2")
-    class_period = models.CharField(
-        "Turma",
-        max_length=8,
-        default="2021.2",
-        help_text="Ano de ingresso. Ex: 2020.2, 2021.6",
-    )
+    course = models.CharField("Nome do curso", choices=Course.choices, max_length=8)
 
-    SHIFT_CHOICES = (("M", "Manhã"), ("T", "Tarde"), ("N", "Noite"))
+    period = models.CharField("Período letivo", max_length=8)
+    class_period = models.CharField("Turma", max_length=8)
 
-    shift = MultiSelectField(
-        "Turno", choices=SHIFT_CHOICES, max_length=len(SHIFT_CHOICES) * 2
-    )
+    shift = MultiSelectField("Turno", choices=Shift.choices)
 
     requester = models.CharField("Nome completo", max_length=100)
     email = models.EmailField("E-mail", max_length=100)
@@ -305,132 +217,17 @@ class PeriodReserve(TimeStampedModel, SoftDeletableModel):
 
     obs = models.TextField("Observação", max_length=1000, null=True, blank=True)
 
-    @classmethod
-    def get_courses(cls):
-        courses = []
-        for index, row in cls.COURSE_CHOICES:
-            courses.append((index, row))
+    objects = PeriodManager()
 
-        return courses
-
-    def get_course_name(self):
-        for index, row in self.COURSE_CHOICES:
-            if index == self.course:
-                return row
-
-    def get_weekdays(self):
-        weekdays = []
-        for index, row in sorted(self.DAYS_OF_THE_WEEK):
-            if index in self.weekdays:
-                weekdays.append(row)
-        return weekdays
-
-    def get_numeric_weekdays(self):
-        weekdays = []
-        for index, row in sorted(self.NUMERIC_DAYS_OF_THE_WEEK):
-            if index in self.weekdays:
-                weekdays.append(row)
-        return weekdays
-
-    def get_days(self):
-        return (
-            PeriodReserveDay.objects.order_by("date")
-            .filter(period=self)
-            .values_list("date", flat=True)
-            .distinct()
-        )
-
-    def get_saturdays(self):
-        return (
-            PeriodReserveDay.objects.order_by("date")
-            .filter(period=self, date__iso_week_day=6)
-            .values_list("date", flat=True)
-            .distinct()
-        )
+    @property
+    def event(self):
+        return f"{self.classcode} - {self.classname}"
 
     def __str__(self):
         if self.classcode:
             return f"{self.classcode}: {self.classname}"
         else:
             return self.classname
-
-    def check_days(self):
-        reserves = Reserve.objects.filter(
-            date__range=(self.date_begin, self.date_end),
-            date__iso_week_day__in=self.weekdays,
-            status="A",
-            classroom=self.classroom,
-            shift__in=self.shift,
-        )
-
-        period_reserves = PeriodReserveDay.objects.filter(
-            date__range=(self.date_begin, self.date_end),
-            date__iso_week_day__in=self.weekdays,
-            period__status="A",
-            period__classroom=self.classroom,
-            shift__in=self.shift,
-            active=True,
-        ).exclude(period=self)
-
-        if self.pk:
-            for reserve in reserves:
-                day = PeriodReserveDay.objects.filter(
-                    period=self, date=reserve.date
-                ).first()
-                if day and not day.active:
-                    reserves = reserves.exclude(id=reserve.id)
-
-            for reserve in period_reserves:
-                day = PeriodReserveDay.objects.filter(
-                    period=self, date=reserve.date
-                ).first()
-                if day and not day.active:
-                    reserves = reserves.exclude(id=reserve.id)
-
-        if reserves or period_reserves:
-            dates = ""
-            for i in reserves:
-                dates += f"{i.date.strftime('%d/%m/%Y')} - {i.shift}, "
-            for i in period_reserves:
-                dates += f"{i.date.strftime('%d/%m/%Y')} - {i.shift}, "
-
-            raise ValidationError(
-                "Já existe uma reserva aprovada para o{0} dia{0}: ".format(
-                    "s" if len(reserves) + len(period_reserves) > 1 else ""
-                )
-                + dates.rstrip(", ")
-            )
-
-    def create_days(self):
-        if self.status == "A":
-            self.check_days()
-
-        reserve_days = PeriodReserveDay.objects.filter(period=self)
-        if reserve_days:
-            reserve_days.delete()
-
-        start_date = self.date_begin
-        end_date = self.date_end
-        delta = timedelta(days=1)
-        while start_date <= end_date:
-            if start_date.isoweekday() in self.weekdays:
-                for shift in self.shift:
-                    PeriodReserveDay.objects.create(
-                        period=self, date=start_date, shift=shift
-                    )
-            start_date += delta
-
-    def save(self, *args, **kwargs):
-        self.weekdays = [int(i) for i in self.weekdays]
-
-        if self.status == "A":
-            self.check_days()
-
-        super().save(*args, **kwargs)
-        self.create_days()
-
-    def update(self, **kwargs):
-        self.__dict__.update(kwargs)
 
     class Meta:
         verbose_name = "Reserva de período"
@@ -445,79 +242,63 @@ class PeriodReserve(TimeStampedModel, SoftDeletableModel):
         ]
 
 
-class PeriodReserveDay(models.Model):
+class ReserveDay(models.Model):
+    reserve = models.ForeignKey(
+        Reserve, related_name="days", on_delete=models.CASCADE, null=True
+    )
     period = models.ForeignKey(
-        PeriodReserve, verbose_name="Período", on_delete=models.CASCADE
+        Period, related_name="days", on_delete=models.CASCADE, null=True
     )
+
     date = models.DateField("Data da reserva")
-    active = models.BooleanField("Ativo", default=True)
-    SHIFT_CHOICES = (("M", "Manhã"), ("T", "Tarde"), ("N", "Noite"))
-    shift = models.CharField(
-        verbose_name="Turno", choices=SHIFT_CHOICES, max_length=1, default="M"
+    shift = models.CharField(choices=Shift.choices, max_length=1)
+
+    classroom = models.ForeignKey(
+        Classroom,
+        related_name="reserves",
+        on_delete=models.CASCADE,
     )
 
-    def get_shift_name(self):
-        for index, row in self.SHIFT_CHOICES:
-            if index == self.shift:
-                return row
+    active = models.BooleanField("Ativo", default=True)
 
-    def __str__(self):
-        return (
-            str(self.period.classroom)
-            + " no dia "
-            + self.date.strftime("%d/%m/%Y")
-            + " - "
-            + self.shift
-        )
+    @property
+    def status(self):
+        return (self.reserve or self.period).status
 
-    def get_period_classroom(self):
-        return str(self.period.classroom)
-
-    get_period_classroom.short_description = "Sala"
-
-    def get_period_requester(self):
-        return self.period.requester
-
-    get_period_requester.short_description = "Professor"
+    @property
+    def event(self):
+        return (self.reserve or self.period).event
 
     def clean(self):
-        if self.period.status == "A" and self.active:
-            reserves = Reserve.objects.filter(
+        print(self.status == Status.APPROVED and self.active)
+        if self.status == Status.APPROVED and self.active:
+            reserves = ReserveDay.objects.filter(
+                Q(period__status=Status.APPROVED) | Q(reserve__status=Status.APPROVED),
                 date=self.date,
-                status="A",
-                classroom=self.period.classroom,
+                classroom=self.classroom,
                 shift=self.shift,
+                active=True,
             )
-            periodreserves = (
-                PeriodReserveDay.objects.filter(
-                    date=self.date,
-                    period__status="A",
-                    period__classroom=self.period.classroom,
-                    shift=self.shift,
-                )
-                .exclude(period=self.period)
-                .exclude(active=False)
-            )
+            if self.reserve:
+                reserves = reserves.exclude(reserve=self.reserve)
+            if self.period:
+                reserves = reserves.exclude(period=self.period)
 
-            if reserves or periodreserves:
+            if reserves:
                 raise ValidationError(
-                    "Já existe uma reserva aprovada para o dia"
-                    f" {self.date.strftime('%d-%m-%Y')}"
+                    {
+                        "date": [
+                            "Já existe uma reserva aprovada para o dia"
+                            f" {self.date.strftime('%d-%m-%Y')}"
+                        ]
+                    }
                 )
 
     def save(self, *args, **kwargs):
         self.clean()
         super().save(*args, **kwargs)
 
-    def update(self, *args, **kwargs):
-        self.__dict__.update(kwargs)
-        self.save()
-
     class Meta:
         verbose_name = "Dia da reserva"
         verbose_name_plural = "Dias da reserva"
         ordering = ["date", "shift"]
-
-
-class MaterialReservation(models.Model):
-    pass

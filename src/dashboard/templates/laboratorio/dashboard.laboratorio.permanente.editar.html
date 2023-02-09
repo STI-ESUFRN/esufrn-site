@@ -176,7 +176,6 @@
     </div>
 {% endblock content %}
 {% block scripts %}
-    <script src="{% static 'assets/dashboard/js/ajax_csrf.js' %}"></script>
     <script>
         $('[data-toggle="datepicker"]').datepicker({
             format: 'dd-mm-yyyy',
@@ -195,7 +194,7 @@
                 }
             });
         });
-        
+
         function atualizarQuantidade(serialized_data) {
             $.ajax({
                 type: "POST",
@@ -221,38 +220,38 @@
                     });
                 }
             });
-        
+
         }
-        
+
         function serialize(form) {
             let serialized_array = form.serializeArray();
             let serialized_data = {};
             for (key in serialized_array) {
                 serialized_data[serialized_array[key]["name"]] = serialized_array[key]["value"];
             }
-        
+
             return serialized_data;
         }
-        
+
         $("#adicionar").click(function(e) {
             e.preventDefault();
-        
+
             let serialized_data = serialize($("#atualizar-quantidade"));
             atualizarQuantidade(serialized_data);
         });
         $("#remover").click(function(e) {
             e.preventDefault();
-        
+
             let serialized_data = serialize($("#atualizar-quantidade"));
             serialized_data.quantity = serialized_data.quantity * -1;
             atualizarQuantidade(serialized_data);
         });
-        
+
         $("#atualizar-instancia").click(function(e) {
             e.preventDefault();
             let serialized_data = serialize($("#form-item"))
             serialized_data["received_at"] = serialized_data["received_at"] ? moment($("#form-item [name=received_at]").val(), "DD-MM-YYYY").format("YYYY-MM-DD") : "";
-        
+
             $.ajax({
                 type: "PATCH",
                 url: `/api/laboratory/permanent/${$("#form-item [name=id]").val()}/`,

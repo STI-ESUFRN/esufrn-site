@@ -203,8 +203,20 @@
                                         <div class="row">
                                             <div class="table-reserva d-flex justify-content-md-center mx-auto">
                                                 <div id="tabela-de-salas">
-                                                    <div id="escolheMes">
-                                                        <!-- AJAX -->
+                                                    <div class="row justify-content-around my-4">
+                                                        <div class="col my-auto text-center">
+                                                            <button onclick='prevMonth()' class="btn btn-dark">
+                                                                <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                                                            </button>
+                                                        </div>
+                                                        <div class="col my-auto text-center">
+                                                            <h5 id="nome-mes" class="m-0"></h5>
+                                                        </div>
+                                                        <div class="col my-auto text-center">
+                                                            <button onclick='nextMonth()' class="btn btn-dark">
+                                                                <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                     <div id="reservation-calendar">
                                                         <!-- RESERVATION CALENDAR -->

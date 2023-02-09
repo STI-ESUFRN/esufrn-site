@@ -17,7 +17,7 @@
                        required
                        name="classname"
                        placeholder="Nome da turma"/>
-                <div class="invalid-feedback">Informe o nome da turma.</div>
+                <div class="invalid-feedback" for="classname">Informe o nome da turma.</div>
             </div>
             <div class="col-md-3">
                 <!-- FORM SALA -->
@@ -34,7 +34,7 @@
                         </option>
                     {% endfor %}
                 </select>
-                <div class="invalid-feedback">Selecione um curso.</div>
+                <div class="invalid-feedback" for="course">Selecione um curso.</div>
             </div>
             <div class="col-md-3">
                 <label>
@@ -45,7 +45,7 @@
                        name="classcode"
                        id="classcode"
                        required/>
-                <div class="invalid-feedback">Informe o código do componente.</div>
+                <div class="invalid-feedback" for="classcode">Informe o código do componente.</div>
             </div>
         </div>
         <div class="form-row my-2">
@@ -59,7 +59,7 @@
                        placeholder="2022.2"
                        data-mask="0000.0"
                        required/>
-                <div class="invalid-feedback">Informe o período letivo.</div>
+                <div class="invalid-feedback" for="period">Informe o período letivo.</div>
             </div>
             <div class="col-md-3 mb-2">
                 <label for="inputAddress2">
@@ -71,7 +71,7 @@
                        placeholder="2021.2"
                        data-mask="0000.0"
                        required/>
-                <div class="invalid-feedback">Informe o ano da turma.</div>
+                <div class="invalid-feedback" for="class_period">Informe o ano da turma.</div>
             </div>
             <div class="col-md-6 mb-2">
                 <label>
@@ -93,14 +93,14 @@
                         </option>
                     {% endfor %}
                 </select>
-                <div class="invalid-feedback">Selecione uma sala.</div>
+                <div class="invalid-feedback" for="classroom">Selecione uma sala.</div>
                 <div class="mt-2">
                     <button id="sala-disp"
                             type="button"
                             class="btn btn-primary"
                             data-toggle="modal"
                             data-target="#calendarModal"
-                            style="float: right;"
+                            style="float: right"
                             disabled>
                         Consultar disponibilidade <i class="fas fa-calendar ml-2" aria-hidden="true"></i>
                     </button>
@@ -119,8 +119,9 @@
                        name="date_begin"
                        data-mask="00-00-0000"
                        data-toggle="datepicker"
+                       date-field
                        required/>
-                <div class="invalid-feedback">Informe uma data.</div>
+                <div class="invalid-feedback" for="date_begin">Informe uma data.</div>
             </div>
             <div class="col-md-4">
                 <label>
@@ -130,8 +131,9 @@
                        name="date_end"
                        data-mask="00-00-0000"
                        data-toggle="datepicker"
+                       date-field
                        required/>
-                <div class="invalid-feedback">Informe uma data.</div>
+                <div class="invalid-feedback" for="date_end">Informe uma data.</div>
             </div>
             <div class="col-md-4">
                 <label>Carga horária</label>
@@ -151,7 +153,7 @@
                 <div class="form-check mr-5">
                     <input class="form-check-input"
                            type="checkbox"
-                           name="week"
+                           name="weekdays"
                            value="7"
                            id="week-dom"/>
                     <label class="form-check-label" for="week-dom">Domingo</label>
@@ -159,7 +161,7 @@
                 <div class="form-check mr-5">
                     <input class="form-check-input"
                            type="checkbox"
-                           name="week"
+                           name="weekdays"
                            value="1"
                            id="week-seg"/>
                     <label class="form-check-label" for="week-seg">Segunda-feira</label>
@@ -167,7 +169,7 @@
                 <div class="form-check mr-5">
                     <input class="form-check-input"
                            type="checkbox"
-                           name="week"
+                           name="weekdays"
                            value="2"
                            id="week-ter"/>
                     <label class="form-check-label" for="week-ter">Terça-feira</label>
@@ -175,7 +177,7 @@
                 <div class="form-check mr-5">
                     <input class="form-check-input"
                            type="checkbox"
-                           name="week"
+                           name="weekdays"
                            value="3"
                            id="week-qua"/>
                     <label class="form-check-label" for="week-qua">Quarta-feira</label>
@@ -183,7 +185,7 @@
                 <div class="form-check mr-5">
                     <input class="form-check-input"
                            type="checkbox"
-                           name="week"
+                           name="weekdays"
                            value="4"
                            id="week-qui"/>
                     <label class="form-check-label" for="week-qui">Quinta-feira</label>
@@ -191,7 +193,7 @@
                 <div class="form-check mr-5">
                     <input class="form-check-input"
                            type="checkbox"
-                           name="week"
+                           name="weekdays"
                            value="5"
                            id="week-sex"/>
                     <label class="form-check-label" for="week-sex">Sexta-feira</label>
@@ -199,12 +201,12 @@
                 <div class="form-check mr-5">
                     <input class="form-check-input"
                            type="checkbox"
-                           name="week"
+                           name="weekdays"
                            value="6"
                            id="week-sab"/>
                     <label class="form-check-label" for="week-sab">Sábado</label>
                 </div>
-                <div class="invalid-feedback">Informe os dias da semana.</div>
+                <div class="invalid-feedback" for="weekdays">Informe os dias da semana.</div>
             </div>
             <div class="form-group col-md-6">
                 <label>
@@ -235,6 +237,7 @@
                            value="N"/>
                     <label class="form-check-label" for="shiftN">Noite</label>
                 </div>
+                <div class="invalid-feedback" for="shift">Informe os turnos.</div>
             </div>
         </div>
         <div class="form-group">
@@ -255,7 +258,7 @@
                    name="requester"
                    placeholder="Nome completo do docente"
                    required/>
-            <div class="invalid-feedback">Informe o nome completo do docente.</div>
+            <div class="invalid-feedback" for="requester">Informe o nome completo do docente.</div>
         </div>
         <div class="form-row">
             <div class="form-group col-md-6">
@@ -267,7 +270,7 @@
                        name="email"
                        placeholder="Email do docente"
                        required/>
-                <div class="invalid-feedback">Informe um endereço de Email válido.</div>
+                <div class="invalid-feedback" for="email">Informe um endereço de Email válido.</div>
             </div>
             <div class="form-group col-md-6">
                 <label for="inputAddress">
@@ -279,11 +282,13 @@
                        name="phone"
                        placeholder="Telefone para contato"
                        required/>
-                <div class="invalid-feedback">Informe um número de celular válido.</div>
+                <div class="invalid-feedback" for="phone">Informe um número de celular válido.</div>
             </div>
         </div>
         <div class="form-group">
-            <label>Observações</label>
+            <label>
+                Observações
+            </label>
             <textarea name="obs"
                       rows="6"
                       class="form-control textarea-counter rounded-0"
@@ -294,7 +299,11 @@
         </div>
         <hr/>
         <div class="form-check mr-5">
-            <input class="form-check-input" type="checkbox" name="status" checked/>
+            <input class="form-check-input"
+                   type="checkbox"
+                   name="status"
+                   value="A"
+                   checked/>
             <label class="form-check-label">
                 Reserva aprovada
             </label>

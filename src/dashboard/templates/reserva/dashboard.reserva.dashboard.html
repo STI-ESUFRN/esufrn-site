@@ -42,18 +42,18 @@
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">
-                        <small>Sala:</small> <b data-attribute="classroom.full_name">---</b>
+                        <small>Sala:</small> <b data-attribute="classroom.full_name"></b>
                     </h5>
                     <p class="card-text">
-                        <small>Evento:</small> <b data-attribute="event">---</b>
+                        <small>Evento:</small> <b data-attribute="event"></b>
                     </p>
                     <hr/>
                     <div class="row">
                         <div class="col-md-4" title="Data para a qual a sala foi reservada">
-                            <small>Data:</small> <b date-format="DD/MM/YYYY" data-attribute="date">---</b>
+                            <small>Data:</small> <b date-format="DD/MM/YYYY" data-attribute="date"></b>
                         </div>
                         <div class="col-md-4">
-                            <small>Turno:</small> <b data-attribute="shift_name">---</b>
+                            <small>Turno:</small> <b data-attribute="shift"></b>
                         </div>
                         <div class="col-md-4">
                             <button class="btn btn-sm btn-light px-2 m-0"
@@ -69,26 +69,26 @@
                     <div class="row">
                         <div class="col">
                             <small>Equipamentos:</small>
-                            <b data-attribute="equipment">---</b>
+                            <b data-attribute="equipment"></b>
                         </div>
                     </div>
                     <hr/>
                     <div class="row">
                         <div class="col-md-4">
-                            <small>Solicitante:</small> <b data-attribute="requester">---</b>
+                            <small>Solicitante:</small> <b data-attribute="requester"></b>
                         </div>
                         <div class="col-md-4">
-                            <small>Email:</small> <b data-attribute="email">---</b>
+                            <small>Email:</small> <b data-attribute="email"></b>
                         </div>
                         <div class="col-md-4">
-                            <small>Telefone:</small> <b data-attribute="phone">---</b>
+                            <small>Telefone:</small> <b data-attribute="phone"></b>
                         </div>
                     </div>
                     <hr/>
                     <div class="row">
                         <div class="col">
                             <small>Justificativa:</small>
-                            <b data-attribute="cause">---</b>
+                            <b data-attribute="cause"></b>
                         </div>
                     </div>
                 </div>
@@ -121,12 +121,12 @@
                        data-status="C">Cancelar Reserva</a>
                     <p class="m-0 mt-2">
                         <small class="text-muted" title="Data que o solicitante submeteu o chamado">
-                            Data do pedido: <span date-format="DD/MM/YYYY HH:mm" data-attribute="created">---</span>
+                            Data do pedido: <span date-format="DD/MM/YYYY HH:mm" data-attribute="created"></span>
                         </small>
                     </p>
                     <p class="m-0 mt-2">
                         <small class="text-muted">
-                            Ultima Alteração: <span date-format="DD/MM/YYYY HH:mm" data-attribute="modified">---</span>
+                            Ultima Alteração: <span date-format="DD/MM/YYYY HH:mm" data-attribute="modified"></span>
                         </small>
                     </p>
                 </div>
@@ -154,8 +154,20 @@
                         <div class="row">
                             <div class="table-reserva d-flex justify-content-md-center mx-auto">
                                 <div id="tabela-de-salas">
-                                    <div id="escolheMes">
-                                        <!-- AJAX -->
+                                    <div class="row justify-content-around my-4">
+                                        <div class="col my-auto text-center">
+                                            <button onclick='prevMonth()' class="btn btn-dark">
+                                                <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col my-auto text-center">
+                                            <h5 id="nome-mes" class="m-0"></h5>
+                                        </div>
+                                        <div class="col my-auto text-center">
+                                            <button onclick='nextMonth()' class="btn btn-dark">
+                                                <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                     <div id="reservation-calendar">
                                         <!-- RESERVATION CALENDAR -->
@@ -173,6 +185,5 @@
     </div>
 {% endblock content %}
 {% block scripts %}
-    <script src="{% static 'assets/dashboard/js/ajax_csrf.js' %}"></script>
     <script src="{% static 'assets/dashboard/reserva/js/dashboard.js' %}"></script>
 {% endblock scripts %}

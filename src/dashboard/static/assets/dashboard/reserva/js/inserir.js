@@ -181,7 +181,7 @@ function getCalendar() {
 
     $.ajax({
         type: "GET",
-        url: `/api/reservas/calendario/?year=${anoAtual}&month=${mesAtual}&classroom=${sala}`,
+        url: `/api/calendar/?date__year=${anoAtual}&date__month=${mesAtual}&classroom=${sala}`,
         dataType: "json",
         success: function (response) {
             calendario.updateCalendar(response, anoAtual, mesAtual);
@@ -201,9 +201,7 @@ function isDate(date) {
     var regex = /([0-9]{2}\-+[0-9]{2}\-+[0-9]{4})/;
     return regex.test(date);
 }
-$.fn.tag = function () {
-    return this[0].outerHTML.replace(this.html(), "");
-};
+
 function validate(input, condition) {
     if (input) {
         if (condition) {
@@ -306,7 +304,7 @@ $("#enviar-reserva").click(function (e) {
 
         $.ajax({
             type: "POST",
-            url: `/api/reservas/`,
+            url: `/api/reserves/`,
             dataType: "json",
             data: serialized_data,
             success: function (response) {
