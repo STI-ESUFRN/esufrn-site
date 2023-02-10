@@ -225,6 +225,9 @@ class Page(models.Model):
         verbose_name_plural = "Páginas"
         ordering = ["path", "name"]
 
+    def get_absolute_url(self):
+        return reverse("pagina", kwargs={"path": self.path})
+
     def __str__(self):
         return self.name
 

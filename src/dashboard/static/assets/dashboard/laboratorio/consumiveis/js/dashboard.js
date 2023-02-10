@@ -231,6 +231,12 @@ $(document).ready(function () {
         $(this).removeClass("is-invalid");
     });
 
+    $("#create-material-form [name=quantity]").on("input", function () {
+        $("#create-material-form [name=alert_below]").val(
+            Math.trunc($(this).val() * 0.25)
+        );
+    });
+
     $("#create-material").click(function (e) {
         e.preventDefault();
 
@@ -257,4 +263,6 @@ $(document).ready(function () {
             },
         });
     });
+
+    $("#quantity").ke;
 });
