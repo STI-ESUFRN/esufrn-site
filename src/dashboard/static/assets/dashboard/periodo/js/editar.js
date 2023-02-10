@@ -15,7 +15,7 @@ $("#classroom").change(function () {
 $("#enviar-reserva").click(function (e) {
     e.preventDefault();
 
-    var serialized_data = $("#form-reserva").serializeREST();
+    var serialized_data = $("#form-reserva").serializeREST(true);
     let id = $("[name=id]").val();
     $.ajax({
         type: "PATCH",

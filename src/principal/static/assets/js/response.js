@@ -30,6 +30,7 @@ function getOptionChoices() {
 }
 
 $.fn.serializeREST = function (
+    include_blank = false,
     input_date_format = "DD-MM-YYYY",
     output_date_format = "YYYY-MM-DD"
 ) {
@@ -44,11 +45,16 @@ $.fn.serializeREST = function (
             let input_format = $(this).attr("date-input-format");
             let output_format = $(this).attr("date-output-format");
 
-            serialized_dates.push({
-                value: moment(
-                    $(this).val(),
+            let value = $(this).val();
+            let formated_date = "";
+            if (value) {
+                formated_date = moment(
+                    value,
                     input_format ? input_format : input_date_format
-                ).format(output_format ? output_format : output_date_format),
+                ).format(output_format ? output_format : output_date_format);
+            }
+            serialized_dates.push({
+                value: formated_date,
                 name: $(this).attr("name"),
             });
         });
@@ -57,10 +63,12 @@ $.fn.serializeREST = function (
 
     let groupedValues = {};
     $.each(serialized_array, function (index, item) {
-        if (!groupedValues[item.name]) {
-            groupedValues[item.name] = [];
+        if (item.value || include_blank) {
+            if (!groupedValues[item.name]) {
+                groupedValues[item.name] = [];
+            }
+            groupedValues[item.name].push(item.value);
         }
-        groupedValues[item.name].push(item.value);
     });
     const groupedValuesAsString = {};
     $.each(groupedValues, function (field, values) {

@@ -40,12 +40,13 @@ class ConsumableSerializer(MaterialSerializer):
         model = Consumable
         fields = MaterialSerializer.Meta.fields + [
             "alert_below",
-            "reference",
+            "initial_quantity",
             "quantity",
             "expiration",
-            "warn",
-            "relative_percentage",
         ]
+        extra_kwargs = {
+            "initial_quantity": {"read_only": True},
+        }
 
     def update(self, instance, validated_data):
         instance.create_log(self.context["request"])
@@ -53,12 +54,21 @@ class ConsumableSerializer(MaterialSerializer):
         return super().update(instance, validated_data)
 
     def validate_quantity(self, quantity):
-        if quantity < 0:
+        if quantity <= 0:
             raise ValidationError(
                 "A quantidade não pode ser negativa", "negative_quantity"
             )
 
         return quantity
+
+    def validate_alert_below(self, alert_below):
+        if alert_below >= int(self.context["request"].data.get("quantity", 0)):
+            raise ValidationError(
+                "A quantidade crítica não pode exceder a quantidade inicial",
+                "alert_below_higher_than_quantity",
+            )
+
+        return alert_below
 
 
 class CategorySerializer(serializers.ModelSerializer):

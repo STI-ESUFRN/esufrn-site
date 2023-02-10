@@ -59,26 +59,14 @@ class Material(SoftDeletableModel, TimeStampedModel):
 
 
 class Consumable(Material):
-    expiration = models.DateField("Data de validade", null=True, blank=True)
-    alert_below = models.IntegerField("Nível crítico", null=True, blank=True)
-    reference = models.IntegerField("Valor de referência", null=True, blank=True)
+    initial_quantity = models.IntegerField("Quantidade inicial", null=True, blank=True)
+    measure_unit = models.CharField(
+        "Unidade de armazenamento", max_length=32, null=True, blank=True
+    )
     quantity = models.IntegerField("Quantidade disponível")
+    alert_below = models.IntegerField("Nível crítico")
+    expiration = models.DateField("Data de validade", null=True, blank=True)
     sold_out_at = models.DateTimeField("Esgotado em", null=True, blank=True)
-
-    @property
-    def critical(self):
-        return self.quantity <= self.alert_below
-
-    @property
-    def warn(self):
-        return (
-            not self.quantity
-            or self.quantity / (self.reference - self.alert_below) < 0.40
-        )
-
-    @property
-    def relative_percentage(self):
-        return int(self.quantity / self.reference * 100)
 
     available_objects = ConsumableManager()
 
@@ -88,11 +76,14 @@ class Consumable(Material):
         ordering = ["-created"]
 
     def save(self, *args, **kwargs):
+        if self._state.adding:
+            self.initial_quantity = self.quantity
+
+        elif self.quantity <= self.alert_below:
+            send_alert_email(self)
+
         if self.quantity == 0 and not self.sold_out_at:
             self.sold_out_at = timezone.now()
-
-        if not self._state.adding and self.quantity <= self.alert_below:
-            send_alert_email(self)
 
         return super().save(*args, **kwargs)
 

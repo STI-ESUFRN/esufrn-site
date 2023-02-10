@@ -26,7 +26,10 @@
     <div class="form-row">
         <div class="form-group col-12">
             <label>Descrição</label>
-            <textarea class="form-control rounded-0" name="description" id="description" rows="5">{% if item %}{{ item.description }}{% endif %}</textarea>
+            <textarea class="form-control rounded-0"
+                      name="description"
+                      id="description"
+                      rows="5">{% if item %}{{ item.description }}{% endif %}</textarea>
             <div class="invalid-feedback" for="description"></div>
         </div>
     </div>
@@ -98,15 +101,6 @@
                    id="alert_below"
                    {% if item %} value="{{ item.alert_below }}"{% endif %}/>
             <div class="invalid-feedback" for="alert_below"></div>
-        </div>
-        <div class="form-group col-md-3">
-            <label>Valor de referência</label>
-            <input class="form-control rounded-0"
-                   type="number"
-                   name="reference"
-                   id="reference"
-                   {% if item %} value="{{ item.reference }}"{% endif %}/>
-            <div class="invalid-feedback" for="reference"></div>
         </div>
     </div>
     <div class="text-center mt-4">

@@ -312,11 +312,19 @@
                                 <label>
                                     <b>Quantidade</b>
                                 </label>
-                                <input class="form-control rounded-0"
-                                       type="number"
-                                       name="quantity"
-                                       id="quantity"/>
+                                <input class="form-control rounded-0" type="number" name="quantity"/>
                                 <div class="invalid-feedback" for="quantity">
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>
+                                    Unidade de armazenamento
+                                </label>
+                                <input class="form-control rounded-0"
+                                       placeholder="Ex. Unidades, caixas, etc."
+                                       type="text"
+                                       name="measure_unit"/>
+                                <div class="invalid-feedback" for="measure_unit">
                                 </div>
                             </div>
                             <div class="form-group col-md-3">
@@ -332,6 +340,19 @@
                                        maxlength="10"
                                        date-field/>
                                 <div class="invalid-feedback" for="expiration">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label>
+                                    <b>Quantidade crítica</b>
+                                </label>
+                                <input type="number" class="form-control rounded-0" name="alert_below"/>
+                                <small class="text-muted m-0">
+                                    Por padrão, esse campo é 25% da quantidade do material
+                                </small>
+                                <div class="invalid-feedback" for="alert_below">
                                 </div>
                             </div>
                         </div>
@@ -364,28 +385,6 @@
                                        placeholder="Localização"
                                        required/>
                                 <div class="invalid-feedback" for="location">
-                                </div>
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label>
-                                    Quantidade crítica
-                                </label>
-                                <input type="number"
-                                       class="form-control rounded-0"
-                                       name="alert_below"
-                                       value="50"/>
-                                <div class="invalid-feedback" for="alert_below">
-                                </div>
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label>
-                                    Valor de referência
-                                </label>
-                                <input type="number"
-                                       class="form-control rounded-0"
-                                       name="reference"
-                                       value="250"/>
-                                <div class="invalid-feedback" for="reference">
                                 </div>
                             </div>
                         </div>
