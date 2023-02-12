@@ -110,7 +110,7 @@ $("#enviar-mensagem").click(function (e) {
 		let serialized_data = $("#form-contato").serialize();
 		$.ajax({
 			type: "POST",
-			url: "/api/contato",
+			url: "/api/contato/",
 			data: serialized_data,
 			success: function (response) {
 				if (response.status == "success") {

@@ -1,0 +1,327 @@
+{% extends "dashboard.base.html" %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'assets/css/reserva.style.css' %}"/>
+    <style>
+        table.custom-table td {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        table.custom-table th:first-child {
+            width: 20px;
+        }
+
+        table.custom-table th:nth-child(2) {
+            width: 20px;
+        }
+
+        table.tl-fixed {
+            table-layout: fixed;
+        }
+
+        .bg-escola {
+            color: #ffffff;
+            background-color: #0b3e61;
+        }
+    </style>
+{% endblock styles %}
+{% block content %}
+    <div id="accordion">
+        <div class="card rounded-0 mb-2">
+            <div class="card-header text-center bg-escola"
+                 id="filter-heading"
+                 data-toggle="collapse"
+                 data-target="#filter-collapse"
+                 aria-expanded="true"
+                 aria-controls="filter-collapse">
+                <h5 class="mb-0">
+                    <b>Filtrar Períodos <i class="fa-solid fa-filter"></i></b>
+                </h5>
+            </div>
+            <div id="filter-collapse"
+                 class="collapse"
+                 aria-labelledby="filter-heading"
+                 data-parent="#accordion">
+                <div class="card-body">{% include "periodo/dashboard.periodo.historico.filters.html" %}</div>
+                <div class="card-footer p-1 text-muted text-right">
+                    <button id="limpa-filtro"
+                            type="button"
+                            class="btn btn-outline-secondary btn-sm">Limpar filtros</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card rounded-0">
+        <div class="card-header head-table border-0 rounded-0">
+            <b><i class="fas fa-paper-plane mr-2"></i>Períodos das turmas na instituição</b>
+        </div>
+        <div class="card-body p-0" style="overflow-x: auto;">
+            <table class="table tl-fixed custom-table table-hover mb-0">
+                <thead>
+                    <tr class="capt-table">
+                        <th class="border-0 text-center" scope="col"></th>
+                        <th class="border-0 text-center" scope="col"></th>
+                        <th class="border-0" scope="col">Turma</th>
+                        <th class="border-0" scope="col">Sala</th>
+                        <th class="border-0" scope="col">Turno</th>
+                        <th class="border-0" scope="col">Professor</th>
+                        <th class="border-0 text-center" scope="col">Início</th>
+                        <th class="border-0 text-center" scope="col">Fim</th>
+                    </tr>
+                </thead>
+                <tbody id="lista-de-chamados">
+                    {% comment %} AJAX {% endcomment %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="text-center w-100">
+        <button id="load-previous" class="btn rounded-0 mt-4">
+            <i class="fas fa-arrow-alt-circle-left"></i> Anterior
+        </button>
+        <button id="load-next" class="btn rounded-0 mt-4">
+            Próxima <i class="fas fa-arrow-alt-circle-right"></i>
+        </button>
+    </div>
+    <div id="period-details" class="mt-4" style="display: none;">
+        <div class="card">
+            <div class="card-header head-table border-0 rounded-0">
+                <div class="row">
+                    <div class="col-6 align-self-center">
+                        <b><i class="fas fa-info mr-2"></i> Detalhes do período</b>
+                    </div>
+                    <div class="col-6 text-right">
+                        <a class="btn btn-primary mx-1"
+                           id="editButton"
+                           href="#"
+                           target="_blank"
+                           role="button">
+                            <i class="fas fa-pen"></i> Editar
+                        </a>
+                        <button class="btn btn-secondary mx-1"
+                                data-toggle="modal"
+                                data-target="#calendarModal">
+                            <i class="fas fa-calendar" aria-hidden="true"></i> Consultar calendário
+                        </button>
+                        <button class="btn btn-danger ml-1"
+                                data-toggle="modal"
+                                data-target="#deleteConfirm">
+                            <i class="fas fa-trash" aria-hidden="true"></i> Apagar
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <small>Curso:</small> <b data-attribute="course"></b>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <small>Módulo:</small> <b data-attribute="classname"></b>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <small>Código:</small> <b data-attribute="classcode"></b>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <small>Período:</small> <b data-attribute="period"></b>
+                    </div>
+                    <div class="col-6">
+                        <small>Turma:</small> <b data-attribute="class_period"></b>
+                    </div>
+                </div>
+                <hr/>
+                <div class="row">
+                    <div class="col-12">
+                        <small>Dias:</small> <b data-attribute="weekdays"></b>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <small>Turno:</small> <b data-attribute="shift"></b>
+                    </div>
+                    <div class="col-6">
+                        <small>Carga horária:</small> <b data-attribute="workload"></b>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <small>De:</small> <b date-format="DD/MM/YYYY" data-attribute="date_begin"></b>
+                    </div>
+                    <div class="col-6">
+                        <small>Até:</small> <b date-format="DD/MM/YYYY" data-attribute="date_end"></b>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <small>Sala:</small> <b data-attribute="classroom.full_name"></b>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <small>Equipamento:</small> <b data-attribute="equipment">---</b>
+                    </div>
+                </div>
+                <hr/>
+                <div class="row">
+                    <div class="col-12">
+                        <small>Professor:</small> <b data-attribute="requester"></b>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <small>Email:</small> <b data-attribute="email"></b>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <small>Telefone:</small> <b data-attribute="phone"></b>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer border-top-0">
+                <p>
+                    <b>Estatísticas:</b>
+                </p>
+                <p>
+                    Horários (total): <b id="totaldays"></b>
+                </p>
+                <p>
+                    Horários ativos: <b id="activedays"></b>
+                </p>
+                <p>
+                    Horários cancelados: <b id="cancelleddays"></b>
+                </p>
+                <hr/>
+                <p>
+                    <b>Ações:</b>
+                </p>
+                <small class="text-muted">Observações sobre a reserva:</small>
+                <textarea id="reserve-obs"
+                          data-attribute="obs"
+                          class="form-control mb-3"
+                          rows="2"
+                          placeholder="Escrever observação"></textarea>
+                <a href="#" class="btn mb-1 btn-outline-primary btn-sm" id="obsReserve">Salvar Observação</a>
+                <hr/>
+                <a href="#"
+                   class="btn mb-1 btn-outline-success btn-sm"
+                   id="confirmReserve"
+                   data-status="A">Por em vigor</a>
+                <a href="#"
+                   class="btn mb-1 btn-outline-danger btn-sm"
+                   id="rejectReserve"
+                   data-status="R">Cancelar período</a>
+                <a href="#"
+                   class="btn mb-1 btn-outline-warning btn-sm"
+                   id="waitReserve"
+                   data-status="E">Marcar como pendente</a>
+                <hr/>
+                <p>
+                    <b>Dias:</b>
+                </p>
+                <table class="table tl-fixed table-hover mb-0">
+                    <thread>
+                    <tr class="capt-table">
+                        <th>
+                            Dia
+                        </th>
+                        <th>
+                            Turno
+                        </th>
+                        <th>
+                            Status
+                        </th>
+                        <th class="text-center">
+                            Ações
+                        </th>
+                    </tr>
+                    </thread>
+                    <tbody id="perioddays">
+                        {% comment %} AJAX {% endcomment %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="deleteConfirm" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            Confirmar exclusão
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i></span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            Tem certeza que deseja apagar este período?
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">
+                            Cancelar
+                        </button>
+                        <button id="deletePeriod"
+                                type="button"
+                                class="btn btn-danger"
+                                data-dismiss="modal">
+                            Apagar <i class="fas fa-trash" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade"
+         id="calendarModal"
+         tabindex="-1"
+         role="dialog"
+         aria-labelledby="mymodal"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="text-center">
+                        Uso da sala: <b><span id="sala-selec"></span></b>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="table-reserva d-flex justify-content-md-center mx-auto">
+                                <div id="tabela-de-salas">
+                                    <div id="escolheMes">
+                                        <!-- AJAX -->
+                                    </div>
+                                    <div id="reservation-calendar">
+                                        <!-- RESERVATION CALENDAR -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">
+                        Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+{% block scripts %}
+    <script src="{% static 'assets/dashboard/periodo/js/historico.js' %}"></script>
+{% endblock scripts %}

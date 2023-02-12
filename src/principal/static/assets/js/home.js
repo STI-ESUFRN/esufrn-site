@@ -86,7 +86,7 @@ $("#newsletter-form").submit(function (e) {
 
     $.ajax({
         type: "POST",
-        url: '/newsletter/subscribe',
+        url: '/newsletter/subscribe/',
         data: serialized_data,
         success: function (response) {
             if (response.status == "success") {

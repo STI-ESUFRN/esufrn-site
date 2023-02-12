@@ -1,0 +1,38 @@
+Você está recebendo este email pois um dos materiais cadastrados em nosso
+sistema acaba de entrar um nível determinado crítico.
+<br/>
+<br/>
+Seguem abaixo as informações completas sobre o material.
+</br>
+</br>
+Nome:
+<b> {{ material.name }}</b>;
+</br>
+Marca:
+<b> {{ material.brand|default_if_none:"Não especificado" }}</b>;
+</br>
+Data de validade:
+<b> {{ material.expiration|default_if_none:"Não especificado" }}</b>;
+</br>
+Quantidade em estoque:
+<b> {{ material.quantity }}</b>;
+</br>
+Quantidade inicial:
+<b> {{ material.initial_quantity }}</b>;
+</br>
+Quantidade crítica:
+<b> {{ material.alert_below }}</b>;
+</br>
+Descrição:
+<b> {{ material.description }}</b>;
+</br>
+Recebido em:
+<b> {{ material.received_at|default_if_none:"Não especificado" }}</b>;
+</br>
+Localizado em:
+<b> {{ material.location|default_if_none:"Não especificado" }}</b>.
+</br>
+</br>
+Observações:
+</br>
+{{ material.comments }}

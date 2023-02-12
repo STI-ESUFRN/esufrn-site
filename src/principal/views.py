@@ -17,21 +17,12 @@ from django.views.decorators.http import require_POST
 
 from principal.forms import NewsletterForm
 from principal.helpers import emailToken, joinRange, paginator, qnt_page
-from principal.models import (
-    Alerta,
-    Blog,
-    Depoimentos,
-    Documentos,
-    Equipe,
-    Newsletter,
-    Paginas,
-    Publicacoes,
-)
+from principal.models import Alert, Document, News, Newsletter, Page, Team, Testimonial
 
 
 def pagina(request, path):
     try:
-        page = Paginas.objects.get(path=path)
+        page = Page.objects.get(path=path)
         context = {"status": "success", "page": page, "crumbs": [{"name": page.name}]}
 
         return render(request, "home.pagina.html", context)
@@ -46,19 +37,19 @@ def inicio(request):
     settings.BOLD = ""
     # pegando os valores para o template
     now = datetime.now()
-    post = Blog.objects.filter(
+    post = News.objects.filter(
         Q(category="noticia") | Q(category="processo") | Q(category="concurso")
     ).filter(published_at__lt=now)[:3]
 
     postEvents = (
-        Blog.objects.filter(category="evento")
+        News.objects.filter(category="evento")
         .filter(published_at__gt=now)
         .order_by("published_at")[:3]
     )
-    important = Blog.objects.filter(isImportant=True)[:4]
-    depoimentos = Depoimentos.objects.all()
+    important = News.objects.filter(isImportant=True)[:4]
+    depoimentos = Testimonial.objects.all()
 
-    alertas = Alerta.objects.filter(expires_at__gt=datetime.now())
+    alertas = Alert.objects.filter(expires_at__gt=datetime.now())
 
     context = {
         "post": post,
@@ -76,7 +67,7 @@ def inicio(request):
 
 
 def noticias(request):
-    news = Blog.objects.all()
+    news = News.objects.all()
 
     category = request.GET.get("category")
     if category:
@@ -118,7 +109,7 @@ def noticias(request):
 
 def noticia(request, slug):
     try:
-        news = Blog.objects.get(slug=slug)
+        news = News.objects.get(slug=slug)
         context = {
             "status": "success",
             "news": news,
@@ -130,12 +121,12 @@ def noticia(request, slug):
 
         return render(request, "home.post.html", context)
 
-    except Blog.DoesNotExist:
-        raise Http404
+    except News.DoesNotExist as e:
+        raise Http404(e)
 
 
 def instituicao_equipe(request):
-    equipe = Equipe.objects.all()
+    equipe = Team.objects.all()
     context = {"equipe": equipe, "crumbs": [{"name": "Insituição"}, {"name": "Equipe"}]}
 
     return render(request, "instituicao.equipe.html", context)
@@ -271,7 +262,7 @@ def email_subscribe(request):
 
 
 def busca(request):
-    news = Blog.objects.all()
+    news = News.objects.all()
 
     category = request.GET.get("category")
     if category:
@@ -329,14 +320,6 @@ def busca(request):
 
             total_qnt = qnt
             total_intervalo = joinRange(intervalo, intervalo, total_qnt)
-
-        # BUSCA PELAS PUBLICAÇÕES
-        if not category or category == "publicacao":
-            resultPublicacoes = Publicacoes.objects.filter(name__icontains=field_search)
-            result_obj_pub, qnt, intervalo = paginator(page, resultPublicacoes)
-
-            total_qnt = qnt_page(total_qnt, qnt)
-            total_intervalo = joinRange(total_intervalo, intervalo, total_qnt)
 
         # BUSCA PELOS ARQUIVOS JSON
         if not category or category == "curso":
@@ -406,7 +389,7 @@ def instituicao_documentos(request):
     )
     list = []
     for index, category in categories:
-        docs = Documentos.objects.filter(category=index)
+        docs = Document.objects.filter(category=index)
         list.append({"main": category, "documentos": docs})
 
     context = {
@@ -419,7 +402,7 @@ def instituicao_documentos(request):
 
 def publicacoes_outras(request):
     anos_list = (
-        Documentos.objects.filter(category="publicacoes")
+        Document.objects.filter(category="publicacoes")
         .order_by("-date__year")
         .values_list("date__year", flat=True)
         .distinct()
@@ -427,7 +410,7 @@ def publicacoes_outras(request):
 
     anos = []
     for ano in anos_list:
-        publicacoes = Documentos.objects.filter(category="publicacoes", date__year=ano)
+        publicacoes = Document.objects.filter(category="publicacoes", date__year=ano)
         anos.append(
             {
                 "ano": ano if ano is not None else "Não Especificado",

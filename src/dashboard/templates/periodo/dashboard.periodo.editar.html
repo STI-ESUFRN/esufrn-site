@@ -1,0 +1,363 @@
+{% extends "dashboard.base.html" %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'assets/css/datepicker.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'assets/css/reserva.style.css' %}"/>
+{% endblock styles %}
+{% block content %}
+    <div class="mb-4">
+        {% comment %} Observação: Alterações que remetem à organização do calendário (data de início e término do período, dias da semana, turnos e sala de aula) restauram o estado dos dias que o período abrange, isto é, a informação de dias anteriormente cancelados será <b>perdida</b>. {% endcomment %}
+        Observação: Por enquanto, quaisquer alterações feitas no período restauram o estado dos dias que o período abrange, isto é, a informação de dias anteriormente cancelados será <b>perdida</b>.
+    </div>
+    <form class="mt-2" autocomplete="off" id="form-reserva">
+        <input name="id" type="hidden" value="{{ period.id }}"/>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputAddress2">
+                    <b>Nome da turma *</b>
+                </label>
+                <input type="text"
+                       class="form-control rounded-0"
+                       required
+                       name="classname"
+                       value="{{ period.classname }}"
+                       placeholder="Nome da turma"/>
+                <div class="invalid-feedback">Informe o nome da turma.</div>
+            </div>
+            <div class="col-md-3">
+                <!-- FORM SALA -->
+                <label>
+                    <b>Curso *</b>
+                </label>
+                <select class="form-control rounded-0" name="course" id="course" required>
+                    <option disabled selected>
+                        Selecione um curso
+                    </option>
+                    {% for index, curso in cursos %}
+                        <option value="{{ index }}"
+                                {% if period.course == index %}selected{% endif %}>
+                            {{ curso }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <div class="invalid-feedback">Selecione um curso.</div>
+            </div>
+            <div class="col-md-3">
+                <label>
+                    <b>Código do componente *</b>
+                </label>
+                <input class="form-control rounded-0"
+                       type="text"
+                       name="classcode"
+                       value="{{ period.classcode|default_if_none:'' }}"
+                       id="classcode"
+                       required/>
+                <div class="invalid-feedback">Informe o código do componente.</div>
+            </div>
+        </div>
+        <div class="form-row my-2">
+            <div class="col-md-3 mb-2">
+                <label for="inputAddress2">
+                    <b>Período letivo *</b>
+                </label>
+                <input type="text"
+                       class="form-control rounded-0"
+                       name="period"
+                       value="{{ period.period }}"
+                       placeholder="2022.2"
+                       data-mask="0000.0"
+                       required/>
+                <div class="invalid-feedback">Informe o período letivo.</div>
+            </div>
+            <div class="col-md-3 mb-2">
+                <label for="inputAddress2">
+                    <b>Turma *</b>
+                </label>
+                <input type="text"
+                       class="form-control rounded-0"
+                       name="class_period"
+                       value="{{ period.class_period }}"
+                       placeholder="2021.2"
+                       data-mask="0000.0"
+                       required/>
+                <div class="invalid-feedback">Informe o ano da turma.</div>
+            </div>
+            <div class="col-md-6 mb-2">
+                <label>
+                    <b>Sala *</b>
+                </label>
+                <select class="form-control rounded-0"
+                        name="classroom"
+                        id="classroom"
+                        required>
+                    <option disabled>
+                        Selecione uma sala
+                    </option>
+                    {% for sala in salas %}
+                        <option value="{{ sala.id }}"
+                                data-classNumber="{{ sala.number }}"
+                                data-type="{{ sala.type }}"
+                                {% if sala.justification_required %}data-justification_required{% endif %}
+                                {% if sala == period.classroom %}selected{% endif %}>
+                            {{ sala }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <div class="invalid-feedback">Selecione uma sala.</div>
+                <div class="mt-2">
+                    <button id="sala-disp"
+                            type="button"
+                            class="btn btn-primary"
+                            data-toggle="modal"
+                            data-target="#calendarModal"
+                            style="float: right"
+                            disabled>
+                        Consultar disponibilidade <i class="fas fa-calendar ml-2" aria-hidden="true"></i>
+                    </button>
+                    <!-- <button id="sala-disp-spreadsheet" type="button" class="btn btn-primary" data-toggle="modal" data-target="#spreadsheetModal" disabled>
+                    Consultar formulário <i class="fas fa-calendar ml-2" aria-hidden="true"></i>
+                </button> -->
+                </div>
+            </div>
+        </div>
+        <div class="form-row my-2">
+            <div class="col-md-4">
+                <label>
+                    <b>Data de início *</b>
+                </label>
+                <input class="form-control rounded-0" name="date_begin" data-mask="00-00-0000" data-toggle="datepicker" value={{ period.date_begin|date:"d-m-Y" }} date-field required/>
+                <div class="invalid-feedback">Informe uma data.</div>
+            </div>
+            <div class="col-md-4">
+                <label>
+                    <b>Data de término *</b>
+                </label>
+                <input class="form-control rounded-0" name="date_end" data-mask="00-00-0000" data-toggle="datepicker" value={{ period.date_end|date:"d-m-Y" }} date-field required/>
+                <div class="invalid-feedback">Informe uma data.</div>
+            </div>
+            <div class="col-md-4">
+                <label>Carga horária</label>
+                <input class="form-control rounded-0"
+                       type="number"
+                       name="workload"
+                       value="{{ period.workload }}"
+                       id="workload"/>
+            </div>
+        </div>
+        <div class="form-row my-2">
+            <div class="form-group col-md-6">
+                <label>
+                    <b>Dias da semana *</b>
+                </label>
+                <br/>
+                <div class="form-check mr-5">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           name="weekdays"
+                           {% if '7' in period.weekdays %}checked{% endif %}
+                           value="7"
+                           id="week-dom"/>
+                    <label class="form-check-label" for="week-dom">Domingo</label>
+                </div>
+                <div class="form-check mr-5">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           name="weekdays"
+                           {% if '1' in period.weekdays %}checked{% endif %}
+                           value="1"
+                           id="week-seg"/>
+                    <label class="form-check-label" for="week-seg">Segunda-feira</label>
+                </div>
+                <div class="form-check mr-5">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           name="weekdays"
+                           {% if '2' in period.weekdays %}checked{% endif %}
+                           value="2"
+                           id="week-ter"/>
+                    <label class="form-check-label" for="week-ter">Terça-feira</label>
+                </div>
+                <div class="form-check mr-5">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           name="weekdays"
+                           {% if '3' in period.weekdays %}checked{% endif %}
+                           value="3"
+                           id="week-qua"/>
+                    <label class="form-check-label" for="week-qua">Quarta-feira</label>
+                </div>
+                <div class="form-check mr-5">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           name="weekdays"
+                           {% if '4' in period.weekdays %}checked{% endif %}
+                           value="4"
+                           id="week-qui"/>
+                    <label class="form-check-label" for="week-qui">Quinta-feira</label>
+                </div>
+                <div class="form-check mr-5">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           name="weekdays"
+                           {% if '5' in period.weekdays %}checked{% endif %}
+                           value="5"
+                           id="week-sex"/>
+                    <label class="form-check-label" for="week-sex">Sexta-feira</label>
+                </div>
+                <div class="form-check mr-5">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           name="weekdays"
+                           {% if '6' in period.weekdays %}checked{% endif %}
+                           value="6"
+                           id="week-sab"/>
+                    <label class="form-check-label" for="week-sab">Sábado</label>
+                </div>
+                <div class="invalid-feedback">Informe os dias da semana.</div>
+            </div>
+            <div class="form-group col-md-6">
+                <label>
+                    <b>Turno *</b>
+                </label>
+                <br/>
+                <div class="form-check mr-5">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           name="shift"
+                           id="shiftM"
+                           {% if 'M' in period.shift %}checked{% endif %}
+                           value="M"/>
+                    <label class="form-check-label" for="shiftM">Manhã</label>
+                </div>
+                <div class="form-check mr-5">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           name="shift"
+                           id="shiftT"
+                           {% if 'T' in period.shift %}checked{% endif %}
+                           value="T"/>
+                    <label class="form-check-label" for="shiftT">Tarde</label>
+                </div>
+                <div class="form-check mr-5">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           name="shift"
+                           id="shiftN"
+                           {% if 'N' in period.shift %}checked{% endif %}
+                           value="N"/>
+                    <label class="form-check-label" for="shiftN">Noite</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputAddress2">Equipamento multimídia e software</label>
+            <input type="text"
+                   class="form-control rounded-0"
+                   name="equipment"
+                   value="{{ period.equipment|default_if_none:'' }}"
+                   placeholder="Será necessária a utilização de algum equipamento multimídia ou sofware específico?"/>
+            <small id="emailHelp" class="form-text text-muted">Exemplo: Datashow, caixa de som, software específico</small>
+        </div>
+        <div class="form-group">
+            <label for="inputAddress2">
+                <b>Nome do docente *</b>
+            </label>
+            <input type="text"
+                   class="form-control rounded-0"
+                   required
+                   name="requester"
+                   placeholder="Nome completo do docente"
+                   value="{{ period.requester }}"
+                   required/>
+            <div class="invalid-feedback">Informe o nome completo do docente.</div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">
+                    <b>Email *</b>
+                </label>
+                <input type="email"
+                       class="form-control rounded-0"
+                       name="email"
+                       placeholder="Email do docente"
+                       value="{{ period.email }}"
+                       required/>
+                <div class="invalid-feedback">Informe um endereço de Email válido.</div>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputAddress">
+                    <b>Telefone *</b>
+                </label>
+                <input type="text"
+                       class="form-control rounded-0"
+                       data-mask="(00) 0 0000-0000"
+                       name="phone"
+                       placeholder="Telefone para contato"
+                       value="{{ period.phone }}"
+                       required/>
+                <div class="invalid-feedback">Informe um número de celular válido.</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Observações</label>
+            <textarea name="obs"
+                      rows="6"
+                      class="form-control textarea-counter rounded-0"
+                      placeholder="Deixe aqui observações adicionais acerca do período"
+                      maxlength="512"
+                      data-counter="#count">{{ period.obs|default_if_none:'' }}</textarea>
+            <small id="count" class="float-right"></small>
+        </div>
+        <hr/>
+        <div class="text-center mt-4">
+            <button id="enviar-reserva" class="btn btn-dark rounded-0">
+                Atualizar período
+            </button>
+        </div>
+    </form>
+    <div class="modal fade"
+         id="calendarModal"
+         tabindex="-1"
+         role="dialog"
+         aria-labelledby="mymodal"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="text-center">
+                        Uso da sala: <b><span id="sala-selec"></span></b>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="table-reserva d-flex justify-content-md-center mx-auto">
+                                <div id="tabela-de-salas">
+                                    <div id="escolheMes">
+                                        <!-- AJAX -->
+                                    </div>
+                                    <div id="reservation-calendar">
+                                        <!-- RESERVATION CALENDAR -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">
+                        Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+{% block scripts %}
+    <script src="{% static 'assets/dashboard/js/form_validate.js' %}"></script>
+    <script src="{% static 'assets/dashboard/periodo/js/period_form.js' %}"></script>
+    <script src="{% static 'assets/dashboard/periodo/js/editar.js' %}"></script>
+{% endblock scripts %}

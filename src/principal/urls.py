@@ -34,6 +34,6 @@ urlpatterns = [
     path("busca/", busca, name="busca"),
     path("noticias/<slug:slug>/", noticia, name="noticia"),
     path("noticias/", noticias, name="noticias"),
-    path("newsletter/unsubscribe", email_unsubscribe, name="unsubscribe"),
-    path("newsletter/subscribe", email_subscribe, name="subscribe"),
+    path("newsletter/unsubscribe/", email_unsubscribe, name="unsubscribe"),
+    path("newsletter/subscribe/", email_subscribe, name="subscribe"),
 ]

@@ -15,12 +15,10 @@
     </a>
     <div class="collapse navbar-collapse flex-column" id="navbar-lista">
         <ul class="navbar-nav ml-auto">
-            {% for item in dashbordItens %}
+            {% for item in dashboard_navbar_items %}
                 <li class="nav-item mx-auto">
-                    <a class="nav-link {% if current.main == item.main %}active{% endif %}"
-                       href="{{ item.main.link }}">
-                        {{ item.main.name }}
-                    </a>
+                    <a class="nav-link {% if current == item %}active{% endif %}"
+                       href="{{ item.link }}">{{ item.name }}</a>
                 </li>
             {% endfor %}
             <li class="d-flex align-items-center nav-item mx-auto">
@@ -34,7 +32,7 @@
         </ul>
     </div>
 </nav>
-{% if current.subs|length > 0 %}
+{% if current.subitems|length > 0 %}
     <nav class="navbar navbar-expand-lg navbar-dark px-4 py-1 sec-nav">
         <button class="navbar-toggler text-dark border-0"
                 type="button"
@@ -47,7 +45,7 @@
         </button>
         <div class="collapse navbar-collapse flex-column" id="navbar-sublista">
             <ul class="navbar-nav mr-auto">
-                {% for item in current.subs %}
+                {% for item in current.subitems %}
                     <li class="nav-item mx-auto">
                         <a class="nav-link pt-3 {% if current_sub == item.related_name %}active{% endif %}"
                            href="{{ item.link }}">

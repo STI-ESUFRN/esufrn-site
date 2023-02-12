@@ -7,7 +7,7 @@ class TestOfferViewSetOrganizationAdmin(APITestCase):
     def setUp(self):
         self.client = APIClient()
 
-        return super(TestOfferViewSetOrganizationAdmin, self).setUpClass()
+        return super().setUpClass()
 
     def some_test(self):
         sample_chamado()

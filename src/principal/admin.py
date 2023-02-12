@@ -1,22 +1,21 @@
 from django.contrib import admin
 
 from principal.models import (
-    Alerta,
-    Arquivos,
-    Blog,
-    BlogAttachments,
-    Depoimentos,
-    Documentos,
-    Equipe,
-    Mensagem,
+    Alert,
+    Document,
+    File,
+    Message,
+    News,
+    NewsAttachment,
     Newsletter,
-    Paginas,
-    Publicacoes,
+    Page,
+    Team,
+    Testimonial,
 )
 
 
 class BlogAttachmentsInline(admin.TabularInline):
-    model = BlogAttachments
+    model = NewsAttachment
 
 
 class BlogAdmin(admin.ModelAdmin):
@@ -56,11 +55,6 @@ class EquipeAdmin(admin.ModelAdmin):
     list_filter = ["kind"]
 
 
-class PublicacoesAdmin(admin.ModelAdmin):
-    list_display = ["name"]
-    search_fields = ["name"]
-
-
 class ArquivosAdmin(admin.ModelAdmin):
     list_display = ["name", "file"]
     search_fields = ["name"]
@@ -95,17 +89,16 @@ class AdminMensagem(admin.ModelAdmin):
 
 
 class AdminAlerta(admin.ModelAdmin):
-    list_display = ["title", "expires_at", "created_at", "modified_at"]
+    list_display = ["title", "expires_at", "created", "modified"]
     search_fields = ["title", "content"]
 
 
-admin.site.register(Blog, BlogAdmin)
-admin.site.register(Equipe, EquipeAdmin)
-admin.site.register(Publicacoes, PublicacoesAdmin)
-admin.site.register(Arquivos, ArquivosAdmin)
-admin.site.register(Paginas, PaginasAdmin)
-admin.site.register(Depoimentos, DepoimentosAdmin)
+admin.site.register(News)
+admin.site.register(Team, EquipeAdmin)
+admin.site.register(File, ArquivosAdmin)
+admin.site.register(Page, PaginasAdmin)
+admin.site.register(Testimonial, DepoimentosAdmin)
 admin.site.register(Newsletter, NewsletterAdmin)
-admin.site.register(Documentos, AdminDocumentos)
-admin.site.register(Mensagem, AdminMensagem)
-admin.site.register(Alerta, AdminAlerta)
+admin.site.register(Document, AdminDocumentos)
+admin.site.register(Message, AdminMensagem)
+admin.site.register(Alert, AdminAlerta)

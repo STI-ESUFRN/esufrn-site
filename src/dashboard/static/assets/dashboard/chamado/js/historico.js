@@ -73,7 +73,7 @@ function patch(data) {
 	$(".loader-global").addClass("load");
 	$.ajax({
 		url: `/api/admin/chamados/${idSelecionado}/`,
-		type: 'PATCH',
+		type: "PATCH",
 		data: data,
 		success: function (response) {
 			refreshData();

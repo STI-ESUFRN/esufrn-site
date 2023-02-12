@@ -39,7 +39,9 @@ class DashboardSubItens(models.Model):
     related_name = models.CharField("Nome relacionado", max_length=50)
     link = models.CharField("Link", max_length=255)
     order = models.IntegerField("Ordem")
-    menu = models.ForeignKey(DashboardItens, on_delete=models.CASCADE, null=True)
+    menu = models.ForeignKey(
+        DashboardItens, related_name="subitems", on_delete=models.CASCADE, null=True
+    )
     decoration = models.CharField(
         "Class estilo",
         blank=True,

@@ -1,10 +1,9 @@
 from django import forms
 
-from .models import Newsletter
+from principal.models import Newsletter
 
 
 class ContactES(forms.Form):
-
     name = forms.CharField(
         label="Nome",
         max_length=100,
@@ -71,30 +70,6 @@ class UnsubscribeES(forms.Form):
                 "placeholder": "Email",
                 "required": True,
                 "class": "w-100 px-2",
-            }
-        ),
-    )
-
-
-class siginForm(forms.Form):
-    field_user_name = forms.CharField(
-        label="Usuário",
-        max_length=100,
-        widget=forms.TextInput(
-            attrs={
-                "class": "form-control rounded-0 border-0 my-4",
-                "placeholder": "Usuário",
-                "required": "required",
-            }
-        ),
-    )
-    field_passwd = forms.CharField(
-        label="Senha",
-        widget=forms.PasswordInput(
-            attrs={
-                "class": "form-control rounded-0 border-0 my-4",
-                "placeholder": "Senha",
-                "required": "required",
             }
         ),
     )

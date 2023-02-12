@@ -1,4 +1,3 @@
-
 function setText(e, val) {
     if (e.is("textarea")) {
         e.val(val);
@@ -10,9 +9,18 @@ function setText(e, val) {
 function fillAttributes(object) {
     $(`[data-attribute]`).each(function () {
         let attr = object;
-        $.map($(this).attr("data-attribute").split('.'), (value, index) => {
-            attr = attr[value];
-            return attr;
+        let path = $(this).attr("data-attribute").split(".");
+        $.each(path, function (index, key) {
+            attr = attr[key];
+            if (choices[key]) {
+                if ($.isArray(attr)) {
+                    attr = $.map(attr, function (value) {
+                        return choices[key][value];
+                    }).join(", ");
+                } else {
+                    attr = choices[key][attr];
+                }
+            }
         });
 
         if (attr != null) {
@@ -22,7 +30,7 @@ function fillAttributes(object) {
             }
             setText($(this), attr);
         } else {
-            setText($(this), '');
+            setText($(this), "");
         }
     });
 }

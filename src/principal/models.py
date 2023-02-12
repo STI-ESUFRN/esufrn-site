@@ -6,13 +6,14 @@ from urllib.parse import unquote
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.conf import settings
 from django.core.mail import get_connection, send_mail
-from django.core.validators import validate_email
+from django.core.validators import EmailValidator
 from django.db import models
 from django.forms import ValidationError
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import strip_tags
 from django.utils.text import slugify
+from model_utils.models import TimeStampedModel
 from multiselectfield import MultiSelectField
 from PIL import Image
 
@@ -20,7 +21,7 @@ from esufrn.settings import MEDIA_ROOT
 from principal.helpers import emailToken
 
 
-class Blog(models.Model):
+class News(models.Model):
     title = models.CharField("Título da notícia", max_length=400)
     subtitle = models.CharField("Subtítulo da notícia", max_length=500)
     slug = models.SlugField(
@@ -41,16 +42,15 @@ class Blog(models.Model):
         ),
     )
 
-    CATEGORY_CHOICES = (
-        ("noticia", "Notícia (Newsletter - Notícias)"),
-        ("evento", "Evento"),
-        ("processo", "Processo (Newsletter - Abertura de Turmas)"),
-        ("concurso", "Concurso (Newsletter - Editais de Cursos)"),
-    )
+    class Category(models.TextChoices):
+        NEWS = "noticia", "Notícia (Newsletter - Notícias)"
+        EVENT = "evento", "Evento"
+        PROCESS = "processo", "Processo (Newsletter - Abertura de Turmas)"
+        COURSE = "concurso", "Concurso (Newsletter - Editais de Cursos)"
 
     author = models.CharField("Nome do autor", max_length=50)
     category = models.CharField(
-        "Categoria", max_length=8, choices=CATEGORY_CHOICES, default="notícia"
+        "Categoria", max_length=8, choices=Category.choices, default=Category.NEWS
     )
 
     image = models.ImageField(
@@ -71,7 +71,7 @@ class Blog(models.Model):
     class Meta:
         verbose_name = "Notícia"
         verbose_name_plural = "Notícias"
-        ordering = ["-modified_at"]
+        ordering = ["-published_at"]
 
     def __str__(self):
         return self.title
@@ -132,7 +132,7 @@ class Blog(models.Model):
         threading.Thread(target=send).start()
 
     def save(self, *args, **kwargs):
-        haveId = self.pk
+        have_id = self.pk
         super().save(*args, **kwargs)
         if self.image:
             filepath = unquote(os.path.split(MEDIA_ROOT)[0] + self.image.url)
@@ -150,11 +150,40 @@ class Blog(models.Model):
 
         super().save(*args, **kwargs)
 
-        if haveId is None:
+        if have_id is None:
             self.send_newsletter()
 
 
-class Equipe(models.Model):
+class File(models.Model):
+    name = models.CharField("Nome", max_length=250)
+    file = models.FileField(
+        upload_to="files/", verbose_name="Arquivo", null=True, max_length=255
+    )
+
+    published_at = models.DateTimeField(
+        "Adicionado em", default=datetime.now, null=True
+    )
+
+    class Meta:
+        verbose_name = "Arquivo"
+        verbose_name_plural = "Arquivos"
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
+
+class NewsAttachment(models.Model):
+    blog = models.ForeignKey(News, related_name="attachments", on_delete=models.CASCADE)
+    file = models.ForeignKey(File, verbose_name="Arquivo", on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Anexo"
+        verbose_name_plural = "Anexos"
+        ordering = ["blog__title"]
+
+
+class Team(models.Model):
     TYPE_CHOICES = (("docente", "Docente"), ("servidor", "Servidor"))
 
     name = models.CharField("Nome", max_length=100)
@@ -178,60 +207,7 @@ class Equipe(models.Model):
         return self.name
 
 
-class Publicacoes(models.Model):
-    TYPE_CHOICES = (
-        ("pub", "Publicação"),
-        ("com", "Comitê de Ética"),
-        ("eno", "Especialização em Enfermagem Obstétrica"),
-    )
-
-    name = models.CharField("Nome", max_length=250)
-    file = models.FileField(
-        upload_to="files/", verbose_name="Arquivo", null=True, blank=True
-    )
-    category = models.CharField(
-        "Tipo", max_length=3, choices=TYPE_CHOICES, default="pub"
-    )
-
-    class Meta:
-        verbose_name = "Publicação"
-        verbose_name_plural = "Publicações"
-        ordering = ["name"]
-
-    def __str__(self):
-        return self.name
-
-
-class Arquivos(models.Model):
-    name = models.CharField("Nome", max_length=250)
-    file = models.FileField(
-        upload_to="files/", verbose_name="Arquivo", null=True, max_length=255
-    )
-
-    published_at = models.DateTimeField(
-        "Adicionado em", default=datetime.now, null=True
-    )
-
-    class Meta:
-        verbose_name = "Arquivo"
-        verbose_name_plural = "Arquivos"
-        ordering = ["name"]
-
-    def __str__(self):
-        return self.name
-
-
-class BlogAttachments(models.Model):
-    blog = models.ForeignKey(Blog, related_name="attachments", on_delete=models.CASCADE)
-    file = models.ForeignKey(Arquivos, verbose_name="Arquivo", on_delete=models.CASCADE)
-
-    class Meta:
-        verbose_name = "Anexo"
-        verbose_name_plural = "Anexos"
-        ordering = ["blog__title"]
-
-
-class Paginas(models.Model):
+class Page(models.Model):
     name = models.CharField("Nome", max_length=250, help_text="Será o título da página")
     path = models.SlugField(
         "Caminho",
@@ -248,6 +224,9 @@ class Paginas(models.Model):
         verbose_name = "Página"
         verbose_name_plural = "Páginas"
         ordering = ["path", "name"]
+
+    def get_absolute_url(self):
+        return reverse("pagina", kwargs={"path": self.path})
 
     def __str__(self):
         return self.name
@@ -296,10 +275,10 @@ class Newsletter(models.Model):
 
     def save(self, *args, **kwargs):
         self.clean()
-        super(Newsletter, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
-class Depoimentos(models.Model):
+class Testimonial(models.Model):
     name = models.CharField("Nome", max_length=100)
     occupation = models.CharField("Ocupação", max_length=100)
     testimonial = models.CharField("Depoimento", max_length=100)
@@ -316,7 +295,7 @@ class Depoimentos(models.Model):
         return self.name
 
 
-class Documentos(models.Model):
+class Document(models.Model):
     name = models.CharField("Nome", max_length=250)
     authors = models.CharField(
         "Autores",
@@ -386,7 +365,7 @@ class Documentos(models.Model):
         return self.name
 
 
-class Mensagem(models.Model):
+class Message(models.Model):
     name = models.CharField("Nome", max_length=100)
     contact = models.CharField("Contato", max_length=100)
     message = models.CharField("Mensagem", max_length=500)
@@ -401,17 +380,14 @@ class Mensagem(models.Model):
         if self.message is None:
             raise ValidationError("O campo de mensagem não pode estar em branco")
 
-        try:
-            validate_email(self.contact)
-
-        except:
-            raise ValidationError("Endereço de email inválido")
+        validator = EmailValidator(message="Endereço de email inválido")
+        validator(self.contact)
 
     def save(self, *args, **kwargs):
         pk = self.pk
         self.clean()
 
-        super(Mensagem, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
         if not pk:
             self.notify()
@@ -419,9 +395,7 @@ class Mensagem(models.Model):
     def notify(self):
         message = (
             "Alguém entrou em contato usando o formulário de contato de nosso"
-            " site.\n\nNome: {}\nContato: {}\n\n  {}".format(
-                self.name, self.contact, self.message
-            )
+            f" site.\n\nNome: {self.name}\nContato: {self.contact}\n\n  {self.message}"
         )
 
         threading.Thread(
@@ -445,13 +419,10 @@ class Mensagem(models.Model):
         return self.message
 
 
-class Alerta(models.Model):
+class Alert(TimeStampedModel):
     title = models.CharField("Título", max_length=100)
     content = RichTextUploadingField("Conteúdo", config_name="page")
     expires_at = models.DateTimeField("Exibir até")
-
-    created_at = models.DateTimeField("Criado em", auto_now_add=True)
-    modified_at = models.DateTimeField("Modificado em", auto_now=True)
 
     def __str__(self):
         return self.title
@@ -459,4 +430,4 @@ class Alerta(models.Model):
     class Meta:
         verbose_name = "Alerta"
         verbose_name_plural = "Alertas"
-        ordering = ["-created_at"]
+        ordering = ["-created"]

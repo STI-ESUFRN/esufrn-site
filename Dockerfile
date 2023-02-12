@@ -1,23 +1,37 @@
-FROM python:3.10-alpine
+FROM python:3.11.0-slim-bullseye
 
-ENV PYTHONUNBUFFERED 1
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV POETRY_VIRTUALENVS_CREATE=false
-ENV APP_HOME=/usr/src/app
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    POETRY_HOME=/etc/poetry \
+    PROJECT_DIR=/app \
+    POETRY_VIRTUALENVS_CREATE=false
 
-WORKDIR $APP_HOME
+ENV PATH="$POETRY_HOME/bin:$PATH"
 
-RUN apk update && \
-    apk add gcc musl-dev mariadb-connector-c-dev
 
-COPY pyproject.toml poetry.lock ./
-RUN pip install poetry
+WORKDIR $PROJECT_DIR
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+    gettext=0.21-4 \
+    libcurl4=7.74.0-1.3+deb11u3 \
+    curl=7.74.0-1.3+deb11u3 \
+    netcat \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN groupadd -g 10001 python \
+    && useradd -m -u 10000 -g python -s /bin/bash python
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+RUN curl -sSL https://install.python-poetry.org | python3 -
+
+COPY poetry.toml poetry.lock pyproject.toml .
+
+COPY --chown=python:python . .
 RUN poetry install --only main
+WORKDIR /$PROJECT_DIR/src
 
-COPY entrypoint.sh .
-RUN sed -i 's/\r$//g' ./entrypoint.sh
-RUN chmod +x ./entrypoint.sh
-
-WORKDIR $APP_HOME/src
-
-ENTRYPOINT ["../entrypoint.sh"]
+USER python
+EXPOSE 8000
+ENTRYPOINT ["../docker/entrypoint.sh"]

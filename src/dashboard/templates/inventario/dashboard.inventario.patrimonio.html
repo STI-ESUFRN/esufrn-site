@@ -1,0 +1,119 @@
+{% extends "dashboard.base.html" %}
+{% block styles %}
+    <style>
+        table.table {
+            table-layout: fixed;
+        }
+
+        table.custom-table th:first-child {
+            width: 20px;
+        }
+
+        table.custom-table th:nth-child(2) {
+            width: 20px;
+        }
+    </style>
+{% endblock styles %}
+{% block content %}
+    <div class="card rounded-0">
+        <div class="card-header head-table border-0 rounded-0">
+            <b><i class="fas fa-book mr-2"></i>Patrimônios cadastrados</b>
+        </div>
+        <div class="card-body p-0" style="overflow-x: auto;">
+            <table class="table custom-table table-hover mb-0">
+                <thead class="capt-table">
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th>Modelo</th>
+                        <th>Tombamento</th>
+                        <th>Categoria</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="patrimonio-list">
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock content %}
+{% block scripts %}
+    <script>
+        var currentPatrimonio = undefined;
+
+        function updateList() {
+            $.ajax({
+                type: "GET",
+                url: "/api/admin/patrimonios/",
+                success: function(response) {
+                    $.each(response, function(index, e) {
+                        let row = $("<tr />", {
+                            "data-id-patrimonio": e.id
+                        });
+                        let fa1col = $("<td />", {
+                            "class": "text-center"
+                        });
+                        let fa1 = $("<i />", {
+                            class: e.status == "D" ? "fas fa-check-circle text-success" : "fas fa-times-circle text-danger"
+                        });
+                        fa1col.append(fa1);
+                        let fa2col = $("<td />", {
+                            "class": "text-center"
+                        });
+                        let fa2 = $("<i />");
+                        switch (e.category) {
+                            case 'N':
+                                fa2.attr("class", "fas fa-laptop");
+                                break;
+                            case 'C':
+                                fa2.attr("class", "fas fa-desktop");
+                                break;
+                            case 'E':
+                                fa2.attr("class", "fas fa-plug");
+                                break;
+                        }
+                        fa2col.append(fa2);
+                        let model = $("<td />", {
+                            text: e.model
+                        });
+                        let dmp = $("<td />", {
+                            text: e.dmp
+                        });
+                        let status = $("<td />", {
+                            text: e.status == "D" ? "Disponível" : "Emprestado"
+                        });
+                        let category = $("<td />", {
+                            text: e.category_name
+                        });
+
+                        row.append(fa1col, fa2col, model, dmp, category, status);
+                        $("#patrimonio-list").append(row);
+                    });
+                    $("[data-id-patrimonio]").click(function(e) {
+                        e.preventDefault();
+                        currentPatrimonio = e.currentTarget.dataset.idPatrimonio;
+                        showDetails();
+                    });
+                }
+            });
+        }
+
+        function showDetails() {
+            $.ajax({
+                type: "GET",
+                url: `/api/admin/patrimonios/${currentPatrimonio}/`,
+                success: function(response) {
+                    $("[data-attribute]").each(function() {
+                        let attrvalue = response;
+                        $.map($(this).attr("data-attribute").split('.'), (value, index) => {
+                            attrvalue = attrvalue[value];
+                            return attrvalue;
+                        });
+                        $(this).text(attrvalue);
+                    });
+                }
+            });
+        }
+        updateList();
+    </script>
+{% endblock scripts %}

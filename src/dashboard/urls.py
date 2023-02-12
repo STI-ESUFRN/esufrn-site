@@ -1,47 +1,16 @@
 from django.contrib.auth import views as auth_views
-from django.urls import path
+from django.urls import include, path
 
-from dashboard.views import (
-    ResetPasswordView,
-    chamadoHistorico,
-    chamadoHome,
-    chamadoInserir,
-    dashboardHome,
-    inventarioEmprestimo,
-    inventarioHome,
-    inventarioPatrimonio,
-    loginView,
-    logoutView,
-    periodoEditar,
-    periodoHistorico,
-    periodoHome,
-    periodoInserir,
-    periodoLista,
-    reservaHistorico,
-    reservaHome,
-    reservaInserir,
-    reservaRelatorio,
-)
+from dashboard.views import ResetPasswordView, home_view, login_view, logout_view
 
 urlpatterns = [
-    path("", dashboardHome, name="dashboard_home"),
-    path("reserva/", reservaHome),
-    path("reserva/historico/", reservaHistorico),
-    path("reserva/inserir/", reservaInserir),
-    path("reserva/relatorio/", reservaRelatorio),
-    path("periodo/", periodoHome),
-    path("periodo/historico/", periodoHistorico, name="periodo_historico"),
-    path("periodo/inserir/", periodoInserir, name="periodo_inserir"),
-    path("periodo/lista/", periodoLista, name="periodo_lista"),
-    path("periodo/editar/<int:pk>/", periodoEditar, name="periodo_editar"),
-    path("chamado/", chamadoHome),
-    path("chamado/historico/", chamadoHistorico),
-    path("chamado/inserir/", chamadoInserir),
-    path("inventario/", inventarioHome),
-    path("inventario/emprestimo", inventarioEmprestimo, name="inventario_emprestimo"),
-    path("inventario/patrimonio", inventarioPatrimonio, name="inventario_patrimonio"),
-    path("login/", loginView, name="login"),
-    path("logout/", logoutView, name="logout"),
+    path("", home_view, name="dashboard_home"),
+    path("reserva/", include("dashboard.reserva.urls")),
+    path("chamado/", include("dashboard.chamado.urls")),
+    path("periodo/", include("dashboard.periodo.urls")),
+    path("laboratorio/", include("dashboard.laboratorio.urls")),
+    path("login/", login_view, name="login"),
+    path("logout/", logout_view, name="logout"),
     path("password-reset/", ResetPasswordView.as_view(), name="password_reset"),
     path(
         "password-reset/confirm/<uidb64>/<token>/",
@@ -64,5 +33,4 @@ urlpatterns = [
         ),
         name="password_reset_done",
     ),
-    # path("perfil/", pagePerfil),
 ]

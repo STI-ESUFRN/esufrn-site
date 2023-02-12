@@ -7,7 +7,7 @@ from django.views.generic import View
 from chamado.api.serializers import ChamadoSerializer
 from chamado.models import Chamado
 from principal.decorators import allowed_users
-from principal.models import Mensagem
+from principal.models import Message
 from reserva.models import Reserve
 from reserva.serializers import ReserveSerializer
 
@@ -43,7 +43,7 @@ class contatosView(View):
         message = request.POST.get("mensagem")
 
         try:
-            Mensagem.objects.create(name=name, contact=contact, message=message)
+            Message.objects.create(name=name, contact=contact, message=message)
 
             return JsonResponse(
                 {"status": "success", "message": "Mensagem enviada com sucesso."}
@@ -64,7 +64,7 @@ decorators = [
 class contatoView(View):
     def delete(self, request, *args, **kwargs):
         try:
-            Mensagem.objects.get(id=self.kwargs["pk"]).delete()
+            Message.objects.get(id=self.kwargs["pk"]).delete()
             return JsonResponse(
                 {"message": "Arquivo excluído com sucesso", "status": "success"}
             )
