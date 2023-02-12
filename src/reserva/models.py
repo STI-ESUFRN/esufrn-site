@@ -288,7 +288,6 @@ class ReserveDay(models.Model):
         return (self.reserve or self.period).event
 
     def clean(self):
-        print(self.status == Status.APPROVED and self.active)
         if self.status == Status.APPROVED and self.active:
             reserves = ReserveDay.objects.filter(
                 Q(period__status=Status.APPROVED) | Q(reserve__status=Status.APPROVED),
