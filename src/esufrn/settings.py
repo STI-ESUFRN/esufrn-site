@@ -31,7 +31,6 @@ INSTALLED_APPS = [
     "chamado",
     "eventos",
     "revistas",
-    "inventario",
     "menu",
     # lib
     "rest_framework",

@@ -8,6 +8,5 @@ urlpatterns = [
     path("contato/<int:pk>/", contatoView.as_view()),
     path("", include("reserva.api.urls")),
     path("", include("chamado.api.urls")),
-    path("", include("inventario.api.urls")),
     path("laboratory/", include("laboratorio.urls")),
 ]
