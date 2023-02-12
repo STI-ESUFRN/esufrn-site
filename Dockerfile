@@ -20,18 +20,18 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN groupadd -g 10001 python \
-    && useradd -m -u 10000 -g python -s /bin/bash python
+# RUN groupadd -g 10001 python \
+    # && useradd -m -u 10000 -g python -s /bin/bash python
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN curl -sSL https://install.python-poetry.org | python3 -
 
 COPY poetry.toml poetry.lock pyproject.toml .
 
-COPY --chown=python:python . .
+COPY . .
 RUN poetry install --only main
 WORKDIR /$PROJECT_DIR/src
 
-USER python
-EXPOSE 8000
+# USER python
+# EXPOSE 8000
 ENTRYPOINT ["../docker/entrypoint.sh"]

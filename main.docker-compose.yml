@@ -12,6 +12,9 @@ services:
         depends_on:
             - postgres
             - redis
+        volumes:
+            - ./src/staticfiles:/app/src/staticfiles
+            - ./src/media:/app/src/media
 
     pgadmin:
         image: dpage/pgadmin4
