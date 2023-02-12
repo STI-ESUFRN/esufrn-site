@@ -2,4 +2,44 @@ version: "3.9"
 
 services:
     web:
-        command: gunicorn esufrn.wsgi:application --worker-class=gevent --worker-connections=64 --workers=4 --bind 0.0.0.0:8000
+        build: .
+        restart: always
+        pull_policy: always
+        env_file: .env
+        command: ../scripts/runserver.sh
+        expose:
+            - 8000
+        depends_on:
+            - postgres
+            - redis
+
+    pgadmin:
+        image: dpage/pgadmin4
+        restart: always
+        environment:
+            PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+            PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+        volumes:
+            - pgadmin-data:/var/lib/pgadmin
+        expose:
+            - 80
+        depends_on:
+            - postgres
+
+    nginx:
+        build:
+            context: nginx
+        restart: always
+        ports:
+            - 80:80
+            - 443:443
+        depends_on:
+            - web
+        volumes:
+            - ./src/staticfiles:/usr/share/nginx/html/staticfiles:ro
+            - ./src/media:/usr/share/nginx/html/media:ro
+            - ./src/templates:/usr/share/nginx/html/templates:ro
+            - ./nginx/ssl:/ssl:ro
+
+volumes:
+    pgadmin-data:

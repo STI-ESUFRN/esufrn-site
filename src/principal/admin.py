@@ -93,7 +93,7 @@ class AdminAlerta(admin.ModelAdmin):
     search_fields = ["title", "content"]
 
 
-admin.site.register(News, BlogAdmin)
+admin.site.register(News)
 admin.site.register(Team, EquipeAdmin)
 admin.site.register(File, ArquivosAdmin)
 admin.site.register(Page, PaginasAdmin)

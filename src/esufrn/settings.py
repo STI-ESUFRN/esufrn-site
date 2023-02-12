@@ -103,17 +103,12 @@ WSGI_APPLICATION = "esufrn.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": os.getenv("DATABASE_ENGINE"),
-        "NAME": os.getenv("MYSQL_DATABASE"),
-        "USER": os.getenv("MYSQL_USER"),
-        "PASSWORD": os.getenv("MYSQL_PASSWORD"),
-        "HOST": "localhost",
-        "PORT": "3306",
-        "OPTIONS": {
-            "charset": "utf8mb4",
-            "use_unicode": True,
-            "init_command": "SET foreign_key_checks = 0;",
-        },
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("DATABASE_NAME"),
+        "USER": os.getenv("DATABASE_USER"),
+        "PASSWORD": os.getenv("DATABASE_PASSWORD"),
+        "HOST": os.getenv("DATABASE_HOST"),
+        "PORT": os.getenv("DATABASE_PORT"),
     }
 }
 
