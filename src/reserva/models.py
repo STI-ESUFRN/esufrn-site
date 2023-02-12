@@ -241,6 +241,24 @@ class Period(TimeStampedModel, SoftDeletableModel):
             "classname",
         ]
 
+    def get_short_weekdays(self):
+        days = {
+            "1": "2ª",
+            "2": "3ª",
+            "3": "4ª",
+            "4": "5ª",
+            "5": "6ª",
+            "6": "7",
+            "7": "8",
+        }
+        return ", ".join([days[day] for day in self.weekdays])
+
+    def get_saturdays(self):
+        return self.days.filter(date__iso_week_day=6).values("date").distinct().count()
+
+    def get_total_days(self):
+        return self.days.values("date").distinct().count()
+
 
 class ReserveDay(models.Model):
     reserve = models.ForeignKey(

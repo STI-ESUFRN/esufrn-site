@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Min
 from django.shortcuts import redirect, render
-
+from django.utils import timezone
 from dashboard.helpers import get_dash_context
 from principal.decorators import allowed_users
 from reserva.models import Classroom, Period
@@ -39,31 +39,18 @@ def period_history(request):
 @login_required(login_url="/dashboard/login")
 @allowed_users(allowed_roles=periodo_roles)
 def list_periods(request):
-    course = request.GET.get("course")
-    period = request.GET.get("period")
-    class_period = request.GET.get("class_period")
+    period = request.GET.get("period") or timezone.now().year
 
-    base = Period.objects.all()
-    if course:
+    base = Period.objects.filter(period__icontains=period)
+
+    if course := request.GET.get("course"):
         base = base.filter(course=course)
-    if period:
-        base = base.filter(period=period)
-    if class_period:
+
+    if class_period := request.GET.get("class_period"):
         base = base.filter(class_period=class_period)
 
-    groups = (
-        base.exclude(course__isnull=True)
-        .values("course", "period", "class_period")
-        .order_by()
-        .annotate(
-            period_total=Count("period"),
-            course_total=Count("course"),
-            class_period_total=Count("class_period"),
-        )
-    )
-
     period_groups = []
-    courses = Period.Course.choices
+    groups = base.values("course", "period", "class_period").annotate(Count("id"))
     for group in groups:
         periods = Period.objects.filter(
             course=group["course"],
@@ -76,13 +63,9 @@ def list_periods(request):
             .order_by("date_begin")[0]["date_begin__min"]
         )
 
-        for index, name in courses:
-            if group["course"] == index:
-                course_name = name
-
         period_groups.append(
             {
-                "course": course_name,
+                "course": Period.Course(group["course"]).label,
                 "period": group["period"],
                 "class_period": group["class_period"],
                 "date_begin": date_begin,
@@ -106,6 +89,7 @@ def list_periods(request):
         "periodos": periodos,
     }
     get_dash_context(context, "Períodos", "periodo_relatorio")
+
     return render(request, "periodo/dashboard.periodo.lista.html", context)
 
 

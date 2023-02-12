@@ -5,43 +5,55 @@
         table.table th:nth-child(1) {
             width: 8%;
         }
+
         table.table th:nth-child(2) {
             width: 20%;
         }
+
         table.table th:nth-child(3) {
             width: 18%;
         }
+
         table.table th:nth-child(4) {
             width: 10%;
         }
+
         table.table th:nth-child(5) {
             width: 24%;
         }
+
         table.table th:nth-child(6) {
             width: 20%;
         }
-        .table thead tr th,.table tbody tr td{
+
+        .table thead tr th,
+        .table tbody tr td {
             border: 1px solid black !important;
             vertical-align: middle;
         }
+
         table {
             page-break-inside: auto !important;
         }
+
         tr {
             page-break-inside: avoid;
             page-break-after: auto !important;
         }
+
         td {
             white-space: normal !important;
         }
+
         thead {
-            display:table-header-group !important;
+            display: table-header-group !important;
         }
 
         .doc * {
             font-family: "Times New Roman", Times, serif !important;
             font-size: 14pt;
         }
+
         .doc-head * {
             font-size: 16pt;
         }
@@ -98,7 +110,7 @@
                     <label>Período:</label>
                     <select class="form-control form-control-sm " data-filter name="period">
                         <option value="">
-                            Todas os períodos
+                            Apenas perídos do ano atual
                         </option>
                         {% for periodo in periodos %}
                             <option value="{{ periodo }}"
@@ -155,11 +167,7 @@
                                 <b>{{ period.classname|upper }}</b>
                             </td>
                             <td class="py-0 text-center">
-                                <div>
-                                    {# djlint:off #}
-                            {% for day in period.get_numeric_weekdays %}{{day}}{% if not forloop.last %},&nbsp;{% endif %}{% endfor %}
-                                    {# djlint:on #}
-                                </div>
+                                <div>{{ period.get_short_weekdays }}</div>
                                 <div>{{ period.shift }}</div>
                                 <div>{{ period.date_begin|date:"d/m" }} a {{ period.date_end|date:"d/m" }}</div>
                             </td>
@@ -167,10 +175,8 @@
                                 {% with period.workload as workload %}
                                     {% if workload %}<div>{{ workload }}h</div>{% endif %}
                                 {% endwith %}
-                                <div>{{ period.get_days|length }}d</div>
-                                {% with period.get_saturdays|length as saturdays %}
-                                    {% if saturdays > 0 %}<div style="white-space: nowrap;">({{ saturdays }} sáb)</div>{% endif %}
-                                {% endwith %}
+                                <div>{{ period.get_total_days }}d</div>
+                                {% if period.get_saturdays %}<div style="white-space: nowrap;">({{ period.get_saturdays }} sáb)</div>{% endif %}
                             </td>
                             <td class="py-0">{{ period.requester }}</td>
                             <td class="py-0">{{ period.classroom }}</td>
