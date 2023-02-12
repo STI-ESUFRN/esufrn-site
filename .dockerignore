@@ -10,5 +10,5 @@ docker-compose.yml
 main.docker-compose.yml
 README.md
 sample.env
-media/
-staticfles/
+src/media/
+src/staticfles/
