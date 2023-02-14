@@ -78,7 +78,14 @@ class NewsletterAdmin(admin.ModelAdmin):
 
 
 class AdminDocumentos(admin.ModelAdmin):
-    list_display = ["name", "category", "document_type", "get_url", "published_at"]
+    list_display = [
+        "name",
+        "is_active",
+        "category",
+        "document_type",
+        "get_url",
+        "created",
+    ]
     search_fields = ["name"]
     list_filter = ["category", "document_type"]
 
