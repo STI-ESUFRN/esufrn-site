@@ -151,7 +151,7 @@ class CalendarViewSet(
 
     def get_queryset(self):
         queryset = ReserveDay.objects.filter(
-            Q(period__status=Status.APPROVED) | Q(reserve__status=Status.APPROVED),
+            Q(period__status=Status.APPROVED) | Q(reserve__status=Status.WAITING),
             active=True,
         )
         return self.filter_queryset(queryset)
