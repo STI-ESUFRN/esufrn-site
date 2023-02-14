@@ -388,8 +388,9 @@ def instituicao_documentos(request):
         ("ensino", "Ensino"),
     )
     list = []
+    queryset = Document.objects.exclude(is_active=False)
     for index, category in categories:
-        docs = Document.objects.filter(category=index)
+        docs = queryset.filter(category=index)
         list.append({"main": category, "documentos": docs})
 
     context = {
