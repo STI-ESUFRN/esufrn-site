@@ -11,6 +11,7 @@ $("#classroom").change(function () {
 $("#enviar-reserva").click(function (e) {
     e.preventDefault();
 
+    $("#enviar-reserva").attr("disabled", true);
     var serialized_data = $("#form-reserva").serializeREST();
     $.ajax({
         type: "POST",
@@ -19,11 +20,14 @@ $("#enviar-reserva").click(function (e) {
         success: function (response) {
             $("#form-reserva").trigger("reset");
             showMessage("Período inserido com sucesso", "alert-success");
+            $("#enviar-reserva").attr("disabled", false);
         },
         error: function (response) {
+            console.error(response);
             $("#form-reserva").fillErrors(response.responseJSON, (message) =>
                 showMessage(message, "alert-danger")
             );
+            $("#enviar-reserva").attr("disabled", false);
         },
     });
 });
