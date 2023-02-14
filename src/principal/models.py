@@ -16,7 +16,7 @@ from django.utils.text import slugify
 from model_utils.models import TimeStampedModel
 from multiselectfield import MultiSelectField
 from PIL import Image
-
+from constance import config
 from esufrn.settings import MEDIA_ROOT
 from principal.helpers import emailToken
 
@@ -407,7 +407,7 @@ class Message(models.Model):
                     "Formulário do site da ESUFRN",
                     message,
                     settings.EMAIL_HOST_USER,
-                    [settings.CONTACT_EMAIL],
+                    [config.CONTACT_EMAIL],
                 )
             ),
         ).start()
