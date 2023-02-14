@@ -140,9 +140,7 @@ class Reserve(TimeStampedModel, SoftDeletableModel):
     admin_created = models.BooleanField(
         verbose_name="Criado pela administração", default=False
     )
-    uuid = models.CharField(
-        max_length=100, null=True, blank=True, unique=True, default=uuid.uuid4
-    )
+    uuid = models.CharField(max_length=100, blank=True, unique=True, default=uuid.uuid4)
 
     objects = ReserveManager()
 
