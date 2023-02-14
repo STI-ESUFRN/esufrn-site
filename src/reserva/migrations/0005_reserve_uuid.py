@@ -5,7 +5,7 @@ import uuid
 
 
 def forwards(apps, schema_editor):
-    reserve_model_cls = apps.get_models("reserva", "Reserve")
+    reserve_model_cls = apps.get_model("reserva", "Reserve")
     queryset = reserve_model_cls.objects.all()
     for reserve in queryset:
         reserve.uuid = uuid.uuid4()
