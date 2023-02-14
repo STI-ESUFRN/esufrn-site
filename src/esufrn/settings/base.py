@@ -1,15 +1,23 @@
 import os
+from pathlib import Path
 
+from corsheaders.defaults import default_headers
 from dotenv import load_dotenv
 
 load_dotenv(override=True)
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SECRET_KEY = os.getenv("SECRET_KEY")
-DEBUG = int(os.getenv("DEBUG", True))
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "*").split(" ")
 
-HTML_MINIFY = int(os.getenv("MINIFY", False))
+def get_nth_parent(path: Path, parents: int) -> str:
+    if not parents:
+        return path
+
+    return get_nth_parent(path.parent, parents - 1)
+
+
+BASE_DIR = get_nth_parent(Path(__file__).resolve(), 3)
+SECRET_KEY = os.getenv("SECRET_KEY")
+DEBUG = True
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "*").split(" ")
 
 INSTALLED_APPS = [
     # other
@@ -60,8 +68,7 @@ X_FRAME_OPTIONS = "SAMEORIGIN"
 CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "http://* https://*").split(
     " "
 )
-CSRF_COOKIE_SECURE = int(os.getenv("CSRF_COOKIE_SECURE", False))
-SESSION_COOKIE_SECURE = int(os.getenv("SESSION_COOKIE_SECURE", False))
+
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
@@ -140,140 +147,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
 
-
-CKEDITOR_UPLOAD_PATH = "uploads/"
-CKEDITOR_CONFIGS = {
-    "default": {
-        "toolbar": [
-            [
-                "Undo",
-                "Redo",
-                "-",
-                "Format",
-                "-",
-                "Bold",
-                "Italic",
-                "Underline",
-                "Image",
-                "HorizontalRule",
-                "-",
-                "Link",
-                "Unlink",
-                "-",
-                "Cut",
-                "Copy",
-                "PasteText",
-                "-",
-                "Subscript",
-                "Superscript",
-                "SpecialChar",
-                "-",
-                "Outdent",
-                "Indent",
-                "-",
-                "BulletedList",
-                "NumberedList",
-            ]
-        ],
-        "width": "100%",
-        "height": 500,
-        "toolbarCanCollapse": False,
-        "entities_latin": False,
-        "basicEntities": False,
-    },
-    "events": {
-        "toolbar": [
-            [
-                "Undo",
-                "Redo",
-                "-",
-                "Format",
-                "-",
-                "Bold",
-                "Italic",
-                "Underline",
-                "Image",
-                "HorizontalRule",
-                "-",
-                "Link",
-                "Unlink",
-                "-",
-                "Cut",
-                "Copy",
-                "PasteText",
-                "-",
-                "Subscript",
-                "Superscript",
-                "SpecialChar",
-                "-",
-                "Outdent",
-                "Indent",
-                "-",
-                "BulletedList",
-                "NumberedList",
-            ]
-        ],
-        "width": "100%",
-        "height": 180,
-        "toolbarCanCollapse": False,
-        "entities_latin": False,
-        "basicEntities": False,
-    },
-    "page": {
-        "removePlugins": "stylesheetparser",
-        "allowedContent": True,
-        "toolbar": [
-            [
-                "Source",
-                "Preview",
-                "Undo",
-                "Redo",
-                "-",
-                "Format",
-                "Font",
-                "FontSize",
-                "-",
-                "Bold",
-                "Italic",
-                "Underline",
-                "Image",
-                "HorizontalRule",
-                "-",
-                "JustifyLeft",
-                "JustifyCenter",
-                "JustifyRight",
-                "JustifyBlock",
-                "-",
-                "Link",
-                "Unlink",
-                "-",
-                "Cut",
-                "Copy",
-                "Paste",
-                "PasteText",
-                "-",
-                "Subscript",
-                "Superscript",
-                "SpecialChar",
-                "-",
-                "Outdent",
-                "Indent",
-                "-",
-                "BulletedList",
-                "NumberedList",
-                "-",
-            ]
-        ],
-        "width": "100%",
-        "height": 600,
-        "toolbarCanCollapse": False,
-        "extraPlugins": ",".join(["codesnippet", "codesnippetgeshi", "div"]),
-        "codeSnippet_theme": "railscasts",
-        "entities_latin": False,
-        "basicEntities": False,
-    },
-}
-
 TEST_RUNNER = "redgreenunittest.django.runner.RedGreenDiscoverRunner"
 
 ADMINS = [
@@ -282,15 +155,6 @@ ADMINS = [
     ("Felipe", "felipe.medeiros.712@ufrn.edu.br"),
 ]
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = os.getenv("EMAIL_HOST")
-EMAIL_PORT = os.getenv("EMAIL_PORT")
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", default="")
-
-CONTACT_EMAIL = os.getenv("CONTACT_EMAIL")
-CONTACT_EMAIL_SUPORTE = os.getenv("CONTACT_EMAIL_SUPORTE")
 
 BOLD = ""
 
@@ -306,9 +170,34 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 8,
 }
 
+CONSTANCE_BACKEND = "constance.backends.redisd.RedisBackend"
+CORS_ALLOW_HEADERS = list(default_headers) + ["scope"]
+
+CONSTANCE_REDIS_CONNECTION = os.getenv(
+    "CONSTANCE_REDIS_CONNECTION", "redis://localhost:6379/1"
+)
+
+CONSTANCE_CONFIG = {
+    "CONTACT_EMAIL": (
+        "esufrn@ufrn.br",
+        "Contact_Email",
+        str,
+    ),
+    "CONTACT_EMAIL_SUPORTE": (
+        "suporte@es.ufrn.br",
+        "Contact_Email_Suporte",
+        str,
+    ),
+}
+
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": "redis://redis:6379",
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": os.getenv("CACHE_REDIS_URL", "redis://localhost:6379/2"),
+        "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
+        "KEY_PREFIX": "django_orm",
     }
 }
