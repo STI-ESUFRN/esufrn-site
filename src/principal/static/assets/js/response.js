@@ -78,6 +78,13 @@ $.fn.serializeREST = function (
     return groupedValuesAsString;
 };
 
+function makeError(message) {
+    return $("<p />", {
+        html: message,
+        class: "m-0",
+    });
+}
+
 $.fn.fillErrors = function (data, non_field_behavior) {
     $.map(data, (value, key) => {
         $(this).find(`[name=${key}]`).addClass("is-invalid");
@@ -86,17 +93,23 @@ $.fn.fillErrors = function (data, non_field_behavior) {
         if (feedback.length) {
             feedback.html("");
             feedback.css("display", "block");
-            value.forEach((message) => {
-                error = $("<p />", {
-                    html: message,
-                    class: "m-0",
+            if ($.isArray(value)) {
+                value.forEach((message) => {
+                    let error = makeError(message);
+                    feedback.append(error);
                 });
+            } else {
+                let error = makeError(value);
                 feedback.append(error);
-            });
+            }
         } else {
-            value.forEach((message) => {
-                non_field_behavior(message);
-            });
+            if ($.isArray(value)) {
+                value.forEach((message) => {
+                    non_field_behavior(message);
+                });
+            } else {
+                non_field_behavior(value);
+            }
         }
     });
 };
