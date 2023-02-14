@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Min
 from django.shortcuts import redirect, render
 from django.utils import timezone
+
 from dashboard.helpers import get_dash_context
 from principal.decorators import allowed_users
 from reserva.models import Classroom, Period

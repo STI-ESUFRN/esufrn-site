@@ -16,7 +16,7 @@ from django.utils.text import slugify
 from model_utils.models import TimeStampedModel
 from multiselectfield import MultiSelectField
 from PIL import Image
-
+from constance import config
 from esufrn.settings import MEDIA_ROOT
 from principal.helpers import emailToken
 
@@ -295,7 +295,17 @@ class Testimonial(models.Model):
         return self.name
 
 
-class Document(models.Model):
+class Document(TimeStampedModel):
+    class Category(models.TextChoices):
+        INSTITUCIONAL = "institucional", "Institucional"
+        ENSINO = "ensino", "Ensino"
+        OUTROS = "outros", "Outros documentos"
+        PUBLICACOES = "publicacoes", "Publicações"
+
+    class Type(models.TextChoices):
+        ARQUIVO = "arquivo", "Arquivo"
+        LINK = "link", "Link"
+
     name = models.CharField("Nome", max_length=250)
     authors = models.CharField(
         "Autores",
@@ -304,21 +314,15 @@ class Document(models.Model):
         null=True,
         blank=True,
     )
-    CATEGORY_CHOICES = (
-        ("institucional", "Institucional"),
-        ("ensino", "Ensino"),
-        ("outros", "Outros documentos"),
-        ("publicacoes", "Publicações"),
-    )
+
     category = models.CharField(
-        verbose_name="Categoria", choices=CATEGORY_CHOICES, max_length=32
+        verbose_name="Categoria", choices=Category.choices, max_length=32
     )
 
-    TYPE_CHOICES = (("arquivo", "Arquivo"), ("link", "Link"))
     document_type = models.CharField(
         "Tipo",
         max_length=100,
-        choices=TYPE_CHOICES,
+        choices=Type.choices,
         default="arquivo",
         help_text=(
             "Documento: Ao clicar, abrirá o documento em uma nova guia; Link: Ao clicar"
@@ -334,14 +338,12 @@ class Document(models.Model):
     date = models.DateField(
         "Data do documento", default=datetime.now, null=True, blank=True
     )
-
-    published_at = models.DateTimeField("Publicado em", auto_now_add=True)
-    modified_at = models.DateTimeField("Modificado em", auto_now=True)
+    is_active = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = "Documento"
         verbose_name_plural = "Documentos"
-        ordering = ["-date", "-published_at"]
+        ordering = ["is_active", "-date"]
 
     def get_url(self):
         if self.document_type == "arquivo":
@@ -405,7 +407,7 @@ class Message(models.Model):
                     "Formulário do site da ESUFRN",
                     message,
                     settings.EMAIL_HOST_USER,
-                    [settings.CONTACT_EMAIL],
+                    [config.CONTACT_EMAIL],
                 )
             ),
         ).start()

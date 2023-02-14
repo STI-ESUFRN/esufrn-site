@@ -1,3 +1,5 @@
+import uuid
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Q
@@ -138,6 +140,7 @@ class Reserve(TimeStampedModel, SoftDeletableModel):
     admin_created = models.BooleanField(
         verbose_name="Criado pela administração", default=False
     )
+    uuid = models.CharField(max_length=100, blank=True, unique=True, default=uuid.uuid4)
 
     objects = ReserveManager()
 

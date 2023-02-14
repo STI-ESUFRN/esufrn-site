@@ -41,13 +41,6 @@ class AdminReserve(admin.ModelAdmin):
     ]
     list_filter = ["status", "classroom", "shift", "date"]
 
-    def save_model(self, request, obj, form, change):
-        if "status" in form.changed_data:
-            if obj.status is not None:
-                obj.notify()
-
-        super().save_model(request, obj, form, change)
-
 
 class AdminPeriodReserve(admin.ModelAdmin):
     list_display = [
