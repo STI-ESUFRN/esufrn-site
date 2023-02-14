@@ -7,6 +7,7 @@ from django.db import models
 from django.template.loader import render_to_string
 from django.utils.translation import gettext as _
 from model_utils.models import SoftDeletableModel, TimeStampedModel
+from constance import config
 
 
 class Chamado(SoftDeletableModel, TimeStampedModel):
@@ -60,7 +61,7 @@ class Chamado(SoftDeletableModel, TimeStampedModel):
                     f"Sistema de Chamados: {self.title}",
                     "",
                     settings.EMAIL_HOST_USER,
-                    [settings.CONTACT_EMAIL_SUPORTE],
+                    [config.CONTACT_EMAIL_SUPORTE],
                     False,
                     None,
                     None,

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "revistas",
     "menu",
     # lib
+    "constance",
     "rest_framework",
     "django_filters",
     "multiselectfield",
