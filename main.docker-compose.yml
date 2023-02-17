@@ -6,15 +6,34 @@ services:
         restart: always
         pull_policy: always
         env_file: .env
-        command: ../scripts/runserver.sh
-        expose:
-            - 8000
+        command: ../scripts/start-api.sh
         depends_on:
             - postgres
             - redis
         volumes:
-            - ./src/staticfiles:/app/src/staticfiles
-            - ./src/media:/app/src/media
+            - ./src:/app/src
+
+    celery-worker:
+        build: .
+        restart: always
+        pull_policy: always
+        env_file: .env
+        depends_on:
+            - redis
+        command: ../scripts/start-celery-worker.sh
+        volumes:
+            - ./src:/app/src
+
+    celery-beat:
+        build: .
+        restart: always
+        pull_policy: always
+        env_file: .env
+        depends_on:
+            - redis
+        command: ../scripts/start-celery-beat.sh
+        volumes:
+            - ./src:/app/src
 
     pgadmin:
         image: dpage/pgadmin4

@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.translation import gettext as _
 
 from principal.models import (
     Alert,
@@ -22,26 +23,39 @@ class BlogAdmin(admin.ModelAdmin):
     list_display = [
         "title",
         "author",
-        "isImportant",
-        "modified_at",
-        "published_at",
+        "is_important",
+        "modified",
+        "created",
         "category",
     ]
 
     search_fields = ["title", "subtitle"]
-    list_filter = ["published_at", "author", "category", "isImportant"]
-    exclude = ["slug"]
+    list_filter = ["created", "author", "category", "is_important"]
+    fieldsets = [
+        (
+            None,
+            {"fields": ["title", "subtitle", "author"]},
+        ),
+        (
+            _("News"),
+            {"fields": ["image", "news"]},
+        ),
+        (
+            _("Options"),
+            {"fields": ["category", "is_important", "published", "publish_in"]},
+        ),
+    ]
     inlines = [
         BlogAttachmentsInline,
     ]
 
     @admin.action(description="Adicionar destaque às Notícias selecionadas")
     def add_important(self, request, queryset):
-        queryset.update(isImportant=True)
+        queryset.update(is_important=True)
 
     @admin.action(description="Remover destaque das Notícias selecionadas")
     def remove_important(self, request, queryset):
-        queryset.update(isImportant=False)
+        queryset.update(is_important=False)
 
     actions = [add_important, remove_important]
 
@@ -100,7 +114,7 @@ class AdminAlerta(admin.ModelAdmin):
     search_fields = ["title", "content"]
 
 
-admin.site.register(News)
+admin.site.register(News, BlogAdmin)
 admin.site.register(Team, EquipeAdmin)
 admin.site.register(File, ArquivosAdmin)
 admin.site.register(Page, PaginasAdmin)

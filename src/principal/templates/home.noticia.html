@@ -30,7 +30,7 @@
                         {% if news.category == "evento" %}<b>Data do evento: {{ news.event_date|date:'d N Y' }}</b>{% endif %}
                     </span>
                     <span class="mx-1">Publicado: {{ news.published_at|date:"d/m/y H:i" }}</span>
-                    <span class="mx-1">Última modificação: {{ news.modified_at|date:"d/m/y H:i" }}</span>
+                    <span class="mx-1">Última modificação: {{ news.modified|date:"d/m/y H:i" }}</span>
                     <span class="mx-1">Autor: {{ news.author }}</span>
                     <br class="d-sm-none" />
                     <span class="float-sm-right">
@@ -41,7 +41,7 @@
                             <a class="btn text-white border-0 rounded-0"
                                style="background-color: #0A62C4;
                                       font-size: 12px;
-                                      display: inline;"
+                                      display: inline"
                                target="_blank"
                                href="https://www.facebook.com/sharer/sharer.php?u=http://www.escoladesaude.ufrn.br{{ news.get_absolute_url }}">
                                 <i class="fab fa-facebook-f"></i> Compartilhar</a>
@@ -51,7 +51,7 @@
                            class="btn text-white border-0 rounded-0"
                            style="background-color: #25b966;
                                   font-size: 12px;
-                                  display: inline;">
+                                  display: inline">
                             <i class="fab fa-whatsapp"></i> Compartilhar
                         </a>
                     </span>
@@ -64,7 +64,7 @@
                         <img src="{{ news.image.url }}"
                              alt="{{ news.title }} - ESUFRN"
                              style="max-width:90%;
-                                    max-height: 30%;"/>
+                                    max-height: 30%"/>
                     </div>
                 {% endif %}
                 <div id="paragrafo-noticia">{{ news.news|mark|safe|linebreaks }}</div>
@@ -81,8 +81,8 @@
                             {% for attachment in news.attachments.all %}
                                 <tr>
                                     <td>
-                                        {% if attachment.file.published_at is not None %}
-                                            {{ attachment.file.published_at|date:"d/m/Y" }}
+                                        {% if attachment.file.created is not None %}
+                                            {{ attachment.file.created|date:"d/m/Y" }}
                                         {% else %}
                                             -
                                         {% endif %}
