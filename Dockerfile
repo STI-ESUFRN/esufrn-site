@@ -32,6 +32,5 @@ COPY . .
 RUN poetry install --only main
 WORKDIR /$PROJECT_DIR/src
 
-# USER python
-# EXPOSE 8000
+EXPOSE 8000
 ENTRYPOINT ["../docker/entrypoint.sh"]

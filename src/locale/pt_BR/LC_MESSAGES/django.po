@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-08 23:30-0300\n"
+"POT-Creation-Date: 2023-02-16 21:51-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,15 +18,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: chamado/models.py:14
+#: chamado/models.py:15
 msgid "Resolved"
 msgstr "Resolvido"
 
-#: chamado/models.py:15
+#: chamado/models.py:16
 msgid "Not resolved"
 msgstr "Não resolvido"
 
-#: chamado/models.py:16
+#: chamado/models.py:17
 msgid "Pending"
 msgstr "Pendente"
 
@@ -34,34 +34,42 @@ msgstr "Pendente"
 msgid "Invalid year"
 msgstr "Ano inválido"
 
+#: principal/admin.py:40
+msgid "News"
+msgstr "Notícia"
+
+#: principal/admin.py:44
+msgid "Options"
+msgstr "Opções"
+
 #: principal/templatetags/mytags.py:47 principal/templatetags/mytags.py:51
 msgid "and"
 msgstr "e"
 
-#: reserva/fields.py:5 reserva/models.py:165
+#: reserva/fields.py:5 reserva/models.py:168
 msgid "Monday"
 msgstr "Segunda"
 
-#: reserva/fields.py:6 reserva/models.py:166
+#: reserva/fields.py:6 reserva/models.py:169
 msgid "Tuesday"
 msgstr "Terça"
 
-#: reserva/fields.py:7 reserva/models.py:167
+#: reserva/fields.py:7 reserva/models.py:170
 msgid "Wednesday"
 msgstr "Quarta"
 
-#: reserva/fields.py:8 reserva/models.py:168
+#: reserva/fields.py:8 reserva/models.py:171
 msgid "Thursday"
 msgstr "Quinta"
 
-#: reserva/fields.py:9 reserva/models.py:169
+#: reserva/fields.py:9 reserva/models.py:172
 msgid "Friday"
 msgstr "Sexta"
 
-#: reserva/fields.py:10 reserva/models.py:170
+#: reserva/fields.py:10 reserva/models.py:173
 msgid "Saturday"
 msgstr "Sábado"
 
-#: reserva/fields.py:11 reserva/models.py:171
+#: reserva/fields.py:11 reserva/models.py:174
 msgid "Sunday"
 msgstr "Domingo"

@@ -4,6 +4,7 @@ from datetime import datetime
 from urllib.parse import unquote
 
 from ckeditor_uploader.fields import RichTextUploadingField
+from constance import config
 from django.conf import settings
 from django.core.mail import get_connection, send_mail
 from django.core.validators import EmailValidator
@@ -11,17 +12,25 @@ from django.db import models
 from django.forms import ValidationError
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.html import strip_tags
 from django.utils.text import slugify
 from model_utils.models import TimeStampedModel
 from multiselectfield import MultiSelectField
 from PIL import Image
-from constance import config
+
 from esufrn.settings import MEDIA_ROOT
 from principal.helpers import emailToken
+from principal.tasks import publish_news
 
 
-class News(models.Model):
+class News(TimeStampedModel):
+    class Category(models.TextChoices):
+        NEWS = "noticia", "Notícia (Newsletter - Notícias)"
+        EVENT = "evento", "Evento"
+        PROCESS = "processo", "Processo (Newsletter - Abertura de Turmas)"
+        COURSE = "concurso", "Concurso (Newsletter - Editais de Cursos)"
+
     title = models.CharField("Título da notícia", max_length=400)
     subtitle = models.CharField("Subtítulo da notícia", max_length=500)
     slug = models.SlugField(
@@ -33,20 +42,23 @@ class News(models.Model):
         ),
     )
     news = RichTextUploadingField("Notícia")
-    isImportant = models.BooleanField(
+    is_important = models.BooleanField(
         "Destaque?",
         default=False,
         help_text=(
-            "Caso seja marcado, esse campo indica a notícia aparecerá no slide da"
+            "Caso seja marcado, esse campo indica a notícia aparecerá no carrossel da"
             " página principal, logo abaixo do menu."
         ),
     )
 
-    class Category(models.TextChoices):
-        NEWS = "noticia", "Notícia (Newsletter - Notícias)"
-        EVENT = "evento", "Evento"
-        PROCESS = "processo", "Processo (Newsletter - Abertura de Turmas)"
-        COURSE = "concurso", "Concurso (Newsletter - Editais de Cursos)"
+    published = models.BooleanField(default=True)
+    published_at = models.DateTimeField(null=True)
+    publish_in = models.DateTimeField(
+        "Publicar em",
+        help_text="Você pode agendar uma data para que seja feita a publicação.",
+        null=True,
+        blank=True,
+    )
 
     author = models.CharField("Nome do autor", max_length=50)
     category = models.CharField(
@@ -64,9 +76,7 @@ class News(models.Model):
             " fundo do link no Facebook."
         ),
     )
-
-    published_at = models.DateTimeField("Publicado em", auto_now_add=True)
-    modified_at = models.DateTimeField("Modificado em", auto_now=True)
+    __task = None
 
     class Meta:
         verbose_name = "Notícia"
@@ -97,8 +107,8 @@ class News(models.Model):
             "url": self.get_absolute_url(),
             "author": self.author,
             "image": self.image,
-            "published_at": self.published_at,
-            "modified_at": self.modified_at,
+            "created": self.created,
+            "modified": self.modified,
             "host_url": settings.HOST_URL,
         }
 
@@ -132,8 +142,26 @@ class News(models.Model):
         threading.Thread(target=send).start()
 
     def save(self, *args, **kwargs):
-        have_id = self.pk
+        if not self.slug:
+            self.slug = slugify(f"{self.title}-{self.created.date()}")
+
+        if self.publish_in and self.publish_in > timezone.now():
+            self.published = False
+
+            if self.__task:
+                self.__task.revoke(terminate=True)
+
+            self.__task = publish_news.apply_async(args=[self.pk], eta=self.publish_in)
+
+        else:
+            self.published = True
+
+        if self.published and not self.published_at:
+            self.published_at = timezone.now()
+            self.send_newsletter()
+
         super().save(*args, **kwargs)
+
         if self.image:
             filepath = unquote(os.path.split(MEDIA_ROOT)[0] + self.image.url)
             picture = Image.open(filepath)
@@ -145,23 +173,11 @@ class News(models.Model):
                 quality=40,
             )
 
-        if not self.slug:
-            self.slug = slugify(f"{self.title}-{self.published_at.date()}")
 
-        super().save(*args, **kwargs)
-
-        if have_id is None:
-            self.send_newsletter()
-
-
-class File(models.Model):
+class File(TimeStampedModel):
     name = models.CharField("Nome", max_length=250)
     file = models.FileField(
         upload_to="files/", verbose_name="Arquivo", null=True, max_length=255
-    )
-
-    published_at = models.DateTimeField(
-        "Adicionado em", default=datetime.now, null=True
     )
 
     class Meta:

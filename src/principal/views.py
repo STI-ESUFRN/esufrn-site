@@ -2,7 +2,7 @@ import json
 import os
 import threading
 import unicodedata
-from datetime import datetime, timedelta
+from datetime import timedelta
 from functools import reduce
 
 from dateutil.relativedelta import relativedelta
@@ -36,20 +36,21 @@ def inicio(request):
 
     settings.BOLD = ""
     # pegando os valores para o template
-    now = datetime.now()
-    post = News.objects.filter(
+    now = timezone.now()
+    queryset = News.objects.filter(published=True)
+    post = queryset.filter(
         Q(category="noticia") | Q(category="processo") | Q(category="concurso")
     ).filter(published_at__lt=now)[:3]
 
     postEvents = (
-        News.objects.filter(category="evento")
+        queryset.filter(category="evento")
         .filter(published_at__gt=now)
         .order_by("published_at")[:3]
     )
-    important = News.objects.filter(isImportant=True)[:4]
+    important = queryset.filter(is_important=True)[:4]
     depoimentos = Testimonial.objects.all()
 
-    alertas = Alert.objects.filter(expires_at__gt=datetime.now())
+    alertas = Alert.objects.filter(expires_at__gt=timezone.now())
 
     context = {
         "post": post,
@@ -119,7 +120,7 @@ def noticia(request, slug):
             ],
         }
 
-        return render(request, "home.post.html", context)
+        return render(request, "home.noticia.html", context)
 
     except News.DoesNotExist as e:
         raise Http404(e)
