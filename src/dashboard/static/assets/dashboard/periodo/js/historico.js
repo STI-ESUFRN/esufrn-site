@@ -299,13 +299,13 @@ function updateDay(id, data) {
         url: `${baseUrl}/${currentPeriod}/days/${id}/`,
         data: data,
         success: function (response) {
+            showMessage("Atualizado com sucesso", "alert-success");
             updateDetails();
             getCalendar();
-            showMessage("Atualizado com sucesso", "alert-success");
         },
         error: function (response) {
-            console.error(response);
             showMessage("Ocorreu um erro ao atualizar", "alert-danger");
+            console.error(response);
         },
     });
 }
@@ -313,20 +313,17 @@ function updateDay(id, data) {
 function update(data) {
     $.ajax({
         url: `${baseUrl}/${currentPeriod}/`,
-        type: "PUT",
+        type: "PATCH",
         data: data,
         success: function (response) {
+            showMessage("Atualizado com sucesso", "alert-success");
+            updateList();
             $(".loader-global").removeClass("load");
-            if (response.status == "success") {
-                updateList();
-                showMessage(response.message, "alert-success");
-            } else {
-                showMessage(response.message, "alert-danger");
-            }
         },
-        error: function (err) {
+        error: function (response) {
+            showMessage("Ocorreu um erro.", "alert-danger");
+            console.error(response);
             $(".loader-global").removeClass("load");
-            showMessage(err.responseJSON.message, "alert-danger");
         },
     });
 }
@@ -361,12 +358,13 @@ $(document).ready(function () {
             type: "DELETE",
             url: `${baseUrl}/${currentPeriod}/`,
             success: function (response) {
-                if (response.status == "success") {
-                    updateList();
-                    showMessage(response.message, "alert-success");
-                } else {
-                    showMessage(response.message, "alert-danger");
-                }
+                showMessage("Deletado com sucesso.", "alert-success");
+                updateList();
+                $("#period-details").fadeTo("fast", 0).slideUp();
+            },
+            error: function (response) {
+                showMessage("Ocorreu um erro.", "alert-danger");
+                console.error(response);
             },
         });
     });

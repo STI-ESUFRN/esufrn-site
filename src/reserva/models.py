@@ -153,7 +153,7 @@ class Reserve(TimeStampedModel, SoftDeletableModel):
         ordering = ["created"]
 
 
-class Period(TimeStampedModel, SoftDeletableModel):
+class Period(TimeStampedModel):
     class Course(models.TextChoices):
         ESU01 = "ESU01", "Técnico em Enfermagem"
         ESU02 = "ESU02", "Técnico em Registros e Informações em Saúde"
