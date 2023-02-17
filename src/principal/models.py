@@ -44,14 +44,21 @@ class News(TimeStampedModel):
     news = RichTextUploadingField("Notícia")
     is_important = models.BooleanField(
         "Destaque?",
-        default=False,
+        default=True,
         help_text=(
             "Caso seja marcado, esse campo indica a notícia aparecerá no carrossel da"
             " página principal, logo abaixo do menu."
         ),
     )
 
-    published = models.BooleanField(default=True)
+    published = models.BooleanField(
+        "Publicada",
+        help_text=(
+            "Com esta opção marcada, a publicação ficará disponível no site"
+            " imediatamente."
+        ),
+        default=True,
+    )
     published_at = models.DateTimeField(null=True)
     publish_in = models.DateTimeField(
         "Publicar em",
