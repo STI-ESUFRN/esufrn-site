@@ -1,10 +1,13 @@
 var localData = [];
 var next = undefined;
 var previous = undefined;
+var idSelected = undefined;
+var baseUrl = "/api/reserves";
+
 function refreshData(url = undefined) {
     if (!url) {
         let filters = $("[data-filter]").serialize();
-        url = `/api/reserves/historico?${filters}`;
+        url = `${baseUrl}/historico?${filters}`;
     }
 
     $("#load-antigo,#load-recente").attr("disabled", true);
@@ -58,6 +61,7 @@ function refreshData(url = undefined) {
         updateButton(previous, "#load-recente");
     });
 }
+
 function updateButton(data, button) {
     if (data) {
         $(button).attr("disabled", false);
@@ -66,7 +70,6 @@ function updateButton(data, button) {
     }
 }
 
-var idSelected = undefined;
 function fillReserve(id) {
     $("#detalhes").hide();
 
@@ -76,9 +79,9 @@ function fillReserve(id) {
     idSelected = reserve.id;
 
     let v = $("[data-attribute=status]");
-    if (v.text() == "A") {
+    if (reserve.status == "A") {
         v.html('Aceito <i class="fas fa-check-circle text-success"></i>');
-    } else if (v.text() == "R") {
+    } else if (reserve.status == "R") {
         v.html('Rejeitado <i class="fas fa-times-circle text-danger"></i>');
     } else {
         v.html(
@@ -89,22 +92,9 @@ function fillReserve(id) {
     $("#detalhes").fadeTo("fast", 0).fadeTo("fast", 1).show();
 }
 
-// ------------------------------------------------------------------- Listeners
-
-$("#load-antigo").click(function (e) {
-    e.preventDefault();
-    refreshData(next);
-});
-
-$("#load-recente").click(function (e) {
-    e.preventDefault();
-    refreshData(previous);
-});
-
-// ------------------------------------------------------------------- Update
 function update(data) {
     $.ajax({
-        url: `/api/reserves/${idSelected}/`,
+        url: `${baseUrl}/${idSelected}/`,
         type: "PATCH",
         data: data,
         success: function (response) {
@@ -121,33 +111,46 @@ function update(data) {
         },
     });
 }
-$("[data-submit=reserve]").click(function (e) {
-    e.preventDefault();
-    $(".loader-global").addClass("load");
-    update({
-        obs: $("[data-attribute=obs]").val()
-            ? $("[data-attribute=obs]").val()
-            : "",
-        status: $(this).attr("data-status"),
-        msg: $("#reserve-email").val(),
-    });
-});
-// -------------------------------------
-$("#obsReserve").click(function (e) {
-    e.preventDefault();
-    update({
-        obs: $("[data-attribute=obs]").val()
-            ? $("[data-attribute=obs]").val()
-            : "",
-    });
-});
 
-$("[data-filter]").change(function () {
-    refreshData();
-});
+$(document).ready(function () {
+    $("#load-antigo").click(function (e) {
+        e.preventDefault();
+        refreshData(next);
+    });
 
-$("#detalhes-dismiss").click(function () {
-    $("#detalhes").fadeTo("fast", 0).slideUp();
+    $("#load-recente").click(function (e) {
+        e.preventDefault();
+        refreshData(previous);
+    });
+
+    $("[data-submit=reserve]").click(function (e) {
+        e.preventDefault();
+        $(".loader-global").addClass("load");
+        update({
+            obs: $("[data-attribute=obs]").val()
+                ? $("[data-attribute=obs]").val()
+                : "",
+            status: $(this).attr("data-status"),
+            msg: $("#reserve-email").val(),
+        });
+    });
+
+    $("#obsReserve").click(function (e) {
+        e.preventDefault();
+        update({
+            obs: $("[data-attribute=obs]").val()
+                ? $("[data-attribute=obs]").val()
+                : "",
+        });
+    });
+
+    $("[data-filter]").change(function () {
+        refreshData();
+    });
+
+    $("#detalhes-dismiss").click(function () {
+        $("#detalhes").fadeTo("fast", 0).slideUp();
+    });
+
+    getOptions(refreshData);
 });
-// ------------------------------------------------------------------- Init
-refreshData();

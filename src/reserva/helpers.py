@@ -75,14 +75,14 @@ def notify_done(reserve: Reserve):
         "Por favor, entre em contato com a Secretaria da Direção de Ensino a fim de"
         " viabilizarmos um possível acordo ou troca de reservas."
     )
-    done_status = {Status.APPROVED, Status.CANCELED}
+
     title = f"Reserva de {reserve.classroom}"
     message = (
         f"Senhor(a) {reserve.requester.split()[0]}, sua solicitação de reserva para"
         f" <b>{reserve.classroom}</b> no dia {reserve.date.strftime('%d')} de"
         f" {_(reserve.date.strftime('%B'))} ({Shift(reserve.shift).label}) foi"
         f" <b>{Status(reserve.status).label}</b>."
-        f" {'' if reserve.status in done_status else rejected_message}"
+        f" {rejected_message if reserve.status == Status.REJECTED else ''}"
     )
     context = {
         "message": message,
