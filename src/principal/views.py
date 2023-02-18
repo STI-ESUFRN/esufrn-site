@@ -315,7 +315,7 @@ def busca(request):
                         for word in words
                     ],
                 )
-            ).order_by("-modified_at")
+            ).order_by("-modified")
 
             result_obj_blog, qnt, intervalo = paginator(page, resultBlog)
 

@@ -28,6 +28,7 @@ class BlogAdmin(admin.ModelAdmin):
         "created",
         "category",
     ]
+    readonly_fields = ["created", "modified", "published_at"]
 
     search_fields = ["title", "subtitle"]
     list_filter = ["created", "author", "category", "is_important"]
@@ -43,6 +44,10 @@ class BlogAdmin(admin.ModelAdmin):
         (
             _("Options"),
             {"fields": ["category", "is_important", "published", "publish_in"]},
+        ),
+        (
+            _("Impotant Dates"),
+            {"fields": ["published_at", "created", "modified"]},
         ),
     ]
     inlines = [
