@@ -1,7 +1,8 @@
 import uuid
+from datetime import timedelta
 
 from django.contrib.auth.models import User
-from django.db import models
+from django.db import models, transaction
 from django.db.models import Q
 from django.utils.translation import gettext as _
 from model_utils.models import SoftDeletableModel, TimeStampedModel
@@ -9,7 +10,7 @@ from multiselectfield import MultiSelectField
 from rest_framework.exceptions import ValidationError
 
 from reserva.enums import Shift, Status
-from reserva.managers import PeriodManager, ReserveManager
+from reserva.helpers import notify_admin, notify_done, notify_requester
 
 
 class Classroom(models.Model):
@@ -142,15 +143,45 @@ class Reserve(TimeStampedModel, SoftDeletableModel):
     )
     uuid = models.CharField(max_length=100, blank=True, unique=True, default=uuid.uuid4)
 
-    objects = ReserveManager()
-
-    def __str__(self):
-        return str(self.classroom)
-
     class Meta:
         verbose_name = "Reserva pontual"
         verbose_name_plural = "Reservas pontuais"
         ordering = ["created"]
+
+    def __str__(self):
+        return str(self.classroom)
+
+    @transaction.atomic
+    def save(self, *args, **kwargs):
+        adding = self._state.adding
+        if not adding:
+            db_instance = Reserve.objects.get(id=self.id)
+
+        super().save(*args, **kwargs)
+        self.ensure_day()
+
+        if adding:
+            notify_admin(self)
+            notify_requester(self)
+
+        else:
+            status_to_notify = {
+                Status.APPROVED,
+                Status.CANCELED,
+                Status.REJECTED,
+            }
+            if db_instance.status != self.status and self.status in status_to_notify:
+                notify_done(self)
+
+    def ensure_day(self):
+        self.days.all().delete()
+
+        ReserveDay.objects.create(
+            reserve=self,
+            date=self.date,
+            shift=self.shift,
+            classroom=self.classroom,
+        )
 
 
 class Period(TimeStampedModel):
@@ -220,8 +251,6 @@ class Period(TimeStampedModel):
 
     obs = models.TextField("Observação", max_length=1000, null=True, blank=True)
 
-    objects = PeriodManager()
-
     @property
     def event(self):
         return f"{self.classcode} - {self.classname}"
@@ -262,6 +291,44 @@ class Period(TimeStampedModel):
     def get_total_days(self):
         return self.days.values("date").distinct().count()
 
+    @transaction.atomic
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.ensure_days()
+
+    def ensure_days(self):
+        self.days.all().delete()
+
+        invalid_dates = []
+        current_date = self.date_begin
+        while current_date <= self.date_end:
+            if str(current_date.isoweekday()) in self.weekdays:
+                for shift in self.shift:
+                    try:
+                        ReserveDay.objects.create(
+                            period=self,
+                            date=current_date,
+                            shift=shift,
+                            classroom=self.classroom,
+                        )
+
+                    except ValidationError:
+                        invalid_dates.append({"date": current_date, "shift": shift})
+
+            current_date += timedelta(days=1)
+
+        if invalid_dates:
+            days = ", ".join(
+                [f"{day['date']} ({day['shift']})" for day in invalid_dates]
+            )
+            raise ValidationError(
+                {
+                    "non_fields_error": [
+                        f"Já existem reservas aprovadas para os dias {days}."
+                    ]
+                }
+            )
+
 
 class ReserveDay(models.Model):
     reserve = models.ForeignKey(
@@ -291,7 +358,8 @@ class ReserveDay(models.Model):
         return (self.reserve or self.period).event
 
     def clean(self):
-        if self.status == Status.APPROVED and self.active:
+        status_to_check = {Status.APPROVED, Status.WAITING}
+        if self.status in status_to_check and self.active:
             reserves = ReserveDay.objects.filter(
                 Q(period__status=Status.APPROVED) | Q(reserve__status=Status.APPROVED),
                 date=self.date,
@@ -304,7 +372,7 @@ class ReserveDay(models.Model):
             if self.period:
                 reserves = reserves.exclude(period=self.period)
 
-            if reserves:
+            if reserves.exists():
                 raise ValidationError(
                     {
                         "date": [

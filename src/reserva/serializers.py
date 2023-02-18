@@ -4,7 +4,8 @@ from rest_framework import serializers
 from rest_framework.serializers import ValidationError
 
 from core.fields import MultiSelectField, PrimaryKeyRelatedFieldWithSerializer
-from reserva.enums import Shift
+from reserva.enums import Shift, Status
+from reserva.helpers import notify_done
 from reserva.models import Classroom, Period, Reserve, ReserveDay
 
 

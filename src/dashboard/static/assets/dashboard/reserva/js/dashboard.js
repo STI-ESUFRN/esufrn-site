@@ -154,10 +154,7 @@ function update(data) {
         },
         error: function (err) {
             $(".loader-global").removeClass("load");
-            showMessage(
-                err.responseJSON.status[0],
-                "alert-" + (err.status == "success" ? "success" : "danger")
-            );
+            fillErrors(err.responseJSON, (e) => showMessage(e, "alert-danger"));
         },
     });
 }

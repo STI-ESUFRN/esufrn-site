@@ -121,3 +121,15 @@ $(document).ready(function () {
         $(`.invalid-feedback[for=${name}]`).css("display", "none");
     });
 });
+
+function fillErrors(data, non_field_behavior) {
+    $.map(data, (value, key) => {
+        if ($.isArray(value)) {
+            value.forEach((message) => {
+                non_field_behavior(message);
+            });
+        } else {
+            non_field_behavior(value);
+        }
+    });
+}

@@ -16,9 +16,6 @@ def bold(str):
     return result
 
 
-register.filter("bold", bold)
-
-
 def mark(str):
     result = re.sub("", r"", str)
     if settings.BOLD != "":
@@ -28,14 +25,8 @@ def mark(str):
     return result
 
 
-register.filter("mark", mark)
-
-
 def split(value, key):
     return value.split(key)
-
-
-register.filter("split", split)
 
 
 def enum(value, key):
@@ -54,17 +45,11 @@ def enum(value, key):
         return value
 
 
-register.filter("enum", enum)
-
-
 def active(value, target=""):
     if value == target:
         return "active"
 
     return ""
-
-
-register.filter("active", active)
 
 
 def getparam(value, key):
@@ -74,4 +59,9 @@ def getparam(value, key):
     return ""
 
 
+register.filter("bold", bold)
+register.filter("mark", mark)
+register.filter("split", split)
+register.filter("enum", enum)
+register.filter("active", active)
 register.filter("getparam", getparam)
