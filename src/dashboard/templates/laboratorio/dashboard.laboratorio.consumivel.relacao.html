@@ -124,7 +124,7 @@
                         "class": "py-0 text-center"
                     });
                     let expiration = $("<td />", {
-                        "text": item.expiration,
+                        "text": moment(item.expiration).format("DD/MM/YYYY"),
                         "class": "py-0 text-center"
                     });
                     let qr = $("<td />", {

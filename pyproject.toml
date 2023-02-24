@@ -33,8 +33,10 @@ drf-nested-routers = "^0.93.4"
 psycopg2-binary = "^2.9.5"
 django-redis = "^5.2.0"
 celery = "^5.2.7"
+pytest-django = "^4.5.2"
+redgreenunittest = {git = "https://github.com/stevematney/redgreenunittests.git"}
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 model-bakery = "^1.5.0"
 pre-commit = "^2.20.0"
 black = "^22.3.0"
