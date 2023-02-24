@@ -81,15 +81,15 @@
                         <div class="text-center text-muted my-2">FILTRAR POR</div>
                         {% with category=request.GET.category period=request.GET.period|getparam:'period' %}
                             <a class="{{ category|active }}"
-                               href="{% url 'noticias' %}?{{ period }}">Tudo</a>
+                               href="{% url 'principal:noticias' %}?{{ period }}">Tudo</a>
                             <a class="{{ category|active:'concurso' }}"
-                               href="{% url 'noticias' %}?category=concurso{{ period }}">Concurso</a>
+                               href="{% url 'principal:noticias' %}?category=concurso{{ period }}">Concurso</a>
                             <a class="{{ category|active:'evento' }}"
-                               href="{% url 'noticias' %}?category=evento{{ period }}">Evento</a>
+                               href="{% url 'principal:noticias' %}?category=evento{{ period }}">Evento</a>
                             <a class="{{ category|active:'noticia' }}"
-                               href="{% url 'noticias' %}?category=noticia{{ period }}">Notícia</a>
+                               href="{% url 'principal:noticias' %}?category=noticia{{ period }}">Notícia</a>
                             <a class="{{ category|active:'processo' }}"
-                               href="{% url 'noticias' %}?category=processo{{ period }}">Processo seletivo</a>
+                               href="{% url 'principal:noticias' %}?category=processo{{ period }}">Processo seletivo</a>
                         {% endwith %}
                     </div>
                 </div>
@@ -107,17 +107,17 @@
                         <div class="text-center text-muted my-2">POR PERÍODO</div>
                         {% with period=request.GET.period category=request.GET.category|getparam:'category' %}
                             <a class="{{ period|active }}"
-                               href="{% url 'noticias' %}?{{ category }}">Em qualquer data</a>
+                               href="{% url 'principal:noticias' %}?{{ category }}">Em qualquer data</a>
                             <a class="{{ period|active:'hora' }}"
-                               href="{% url 'noticias' %}?period=hora{{ category }}">Na última hora</a>
+                               href="{% url 'principal:noticias' %}?period=hora{{ category }}">Na última hora</a>
                             <a class="{{ period|active:'dia' }}"
-                               href="{% url 'noticias' %}?period=dia{{ category }}">Nas últimas 24 horas</a>
+                               href="{% url 'principal:noticias' %}?period=dia{{ category }}">Nas últimas 24 horas</a>
                             <a class="{{ period|active:'semana' }}"
-                               href="{% url 'noticias' %}?period=semana{{ category }}">Na última semana</a>
+                               href="{% url 'principal:noticias' %}?period=semana{{ category }}">Na última semana</a>
                             <a class="{{ period|active:'mes' }}"
-                               href="{% url 'noticias' %}?period=mes{{ category }}">No último mês</a>
+                               href="{% url 'principal:noticias' %}?period=mes{{ category }}">No último mês</a>
                             <a class="{{ period|active:'ano' }}"
-                               href="{% url 'noticias' %}?period=ano{{ category }}">No último ano</a>
+                               href="{% url 'principal:noticias' %}?period=ano{{ category }}">No último ano</a>
                         {% endwith %}
                     </div>
                 </div>
@@ -153,7 +153,7 @@
                 {% with period=request.GET.period|getparam:'period' category=request.GET.category|getparam:'category' %}
                     {% if pag > 4 %}
                         <a class="a-clear mx-1"
-                           href="{% url 'noticias' %}?page=1{{ category }}{{ period }}">
+                           href="{% url 'principal:noticias' %}?page=1{{ category }}{{ period }}">
                             <button class="btn btn-outline-dark rounded-circle btn-pagination {{ pag|active:'1' }}">
                                 <p>1</p>
                             </button>
@@ -164,7 +164,7 @@
                     {% endif %}
                     {% for i in rng %}
                         <a class="a-clear mx-1"
-                           href="{% url 'noticias' %}?page={{ i }}{{ category }}{{ period }}">
+                           href="{% url 'principal:noticias' %}?page={{ i }}{{ category }}{{ period }}">
                             <button class="btn btn-outline-dark rounded-circle btn-pagination {{ pag|active:i }}">
                                 <p>{{ i }}</p>
                             </button>
@@ -175,7 +175,7 @@
                             <p>...</p>
                         </button>
                         <a class="a-clear mx-1"
-                           href="{% url 'noticias' %}?page={{ total }}{{ category }}{{ period }}">
+                           href="{% url 'principal:noticias' %}?page={{ total }}{{ category }}{{ period }}">
                             <button class="btn btn-outline-dark rounded-circle btn-pagination {{ pag|active:total }}">
                                 <p>{{ total }}</p>
                             </button>

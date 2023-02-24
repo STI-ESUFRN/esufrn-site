@@ -91,7 +91,7 @@ $(document).ready(function () {
         let selected = $("#classroom option:selected");
 
         let type = selected.attr("data-type");
-        let term = $("#form-reserva [name=confirm]");
+        let term = $("#form-reserva [name=declare]");
         if (type == "lab") {
             term.parent().prop("hidden", false);
             term.prop("required", true);
@@ -162,9 +162,9 @@ $(document).ready(function () {
                 resetDate();
             },
             error: function (response) {
+                console.error(response);
                 $("#form-reserva").fillErrors(
                     response.responseJSON,
-                    "status-message",
                     function (message) {
                         $("#status-message").append(`
                             <div class="rounded-0 alert alert-warning alert-dismissible fade show" role="alert">

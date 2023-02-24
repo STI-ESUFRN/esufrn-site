@@ -18,14 +18,19 @@
 {% endblock styles %}
 {% block content %}
     <div class="d-flex justify-content-between px-2">
-        <div>
+        <span>
             <a class="btn btn-secondary rounded-0 m-0"
                data-toggle="modal"
                data-target="#add-material"
                role="button">
                 <i class="fas fa-plus mr-2" aria-hidden="true"></i> Inserir material de consumo
             </a>
-        </div>
+            <a class="btn btn-secondary rounded-0 m-0"
+               href="{% url 'consumable_list' %}"
+               role="button">
+                <i class="fa-solid fa-list mr-2" aria-hidden="true"></i> Relação de itens
+            </a>
+        </span>
         <div>
             <form id="filters">
                 <div class="form-row">
@@ -146,7 +151,7 @@
                                 <small>Marca:</small> <b data-attribute="brand"></b>
                             </p>
                             <p class="card-text m-0">
-                                <small>Quantidade:</small> <b data-attribute="quantity"></b>
+                                <small>Quantidade:</small> <b data-attribute="quantity"></b> <span data-attribute="measure_unit"></span>
                             </p>
                             <p class="card-text m-0">
                                 <small>
@@ -249,7 +254,9 @@
                     <p>Tem certeza que deseja apagar este material?</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">
+                        Cancelar
+                    </button>
                     <button id="delete-material"
                             type="button"
                             class="btn btn-danger"

@@ -115,7 +115,7 @@ def noticia(request, slug):
             "status": "success",
             "news": news,
             "crumbs": [
-                {"name": "Notícias", "link": reverse("noticias")},
+                {"name": "Notícias", "link": reverse("principal:noticias")},
                 {"name": news.title},
             ],
         }
@@ -365,7 +365,7 @@ def busca(request):
             "total": total_qnt,
             "rng": total_intervalo,
             "crumbs": [
-                {"name": "Notícias", "link": reverse("noticias")},
+                {"name": "Notícias", "link": reverse("principal:noticias")},
                 {"name": "Resultados da busca"},
             ],
         }
@@ -375,7 +375,7 @@ def busca(request):
             "status": "error",
             "mensagem": "error",
             "crumbs": [
-                {"name": "Notícias", "link": reverse("noticias")},
+                {"name": "Notícias", "link": reverse("principal:noticias")},
                 {"name": "Resultados da busca"},
             ],
         }

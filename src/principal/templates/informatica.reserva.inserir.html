@@ -41,12 +41,16 @@
                                     {% endfor %}
                                 </select>
                                 <div class="form-check my-2" id="term" hidden>
-                                    <input type="checkbox" class="form-check-input" id="confirm" name="confirm"/>
-                                    <label class="form-check-label" for="confirm">
+                                    <input type="checkbox"
+                                           class="form-check-input"
+                                           id="declare"
+                                           name="declare"
+                                           value="true"/>
+                                    <label class="form-check-label" for="declare">
                                         Marcando esta caixa, você declara que o laboratório contará com a supervisão
                                         de um <strong>docente</strong> no momento da aula. *
                                     </label>
-                                    <div class="invalid-feedback" for="confirm"></div>
+                                    <div class="invalid-feedback" for="declare"></div>
                                 </div>
                                 <div class="invalid-feedback" for="classroom"></div>
                                 <div class="mt-2">

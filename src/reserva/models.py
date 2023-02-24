@@ -151,8 +151,42 @@ class Reserve(TimeStampedModel, SoftDeletableModel):
     def __str__(self):
         return str(self.classroom)
 
+    def clean(self):
+        errors = {}
+        try:
+            if self.classroom.justification_required and not self.cause:
+                raise ValidationError(
+                    {
+                        "cause": [
+                            "Este tipo de sala requer que o usuário informe uma"
+                            " justificativa para seu uso."
+                        ]
+                    }
+                )
+
+        except ValidationError as e:
+            errors |= e.detail
+
+        try:
+            if self.classroom.type == Classroom.Type.LABORATORY and not self.declare:
+                raise ValidationError(
+                    {
+                        "declare": [
+                            "Este tipo de sala requer que o usuário declare que esteja"
+                            " presente um docente no momento da aula."
+                        ]
+                    }
+                )
+
+        except ValidationError as e:
+            errors |= e.detail
+
+        if errors:
+            raise ValidationError(errors)
+
     @transaction.atomic
     def save(self, *args, **kwargs):
+        self.clean()
         adding = self._state.adding
         if not adding:
             db_instance = Reserve.objects.get(id=self.id)

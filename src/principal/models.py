@@ -94,7 +94,7 @@ class News(TimeStampedModel):
         return self.title
 
     def get_absolute_url(self):
-        return reverse("noticia", kwargs={"slug": self.slug})
+        return reverse("principal:noticia", kwargs={"slug": self.slug})
 
     def send_newsletter(self):
         if self.category == "noticia":
@@ -249,22 +249,21 @@ class Page(models.Model):
         ordering = ["path", "name"]
 
     def get_absolute_url(self):
-        return reverse("pagina", kwargs={"path": self.path})
+        return reverse("principal:pagina", kwargs={"path": self.path})
 
     def __str__(self):
         return self.name
 
 
 class Newsletter(models.Model):
-    TYPE_CHOICES = (
-        ("editais", "Editais de Cursos"),
-        ("turmas", "Abertura de Turmas"),
-        ("outras", "Outras Notícias"),
-    )
+    class Type(models.TextChoices):
+        EDITAIS = "editais", "Editais de Cursos"
+        TURMAS = "turmas", "Abertura de Turmas"
+        OUTRAS = "outras", "Outras Notícias"
 
     name_person = models.CharField("Nome", max_length=110)
     email = models.EmailField("Email", max_length=110)
-    category = MultiSelectField("Tipo", max_length=21, choices=TYPE_CHOICES)
+    category = MultiSelectField("Tipo", max_length=21, choices=Type.choices)
 
     subscribed_at = models.DateTimeField("Inscrito desde", auto_now_add=True, null=True)
     last_updated = models.DateTimeField("Última atualização", auto_now=True, null=True)

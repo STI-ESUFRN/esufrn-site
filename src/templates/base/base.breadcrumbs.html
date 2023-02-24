@@ -10,7 +10,7 @@
 <nav aria-label="breadcrumb" class="container">
     <ol class="breadcrumb px-0 mb-0">
         <li class="breadcrumb-item">
-            <a href="{% url 'home' %}"><i class="fas fa-home"></i></a>
+            <a href="{% url 'principal:home' %}"><i class="fas fa-home"></i></a>
         </li>
         {% for crumb in crumbs %}
             <li class="breadcrumb-item breadcrumb-ellipsis {% if forloop.last %}active{% endif %}"
