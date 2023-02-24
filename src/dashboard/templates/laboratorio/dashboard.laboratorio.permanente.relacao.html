@@ -37,6 +37,11 @@
 {% endblock styles %}
 {% block content %}
     <div class="no-print">
+        <a class="btn btn-secondary rounded-0 m-0"
+           href="{% url 'permanent_dashboard' %}"
+           role="button">
+            <i class="fa-solid fa-arrow-left mr-2" aria-hidden="true"></i> Voltar
+        </a>
         <div class="mb-2 text-center">
             <h3>Relação de materiais permanentes</h3>
             <div class="row justify-content-end">

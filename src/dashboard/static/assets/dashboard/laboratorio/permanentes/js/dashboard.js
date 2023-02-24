@@ -197,14 +197,14 @@ $(document).ready(function () {
         daysMin: ["D", "S", "T", "Q", "Q", "S", "S"],
     });
 
-    $("#create-material-form [name]").change(function () {
+    $("#form-item [name]").change(function () {
         $(this).removeClass("is-invalid");
     });
 
     $("#create-material").click(function (e) {
         e.preventDefault();
 
-        let serialized_data = $("#create-material-form").serializeREST();
+        let serialized_data = $("#form-item").serializeREST();
         $.ajax({
             type: "POST",
             url: "/api/laboratory/permanents/",
@@ -217,12 +217,12 @@ $(document).ready(function () {
                 );
                 getMaterials();
                 $("#add-material").modal("hide");
-                $("#create-material-form").trigger("reset");
+                $("#form-item").trigger("reset");
             },
             error(response) {
-                $("#create-material-form").fillErrors(
-                    response.responseJSON,
-                    (message) => showMessage(message, "text-danger")
+                console.error(response);
+                $("#form-item").fillErrors(response.responseJSON, (message) =>
+                    showMessage(message, "text-danger")
                 );
             },
         });
@@ -253,6 +253,7 @@ $(document).ready(function () {
                 $("#form-category").trigger("reset");
             },
             error: function (response) {
+                console.error(response);
                 $("#form-category").fillErrors(
                     response.responseJSON,
                     (message) => showNonFieldErrorMessage(message, "errors")

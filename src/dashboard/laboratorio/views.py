@@ -43,10 +43,8 @@ def update_consumable_view(request, pk):
 @login_required(login_url="/dashboard/login")
 @allowed_users(allowed_roles=material_roles)
 def materials_consumable_list_view(request):
-    context = {}
-    get_dash_context(context, "Laboratório", "relacao")
     return render(
-        request, "laboratorio/dashboard.laboratorio.consumivel.relacao.html", context
+        request, "laboratorio/dashboard.laboratorio.consumivel.relacao.html"
     )
 
 
@@ -78,8 +76,4 @@ def update_permanent_view(request, pk):
 @login_required(login_url="/dashboard/login")
 @allowed_users(allowed_roles=material_roles)
 def materials_permanent_list_view(request):
-    context = {}
-    get_dash_context(context, "Laboratório", "relacao")
-    return render(
-        request, "laboratorio/dashboard.laboratorio.permanente.relacao.html", context
-    )
+    return render(request, "laboratorio/dashboard.laboratorio.permanente.relacao.html")
