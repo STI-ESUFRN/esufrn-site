@@ -41,7 +41,7 @@
                              style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)">
                             <div class="mr-lg-auto float-none float-lg-left my-2"
                                  style="color: rgba(255, 255, 255, 0.7);
-                                        font-size: 20px;">
+                                        font-size: 20px">
                                 ESCOLA DE SAÚDE - UFRN
                             </div>
                             <div class="ml-lg-auto float-none float-lg-right my-2" id="logo">
@@ -67,7 +67,7 @@
                                 </button>
                                 <form class="form-inline my-2 my-lg-0 form-busca"
                                       method="get"
-                                      action="{% url 'busca' %}">
+                                      action="{% url 'principal:busca' %}">
                                     <input type="search" name="termo" placeholder="Buscar"/>
                                     <button type="submit">
                                         <i class="fas fa-search"></i>
@@ -101,28 +101,50 @@
                                         {% if i.image %}
                                             <img src="/media/{{ i.image }}"
                                                  alt=""
-                                                 style=" width: 100%; height: 100%; position: absolute; bottom: 0px; left: 0px; z-index: 1; object-fit: cover; opacity: 0.5; filter: blur(10px); "/>
+                                                 style="width: 100%;
+                                                        height: 100%;
+                                                        position: absolute;
+                                                        bottom: 0px;
+                                                        left: 0px;
+                                                        z-index: 1;
+                                                        object-fit: cover;
+                                                        opacity: 0.5;
+                                                        filter: blur(10px)"/>
                                             <img src="/media/{{ i.image }}"
                                                  alt=""
                                                  class="h-100 h-100 m-auto"
                                                  style="object-fit: contain;
                                                         z-index: 2;
-                                                        max-height: 450px;"/>
+                                                        max-height: 450px"/>
                                         {% else %}
                                             <img src="{% static 'assets/images/ESUFRN.high.png' %}"
                                                  alt=""
-                                                 style=" width: 100%; height: 100%; position: absolute; bottom: 0px; left: 0px; z-index: 1; object-fit: cover; opacity: 0.5; filter: blur(10px); "/>
+                                                 style="width: 100%;
+                                                        height: 100%;
+                                                        position: absolute;
+                                                        bottom: 0px;
+                                                        left: 0px;
+                                                        z-index: 1;
+                                                        object-fit: cover;
+                                                        opacity: 0.5;
+                                                        filter: blur(10px)"/>
                                             <img src="{% static 'assets/images/ESUFRN.high.png' %}"
                                                  alt=""
                                                  class="h-100 h-100 m-auto"
                                                  style="object-fit: contain;
                                                         z-index: 2;
-                                                        max-height: 450px;"/>
+                                                        max-height: 450px"/>
                                         {% endif %}
-                                        <!-- <span style=" background-color: transparent; background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.8) 100%); width: 100%; position: absolute; bottom: 0px; left: 0px; height: 50%; "></span> -->
+                                        <!-- <span style="background-color: transparent;
+              background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.8) 100%);
+              width: 100%;
+              position: absolute;
+              bottom: 0px;
+              left: 0px;
+              height: 50%"></span> -->
                                     </div>
                                     <div class="xcontainer xdestaque-text d-flex py-5 px-2 my-auto"
-                                         style="flex: 1;">
+                                         style="flex: 1">
                                         <h2 class="text-white slide-font m-auto" style="z-index: 10000;">{{ i.title|truncatechars:150 }}</h2>
                                     </div>
                                 </div>
@@ -134,10 +156,16 @@
                         <div class="destaque-box h-100">
                             <div class="destaque-image">
                                 <img src="{% static 'assets/images/porta.min.jpg' %}" alt=""/>
-                                <span style=" background-color: transparent; background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.8) 100%); width: 100%; position: absolute; bottom: 0px; left: 0px; height: 50%; "></span>
+                                <span style="background-color: transparent;
+                                             background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.8) 100%);
+                                             width: 100%;
+                                             position: absolute;
+                                             bottom: 0px;
+                                             left: 0px;
+                                             height: 50%"></span>
                             </div>
                             <div class="container destaque-text">
-                                <a href="{% url 'pagina' 'instituicao_contato' %}">
+                                <a href="{% url 'principal:pagina' 'instituicao_contato' %}">
                                     <div class="w-60 h-100 d-flex align-items-end">
                                         <div>
                                             <h1 class="text-white slide-font">Contatos, Requerimentos e Solicitações</h1>
@@ -172,7 +200,8 @@
                         </div>
                         <p class="mb-0 mb-sm-2" style="text-align: left; text-align-last: left;">{{ i.published_at|date:'d F Y' }}</p>
                         <h5 class="mb-4 mb-sm-0"
-                            style="text-align: left; text-align-last: left"
+                            style="text-align: left;
+                                   text-align-last: left"
                             title="{{ i.title }}">
                             {{ i.title|truncatechars:150 }}
                         </h5>
@@ -180,7 +209,7 @@
                 {% endfor %}
             </div>
             <div class="text-l-left mb-4 mb-lg-0 mt-4">
-                <a href="{% url 'noticias' %}" class="text-center">
+                <a href="{% url 'principal:noticias' %}" class="text-center">
                     <button class="btn btn-outline-dark btn-radio">Ver mais notícicas</button>
                 </a>
             </div>
@@ -212,7 +241,7 @@
                 <h5 class="text-white">No momento não há eventos futuros cadastrados</h5>
             {% endif %}
             <div class="text-l-left my-4 see-more">
-                <a href="{% url 'noticias' %}?category=evento" class="text-center">
+                <a href="{% url 'principal:noticias' %}?category=evento" class="text-center">
                     <button class="btn btn-outline-light btn-radio">Ver mais eventos</button>
                 </a>
             </div>

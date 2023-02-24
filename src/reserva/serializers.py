@@ -4,8 +4,7 @@ from rest_framework import serializers
 from rest_framework.serializers import ValidationError
 
 from core.fields import MultiSelectField, PrimaryKeyRelatedFieldWithSerializer
-from reserva.enums import Shift, Status
-from reserva.helpers import notify_done
+from reserva.enums import Shift
 from reserva.models import Classroom, Period, Reserve, ReserveDay
 
 
@@ -66,32 +65,6 @@ class ReserveSerializer(serializers.ModelSerializer):
                 "read_only": True,
             },
         }
-
-    def validate_cause(self, cause):
-        if "classroom" in self.context["request"].data:
-            classroom = Classroom.objects.get(
-                id=self.context["request"].data["classroom"]
-            )
-            if classroom.justification_required and not cause:
-                raise ValidationError(
-                    "Este tipo de sala requer que o usuário informe uma justificativa"
-                    " para seu uso."
-                )
-        return cause
-
-    def validate_declare(self, declare):
-        if "classroom" in self.context["request"].data:
-            classroom = Classroom.objects.get(
-                id=self.context["request"].data["classroom"]
-            )
-            if classroom.type == "lab" and not self.context["request"].data.get(
-                "declare", False
-            ):
-                raise ValidationError(
-                    "Este tipo de sala requer que o usuário declare que esteja presente"
-                    " um docente no momento da aula."
-                )
-        return declare
 
     def validate_date(self, date):
         if "shift" in self.context["request"].data:
@@ -158,6 +131,7 @@ class ReservePublicSerializer(ReserveSerializer):
             "date",
             "classroom",
             "event",
+            "declare",
             "status",
             "status_display",
             "shift",
@@ -166,6 +140,9 @@ class ReservePublicSerializer(ReserveSerializer):
         extra_kwargs = {
             "status": {
                 "read_only": True,
+            },
+            "declare": {
+                "write_only": True,
             },
         }
 

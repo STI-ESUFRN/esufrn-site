@@ -11,7 +11,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">{% include "base.navbar.itens.html" %}</div>
     <form class="form-inline my-2 my-lg-0 form-busca"
           method="get"
-          action="{% url 'busca' %}"
+          action="{% url 'principal:busca' %}"
           autocomplete="off">
         <input type="search" name="termo" placeholder="Buscar"/>
         <button type="submit">

@@ -69,7 +69,7 @@ function createMaterialRow(data) {
         class: data.quantity <= data.alert_below ? "text-danger" : "",
     });
     let expiration = $("<td />", {
-        text: data.expiration,
+        text: moment(data.expiration).format("DD/MM/YYYY"),
     });
     let brand = $("<td />", {
         text: data.brand,

@@ -9,17 +9,19 @@
         footer {
             background-color: #0b3e61 !important;
         }
+
         .dropdown-item.active,
-		.dropdown-item:active,
-		.dropdown-item.hover,
-		.dropdown-item:hover {
-			background-color: #082f49;
-		}
+        .dropdown-item:active,
+        .dropdown-item.hover,
+        .dropdown-item:hover {
+            background-color: #082f49;
+        }
 
         .dropbtn {
             background-color: transparent;
             border: none;
         }
+
         .custom-dropdown {
             position: relative;
             display: inline-block;
@@ -30,8 +32,8 @@
             position: absolute;
             background-color: white;
             min-width: 160px;
-            border-color: rgba(0,0,0,0.15);
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            border-color: rgba(0, 0, 0, 0.15);
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
             z-index: 1;
         }
 
@@ -52,9 +54,10 @@
         }
 
         .custom-dropdown:hover {
-            cursor:pointer;
+            cursor: pointer;
         }
-        a.active{
+
+        a.active {
             font-weight: bold;
         }
     </style>
@@ -83,17 +86,17 @@
                         <div class="text-center text-muted my-2">FILTRAR POR</div>
                         {% with category=request.GET.category period=request.GET.period|getparam:'period' %}
                             <a class="{{ category|active }}"
-                               href="{% url 'busca' %}?termo={{ search }}{{ period }}">Tudo</a>
+                               href="{% url 'principal:busca' %}?termo={{ search }}{{ period }}">Tudo</a>
                             <a class="{{ category|active:'concurso' }}"
-                               href="{% url 'busca' %}?termo={{ search }}&category=concurso{{ period }}">Concurso</a>
+                               href="{% url 'principal:busca' %}?termo={{ search }}&category=concurso{{ period }}">Concurso</a>
                             <a class="{{ category|active:'evento' }}"
-                               href="{% url 'busca' %}?termo={{ search }}&category=evento{{ period }}">Evento</a>
+                               href="{% url 'principal:busca' %}?termo={{ search }}&category=evento{{ period }}">Evento</a>
                             <a class="{{ category|active:'noticia' }}"
-                               href="{% url 'busca' %}?termo={{ search }}&category=noticia{{ period }}">Notícia</a>
+                               href="{% url 'principal:busca' %}?termo={{ search }}&category=noticia{{ period }}">Notícia</a>
                             <a class="{{ category|active:'processo' }}"
-                               href="{% url 'busca' %}?termo={{ search }}&category=processo{{ period }}">Processo seletivo</a>
+                               href="{% url 'principal:busca' %}?termo={{ search }}&category=processo{{ period }}">Processo seletivo</a>
                             <a class="{{ category|active:'curso' }}"
-                               href="{% url 'busca' %}?termo={{ search }}&category=curso{{ period }}">Curso</a>
+                               href="{% url 'principal:busca' %}?termo={{ search }}&category=curso{{ period }}">Curso</a>
                         {% endwith %}
                     </div>
                 </div>
@@ -110,17 +113,17 @@
                         <div class="text-center text-muted my-2">POR PERÍODO</div>
                         {% with period=request.GET.period category=request.GET.category|getparam:'category' %}
                             <a class="{{ period|active }}"
-                               href="{% url 'busca' %}?termo={{ search }}{{ category }}">Em qualquer data</a>
+                               href="{% url 'principal:busca' %}?termo={{ search }}{{ category }}">Em qualquer data</a>
                             <a class="{{ period|active:'hora' }}"
-                               href="{% url 'busca' %}?termo={{ search }}&period=hora{{ category }}">Na última hora</a>
+                               href="{% url 'principal:busca' %}?termo={{ search }}&period=hora{{ category }}">Na última hora</a>
                             <a class="{{ period|active:'dia' }}"
-                               href="{% url 'busca' %}?termo={{ search }}&period=dia{{ category }}">Nas últimas 24 horas</a>
+                               href="{% url 'principal:busca' %}?termo={{ search }}&period=dia{{ category }}">Nas últimas 24 horas</a>
                             <a class="{{ period|active:'semana' }}"
-                               href="{% url 'busca' %}?termo={{ search }}&period=semana{{ category }}">Na última semana</a>
+                               href="{% url 'principal:busca' %}?termo={{ search }}&period=semana{{ category }}">Na última semana</a>
                             <a class="{{ period|active:'mes' }}"
-                               href="{% url 'busca' %}?termo={{ search }}&period=mes{{ category }}">No último mês</a>
+                               href="{% url 'principal:busca' %}?termo={{ search }}&period=mes{{ category }}">No último mês</a>
                             <a class="{{ period|active:'ano' }}"
-                               href="{% url 'busca' %}?termo={{ search }}&period=ano{{ category }}">No último ano</a>
+                               href="{% url 'principal:busca' %}?termo={{ search }}&period=ano{{ category }}">No último ano</a>
                         {% endwith %}
                     </div>
                 </div>
@@ -148,7 +151,7 @@
                         <div class="row my-2">
                             <div class="col-lg-2 align-self-center text-center">
                                 <img src="{% if i.image %}{{ i.image.url }}{% endif %}"
-                                     style="object-fit: cover;"
+                                     style="object-fit: cover"
                                      width="100%"
                                      height="120px"
                                      onerror="this.src='https://images2.imgbox.com/02/21/d1mWMGt6_o.png'"/>
@@ -178,7 +181,7 @@
                 <div class="container">
                     {% for i in result_cur %}
                         <div class="item-noticia mt-4">
-                            <a href="{% url 'ensino_pronatec' %}?curso={{ i.id }}">
+                            <a href="{% url 'principal:ensino_pronatec' %}?curso={{ i.id }}">
                                 <h2>{{ i.nome|bold|safe }}</h2>
                             </a>
                             <p class="text-muted resumo">
@@ -212,7 +215,7 @@
             {% comment %} Paginador {% endcomment %}
             <div class="container text-center text-uppercase mt-4">
                 {% comment %} {% if pag > 4 %}
-                    <a class="a-clear mx-1" href="{% url 'busca' %}?termo={{ search }}&page=1{% if period %}&period={{ period }}{% endif %}{% if category %}&category={{ category }}{% endif %}" data-page='1'>
+                    <a class="a-clear mx-1" href="{% url 'principal:busca' %}?termo={{ search }}&page=1{% if period %}&period={{ period }}{% endif %}{% if category %}&category={{ category }}{% endif %}" data-page='1'>
                         <button class="btn btn-outline-dark rounded-circle btn-pagination">
                             <p>1</p>
                         </button>
@@ -222,7 +225,7 @@
                     </button>
                 {% endif %}
                 {% for i in rng %}
-                    <a class="a-clear mx-1" href="{% url 'busca' %}?termo={{ search }}&page={{ i }}{% if period %}&period={{ period }}{% endif %}{% if category %}&category={{ category }}{% endif %}" data-page='{{ i }}'>
+                    <a class="a-clear mx-1" href="{% url 'principal:busca' %}?termo={{ search }}&page={{ i }}{% if period %}&period={{ period }}{% endif %}{% if category %}&category={{ category }}{% endif %}" data-page='{{ i }}'>
                         <button class="btn btn-outline-dark rounded-circle btn-pagination">
                             <p>
                                 {{ i }}
@@ -236,7 +239,7 @@
                             ...
                         </p>
                     </button>
-                    <a class="a-clear mx-1" href="{% url 'busca' %}?termo={{ search }}&page={{ total }}{% if period %}&period={{ period }}{% endif %}{% if category %}&category={{ category }}{% endif %}" data-page='{{ total }}'>
+                    <a class="a-clear mx-1" href="{% url 'principal:busca' %}?termo={{ search }}&page={{ total }}{% if period %}&period={{ period }}{% endif %}{% if category %}&category={{ category }}{% endif %}" data-page='{{ total }}'>
                         <button class="btn btn-outline-dark rounded-circle btn-pagination">
                             <p>
                                 {{ total }}
@@ -247,7 +250,7 @@
                 {% with period=request.GET.period|getparam:'period' category=request.GET.category|getparam:'category' %}
                     {% if pag > 4 %}
                         <a class="a-clear mx-1"
-                           href="{% url 'busca' %}?termo={{ search }}&page=1{{ category }}{{ period }}">
+                           href="{% url 'principal:busca' %}?termo={{ search }}&page=1{{ category }}{{ period }}">
                             <button class="btn btn-outline-dark rounded-circle btn-pagination {{ pag|active:'1' }}">
                                 <p>
                                     1
@@ -262,7 +265,7 @@
                     {% endif %}
                     {% for i in rng %}
                         <a class="a-clear mx-1"
-                           href="{% url 'busca' %}?termo={{ search }}&page={{ i }}{{ category }}{{ period }}">
+                           href="{% url 'principal:busca' %}?termo={{ search }}&page={{ i }}{{ category }}{{ period }}">
                             <button class="btn btn-outline-dark rounded-circle btn-pagination {{ pag|active:i }}">
                                 <p>
                                     {{ i }}
@@ -277,7 +280,7 @@
                             </p>
                         </button>
                         <a class="a-clear mx-1"
-                           href="{% url 'busca' %}?termo={{ search }}&page={{ total }}{{ category }}{{ period }}">
+                           href="{% url 'principal:busca' %}?termo={{ search }}&page={{ total }}{{ category }}{{ period }}">
                             <button class="btn btn-outline-dark rounded-circle btn-pagination {{ pag|active:total }}">
                                 <p>
                                     {{ total }}
@@ -303,7 +306,10 @@
 {% block scripts %}
     <script>
         $("a[data-page='{{pag}}'] .btn-pagination").addClass("active");
-        $("div.cat-inner a.btn#cat-tud").css({ 'background-color': '#0b3e61', 'border-color': '#0b3e61' });
+        $("div.cat-inner a.btn#cat-tud").css({
+            'background-color': '#0b3e61',
+            'border-color': '#0b3e61'
+        });
         if ($.browser.mozilla) {
             $(".evento-item h5").css('white-space', 'nowrap');
         }

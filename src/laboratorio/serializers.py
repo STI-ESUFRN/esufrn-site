@@ -42,6 +42,7 @@ class ConsumableSerializer(MaterialSerializer):
             "alert_below",
             "initial_quantity",
             "quantity",
+            "measure_unit",
             "expiration",
         ]
         extra_kwargs = {
