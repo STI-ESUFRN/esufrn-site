@@ -12,9 +12,9 @@ app_name = "reserves"
 
 
 router = routers.SimpleRouter()
+router.register("calendar", CalendarViewSet, basename="calendar")
 router.register("periods", PeriodViewset, basename="periodos")
 router.register("reserves", ReserveViewSet, basename="reservas")
-router.register("calendar", CalendarViewSet, basename="calendar")
 
 period_router = routers.NestedSimpleRouter(router, "periods", lookup="period")
 period_router.register("days", ReserveDayViewSet, basename="days")

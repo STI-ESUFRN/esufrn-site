@@ -1,0 +1,280 @@
+{% extends "dashboard.base.html" %}
+{% load static %}
+{% load mathfilters %}
+{% block styles %}
+{% endblock styles %}
+{% block content %}
+    <div class="card">
+        <div class="card-header head-table border-0 rounded-0">
+            <div class="row">
+                <div class="col-6 align-self-center">
+                    <b><i class="fas fa-info mr-2"></i> Detalhes do material</b>
+                </div>
+                <div class="col-6 text-right">
+                    <button class="btn btn-danger ml-1"
+                            data-toggle="modal"
+                            data-target="#deleteConfirm">
+                        <i class="fas fa-trash" aria-hidden="true"></i> Apagar
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12">
+                    <small>Nome:</small> <b>{{ item.name }}</b>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <small>Descrição:</small> <b>{{ item.description }}</b>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <small>Quantidade:</small> <b>{{ item.quantity }}</b>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <small>Marca:</small> <b>{{ item.brand }}</b>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <small>Tipo:</small> <b>
+                        {% if item.type == "C" %}
+                            Consumível
+                        {% else %}
+                            Permanente
+                        {% endif %}
+                    </b>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <small>Tombo:</small> <b>{{ item.number }}</b>
+                </div>
+                <div class="col-6">
+                    <small>Validade:</small> <b>{{ item.expiration|default_if_none:"Não especificado/Indeterminado" }}</b>
+                </div>
+            </div>
+            <hr/>
+            <div class="row">
+                <div class="col-6">
+                    <small>Quantidade crítica:</small> <b>{{ item.alert_below|default_if_none:"" }}</b>
+                </div>
+                <div class="col-6">
+                    <small>Quantidade inicial:</small> <b>{{ item.initial_quantity|default_if_none:"" }}</b>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <small>Recebido em:</small> <b>{{ item.received_at|default_if_none:"Não especificado" }}</b>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <small>Localização:</small> <b>{{ item.location }}</b>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer border-top-0">
+            <p>
+                <b>Ações:</b>
+            </p>
+            <form id="atualizar-quantidade">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <small class="text-muted">Atualizar quantidade</small>
+                        <input class="form-control rounded-0"
+                               type="number"
+                               name="quantity"
+                               id="quantity"/>
+                        <div class="invalid-feedback" for="quantity"></div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="text-center mt-4">
+                                    <a href="#" class="btn mb-1 btn-outline-success btn-sm" id="adicionar">Adicionar</a>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="text-center mt-4">
+                                    <a href="#" class="btn mb-1 btn-outline-danger btn-sm" id="remover">Remover</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <p>
+                <b>Histórico:</b>
+            </p>
+            {% for log in item.history.all %}
+                Em {{ log.created }}, <b>{{ log.user.username }}</b>
+                <strong>
+                    {% if log.diff > 0 %}
+                        <span class="text-success">adicionou</span>
+                    {% else %}
+                        <span class="text-danger">removeu</span>
+                    {% endif %}
+                </strong>
+                {{ log.diff|abs }} unidade{{ log.diff|abs|pluralize }} deste material no inventário (anterior: {{ log.prev_quantity }}).
+                <br/>
+            {% endfor %}
+            <p class="m-0 mt-2">
+                <small class="text-muted">Data de criação: {{ item.created }}</small>
+            </p>
+            <p class="m-0">
+                <small class="text-muted">Ultima Alteração: {{ item.modified }}</small>
+            </p>
+        </div>
+    </div>
+    <div id="deleteConfirm" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar exclusão</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Tem certeza que deseja apagar este material?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+                    <button id="deletePeriod"
+                            type="button"
+                            class="btn btn-danger"
+                            data-dismiss="modal">
+                        Apagar <i class="fas fa-trash" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="item-accordion" class="my-2">
+        <div class="card">
+            <div class="card-header" id="editar-informacoes">
+                <h5 class="mb-0">
+                    <a data-toggle="collapse"
+                       data-target="#collapse-editar-informacoes"
+                       aria-expanded="true"
+                       aria-controls="collapse-editar-informacoes">
+                        Editar informações <i class="fas fa-pen" aria-hidden="true"></i>
+                    </a>
+                </h5>
+            </div>
+            <div id="collapse-editar-informacoes"
+                 class="collapse"
+                 aria-labelledby="editar-informacoes"
+                 data-parent="#item-accordion">
+                <div class="card-body">{% include "laboratorio/base.material.form.html" %}</div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+{% block scripts %}
+    <script>
+        $('[data-toggle="datepicker"]').datepicker({
+            format: 'dd-mm-yyyy',
+            months: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+            daysMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S']
+        });
+        $("#deletePeriod").click(function(e) {
+            $.ajax({
+                type: "DELETE",
+                url: `/api/laboratory/permanent/${$("#form-item [name=id]").val()}/`,
+                success: function(response) {
+                    window.location.replace("/dashboard");
+                },
+                error: function(response){
+                    showMessage("Ocorreu um erro durante a exclusão do material.", "alert-danger");
+                }
+            });
+        });
+
+        function atualizarQuantidade(serialized_data) {
+            $.ajax({
+                type: "POST",
+                url: `/api/laboratory/permanent/${$("#form-item [name=id]").val()}/add/`,
+                dataType: "json",
+                data: serialized_data,
+                success: function(response) {
+                    showMessage("Material atualizado com sucesso.", "alert-success");
+                    $("#atualizar-quantidade [name]").removeClass("is-invalid");
+                    $("#atualizar-quantidade").trigger("reset");
+                },
+                error(response) {
+                    $.map(response.responseJSON, (value, label) => {
+                        $(`#atualizar-quantidade [name=${label}]`).addClass("is-invalid");
+                        let feedback = $(`#atualizar-quantidade .invalid-feedback[for=${label}]`);
+                        feedback.html("");
+                        value.forEach((message) => {
+                            error = $("<p />", {
+                                "html": message
+                            });
+                            feedback.append(error);
+                        });
+                    });
+                }
+            });
+
+        }
+
+        function serialize(form) {
+            let serialized_array = form.serializeArray();
+            let serialized_data = {};
+            for (key in serialized_array) {
+                serialized_data[serialized_array[key]["name"]] = serialized_array[key]["value"];
+            }
+
+            return serialized_data;
+        }
+
+        $("#adicionar").click(function(e) {
+            e.preventDefault();
+
+            let serialized_data = serialize($("#atualizar-quantidade"));
+            atualizarQuantidade(serialized_data);
+        });
+        $("#remover").click(function(e) {
+            e.preventDefault();
+
+            let serialized_data = serialize($("#atualizar-quantidade"));
+            serialized_data.quantity = serialized_data.quantity * -1;
+            atualizarQuantidade(serialized_data);
+        });
+
+        $("#atualizar-instancia").click(function(e) {
+            e.preventDefault();
+            let serialized_data = serialize($("#form-item"))
+            serialized_data["received_at"] = serialized_data["received_at"] ? moment($("#form-item [name=received_at]").val(), "DD-MM-YYYY").format("YYYY-MM-DD") : "";
+
+            $.ajax({
+                type: "PATCH",
+                url: `/api/laboratory/permanent/${$("#form-item [name=id]").val()}/`,
+                dataType: "json",
+                data: serialized_data,
+                success: function(response) {
+                    showMessage("Material atualizado com sucesso.", "alert-success");
+                    $("#form-item [name]").removeClass("is-invalid");
+                },
+                error(response) {
+                    $.map(response.responseJSON, (value, label) => {
+                        $(`#form-item [name=${label}]`).addClass("is-invalid");
+                        let feedback = $(`.invalid-feedback[for=${label}]`);
+                        feedback.html("");
+                        value.forEach((message) => {
+                            error = $("<p />", {
+                                "html": message
+                            });
+                            feedback.append(error);
+                        });
+                    });
+                }
+            });
+        });
+    </script>
+{% endblock scripts %}

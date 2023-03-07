@@ -1,11 +1,12 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from chamado.api.viewsets import ChamadoAdminViewSet, ChamadoViewSet
+from chamado.api.views import ChamadoViewSet
 
 router = routers.DefaultRouter()
 
-router.register(r"chamados", ChamadoViewSet, basename="chamado")
-router.register(r"admin/chamados", ChamadoAdminViewSet, basename="chamado_admin")
+router.register("tickets", ChamadoViewSet, basename="chamado")
 
-urlpatterns = [path("", include(router.urls))]
+urlpatterns = [
+    path("", include(router.urls)),
+]

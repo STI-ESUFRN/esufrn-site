@@ -1,6 +1,13 @@
 from django.contrib import admin
 
-from laboratorio.models import Consumable, History, Material, Permanent
+from laboratorio.models import (
+    Consumable,
+    History,
+    Material,
+    Permanent,
+    UserWarehouse,
+    Warehouse,
+)
 
 
 class MaterialAdmin(admin.ModelAdmin):
@@ -39,7 +46,9 @@ class PermanentAdmin(MaterialAdmin):
         obj.generate_qr(request)
 
 
-admin.site.register(Material, MaterialAdmin)
 admin.site.register(Consumable, ConsumableAdmin)
-admin.site.register(Permanent, PermanentAdmin)
 admin.site.register(History)
+admin.site.register(Material, MaterialAdmin)
+admin.site.register(Permanent, PermanentAdmin)
+admin.site.register(UserWarehouse)
+admin.site.register(Warehouse)

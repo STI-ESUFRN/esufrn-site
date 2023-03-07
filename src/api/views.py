@@ -4,7 +4,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_GET
 from django.views.generic import View
 
-from chamado.api.serializers import ChamadoSerializer
+from chamado.api.serializers import ChamadoCreateSerializer
 from chamado.models import Chamado
 from principal.decorators import allowed_users
 from principal.models import Message
@@ -28,7 +28,7 @@ def search(request):
 
     merge = []
 
-    serializador = ChamadoSerializer(result, many=True)
+    serializador = ChamadoCreateSerializer(result, many=True)
     merge += serializador.data
     serializador = ReserveSerializer(resultRes, many=True)
     merge += serializador.data
