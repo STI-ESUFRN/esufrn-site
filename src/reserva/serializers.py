@@ -184,7 +184,7 @@ class PeriodSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance = super().update(instance, validated_data)
-        self.Meta.model.objects.ensure_days(instance)
+        instance.ensure_days()
         return instance
 
 
