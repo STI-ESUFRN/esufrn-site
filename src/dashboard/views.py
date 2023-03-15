@@ -9,7 +9,6 @@ from django.urls import reverse_lazy
 from django.views.decorators.cache import never_cache
 
 from dashboard.forms import SiginForm
-from dashboard.helpers import get_dash_context
 from principal.decorators import authenticated_user, unauthenticated_user
 from principal.models import Message
 from reserva.models import Reserve, ReserveDay
@@ -95,5 +94,4 @@ def home_view(request):
         "events": events,
         "classes": classes,
     }
-    get_dash_context(context, "Home")
     return render(request, "dashboard.home.html", context)

@@ -116,6 +116,7 @@ class News(TimeStampedModel):
             "image": self.image,
             "created": self.created,
             "modified": self.modified,
+            "published_at": self.published_at,
             "host_url": settings.HOST_URL,
         }
 

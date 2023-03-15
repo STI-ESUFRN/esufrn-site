@@ -5,10 +5,6 @@ from dashboard.views import ResetPasswordView, home_view, login_view, logout_vie
 
 urlpatterns = [
     path("", home_view, name="dashboard_home"),
-    path("reserva/", include("dashboard.reserva.urls")),
-    path("chamado/", include("dashboard.chamado.urls")),
-    path("periodo/", include("dashboard.periodo.urls")),
-    path("laboratorio/", include("dashboard.laboratorio.urls")),
     path("login/", login_view, name="login"),
     path("logout/", logout_view, name="logout"),
     path("password-reset/", ResetPasswordView.as_view(), name="password_reset"),
@@ -33,4 +29,7 @@ urlpatterns = [
         ),
         name="password_reset_done",
     ),
+    path("chamado/", include("chamado.dashboard.urls")),
+    path("laboratorio/", include("laboratorio.dashboard.urls")),
+    path("reserva/", include("reserva.dashboard.urls")),
 ]

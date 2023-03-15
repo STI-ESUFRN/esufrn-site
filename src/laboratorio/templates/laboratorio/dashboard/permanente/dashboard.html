@@ -1,0 +1,233 @@
+{% extends "dashboard.base.html" %}
+{% load static %}
+{% load mathfilters %}
+{% block styles %}
+    <style>
+        table.table {
+            table-layout: fixed;
+        }
+
+        table.table th:nth-child(1) {
+            width: 30px;
+        }
+
+        .datepicker-container {
+            z-index: 1600 !important;
+        }
+    </style>
+{% endblock styles %}
+{% block content %}
+    <div class="d-flex justify-content-between px-2">
+        <div>
+            <a class="btn btn-secondary rounded-0 m-0"
+               data-toggle="modal"
+               data-target="#add-material"
+               role="button">
+                <i class="fas fa-plus mr-2" aria-hidden="true"></i> Inserir material permanente
+            </a>
+            <a class="btn btn-secondary rounded-0 m-0"
+               href="{% url 'permanent_list' %}"
+               role="button">
+                <i class="fa-solid fa-list mr-2" aria-hidden="true"></i> Relação de itens
+            </a>
+        </div>
+        <div>
+            <form id="filters">
+                <div class="form-row">
+                    <div class="form-group col">
+                        <select class="form-control rounded-0 mr-1" name="category" data-filter>
+                            <option selected value="">
+                                Todas as categorias
+                            </option>
+                            <optgroup id="category-filter" label="Categorias">
+                            </optgroup>
+                        </select>
+                    </div>
+                    <div class="form-group col">
+                        <select class="form-control rounded-0" name="status" data-filter>
+                            <option selected value="">
+                                Todos os status
+                            </option>
+                            <optgroup id="status-filter" label="Status">
+                            </optgroup>
+                        </select>
+                    </div>
+                    <div class="form-group col">
+                        <input class="form-control rounded-0"
+                               placeholder="Buscar"
+                               type="text"
+                               name="search"
+                               data-filter/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <hr class="mt-0"/>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="accordion">
+                <div id="card-material" class="card rounded-0">
+                    <div class="card-header head-table border-0 rounded-0" id="headingTwo">
+                        <h5 class="mb-0">
+                            <a data-toggle="collapse"
+                               data-target="#materials-collapse"
+                               aria-expanded="true"
+                               aria-controls="materials-collapse">
+                                <b><i class="fa-solid fa-stethoscope mr-2"></i> Itens permanentes: <span id="material-count"></span></b>
+                            </a>
+                        </h5>
+                    </div>
+                    <div id="materials-collapse"
+                         class="collapse show"
+                         aria-labelledby="headingTwo"
+                         data-parent="#accordion">
+                        <div class="card-body p-0" style="overflow-x: auto;">
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr class="capt-table">
+                                        <th class="border-0 text-center" scope="col"></th>
+                                        <th class="border-0" scope="col">Nome</th>
+                                        <th class="border-0" scope="col">Tombo</th>
+                                        <th class="border-0" scope="col">Marca</th>
+                                        <th class="border-0" scope="col">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="materials-list">
+                                    {% comment %} AJAX {% endcomment %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card-footer">
+                            <div class="text-center w-100">
+                                <button id="load-previous" class="btn rounded-0">
+                                    <i class="fa-solid fa-circle-arrow-left"></i> Anterior
+                                </button>
+                                <button id="load-next" class="btn rounded-0">
+                                    Próxima <i class="fa-solid fa-circle-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card-group" id="details" style="display: none;opacity: 0;">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-header head-table border-0 rounded-0">
+                        <b><i class="fas fa-info mr-2"></i>Detalhes do Material</b>
+                        <button id="details-dismiss" type="button" class="close" aria-label="Close">
+                            <span aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i></span>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title mb-2">
+                            <small>Nome:</small> <b data-attribute="name"></b>
+                        </h5>
+                        <p class="card-text m-0">
+                            <small>Descrição:</small> <b data-attribute="description"></b>
+                        </p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <p class="card-text m-0">
+                                <small>Status:</small> <b data-attribute="status_display"></b>
+                            </p>
+                            <p class="card-text m-0">
+                                <small>
+                                    Tombamento: <span data-attribute="number"></span>
+                                </small>
+                            </p>
+                        </li>
+                    </ul>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <small>Localização:</small> <b data-attribute="location"></b>
+                            <small>
+                                <p class="my-0">
+                                    Recebido em: <span date-format="DD/MM/YYYY" data-attribute="received_at"></span>
+                                </p>
+                            </small>
+                        </li>
+                    </ul>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <small class="text-muted">Observações sobre o material:</small>
+                            <textarea class="form-control mb-3"
+                                      rows="4"
+                                      placeholder="Escrever observação"
+                                      data-attribute="comments"></textarea>
+                            <a href="#"
+                               class="btn mb-1 btn-outline-primary btn-sm"
+                               id="patch-comment">Salvar observação <i class="fa-solid fa-floppy-disk"></i></a>
+                        </li>
+                    </ul>
+                    <div id="accordion">
+                        <div class="card rounded-0">
+                            <div class="card-header" id="card-actions">
+                                <h5 class="mb-0">
+                                    <a data-toggle="collapse"
+                                       data-target="#collapse-actions"
+                                       aria-expanded="true"
+                                       aria-controls="collapse-actions">
+                                        Ações <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                </h5>
+                            </div>
+                            <div id="collapse-actions"
+                                 class="collapse"
+                                 aria-labelledby="card-actions"
+                                 data-parent="#accordion">
+                                <div class="card-body">
+                                    <button class="btn btn-danger"
+                                            data-toggle="modal"
+                                            data-target="#deleteConfirm">
+                                        Apagar <i class="fas fa-trash" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer border-top-0">
+                        <p class="m-0">
+                            <small class="text-muted">Data de criação: <span date-format="DD/MM/YYYY HH:mm" data-attribute="created"></span></small>
+                        </p>
+                        <p class="m-0">
+                            <small class="text-muted">Ultima Alteração: <span date-format="DD/MM/YYYY HH:mm" data-attribute="modified"></span></small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="deleteConfirm" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar exclusão</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Tem certeza que deseja apagar este material?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+                    <button id="delete-material"
+                            type="button"
+                            class="btn btn-danger"
+                            data-dismiss="modal">
+                        Apagar <i class="fas fa-trash" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include "laboratorio/dashboard/permanente/inserir.material.html" %}
+    {% include "laboratorio/dashboard/permanente/inserir.categoria.html" %}
+{% endblock content %}
+{% block scripts %}
+    <script src="{% static 'assets/laboratorio/dashboard/permanentes/js/dashboard.js' %}"></script>
+{% endblock scripts %}

@@ -3,7 +3,7 @@ from rest_framework import serializers
 from chamado.models import Chamado
 
 
-class ChamadoSerializer(serializers.ModelSerializer):
+class ChamadoCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chamado
         fields = [
@@ -15,7 +15,7 @@ class ChamadoSerializer(serializers.ModelSerializer):
         ]
 
 
-class ChamadoAdminSerializer(serializers.ModelSerializer):
+class ChamadoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chamado
         fields = [

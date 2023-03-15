@@ -6,7 +6,7 @@ urlpatterns = [
     path("busca/", search, name="search"),
     path("contato/", contatosView.as_view()),
     path("contato/<int:pk>/", contatoView.as_view()),
-    path("", include("reserva.api.urls")),
     path("", include("chamado.api.urls")),
-    path("laboratory/", include("laboratorio.urls")),
+    path("", include("laboratorio.api.urls")),
+    path("", include("reserva.api.urls")),
 ]

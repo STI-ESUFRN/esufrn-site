@@ -85,7 +85,7 @@ function makeError(message) {
     });
 }
 
-$.fn.fillErrors = function (data, non_field_behavior) {
+$.fn.fillErrors = function (data, non_field_behavior = undefined) {
     $.map(data, (value, key) => {
         $(this).find(`[name=${key}]`).addClass("is-invalid");
 
@@ -102,7 +102,7 @@ $.fn.fillErrors = function (data, non_field_behavior) {
                 let error = makeError(value);
                 feedback.append(error);
             }
-        } else {
+        } else if (non_field_behavior) {
             if ($.isArray(value)) {
                 value.forEach((message) => {
                     non_field_behavior(message);

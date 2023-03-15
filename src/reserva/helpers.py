@@ -54,8 +54,8 @@ def notify_requester(reserve):
         Solicitante: <b>{reserve.requester}</b><br/>
         <hr/>
         <p>
-            Enviou algum dado errado? Cancele sua reserva a qualquer momento clicando
-            <a href="{cancel_url}">aqui</a>
+            Desistiu da reserva ou enviou algum dado errado? Cancele sua reserva a
+            qualquer momento clicando <a href="{cancel_url}">aqui</a>
         </p>
 
     """
