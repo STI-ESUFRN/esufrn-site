@@ -15,6 +15,32 @@ from laboratorio.helpers import send_alert_email
 from laboratorio.managers import ConsumableManager
 
 
+class Warehouse(SoftDeletableModel):
+    name = models.CharField("Nome", max_length=255)
+
+    class Meta:
+        verbose_name = "Almoxarifado"
+        verbose_name_plural = "Almoxarifados"
+
+    def __str__(self) -> str:
+        return f"{self.name}"
+
+
+class UserWarehouse(models.Model):
+    user = models.ForeignKey(User, related_name="warehouses", on_delete=models.CASCADE)
+    warehouse = models.ForeignKey(
+        Warehouse, related_name="responsibles", on_delete=models.CASCADE
+    )
+
+    class Meta:
+        verbose_name = "Responsável"
+        verbose_name_plural = "Responsáveis"
+        unique_together = ["user", "warehouse"]
+
+    def __str__(self) -> str:
+        return f"{self.user}|{self.warehouse}"
+
+
 class Material(SoftDeletableModel, TimeStampedModel):
     name = models.CharField("Nome", max_length=255)
     description = models.TextField("Descrição")
@@ -25,11 +51,14 @@ class Material(SoftDeletableModel, TimeStampedModel):
     qr_code = models.ForeignKey(
         "assets.ESImage", on_delete=models.PROTECT, null=True, editable=False
     )
+    warehouse = models.ForeignKey(
+        Warehouse, related_name="materials", on_delete=models.PROTECT, null=True
+    )
 
     class Meta:
-        verbose_name = "Instância"
-        verbose_name_plural = "Instâncias"
-        ordering = ["-created"]
+        verbose_name = "Material"
+        verbose_name_plural = "Materiais"
+        ordering = ["-name", "-created"]
 
     def get_url(self) -> str:
         raise NotImplementedError

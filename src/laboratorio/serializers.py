@@ -5,10 +5,29 @@ from assets.models import ESImage
 from assets.serializers import ESImageSerializer
 from core.fields import PrimaryKeyRelatedFieldWithSerializer
 from core.serializers import UserSerializer
-from laboratorio.models import Category, Consumable, History, Material, Permanent
+from laboratorio.models import (
+    Category,
+    Consumable,
+    History,
+    Material,
+    Permanent,
+    Warehouse,
+)
+
+
+class WarehouseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Warehouse
+        fields = [
+            "id",
+            "name",
+        ]
 
 
 class MaterialSerializer(serializers.ModelSerializer):
+    warehouse = PrimaryKeyRelatedFieldWithSerializer(
+        WarehouseSerializer, queryset=Warehouse.objects.all()
+    )
     qr_code = PrimaryKeyRelatedFieldWithSerializer(
         ESImageSerializer, queryset=ESImage.objects.all(), required=False
     )
@@ -22,6 +41,7 @@ class MaterialSerializer(serializers.ModelSerializer):
             "brand",
             "received_at",
             "location",
+            "warehouse",
             "comments",
             "qr_code",
             "created",
