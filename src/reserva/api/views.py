@@ -10,8 +10,9 @@ from core.permissions import IsSafeMethods, IsSuperAdmin
 from reserva.api.filters import CalendarFilter
 from reserva.api.permissions import IsFromCoordination, IsFromDirection, IsFromReserve
 from reserva.enums import Status
-from reserva.models import Period, Reserve, ReserveDay
+from reserva.models import Classroom, Period, Reserve, ReserveDay
 from reserva.serializers import (
+    ClassroomSerializer,
     CreateReserveSerializer,
     PeriodSerializer,
     ReserveDaySerializer,
@@ -158,3 +159,10 @@ class CalendarViewSet(
             active=True,
         )
         return self.filter_queryset(queryset)
+
+
+class ClassroomViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    serializer_class = ClassroomSerializer
+    queryset = Classroom.objects.all()
+    permission_classes = [AllowAny]
+    pagination_class = None

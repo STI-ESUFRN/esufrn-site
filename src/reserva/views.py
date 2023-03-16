@@ -35,3 +35,13 @@ def cancel_reserve(request, uuid):
         ],
     }
     return render(request, "informatica.reserva.cancelar.html", context)
+
+
+def calendar_view(request):
+    context = {
+        "crumbs": [
+            {"name": "Reserva de Salas"},
+            {"name": "Calendário"},
+        ],
+    }
+    return render(request, "informatica.reserva.calendario.html", context)
