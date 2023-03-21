@@ -26,10 +26,13 @@ class WarehouseSerializer(serializers.ModelSerializer):
 
 class MaterialSerializer(serializers.ModelSerializer):
     warehouse = PrimaryKeyRelatedFieldWithSerializer(
-        WarehouseSerializer, queryset=Warehouse.objects.all()
+        WarehouseSerializer,
+        queryset=Warehouse.objects.all(),
     )
     qr_code = PrimaryKeyRelatedFieldWithSerializer(
-        ESImageSerializer, queryset=ESImage.objects.all(), required=False
+        ESImageSerializer,
+        queryset=ESImage.objects.all(),
+        required=False,
     )
 
     class Meta:
@@ -77,7 +80,8 @@ class ConsumableSerializer(MaterialSerializer):
     def validate_quantity(self, quantity):
         if quantity <= 0:
             raise ValidationError(
-                "A quantidade não pode ser negativa", "negative_quantity"
+                "A quantidade não pode ser negativa",
+                "negative_quantity",
             )
 
         return quantity
@@ -101,7 +105,8 @@ class CategorySerializer(serializers.ModelSerializer):
 class PermanentSerializer(MaterialSerializer):
     status_display = serializers.CharField(source="get_status_display", read_only=True)
     category = PrimaryKeyRelatedFieldWithSerializer(
-        CategorySerializer, queryset=Category.objects.all()
+        CategorySerializer,
+        queryset=Category.objects.all(),
     )
 
     class Meta(MaterialSerializer.Meta):

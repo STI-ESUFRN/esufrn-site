@@ -34,7 +34,8 @@ class ChamadoViewSet(viewsets.ModelViewSet):
     def open(self, request, pk=None):
         serializer_cls = self.get_serializer_class()
         serializer = serializer_cls(
-            data=request.data, context=self.get_serializer_context()
+            data=request.data,
+            context=self.get_serializer_context(),
         )
         serializer.is_valid(raise_exception=True)
         serializer.save()

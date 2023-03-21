@@ -67,7 +67,7 @@ MIDDLEWARE = [
 X_FRAME_OPTIONS = "SAMEORIGIN"
 
 CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "http://* https://*").split(
-    " "
+    " ",
 )
 
 
@@ -95,11 +95,11 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "menu.context.menuItens",
+                "menu.context.menu_itens",
                 "dashboard.context.navbar",
-            ]
+            ],
         },
-    }
+    },
 ]
 
 LOCALE_PATHS = (os.path.join(os.path.dirname(os.path.realpath(__name__)), "locale"),)
@@ -115,7 +115,7 @@ DATABASES = {
         "PASSWORD": os.getenv("DATABASE_PASSWORD"),
         "HOST": os.getenv("DATABASE_HOST"),
         "PORT": os.getenv("DATABASE_PORT"),
-    }
+    },
 }
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
@@ -124,7 +124,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": (
             "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
-        )
+        ),
     },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
@@ -173,7 +173,8 @@ CONSTANCE_BACKEND = "constance.backends.redisd.RedisBackend"
 CORS_ALLOW_HEADERS = list(default_headers) + ["scope"]
 
 CONSTANCE_REDIS_CONNECTION = os.getenv(
-    "CONSTANCE_REDIS_CONNECTION", "redis://localhost:6379/1"
+    "CONSTANCE_REDIS_CONNECTION",
+    "redis://localhost:6379/1",
 )
 
 CONSTANCE_CONFIG = {
@@ -198,7 +199,7 @@ CACHES = {
         "LOCATION": os.getenv("CACHE_REDIS_URL", "redis://localhost:6379/2"),
         "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
         "KEY_PREFIX": "django_orm",
-    }
+    },
 }
 
 # Celery

@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from dateutil.relativedelta import relativedelta
 from django.http import Http404
@@ -24,11 +24,11 @@ def evento(request, slug):
         return render(request, "eventos.evento.html", context)
 
     except Event.DoesNotExist as e:
-        raise Http404(e)
+        raise Http404 from e
 
 
 def eventos(request):
-    today = datetime.now().date()
+    today = timezone.now().date()
 
     events = Event.available_objects.all()
 
@@ -100,7 +100,7 @@ def eventos(request):
 
 
 def eventos_concluidos(request):
-    events = Event.available_objects.filter(date_end__lt=datetime.now().date())
+    events = Event.available_objects.filter(date_end__lt=timezone.now().date())
 
     page = int(request.GET.get("page", "1"))
     result_obj, qnt, intervalo = paginator(page, events)

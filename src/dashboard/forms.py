@@ -10,7 +10,7 @@ class SiginForm(forms.Form):
                 "class": "form-control rounded-0 border-0 my-4",
                 "placeholder": "Usuário",
                 "required": "required",
-            }
+            },
         ),
     )
     field_passwd = forms.CharField(
@@ -20,6 +20,6 @@ class SiginForm(forms.Form):
                 "class": "form-control rounded-0 border-0 my-4",
                 "placeholder": "Senha",
                 "required": "required",
-            }
+            },
         ),
     )
