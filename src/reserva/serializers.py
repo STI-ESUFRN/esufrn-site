@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.serializers import ValidationError
 
@@ -31,7 +32,8 @@ class ClassroomSerializer(serializers.ModelSerializer):
 
 class ReserveSerializer(serializers.ModelSerializer):
     classroom = PrimaryKeyRelatedFieldWithSerializer(
-        ClassroomSerializer, queryset=Classroom.objects.all()
+        ClassroomSerializer,
+        queryset=Classroom.objects.all(),
     )
     shift_display = serializers.CharField(source="get_shift_display", read_only=True)
     status_display = serializers.CharField(source="get_status_display", read_only=True)
@@ -76,26 +78,27 @@ class ReserveSerializer(serializers.ModelSerializer):
                 time = "22:15"
 
             relative_date = datetime.strptime(
-                f"{self.context['request'].data['date']} {time}", "%Y-%m-%d %H:%M"
-            )
-            now = datetime.today()
+                f"{self.context['request'].data['date']} {time}",
+                "%Y-%m-%d %H:%M",
+            ).replace(tzinfo=timezone.get_default_timezone())
+            now = timezone.now()
 
             diff = (relative_date - now).days
             if diff < 0:
                 raise ValidationError(
-                    "Você não pode reservar uma sala para uma data passada."
+                    "Você não pode reservar uma sala para uma data passada.",
                 )
 
             if "classroom" in self.context["request"].data:
                 classroom = Classroom.objects.get(
-                    id=self.context["request"].data["classroom"]
+                    id=self.context["request"].data["classroom"],
                 )
                 if diff < classroom.days_required:
-                    raise ValidationError(
+                    message = (
                         "A reserva para esta sala requer antecedência de"
-                        f" {classroom.days_required} "
-                        f"dia{'s' if classroom.days_required > 1 else ''}."
+                        f" {classroom.days_required} dia{'s' if classroom.days_required > 1 else ''}."
                     )
+                    raise ValidationError(message)
 
         return date
 
@@ -119,7 +122,8 @@ class CreateReserveSerializer(ReserveSerializer):
 
 class ReservePublicSerializer(ReserveSerializer):
     classroom = PrimaryKeyRelatedFieldWithSerializer(
-        ClassroomSerializer, queryset=Classroom.objects.all()
+        ClassroomSerializer,
+        queryset=Classroom.objects.filter(public=True),
     )
     shift_display = serializers.CharField(source="get_shift_display", read_only=True)
     status_display = serializers.CharField(source="get_status_display", read_only=True)
@@ -149,7 +153,8 @@ class ReservePublicSerializer(ReserveSerializer):
 
 class PeriodSerializer(serializers.ModelSerializer):
     classroom = PrimaryKeyRelatedFieldWithSerializer(
-        ClassroomSerializer, queryset=Classroom.objects.all()
+        ClassroomSerializer,
+        queryset=Classroom.objects.all(),
     )
     shift = MultiSelectField(choices=Shift.choices)
     weekdays = MultiSelectField(choices=Period.Weekdays.choices)

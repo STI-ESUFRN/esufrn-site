@@ -17,26 +17,26 @@ from reserva.serializers import ReserveSerializer
 def search(request):
     result = Chamado.objects.filter(
         Q(name__icontains=request.GET["search"])
-        | Q(obs__icontains=request.GET["search"])
+        | Q(obs__icontains=request.GET["search"]),
     ).exclude(status__isnull=True)
-    resultRes = Reserve.objects.filter(
+    result_res = Reserve.objects.filter(
         Q(classroom__classroom__icontains=request.GET["search"])
         | Q(event__icontains=request.GET["search"])
         | Q(requester__icontains=request.GET["search"])
-        | Q(obs__icontains=request.GET["search"])
+        | Q(obs__icontains=request.GET["search"]),
     ).exclude(status="E")
 
     merge = []
 
     serializador = ChamadoCreateSerializer(result, many=True)
     merge += serializador.data
-    serializador = ReserveSerializer(resultRes, many=True)
+    serializador = ReserveSerializer(result_res, many=True)
     merge += serializador.data
 
     return JsonResponse(merge, safe=False)
 
 
-class contatosView(View):
+class ContatosView(View):
     def post(self, request, *args, **kwargs):
         name = request.POST.get("nome")
         contact = request.POST.get("contato")
@@ -46,12 +46,12 @@ class contatosView(View):
             Message.objects.create(name=name, contact=contact, message=message)
 
             return JsonResponse(
-                {"status": "success", "message": "Mensagem enviada com sucesso."}
+                {"status": "success", "message": "Mensagem enviada com sucesso."},
             )
 
         except Exception as e:
             return JsonResponse(
-                {"status": "error", "message": "{}".format(next(iter(e)))}
+                {"status": "error", "message": "{}".format(next(iter(e)))},
             )
 
 
@@ -61,12 +61,12 @@ decorators = [
 
 
 @method_decorator(decorators, name="dispatch")
-class contatoView(View):
+class ContatoView(View):
     def delete(self, request, *args, **kwargs):
         try:
             Message.objects.get(id=self.kwargs["pk"]).delete()
             return JsonResponse(
-                {"message": "Arquivo excluído com sucesso", "status": "success"}
+                {"message": "Arquivo excluído com sucesso", "status": "success"},
             )
 
         except Exception as e:

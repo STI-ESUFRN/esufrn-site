@@ -26,7 +26,7 @@ def authenticated_user(redirect_to="/"):
     return decorator
 
 
-def allowed_users(allowed_roles=[]):
+def allowed_users(allowed_roles=list):
     def decorator(view):
         def wrapper_func(request, *args, **kwargs):
             if (
@@ -34,7 +34,7 @@ def allowed_users(allowed_roles=[]):
                 or request.user.is_superuser
             ):
                 return view(request, *args, **kwargs)
-            raise PermissionDenied()
+            raise PermissionDenied
 
         return wrapper_func
 

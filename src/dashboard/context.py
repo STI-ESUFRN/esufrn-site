@@ -25,7 +25,7 @@ def navbar(request):
                     When(id=current_menu.id, then=True),
                     default=False,
                     output_field=BooleanField(),
-                )
+                ),
             )
         )
 
@@ -37,7 +37,7 @@ def navbar(request):
                     When(link=request.path, then=True),
                     default=False,
                     output_field=BooleanField(),
-                )
+                ),
             )
         )
 

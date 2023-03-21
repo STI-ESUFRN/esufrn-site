@@ -2,7 +2,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from principal.helpers import emailToken
+from principal.helpers import email_token
 from principal.tests.helpers import sample_news, sample_newsletter, sample_page
 
 
@@ -96,7 +96,7 @@ class PrincipalViewsTest(APITestCase):
 
     def test_unsubscribe_view(self):
         newsletter = sample_newsletter(consent=True)
-        token = emailToken(newsletter.email)
+        token = email_token(newsletter.email)
         url = reverse("principal:unsubscribe")
         response = self.client.get(url, {"token": token, "email": newsletter.email})
 

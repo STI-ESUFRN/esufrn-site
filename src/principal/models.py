@@ -20,7 +20,7 @@ from multiselectfield import MultiSelectField
 from PIL import Image
 
 from esufrn.settings import MEDIA_ROOT
-from principal.helpers import emailToken
+from principal.helpers import email_token
 from principal.tasks import publish_news
 
 
@@ -69,7 +69,10 @@ class News(TimeStampedModel):
 
     author = models.CharField("Nome do autor", max_length=50)
     category = models.CharField(
-        "Categoria", max_length=8, choices=Category.choices, default=Category.NEWS
+        "Categoria",
+        max_length=8,
+        choices=Category.choices,
+        default=Category.NEWS,
     )
 
     image = models.ImageField(
@@ -129,7 +132,7 @@ class News(TimeStampedModel):
                 email = registration.email
                 context["newsletter_email"] = {
                     "email": email,
-                    "token": emailToken(email),
+                    "token": email_token(email),
                 }
 
                 msg_html = render_to_string("base_email.html", context)
@@ -185,7 +188,10 @@ class News(TimeStampedModel):
 class File(TimeStampedModel):
     name = models.CharField("Nome", max_length=250)
     file = models.FileField(
-        upload_to="files/", verbose_name="Arquivo", null=True, max_length=255
+        upload_to="files/",
+        verbose_name="Arquivo",
+        null=True,
+        max_length=255,
     )
 
     class Meta:
@@ -200,6 +206,9 @@ class File(TimeStampedModel):
 class NewsAttachment(models.Model):
     blog = models.ForeignKey(News, related_name="attachments", on_delete=models.CASCADE)
     file = models.ForeignKey(File, verbose_name="Arquivo", on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return f"{self.blog}|{self.file}"
 
     class Meta:
         verbose_name = "Anexo"
@@ -217,7 +226,10 @@ class Team(models.Model):
         default="/equipe/base/avatar.jpg",
     )
     kind = models.CharField(
-        "Tipo", max_length=8, choices=TYPE_CHOICES, default="docente"
+        "Tipo",
+        max_length=8,
+        choices=TYPE_CHOICES,
+        default="docente",
     )
     sigaa = models.URLField(max_length=300, blank=True)
     cv = models.URLField(max_length=300, blank=True)
@@ -291,7 +303,7 @@ class Newsletter(models.Model):
             raise ValidationError("O campo de nome não pode estar vazio")
         if not self.email:
             raise ValidationError("O campo de email não pode estar vazio")
-        if not self.category or self.category[0] == "":
+        if not self.category or not self.category[0]:
             raise ValidationError("Escolha pelo menos uma categoria")
         if not self.consent:
             raise ValidationError("Você precisa concordar com os termos de uso")
@@ -306,7 +318,10 @@ class Testimonial(models.Model):
     occupation = models.CharField("Ocupação", max_length=100)
     testimonial = models.CharField("Depoimento", max_length=100)
     file = models.FileField(
-        upload_to="depoimentos/", verbose_name="Imagem", null=True, blank=True
+        upload_to="depoimentos/",
+        verbose_name="Imagem",
+        null=True,
+        blank=True,
     )
 
     class Meta:
@@ -339,7 +354,9 @@ class Document(TimeStampedModel):
     )
 
     category = models.CharField(
-        verbose_name="Categoria", choices=Category.choices, max_length=32
+        verbose_name="Categoria",
+        choices=Category.choices,
+        max_length=32,
     )
 
     document_type = models.CharField(
@@ -354,12 +371,18 @@ class Document(TimeStampedModel):
     )
 
     file = models.FileField(
-        upload_to="files/documentos", verbose_name="Arquivo", max_length=255, blank=True
+        upload_to="files/documentos",
+        verbose_name="Arquivo",
+        max_length=255,
+        blank=True,
     )
     link = models.CharField("Link", max_length=1024, blank=True)
 
     date = models.DateField(
-        "Data do documento", default=datetime.now, null=True, blank=True
+        "Data do documento",
+        default=datetime.now,
+        null=True,
+        blank=True,
     )
     is_active = models.BooleanField(default=True)
 
@@ -373,17 +396,18 @@ class Document(TimeStampedModel):
             return self.file
         if self.document_type == "link":
             return self.link
+        return None
 
     get_url.short_description = "Caminho"
 
     def clean(self):
         if self.document_type == "arquivo" and not self.file.name:
             raise ValidationError(
-                "O tipo do documento exige que seja escolhido um arquivo"
+                "O tipo do documento exige que seja escolhido um arquivo",
             )
         if self.document_type == "link" and not self.link:
             raise ValidationError(
-                "O tipo do documento exige que seja informado um link"
+                "O tipo do documento exige que seja informado um link",
             )
 
     def __str__(self):

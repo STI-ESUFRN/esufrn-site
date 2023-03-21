@@ -6,7 +6,7 @@ from reserva.models import Classroom, Reserve
 
 
 def home_reserva(request):
-    salas = Classroom.objects.all()
+    salas = Classroom.objects.filter(public=True)
     context = {
         "salas": salas,
         "crumbs": [
@@ -23,7 +23,7 @@ def cancel_reserve(request, uuid):
         reserve = Reserve.objects.exclude(status=Status.CANCELED).get(uuid=uuid)
 
     except Reserve.DoesNotExist as e:
-        raise Http404(e)
+        raise Http404 from e
 
     reserve.status = Status.CANCELED
     reserve.save()

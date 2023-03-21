@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import time
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -6,12 +6,20 @@ from django.contrib.auth.views import PasswordResetView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.views.decorators.cache import never_cache
 
 from dashboard.forms import SiginForm
 from principal.decorators import authenticated_user, unauthenticated_user
 from principal.models import Message
 from reserva.models import Reserve, ReserveDay
+
+MORNING_SHIGT_BEGIN = time(7, 00, 00)
+MORNING_SHIGT_END = time(12, 30, 00)
+AFTERNOON_SHIFT_BEGIN = time(13, 00, 00)
+AFTERNOON_SHIFT_END = time(18, 30, 00)
+NIGHT_SHIFT_BEGIN = time(18, 45, 00)
+NIGHT_SHIFT_END = time(22, 15, 00)
 
 
 # REGISTRATION
@@ -48,12 +56,12 @@ def login_view(request):
                 return redirect(next_url)
 
             return redirect("dashboard_home")
-        else:
-            context = {
-                "status": "error",
-                "message": "Credenciais inválidas",
-                "form": form,
-            }
+
+        context = {
+            "status": "error",
+            "message": "Credenciais inválidas",
+            "form": form,
+        }
 
     return render(request, "dashboard.login.html", context)
 
@@ -69,24 +77,28 @@ def logout_view(request):
 @login_required(login_url="/dashboard/login")
 def home_view(request):
     messages = Message.objects.all()
-    now = datetime.now()
+    now = timezone.now()
 
     shift = None
-    if ((now.hour == 18 and now.minute >= 45) or now.hour > 18) and (
-        (now.hour == 22 and now.minute <= 15) or now.hour < 22
-    ):
-        shift = "N"
-    elif now.hour >= 13 and ((now.hour == 18 and now.minute <= 30) or now.hour < 18):
-        shift = "T"
-    elif now.hour >= 7 and ((now.hour == 12 and now.minute <= 30) or now.hour < 12):
+    current_time = timezone.localtime(now).time()
+    if MORNING_SHIGT_BEGIN <= current_time <= MORNING_SHIGT_END:
         shift = "M"
+
+    elif AFTERNOON_SHIFT_BEGIN <= current_time <= AFTERNOON_SHIFT_END:
+        shift = "T"
+
+    elif NIGHT_SHIFT_BEGIN <= current_time <= NIGHT_SHIFT_END:
+        shift = "N"
 
     events = []
     classes = []
     if shift:
         events = Reserve.objects.filter(date=now.date(), shift=shift, status="A")
         classes = ReserveDay.objects.filter(
-            date=now.date(), shift=shift, period__status="A", active=True
+            date=now.date(),
+            shift=shift,
+            period__status="A",
+            active=True,
         )
 
     context = {

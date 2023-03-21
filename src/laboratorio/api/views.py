@@ -54,7 +54,7 @@ class ConsumableViewSet(WarehouseMixin, viewsets.ModelViewSet):
     @action(detail=False, methods=["get"])
     def alert(self, request, pk=None):
         queryset = self.filter_queryset(
-            self.get_queryset().filter(quantity__lte=F("alert_below"))
+            self.get_queryset().filter(quantity__lte=F("alert_below")),
         )
 
         serializer = self.get_serializer(queryset, many=True)
@@ -92,8 +92,8 @@ class CategoryViewSet(viewsets.ModelViewSet):
                 {
                     "category": [
                         "Não foi possível apagar esta instância pois existem materiais"
-                        " categorizados como tal."
-                    ]
+                        " categorizados como tal.",
+                    ],
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )
