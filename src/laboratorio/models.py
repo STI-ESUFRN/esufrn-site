@@ -29,7 +29,9 @@ class Warehouse(SoftDeletableModel):
 class UserWarehouse(models.Model):
     user = models.ForeignKey(User, related_name="warehouses", on_delete=models.CASCADE)
     warehouse = models.ForeignKey(
-        Warehouse, related_name="responsibles", on_delete=models.CASCADE
+        Warehouse,
+        related_name="responsibles",
+        on_delete=models.CASCADE,
     )
 
     class Meta:
@@ -49,16 +51,22 @@ class Material(SoftDeletableModel, TimeStampedModel):
     location = models.CharField("Localização", max_length=255, null=True, blank=True)
     comments = models.TextField("Observações", null=True, blank=True)
     qr_code = models.ForeignKey(
-        "assets.ESImage", on_delete=models.PROTECT, null=True, editable=False
+        "assets.ESImage",
+        on_delete=models.PROTECT,
+        null=True,
+        editable=False,
     )
     warehouse = models.ForeignKey(
-        Warehouse, related_name="materials", on_delete=models.PROTECT, null=True
+        Warehouse,
+        related_name="materials",
+        on_delete=models.PROTECT,
+        null=True,
     )
 
     class Meta:
         verbose_name = "Material"
         verbose_name_plural = "Materiais"
-        ordering = ["-name", "-created"]
+        ordering = ["name", "-created"]
 
     def get_url(self) -> str:
         raise NotImplementedError
@@ -67,7 +75,9 @@ class Material(SoftDeletableModel, TimeStampedModel):
         data = request.build_absolute_uri(self.get_url())
         border = (10, 10, 10, 10)
         qr_code = ImageOps.expand(
-            qrcode.make(data, border=5), border=border, fill="black"
+            qrcode.make(data, border=5),
+            border=border,
+            fill="black",
         )
 
         stream = BytesIO()
@@ -90,7 +100,10 @@ class Material(SoftDeletableModel, TimeStampedModel):
 class Consumable(Material):
     initial_quantity = models.IntegerField("Quantidade inicial", null=True, blank=True)
     measure_unit = models.CharField(
-        "Unidade de armazenamento", max_length=32, null=True, blank=True
+        "Unidade de armazenamento",
+        max_length=32,
+        null=True,
+        blank=True,
     )
     quantity = models.IntegerField("Quantidade disponível")
     alert_below = models.IntegerField("Nível crítico")
@@ -175,7 +188,10 @@ class Permanent(Material):
     number = models.CharField("Tombamento", max_length=255, unique=True)
     category = models.ForeignKey(Category, null=True, on_delete=models.PROTECT)
     status = models.CharField(
-        "Status", max_length=11, choices=Status.choices, default=Status.AVAILABLE
+        "Status",
+        max_length=11,
+        choices=Status.choices,
+        default=Status.AVAILABLE,
     )
 
     class Meta:

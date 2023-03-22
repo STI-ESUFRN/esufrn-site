@@ -10,7 +10,9 @@ from assets.models import File
 class Event(SoftDeletableModel, TimeStampedModel):
     name = models.CharField("Nome do evento", max_length=255)
     image = models.ForeignKey(
-        "assets.ESImage", verbose_name="Imagem", on_delete=models.PROTECT
+        "assets.ESImage",
+        verbose_name="Imagem",
+        on_delete=models.PROTECT,
     )
     date_begin = models.DateField("Data de início")
     date_end = models.DateField("Data de término")
@@ -46,10 +48,15 @@ class Event(SoftDeletableModel, TimeStampedModel):
 
 class AdditionalInformation(models.Model):
     event = models.ForeignKey(
-        Event, related_name="informations", on_delete=models.CASCADE
+        Event,
+        related_name="informations",
+        on_delete=models.CASCADE,
     )
     name = models.CharField("Informação", max_length=255)
     details = RichTextUploadingField("Detalhes", config_name="events")
+
+    def __str__(self) -> str:
+        return f"{self.event}|{self.name}"
 
     class Meta:
         ordering = ["event__id", "name"]
@@ -59,7 +66,9 @@ class AdditionalInformation(models.Model):
 
 class Attachment(File):
     event = models.ForeignKey(
-        Event, related_name="attachments", on_delete=models.CASCADE
+        Event,
+        related_name="attachments",
+        on_delete=models.CASCADE,
     )
 
     class Meta:

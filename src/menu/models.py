@@ -21,10 +21,14 @@ class Itens(models.Model):
         default=False,
     )
     link = models.CharField(
-        "Link", max_length=255, blank=True, help_text="Usar apenas se o tipo for Link"
+        "Link",
+        max_length=255,
+        blank=True,
+        help_text="Usar apenas se o tipo for Link",
     )
     order = models.IntegerField(
-        "Ordem", help_text="Ordem que aparecerá na barra de menu"
+        "Ordem",
+        help_text="Ordem que aparecerá na barra de menu",
     )
     decoration = models.CharField(
         "Class estilo",
@@ -37,15 +41,15 @@ class Itens(models.Model):
     def get_link(self):
         if self.action_type == "link" and self.link:
             return self.link
-        else:
-            return "-"
+
+        return "-"
 
     get_link.short_description = "Link"
 
     def clean(self):
         if self.action_type == "link" and not self.link:
             raise ValidationError(
-                "Este tipo de menu requer que seja especificado um link"
+                "Este tipo de menu requer que seja especificado um link",
             )
 
     def save(self, *args, **kwargs):
@@ -67,7 +71,10 @@ class SubItens(models.Model):
     link = models.CharField("Link", max_length=255)
     order = models.IntegerField("Ordem")
     menu = models.ForeignKey(
-        Itens, related_name="subitems", on_delete=models.CASCADE, null=True
+        Itens,
+        related_name="subitems",
+        on_delete=models.CASCADE,
+        null=True,
     )
     decoration = models.CharField(
         "Class estilo",

@@ -1,11 +1,11 @@
 import threading
-from datetime import datetime
 
 from constance import config
 from django.conf import settings
 from django.core.mail import send_mail
 from django.db import models
 from django.template.loader import render_to_string
+from django.utils import timezone
 from django.utils.translation import gettext as _
 from model_utils.models import SoftDeletableModel, TimeStampedModel
 
@@ -24,7 +24,10 @@ class Chamado(SoftDeletableModel, TimeStampedModel):
     solved_at = models.DateTimeField("Resolvido em", null=True)
     obs = models.TextField("Observações", null=True)
     status = models.CharField(
-        "Status", max_length=1, choices=Status.choices, default=Status.PENDING
+        "Status",
+        max_length=1,
+        choices=Status.choices,
+        default=Status.PENDING,
     )
 
     def save(self, *args, **kwargs):
@@ -32,7 +35,7 @@ class Chamado(SoftDeletableModel, TimeStampedModel):
 
         if self.status is not self.Status.PENDING:
             if self.solved_at is None:
-                self.solved_at = datetime.today()
+                self.solved_at = timezone.now()
         else:
             self.solved_at = None
 

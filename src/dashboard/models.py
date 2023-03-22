@@ -7,7 +7,8 @@ class DashboardItens(models.Model):
     name = models.CharField("Nome", max_length=100)
     link = models.CharField("Link", max_length=255)
     order = models.IntegerField(
-        "Ordem", help_text="Ordem que aparecerá na barra de menu"
+        "Ordem",
+        help_text="Ordem que aparecerá na barra de menu",
     )
     decoration = models.CharField(
         "Class estilo",
@@ -31,7 +32,10 @@ class DashboardSubItens(models.Model):
     link = models.CharField("Link", max_length=255)
     order = models.IntegerField("Ordem")
     menu = models.ForeignKey(
-        DashboardItens, related_name="subitems", on_delete=models.CASCADE, null=True
+        DashboardItens,
+        related_name="subitems",
+        on_delete=models.CASCADE,
+        null=True,
     )
     decoration = models.CharField(
         "Class estilo",
@@ -41,7 +45,10 @@ class DashboardSubItens(models.Model):
         help_text="Classes CSS extra",
     )
     aditional = models.TextField(
-        "HTML Adicional", max_length=512, null=True, blank=True
+        "HTML Adicional",
+        max_length=512,
+        null=True,
+        blank=True,
     )
 
     class Meta:

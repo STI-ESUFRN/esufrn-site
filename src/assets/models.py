@@ -9,10 +9,16 @@ from assets.helpers import Quality, resize_image
 class ESImage(TimeStampedModel):
     high = models.ImageField("Imagem (qualidade original)", upload_to="images")
     medium = models.ImageField(
-        "Imagem (qualidade média)", blank=True, null=True, upload_to="images"
+        "Imagem (qualidade média)",
+        blank=True,
+        null=True,
+        upload_to="images",
     )
     low = models.ImageField(
-        "Imagem (qualidade baixa)", blank=True, null=True, upload_to="images"
+        "Imagem (qualidade baixa)",
+        blank=True,
+        null=True,
+        upload_to="images",
     )
 
     def save(self, *args, **kwargs):

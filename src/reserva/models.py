@@ -28,16 +28,22 @@ class Classroom(models.Model):
 
     type = models.CharField("Tipo de sala", max_length=3, choices=Type.choices)
     number = models.CharField("Número da sala", max_length=10)
+    public = models.BooleanField("Visível ao público", default=True)
 
     days_required = models.IntegerField(
-        verbose_name="Prazo mínimo de reserva", default=1
+        verbose_name="Prazo mínimo de reserva",
+        default=1,
     )
     justification_required = models.BooleanField(
-        "Requer justificativa de uso", default=False
+        "Requer justificativa de uso",
+        default=False,
     )
 
     floor = models.CharField(
-        "Andar", max_length=25, choices=Floor.choices, default=Floor.GROUND
+        "Andar",
+        max_length=25,
+        choices=Floor.choices,
+        default=Floor.GROUND,
     )
 
     class Meta:
@@ -60,10 +66,10 @@ class Classroom(models.Model):
             raise ValidationError(
                 {
                     "name": [
-                        "Caso informada um acrônimo, por favor informar também o nome"
-                        " da sala."
-                    ]
-                }
+                        "Caso informada um acrônimo, por favor informar também o"
+                        " nome da sala.",
+                    ],
+                },
             )
 
     def save(self, *args, **kwargs):
@@ -93,12 +99,15 @@ class UserClassroom(models.Model):
     def clean(self):
         if not self.user.email:
             raise ValidationError(
-                {"user": ["O responsável precisa ter um email associado a ele."]}
+                {"user": ["O responsável precisa ter um email associado a ele."]},
             )
 
     def save(self, *args, **kwargs):
         self.clean()
         super().save(*args, **kwargs)
+
+    def __str__(self) -> str:
+        return f"{self.user}|{self.classroom}"
 
     class Meta:
         verbose_name = "Responsável"
@@ -120,7 +129,10 @@ class Reserve(TimeStampedModel, SoftDeletableModel):
     phone = models.CharField("Telefone", max_length=16, null=True, blank=True)
     cause = models.TextField("Justificativa", max_length=512, null=True, blank=True)
     equipment = models.CharField(
-        "Equipamento multimídia", max_length=200, null=True, blank=True
+        "Equipamento multimídia",
+        max_length=200,
+        null=True,
+        blank=True,
     )
     status = models.CharField(
         "Estado da reserva",
@@ -139,7 +151,8 @@ class Reserve(TimeStampedModel, SoftDeletableModel):
         ),
     )
     admin_created = models.BooleanField(
-        verbose_name="Criado pela administração", default=False
+        verbose_name="Criado pela administração",
+        default=False,
     )
     uuid = models.CharField(max_length=100, blank=True, unique=True, default=uuid.uuid4)
 
@@ -159,9 +172,9 @@ class Reserve(TimeStampedModel, SoftDeletableModel):
                     {
                         "cause": [
                             "Este tipo de sala requer que o usuário informe uma"
-                            " justificativa para seu uso."
-                        ]
-                    }
+                            " justificativa para seu uso.",
+                        ],
+                    },
                 )
 
         except ValidationError as e:
@@ -172,10 +185,10 @@ class Reserve(TimeStampedModel, SoftDeletableModel):
                 raise ValidationError(
                     {
                         "declare": [
-                            "Este tipo de sala requer que o usuário declare que esteja"
-                            " presente um docente no momento da aula."
-                        ]
-                    }
+                            "Este tipo de sala requer que o usuário declare que"
+                            " esteja presente um docente no momento da aula.",
+                        ],
+                    },
                 )
 
         except ValidationError as e:
@@ -292,8 +305,8 @@ class Period(TimeStampedModel):
     def __str__(self):
         if self.classcode:
             return f"{self.classcode}: {self.classname}"
-        else:
-            return self.classname
+
+        return self.classname
 
     class Meta:
         verbose_name = "Reserva de período"
@@ -353,23 +366,29 @@ class Period(TimeStampedModel):
 
         if invalid_dates:
             days = ", ".join(
-                [f"{day['date']} ({day['shift']})" for day in invalid_dates]
+                [f"{day['date']} ({day['shift']})" for day in invalid_dates],
             )
             raise ValidationError(
                 {
                     "non_fields_error": [
-                        f"Já existem reservas aprovadas para os dias {days}."
-                    ]
-                }
+                        f"Já existem reservas aprovadas para os dias {days}.",
+                    ],
+                },
             )
 
 
 class ReserveDay(models.Model):
     reserve = models.ForeignKey(
-        Reserve, related_name="days", on_delete=models.CASCADE, null=True
+        Reserve,
+        related_name="days",
+        on_delete=models.CASCADE,
+        null=True,
     )
     period = models.ForeignKey(
-        Period, related_name="days", on_delete=models.CASCADE, null=True
+        Period,
+        related_name="days",
+        on_delete=models.CASCADE,
+        null=True,
     )
 
     date = models.DateField("Data da reserva")
@@ -411,14 +430,17 @@ class ReserveDay(models.Model):
                     {
                         "date": [
                             "Já existe uma reserva aprovada para o dia"
-                            f" {self.date.strftime('%d-%m-%Y')}"
-                        ]
-                    }
+                            f" {self.date.strftime('%d-%m-%Y')}",
+                        ],
+                    },
                 )
 
     def save(self, *args, **kwargs):
         self.clean()
         super().save(*args, **kwargs)
+
+    def __str__(self) -> str:
+        return f"{self.date}|{self.reserve or self.period}"
 
     class Meta:
         verbose_name = "Dia da reserva"

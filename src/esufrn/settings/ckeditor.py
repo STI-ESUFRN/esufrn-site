@@ -30,7 +30,7 @@ CKEDITOR_CONFIGS = {
                 "-",
                 "BulletedList",
                 "NumberedList",
-            ]
+            ],
         ],
         "width": "100%",
         "height": 500,
@@ -68,7 +68,7 @@ CKEDITOR_CONFIGS = {
                 "-",
                 "BulletedList",
                 "NumberedList",
-            ]
+            ],
         ],
         "width": "100%",
         "height": 180,
@@ -119,7 +119,7 @@ CKEDITOR_CONFIGS = {
                 "BulletedList",
                 "NumberedList",
                 "-",
-            ]
+            ],
         ],
         "width": "100%",
         "height": 600,

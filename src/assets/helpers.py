@@ -22,7 +22,7 @@ def resize_image(uploaded_image, quality=Quality.BEST):
     img_temp.save(output_io_stream, format="JPEG", quality=int(100 / quality.value))
 
     output_io_stream.seek(0)
-    uploaded_image = InMemoryUploadedFile(
+    return InMemoryUploadedFile(
         output_io_stream,
         "ImageField",
         f"{uploaded_image.name.split('.')[0]}{name[quality.value]}.jpg",
@@ -30,4 +30,3 @@ def resize_image(uploaded_image, quality=Quality.BEST):
         sys.getsizeof(output_io_stream),
         None,
     )
-    return uploaded_image

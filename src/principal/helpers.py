@@ -2,13 +2,14 @@ import hashlib
 import math
 
 
-def haveMore(total, npp, page):
+def have_more(total, npp, page):
     if total % (npp * page) == total:
         return False
-    elif total % (npp * page) == 0:
+
+    if total % (npp * page) == 0:
         return False
-    else:
-        return True
+
+    return True
 
 
 def paginator(current_page, objects, epp=5):
@@ -34,12 +35,11 @@ def paginator(current_page, objects, epp=5):
         else:
             bounds = range(1, current_page + 3)
 
-    else:
-        if current_page + 3 >= total:
-            bounds = range(current_page - 2, total + 1)
+    elif current_page + 3 >= total:
+        bounds = range(current_page - 2, total + 1)
 
-        else:
-            bounds = range(current_page - 2, current_page + 3)
+    else:
+        bounds = range(current_page - 2, current_page + 3)
 
     result = paginate(objects, current_page, epp)
 
@@ -49,17 +49,13 @@ def paginator(current_page, objects, epp=5):
 def qnt_page(qnt_ant, qnt_pos):
     if qnt_ant > qnt_pos:
         return qnt_ant
-    else:
-        return qnt_pos
+
+    return qnt_pos
 
 
-def joinRange(rng1, rng2, qnt_page):
+def join_range(rng1, rng2, qnt_page):
     if rng2 != range(1, 1) and rng1 != range(1, 1):
-        if rng1[0] <= rng2[0]:
-            rng = rng1
-
-        else:
-            rng = rng2
+        rng = rng1 if rng1[0] <= rng2[0] else rng2
 
         if rng1[-1] >= rng2[-1]:
             rng = range(rng[0], rng1[-1] + 1)
@@ -67,14 +63,17 @@ def joinRange(rng1, rng2, qnt_page):
             rng = range(rng[0], rng2[-1] + 1)
 
         return rng
-    else:
-        if rng1 == range(1, 1):
-            return rng2
-        elif rng2 == range(1, 1):
-            return rng1
+
+    if rng1 == range(1, 1):
+        return rng2
+
+    if rng2 == range(1, 1):
+        return rng1
+
+    return None
 
 
-def emailToken(email):
+def email_token(email):
     return hashlib.md5(
         "[Jmh!&DKfY#u&l#4zvFXw5mV4iD(uEmUW]:{}".format(email.lower()).encode(),
         usedforsecurity=False,

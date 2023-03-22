@@ -10,8 +10,9 @@ from core.permissions import IsSafeMethods, IsSuperAdmin
 from reserva.api.filters import CalendarFilter
 from reserva.api.permissions import IsFromCoordination, IsFromDirection, IsFromReserve
 from reserva.enums import Status
-from reserva.models import Period, Reserve, ReserveDay
+from reserva.models import Classroom, Period, Reserve, ReserveDay
 from reserva.serializers import (
+    ClassroomSerializer,
     CreateReserveSerializer,
     PeriodSerializer,
     ReserveDaySerializer,
@@ -58,7 +59,8 @@ class ReserveViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=["post"], permission_classes=[AllowAny])
     def cadastrar(self, request, pk=None):
         serializer = self.get_serializer(
-            data=request.data, context={"request": request}
+            data=request.data,
+            context={"request": request},
         )
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -124,7 +126,7 @@ class ReserveDayViewSet(viewsets.ModelViewSet):
     pagination_class = None
     permission_classes = [
         (AllowAny & IsSafeMethods)
-        | (IsAuthenticated & (IsFromCoordination | IsFromDirection | IsSuperAdmin))
+        | (IsAuthenticated & (IsFromCoordination | IsFromDirection | IsSuperAdmin)),
     ]
     filter_backends = [DjangoFilterBackend]
     filterset_fields = {
@@ -136,6 +138,20 @@ class ReserveDayViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = self.filter_queryset(super().get_queryset())
         return queryset.filter(period=self.kwargs["period_pk"])
+
+
+class ClassroomViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
+    queryset = Classroom.objects.all()
+    serializer_class = ClassroomSerializer
+    permission_classes = [AllowAny]
+    pagination_class = None
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.is_anonymous:
+            return queryset.filter(public=True)
+
+        return queryset
 
 
 class CalendarViewSet(

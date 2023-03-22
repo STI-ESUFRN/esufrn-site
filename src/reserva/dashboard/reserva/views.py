@@ -21,13 +21,16 @@ def reserve_history(request):
 
     else:
         user_classroomns = UserClassroom.objects.filter(user=request.user).values_list(
-            "classroom", flat=True
+            "classroom",
+            flat=True,
         )
         salas = Classroom.objects.filter(id__in=user_classroomns)
 
     context = {"salas": salas}
     return render(
-        request, "reserva/dashboard/reserva/dashboard.reserva.historico.html", context
+        request,
+        "reserva/dashboard/reserva/dashboard.reserva.historico.html",
+        context,
     )
 
 
@@ -39,13 +42,16 @@ def create_reserve(request):
 
     else:
         user_classroomns = UserClassroom.objects.filter(user=request.user).values_list(
-            "classroom", flat=True
+            "classroom",
+            flat=True,
         )
         salas = Classroom.objects.filter(id__in=user_classroomns)
 
     context = {"salas": salas}
     return render(
-        request, "reserva/dashboard/reserva/dashboard.reserva.inserir.html", context
+        request,
+        "reserva/dashboard/reserva/dashboard.reserva.inserir.html",
+        context,
     )
 
 
@@ -63,5 +69,7 @@ def reserve_report(request):
         "sala": sala,
     }
     return render(
-        request, "reserva/dashboard/reserva/dashboard.reserva.relatorio.html", context
+        request,
+        "reserva/dashboard/reserva/dashboard.reserva.relatorio.html",
+        context,
     )
