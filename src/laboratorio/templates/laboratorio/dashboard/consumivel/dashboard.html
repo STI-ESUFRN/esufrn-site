@@ -166,12 +166,17 @@
                     </ul>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">
-                            <small>Localização:</small> <b data-attribute="location"></b>
-                            <small>
-                                <p class="my-0">
+                            <p class="my-0">
+                                <small>Almoxarifado:</small> <b data-attribute="warehouse.name"></b>
+                            </p>
+                            <p class="my-0">
+                                <small>Localização:</small> <b data-attribute="location"></b>
+                            </p>
+                            <p class="my-0">
+                                <small>
                                     Recebido em: <span date-format="DD/MM/YYYY" data-attribute="received_at"></span>
-                                </p>
-                            </small>
+                                </small>
+                            </p>
                         </li>
                     </ul>
                     <ul class="list-group list-group-flush">
@@ -255,7 +260,9 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>Tem certeza que deseja apagar este material?</p>
+                    <p>
+                        Tem certeza que deseja apagar este material?
+                    </p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-dismiss="modal">
