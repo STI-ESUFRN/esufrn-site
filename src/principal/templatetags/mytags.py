@@ -9,16 +9,16 @@ register = template.Library()
 
 def bold(str):
     pattern = re.compile(
-        "|".join((re.escape(word) for word in settings.BOLD.split())), re.I
+        "|".join((re.escape(word) for word in settings.BOLD.split())),
+        re.I,
     )
-    result = re.sub(pattern, r"<b>\g<0></b>", str)
 
-    return result
+    return re.sub(pattern, r"<b>\g<0></b>", str)
 
 
 def mark(str):
     result = re.sub("", r"", str)
-    if settings.BOLD != "":
+    if settings.BOLD:
         pattern = re.compile(re.escape(settings.BOLD), re.I)
         result = re.sub(pattern, r"<mark>\g<0></mark>", str)
 
@@ -35,14 +35,15 @@ def enum(value, key):
 
     if length > 2:
         return "{} {} {}".format(
-            ", ".join(list[0 : length - 1]), _("and"), list[length - 1]
+            ", ".join(list[0 : length - 1]),
+            _("and"),
+            list[length - 1],
         )
 
-    elif length > 1:
+    if length > 1:
         return " {} ".format(_("and")).join(list)
 
-    else:
-        return value
+    return value
 
 
 def active(value, target=""):

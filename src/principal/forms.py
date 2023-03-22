@@ -9,7 +9,7 @@ class ContactES(forms.Form):
         max_length=100,
         required=True,
         widget=forms.TextInput(
-            attrs={"name": "nome", "placeholder": "Nome", "required": True}
+            attrs={"name": "nome", "placeholder": "Nome", "required": True},
         ),
     )
     contact = forms.CharField(
@@ -17,7 +17,7 @@ class ContactES(forms.Form):
         max_length=100,
         required=True,
         widget=forms.TextInput(
-            attrs={"name": "contato", "placeholder": "Contato", "required": True}
+            attrs={"name": "contato", "placeholder": "Contato", "required": True},
         ),
     )
     message = forms.CharField(
@@ -28,7 +28,7 @@ class ContactES(forms.Form):
                 "name": "mensagem",
                 "placeholder": "Mensagem",
                 "required": True,
-            }
+            },
         ),
     )
 
@@ -43,17 +43,17 @@ class NewsletterForm(forms.ModelForm):
                     "class": "w-100 p-2",
                     "placeholder": "Nome",
                     "required": True,
-                }
+                },
             ),
             "email": forms.EmailInput(
                 attrs={
                     "class": "w-100 p-2",
                     "placeholder": "Email",
                     "required": True,
-                }
+                },
             ),
             "category": forms.CheckboxSelectMultiple(
-                attrs={"class": "form-check-input text-black"}
+                attrs={"class": "form-check-input text-black"},
             ),
             "consent": forms.CheckboxInput(attrs={"required": True}),
         }
@@ -70,6 +70,6 @@ class UnsubscribeES(forms.Form):
                 "placeholder": "Email",
                 "required": True,
                 "class": "w-100 px-2",
-            }
+            },
         ),
     )

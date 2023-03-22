@@ -33,10 +33,10 @@ class PrimaryKeyRelatedFieldWithSerializer(serializers.PrimaryKeyRelatedField):
             [
                 (
                     super(PrimaryKeyRelatedFieldWithSerializer, self).to_representation(
-                        item
+                        item,
                     ),
                     self.display_value(item),
                 )
                 for item in queryset
-            ]
+            ],
         )

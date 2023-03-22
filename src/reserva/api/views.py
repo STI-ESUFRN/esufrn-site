@@ -59,7 +59,8 @@ class ReserveViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=["post"], permission_classes=[AllowAny])
     def cadastrar(self, request, pk=None):
         serializer = self.get_serializer(
-            data=request.data, context={"request": request}
+            data=request.data,
+            context={"request": request},
         )
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -125,7 +126,7 @@ class ReserveDayViewSet(viewsets.ModelViewSet):
     pagination_class = None
     permission_classes = [
         (AllowAny & IsSafeMethods)
-        | (IsAuthenticated & (IsFromCoordination | IsFromDirection | IsSuperAdmin))
+        | (IsAuthenticated & (IsFromCoordination | IsFromDirection | IsSuperAdmin)),
     ]
     filter_backends = [DjangoFilterBackend]
     filterset_fields = {
@@ -137,6 +138,19 @@ class ReserveDayViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = self.filter_queryset(super().get_queryset())
         return queryset.filter(period=self.kwargs["period_pk"])
+
+
+class ClassroomViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
+    serializer_class = ClassroomSerializer
+    queryset = Classroom.objects.all()
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.is_anonymous:
+            return queryset.filter(public=True)
+
+        return queryset
 
 
 class CalendarViewSet(

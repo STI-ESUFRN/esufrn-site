@@ -16,7 +16,7 @@ from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 from principal.forms import NewsletterForm
-from principal.helpers import emailToken, joinRange, paginator, qnt_page
+from principal.helpers import email_token, join_range, paginator, qnt_page
 from principal.models import Alert, Document, News, Newsletter, Page, Team, Testimonial
 
 
@@ -28,7 +28,7 @@ def pagina(request, path):
         return render(request, "home.pagina.html", context)
 
     except Exception as e:
-        raise Http404(e)
+        raise Http404 from e
 
 
 def inicio(request):
@@ -39,10 +39,10 @@ def inicio(request):
     now = timezone.now()
     queryset = News.objects.filter(published=True)
     post = queryset.filter(
-        Q(category="noticia") | Q(category="processo") | Q(category="concurso")
+        Q(category="noticia") | Q(category="processo") | Q(category="concurso"),
     ).filter(published_at__lt=now)[:3]
 
-    postEvents = (
+    post_events = (
         queryset.filter(category="evento")
         .filter(published_at__gt=now)
         .order_by("published_at")[:3]
@@ -54,7 +54,7 @@ def inicio(request):
 
     context = {
         "post": post,
-        "events": postEvents,
+        "events": post_events,
         "important": important,
         "depoimentos": depoimentos,
         "newsletter": newsletter,
@@ -123,7 +123,7 @@ def noticia(request, slug):
         return render(request, "home.noticia.html", context)
 
     except News.DoesNotExist as e:
-        raise Http404(e)
+        raise Http404 from e
 
 
 def instituicao_equipe(request):
@@ -177,7 +177,7 @@ def ensino_mestrado(request):
     settings.BOLD = ""
 
     return redirect(
-        "https://sigaa.ufrn.br/sigaa/public/programa/portal.jsf?lc=pt_BR&id=10489"
+        "https://sigaa.ufrn.br/sigaa/public/programa/portal.jsf?lc=pt_BR&id=10489",
     )
 
 
@@ -199,7 +199,7 @@ def email_unsubscribe(request):
     email = request.GET.get("email")
     token = request.GET.get("token")
     if email and token:
-        _token = emailToken(email)
+        _token = email_token(email)
         if _token == token:
             result = Newsletter.objects.filter(email__iexact=email)
             if result:
@@ -236,24 +236,29 @@ def email_subscribe(request):
     try:
         name_person = request.POST.get("name_person")
         email = request.POST.get("email")
-        consent = True if request.POST.get("consent") == "on" else False
+        consent = request.POST.get("consent") == "on"
         category = str(request.POST.get("category")).split(",")
 
         newsletter = Newsletter.objects.filter(email__iexact=email)
         if newsletter:
             newsletter.update(
-                name_person=name_person, category=category, consent=consent
+                name_person=name_person,
+                category=category,
+                consent=consent,
             )
             return JsonResponse(
-                {"status": "success", "message": "Cadastro atualizado com sucesso"}
+                {"status": "success", "message": "Cadastro atualizado com sucesso"},
             )
-        else:
-            Newsletter.objects.create(
-                name_person=name_person, email=email, category=category, consent=consent
-            )
-            return JsonResponse(
-                {"status": "success", "message": "Email cadastrado com sucesso"}
-            )
+
+        Newsletter.objects.create(
+            name_person=name_person,
+            email=email,
+            category=category,
+            consent=consent,
+        )
+        return JsonResponse(
+            {"status": "success", "message": "Email cadastrado com sucesso"},
+        )
 
     except Exception as e:
         return JsonResponse({"status": "error", "message": "{}".format(next(iter(e)))})
@@ -302,7 +307,7 @@ def busca(request):
 
         # BUSCA PELAS NOTÍCIAS
         if not category or (category != "curso" and category != "publicacao"):
-            resultBlog = news.filter(
+            result_blog = news.filter(
                 reduce(
                     lambda x, y: x & y,
                     [
@@ -314,18 +319,18 @@ def busca(request):
                         )
                         for word in words
                     ],
-                )
+                ),
             ).order_by("-modified")
 
-            result_obj_blog, qnt, intervalo = paginator(page, resultBlog)
+            result_obj_blog, qnt, intervalo = paginator(page, result_blog)
 
             total_qnt = qnt
-            total_intervalo = joinRange(intervalo, intervalo, total_qnt)
+            total_intervalo = join_range(intervalo, intervalo, total_qnt)
 
         # BUSCA PELOS ARQUIVOS JSON
         if not category or category == "curso":
 
-            def readJson(file):
+            def read_json(file):
                 result = []
                 with open(os.path.join(settings.STATIC_ROOT, file)) as json_file:
                     data = json.load(json_file)
@@ -333,33 +338,35 @@ def busca(request):
                 for line in data:
                     for word in words:
                         if unicodedata.normalize("NFKD", word.lower()).encode(
-                            "ASCII", "ignore"
+                            "ASCII",
+                            "ignore",
                         ) in unicodedata.normalize("NFKD", line["nome"].lower()).encode(
-                            "ASCII", "ignore"
+                            "ASCII",
+                            "ignore",
                         ):
                             result.append(line)
                             break
 
                 return result
 
-            resultCur = []
-            resultCur += readJson("assets/json/ensino.tecnico.json")
-            resultCur += readJson("assets/json/ensino.especializacao.json")
-            resultCur += readJson("assets/json/ensino.graduacao.json")
-            resultCur += readJson("assets/json/ensino.postecnico.json")
-            resultCur += readJson("assets/json/ensino.pronatec.json")
+            courses = []
+            courses += read_json("assets/json/ensino.tecnico.json")
+            courses += read_json("assets/json/ensino.especializacao.json")
+            courses += read_json("assets/json/ensino.graduacao.json")
+            courses += read_json("assets/json/ensino.postecnico.json")
+            courses += read_json("assets/json/ensino.pronatec.json")
 
-            result_cur, qnt, intervalo = paginator(page, resultCur)
+            result_cur, qnt, intervalo = paginator(page, courses)
             total_qnt = qnt_page(total_qnt, qnt)
-            total_intervalo = joinRange(total_intervalo, intervalo, total_qnt)
+            total_intervalo = join_range(total_intervalo, intervalo, total_qnt)
 
         context = {
             "news": result_obj_blog,
             "result_pub": result_obj_pub,
             "result_cur": result_cur,
             "pag": page,
-            "category": category if category != "" else None,
-            "period": period if period != "" else None,
+            "category": category if category else None,
+            "period": period if period else None,
             "search": field_search,
             "status": "success",
             "total": total_qnt,
@@ -417,7 +424,7 @@ def publicacoes_outras(request):
             {
                 "ano": ano if ano is not None else "Não Especificado",
                 "publicacoes": publicacoes,
-            }
+            },
         )
 
     context = {

@@ -22,7 +22,9 @@ def create_period(request):
     cursos = Period.Course.choices
     context = {"salas": salas, "cursos": cursos}
     return render(
-        request, "reserva/dashboard/periodo/dashboard.periodo.inserir.html", context
+        request,
+        "reserva/dashboard/periodo/dashboard.periodo.inserir.html",
+        context,
     )
 
 
@@ -34,7 +36,9 @@ def period_history(request):
         "salas": Classroom.objects.all(),
     }
     return render(
-        request, "reserva/dashboard/periodo/dashboard.periodo.historico.html", context
+        request,
+        "reserva/dashboard/periodo/dashboard.periodo.historico.html",
+        context,
     )
 
 
@@ -72,7 +76,7 @@ def list_periods(request):
                 "class_period": group["class_period"],
                 "date_begin": date_begin,
                 "periods": periods,
-            }
+            },
         )
 
     reservas = Period.objects.all()
@@ -92,7 +96,9 @@ def list_periods(request):
     }
 
     return render(
-        request, "reserva/dashboard/periodo/dashboard.periodo.lista.html", context
+        request,
+        "reserva/dashboard/periodo/dashboard.periodo.lista.html",
+        context,
     )
 
 
@@ -108,5 +114,7 @@ def update_period(request, pk):
         "cursos": cursos,
     }
     return render(
-        request, "reserva/dashboard/periodo/dashboard.periodo.editar.html", context
+        request,
+        "reserva/dashboard/periodo/dashboard.periodo.editar.html",
+        context,
     )

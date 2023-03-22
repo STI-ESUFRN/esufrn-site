@@ -80,7 +80,7 @@ class AdminPeriodReserve(admin.ModelAdmin):
                     "weekdays",
                     "shift",
                     "equipment",
-                )
+                ),
             },
         ),
         ("Dados do docente", {"fields": ("requester", "email", "phone")}),
