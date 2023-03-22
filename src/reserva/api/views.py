@@ -173,3 +173,10 @@ class CalendarViewSet(
             active=True,
         )
         return self.filter_queryset(queryset)
+
+
+class ClassroomViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    serializer_class = ClassroomSerializer
+    queryset = Classroom.objects.all()
+    permission_classes = [AllowAny]
+    pagination_class = None

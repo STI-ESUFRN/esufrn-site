@@ -1,0 +1,155 @@
+{% extends "base.pagina.html" %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'assets/css/reserva.style.css' %}"/>
+{% endblock styles %}
+{% block content %}
+    <article>
+        <div class="container mt-5 cabecalho">
+            <div class="d-flex justify-content-center flex-wrap" id="classrooms"></div>
+        </div>
+        <div class="container mt-5 corpo">
+            <div class="container-fluid text-center">
+                Mostrando reservas para: <b id="sala-selec"></b>
+                <div class="row">
+                    <div class="table-reserva d-flex justify-content-md-center mx-auto">
+                        <div id="tabela-de-salas">
+                            <div class="row justify-content-around my-4">
+                                <div class="col my-auto text-center">
+                                    <button onclick='prevMonth()' class="btn btn-dark">
+                                        <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                                <div class="col my-auto text-center">
+                                    <h5 id="nome-mes" class="m-0"></h5>
+                                </div>
+                                <div class="col my-auto text-center">
+                                    <button onclick='nextMonth()' class="btn btn-dark">
+                                        <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="reservation-calendar">
+                                <!-- RESERVATION CALENDAR -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <p>
+                        <small>A cor do ícone indica se a solicitação está em análise (<i class="fas fa-circle text-warning"></i>) ou se ja foi confirmada (<i class="fas fa-circle text-success"></i>).</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </article>
+{% endblock content %}
+{% block scripts %}
+    <script src="{% static 'assets/js/reservation_calendar.js' %}"></script>
+    <script src="{% static 'assets/dashboard/js/moment.min.js' %}"></script>
+    <script>
+        calendario = new ReservationCalendar({
+            weekName: [
+                "Domingo",
+                "Segunda",
+                "Terça",
+                "Quarta",
+                "Quinta",
+                "Sexta",
+                "Sábado",
+            ],
+            dayName: "Dia",
+            varNames: {
+                date: "date",
+                event: "event",
+                status: {
+                    name: "status",
+                    confirmed: "A",
+                    refused: "R",
+                    waiting: "E",
+                },
+                shift: "shift",
+            },
+        });
+        var mesNome = [
+            "Jan",
+            "Fev",
+            "Mar",
+            "Abr",
+            "Mai",
+            "Jun",
+            "Jul",
+            "Ago",
+            "Set",
+            "Out",
+            "Nov",
+            "Dez",
+        ];
+        var dataAtual = new Date();
+        var mesAtual = dataAtual.getMonth() + 1;
+        var anoAtual = dataAtual.getFullYear();
+
+        function get_classrooms() {
+            $.get("/api/classrooms", function(response) {
+                $("#classrooms").html("");
+                response.forEach(function(classroom) {
+                    let classroom_btn = $("<button />", {
+                        "text": classroom.full_name,
+                        "data-id": classroom.id,
+                        "data-full-name": classroom.full_name,
+                        "class": "btn btn-primary m-2",
+                    });
+                    classroom_btn.click(function(e) {
+                        sala = e.currentTarget.dataset.id;
+
+                        $("#sala-selec").text(e.currentTarget.dataset.fullName);
+                        getCalendar();
+                    });
+
+                    $("#classrooms").append(classroom_btn);
+                });
+
+                sala = response[0].id;
+                $("#sala-selec").text(response[0].full_name);
+                getCalendar();
+            })
+        }
+
+        function prevMonth() {
+            if (mesAtual == 1) {
+                anoAtual -= 1;
+                mesAtual = 12;
+            } else {
+                mesAtual -= 1;
+            }
+            getCalendar();
+        }
+
+        function nextMonth() {
+            if (mesAtual == 12) {
+                anoAtual += 1;
+                mesAtual = 1;
+            } else {
+                mesAtual += 1;
+            }
+            getCalendar();
+        }
+
+        function getCalendar() {
+            $.ajax({
+                type: "GET",
+                url: `/api/calendar/?date__year=${anoAtual}&date__month=${mesAtual}&classroom=${sala}`,
+                dataType: "json",
+                success: function(response) {
+
+                    $("#nome-mes").text(`${mesNome[mesAtual - 1]} / ${anoAtual}`);
+                    calendario.updateCalendar(response, anoAtual, mesAtual);
+                },
+            });
+        }
+
+        $(document).ready(() => {
+            get_classrooms();
+        });
+    </script>
+{% endblock scripts %}
