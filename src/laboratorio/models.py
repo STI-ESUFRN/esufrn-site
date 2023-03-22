@@ -66,7 +66,7 @@ class Material(SoftDeletableModel, TimeStampedModel):
     class Meta:
         verbose_name = "Material"
         verbose_name_plural = "Materiais"
-        ordering = ["-name", "-created"]
+        ordering = ["name", "-created"]
 
     def get_url(self) -> str:
         raise NotImplementedError

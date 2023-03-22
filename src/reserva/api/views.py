@@ -141,9 +141,10 @@ class ReserveDayViewSet(viewsets.ModelViewSet):
 
 
 class ClassroomViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
-    serializer_class = ClassroomSerializer
     queryset = Classroom.objects.all()
+    serializer_class = ClassroomSerializer
     permission_classes = [AllowAny]
+    pagination_class = None
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -173,10 +174,3 @@ class CalendarViewSet(
             active=True,
         )
         return self.filter_queryset(queryset)
-
-
-class ClassroomViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
-    serializer_class = ClassroomSerializer
-    queryset = Classroom.objects.all()
-    permission_classes = [AllowAny]
-    pagination_class = None
