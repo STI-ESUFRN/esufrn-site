@@ -72,6 +72,17 @@
                     </div>
                     <hr/>
                     <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>
+                                <b>Almoxarifado</b>
+                            </label>
+                            <select class="form-control rounded-0" name="warehouse" id="warehouse">
+                                <option selected disabled>
+                                    Selecione um Almoxarifado
+                                </option>
+                            </select>
+                            <div class="invalid-feedback" for="warehouse"></div>
+                        </div>
                         <div class="form-group col-md-3">
                             <label>
                                 <b>Tombo</b>
@@ -83,23 +94,18 @@
                             <div class="invalid-feedback" for="number"></div>
                         </div>
                         <div class="form-group col-md-3">
-                            <label>
-                                Localização
-                            </label>
+                            <label>Localização</label>
                             <input type="text"
                                    class="form-control rounded-0"
                                    name="location"
                                    placeholder="Localização"
                                    required/>
-                            <div class="invalid-feedback" for="location">
-                            </div>
+                            <div class="invalid-feedback" for="location"></div>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-4">
-                            <label>
-                                Data de recebimento
-                            </label>
+                            <label>Data de entrada no sistema</label>
                             <input class="form-control rounded-0 mb-1"
                                    name="received_at"
                                    data-mask="00-00-0000"
@@ -108,29 +114,22 @@
                                    autocomplete="off"
                                    maxlength="10"
                                    date-field/>
-                            <div class="invalid-feedback" for="received_at">
-                            </div>
+                            <div class="invalid-feedback" for="received_at"></div>
                         </div>
                     </div>
                     <hr/>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label>
-                                Observações
-                            </label>
+                            <label>Observações</label>
                             <textarea class="form-control rounded-0" name="comments" id="comments" rows="5"></textarea>
-                            <div class="invalid-feedback" for="comments">
-                            </div>
+                            <div class="invalid-feedback" for="comments"></div>
                         </div>
                     </div>
-                    <div id="form-errors">
-                    </div>
+                    <div id="form-errors"></div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                    Cancelar
-                </button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                 <button id="create-material" type="button" class="btn btn-primary">
                     Salvar <i class="fa-solid fa-floppy-disk"></i>
                 </button>

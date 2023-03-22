@@ -123,6 +123,21 @@ function getStatuses() {
         },
     });
 }
+
+function getWarehouses(callback = undefined) {
+    $.get(`/api/laboratory/warehouses/`, function (response) {
+        response.forEach((element) => {
+            let opt = `<option value=${element.id}>${element.name}</option>`;
+            $("#warehouse").append(opt);
+            $("[name=warehouse][data-filter]").append(opt);
+        });
+
+        if (callback) {
+            callback();
+        }
+    });
+}
+
 $(document).ready(function () {
     $("#details-dismiss").click(() => {
         $("#details").fadeTo("fast", 0).slideUp();
@@ -280,7 +295,9 @@ $(document).ready(function () {
         });
     });
 
-    getMaterials();
-    getStatuses();
-    getCategories();
+    getWarehouses(() => {
+        getMaterials();
+        getStatuses();
+        getCategories();
+    });
 });
