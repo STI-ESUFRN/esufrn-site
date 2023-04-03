@@ -17,7 +17,7 @@ def send_alert_email(material, *args, **kwargs):
     html = render_to_string("base.email_conversation.html", {"message": message})
 
     responsibles = User.objects.filter(groups__name="laboratorio")
-    recipient_list = [recipient.user.email for recipient in responsibles]
+    recipient_list = [recipient.email for recipient in responsibles]
     send_mail_async(
         subject=subject,
         recipient_list=recipient_list,
