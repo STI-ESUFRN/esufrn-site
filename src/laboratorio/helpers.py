@@ -10,7 +10,7 @@ def send_alert_email(material, *args, **kwargs):
     )
 
     message = render_to_string(
-        "laboratorio/laboratorio/consumivel/email.html",
+        "laboratorio/consumivel/email.html",
         {"material": material},
     )
 
