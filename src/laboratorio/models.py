@@ -115,7 +115,7 @@ class Consumable(Material):
     class Meta:
         verbose_name = "Material de consumo"
         verbose_name_plural = "Materiais de consumo"
-        ordering = ["-created"]
+        ordering = ["name", "-created"]
 
     def save(self, *args, **kwargs):
         if self._state.adding:
@@ -197,7 +197,7 @@ class Permanent(Material):
     class Meta:
         verbose_name = "Material permanente"
         verbose_name_plural = "Materiais permanentes"
-        ordering = ["-created"]
+        ordering = ["name", "-created"]
 
     def get_url(self):
         return reverse("update_permanent", kwargs={"pk": self.id})
