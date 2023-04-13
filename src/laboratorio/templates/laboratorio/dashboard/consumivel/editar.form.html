@@ -46,15 +46,13 @@
             <div class="invalid-feedback" for="quantity"></div>
         </div>
         <div class="form-group col-md-3">
-            <label>
-                <b>Tombo</b>
-            </label>
+            <label>Unidade de armazenamento</label>
             <input class="form-control rounded-0"
-                   type="number"
-                   name="number"
-                   id="number"
-                   {% if item %} value="{{ item.number }}"{% endif %}/>
-            <div class="invalid-feedback" for="number"></div>
+                   placeholder="Ex. Unidades, caixas, etc."
+                   type="text"
+                   name="measure_unit"
+                   {% if item %} value="{{ item.measure_unit|default_if_none:'' }}"{% endif %}/>
+            <div class="invalid-feedback" for="measure_unit"></div>
         </div>
         <div class="form-group col-md-3">
             <label>Data de validade</label>
@@ -63,9 +61,10 @@
                    data-mask="00-00-0000"
                    data-toggle="datepicker"
                    required
+                   date-field
                    autocomplete="off"
                    maxlength="10"
-                   {% if item %} value="{{ item.expiration|default_if_none:'' }}"{% endif %}/>
+                   {% if item %} value="{{ item.expiration|date:"%d-m-Y"|default_if_none:'' }}"{% endif %}/>
             <div class="invalid-feedback" for="expiration"></div>
         </div>
     </div>
@@ -77,9 +76,10 @@
                    data-mask="00-00-0000"
                    data-toggle="datepicker"
                    required
+                   date-field
                    autocomplete="off"
                    maxlength="10"
-                   {% if item %} value="{{ item.received_at|default_if_none:'' }}"{% endif %}/>
+                   {% if item %} value="{{ item.received_at|date:"%d-m-Y"|default_if_none:'' }}"{% endif %}/>
             <div class="invalid-feedback" for="received_at"></div>
         </div>
     </div>
@@ -104,13 +104,6 @@
         </div>
     </div>
     <div class="text-center mt-4">
-        <button id="atualizar-instancia" class="btn btn-dark rounded-0">
-            Atualizar material
-            {% if item.type == 'C' %}
-                consumível
-            {% else %}
-                permanente
-            {% endif %}
-        </button>
+        <button id="atualizar-instancia" class="btn btn-dark rounded-0">Atualizar material</button>
     </div>
 </form>
