@@ -17,9 +17,10 @@
     </style>
 {% endblock styles %}
 {% block content %}
-    <div class="d-flex justify-content-between px-2">
+    <div class="d-flex justify-content-between">
         <span>
-            <a class="btn btn-secondary rounded-0 m-0"
+            <a href="#"
+               class="btn btn-secondary rounded-0 m-0"
                data-toggle="modal"
                data-target="#add-material"
                role="button">
@@ -191,6 +192,20 @@
                                id="patch-comment">Salvar observação <i class="fa-solid fa-floppy-disk"></i></a>
                         </li>
                     </ul>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-end">
+                                <a href="#" id="editMaterial" class="btn btn-primary ml-2" role="button">
+                                    Editar <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+                                </a>
+                                <button class="btn btn-danger ml-2"
+                                        data-toggle="modal"
+                                        data-target="#deleteConfirm">
+                                    Apagar <i class="fas fa-trash" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </li>
+                    </ul>
                     <div id="accordion">
                         <div class="card rounded-0">
                             <div class="card-header" id="card-material-history">
@@ -211,30 +226,6 @@
                                      class="card-body"
                                      style="max-height: 200px;
                                             overflow-y: scroll"></div>
-                            </div>
-                        </div>
-                        <div class="card rounded-0">
-                            <div class="card-header" id="card-actions">
-                                <h5 class="mb-0">
-                                    <a data-toggle="collapse"
-                                       data-target="#collapse-actions"
-                                       aria-expanded="true"
-                                       aria-controls="collapse-actions">
-                                        Ações <i class="fa-solid fa-pen-to-square"></i>
-                                    </a>
-                                </h5>
-                            </div>
-                            <div id="collapse-actions"
-                                 class="collapse"
-                                 aria-labelledby="card-actions"
-                                 data-parent="#accordion">
-                                <div class="card-body">
-                                    <button class="btn btn-danger"
-                                            data-toggle="modal"
-                                            data-target="#deleteConfirm">
-                                        Apagar <i class="fas fa-trash" aria-hidden="true"></i>
-                                    </button>
-                                </div>
                             </div>
                         </div>
                     </div>

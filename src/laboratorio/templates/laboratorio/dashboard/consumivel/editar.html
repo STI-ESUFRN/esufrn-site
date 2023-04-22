@@ -4,7 +4,12 @@
 {% block styles %}
 {% endblock styles %}
 {% block content %}
-    <div class="card">
+    <a class="btn btn-secondary rounded-0 m-0"
+       href="{% url 'consumable_dashboard' %}"
+       role="button">
+        <i class="fa-solid fa-arrow-left mr-2" aria-hidden="true"></i> Voltar
+    </a>
+    <div class="card mt-2">
         <div class="card-header head-table border-0 rounded-0">
             <div class="row">
                 <div class="col-6 align-self-center">
@@ -19,53 +24,51 @@
                 </div>
             </div>
         </div>
-        <div class="card-body">
+        <div id="material-info" class="card-body">
             <div class="row">
                 <div class="col-12">
-                    <small>Nome:</small> <b>{{ item.name }}</b>
+                    <small>Nome:</small> <b data-attribute="name"></b>
                 </div>
             </div>
             <div class="row">
                 <div class="col-12">
-                    <small>Descrição:</small> <b>{{ item.description }}</b>
+                    <small>Descrição:</small> <b data-attribute="description"></b>
                 </div>
             </div>
             <div class="row">
                 <div class="col-12">
-                    <small>Quantidade:</small> <b>{{ item.quantity }}</b>
+                    <small>Quantidade:</small> <b data-attribute="quantity"></b>
                 </div>
             </div>
             <div class="row">
                 <div class="col-12">
-                    <small>Marca:</small> <b>{{ item.brand }}</b>
+                    <small>Marca:</small> <b data-attribute="brand"></b>
                 </div>
             </div>
             <div class="row">
                 <div class="col-6">
-                    <small>Tipo:</small> <b>
-                        Consumível
-                    </b>
+                    <small>Tipo:</small> <b>Consumível</b>
                 </div>
             </div>
             <div class="row">
                 <div class="col-6">
-                    <small>Validade:</small> <b>{{ item.expiration|default_if_none:"Não especificado/Indeterminado" }}</b>
+                    <small>Validade:</small> <b data-attribute="expiration" date-format="DD/MM/YYYY">Não especificado/Indeterminado</b>
                 </div>
             </div>
             <hr />
             <div class="row">
                 <div class="col-6">
-                    <small>Quantidade crítica:</small> <b>{{ item.alert_below|default_if_none:"" }}</b>
+                    <small>Quantidade crítica:</small> <b data-attribute="alert_below"></b>
                 </div>
             </div>
             <div class="row">
                 <div class="col-12">
-                    <small>Recebido em:</small> <b>{{ item.received_at|default_if_none:"Não especificado" }}</b>
+                    <small>Recebido em:</small> <b data-attribute="received_at" date-format="DD/MM/YYYY">Não especificado</b>
                 </div>
             </div>
             <div class="row">
                 <div class="col-6">
-                    <small>Localização:</small> <b>{{ item.location }}</b>
+                    <small>Localização:</small> <b data-attribute="location"></b>
                 </div>
             </div>
         </div>
@@ -83,16 +86,10 @@
                                    name="quantity"
                                    id="quantity"/>
                             <div class="invalid-feedback" for="quantity"></div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="text-center mt-4">
-                                        <a href="#" class="btn mb-1 btn-outline-success btn-sm" id="adicionar">Adicionar</a>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="text-center mt-4">
-                                        <a href="#" class="btn mb-1 btn-outline-danger btn-sm" id="remover">Remover</a>
-                                    </div>
+                            <div class="container my-2">
+                                <div class="d-flex justify-content-center flex-wrap">
+                                    <a href="#" class="btn btn-outline-success btn-sm mx-2" id="adicionar">Adicionar</a>
+                                    <a href="#" class="btn btn-outline-danger btn-sm mx-2" id="remover">Remover</a>
                                 </div>
                             </div>
                         </div>
@@ -102,19 +99,7 @@
                     <p>
                         <b>Histórico:</b>
                     </p>
-                    {% for log in item.history.all %}
-                        Em {{ log.created }}, <b>{{ log.user.username }}</b>
-                        <strong>
-                            {% if log.diff > 0 %}
-                                <span class="text-success">adicionou</span>
-                            {% else %}
-                                <span class="text-danger">removeu</span>
-                            {% endif %}
-                        </strong>
-                        {{ log.diff|abs }} unidade{{ log.diff|abs|pluralize }} deste material no inventário (anterior: {{
-                        log.prev_quantity }}).
-                        <br />
-                    {% endfor %}
+                    <div id="history">{% comment %} AJAX {% endcomment %}</div>
                 </div>
             </div>
             <hr/>
@@ -173,6 +158,10 @@
 {% endblock content %}
 {% block scripts %}
     <script>
+        var pathArray = window.location.pathname.split('/');
+        var id = pathArray[pathArray.length - 1] || pathArray[pathArray.length - 2];
+
+
         $('[data-toggle="datepicker"]').datepicker({
             format: 'dd-mm-yyyy',
             months: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
@@ -181,7 +170,7 @@
         $("#deletePeriod").click(function(e) {
             $.ajax({
                 type: "DELETE",
-                url: `/api/laboratory/consumables/${$("#form-item [name=id]").val()}/`,
+                url: `/api/laboratory/consumables/${id}/`,
                 success: function(response) {
                     window.location.replace("/dashboard");
                 },
@@ -194,13 +183,14 @@
         function atualizarQuantidade(serialized_data) {
             $.ajax({
                 type: "POST",
-                url: `/api/laboratory/consumables/${$("#form-item [name=id]").val()}/add/`,
+                url: `/api/laboratory/consumables/${id}/add/`,
                 dataType: "json",
                 data: serialized_data,
                 success: function(response) {
                     showMessage("Material atualizado com sucesso.", "alert-success");
                     $("#atualizar-quantidade [name]").removeClass("is-invalid");
                     $("#atualizar-quantidade").trigger("reset");
+                    fillMaterial();
                 },
                 error(response) {
                     $.map(response.responseJSON, (value, label) => {
@@ -249,12 +239,13 @@
 
             $.ajax({
                 type: "PATCH",
-                url: `/api/laboratory/consumables/${$("#form-item [name=id]").val()}/`,
+                url: `/api/laboratory/consumables/${id}/`,
                 dataType: "json",
                 data: serialized_data,
                 success: function(response) {
                     showMessage("Material atualizado com sucesso.", "alert-success");
                     $("#form-item [name]").removeClass("is-invalid");
+                    fillMaterial();
                 },
                 error(response) {
                     $.map(response.responseJSON, (value, label) => {
@@ -271,5 +262,29 @@
                 }
             });
         });
+
+        function fillMaterial() {
+            $.get(`/api/laboratory/consumables/${id}/`, (response) => {
+                fillAttributes(response);
+                $.get(`/api/laboratory/consumables/${id}/history/`, (history) => {
+                    $("#history").html("");
+                    history.forEach((entry) => {
+                        let created = moment(entry.created);
+                        $("#history").append(`
+                                                                    Em ${created.format("DD/MM/YYYY")} às ${created.format("HH:MM")}, <b>${entry.user.username}</b>
+                                                                    <strong>
+                                                                        ${entry.diff > 0 ? '<span class="text-success">adicionou</span>' : '<span class="text-danger">removeu</span>'}
+                                                                    </strong>
+                                                                    ${Math.abs(entry.diff)} ${response.measure_unit}${ Math.abs(entry.diff)!= 1 ? 's':'' } deste material no inventário (anterior: ${entry.prev_quantity}).
+                                                                    <br />
+                                                                `);
+                    })
+                });
+            });
+        }
+
+        $(document).ready(function() {
+            fillMaterial();
+        })
     </script>
 {% endblock scripts %}

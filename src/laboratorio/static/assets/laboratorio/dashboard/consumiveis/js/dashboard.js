@@ -9,7 +9,8 @@ function fillItem() {
     let url = `${baseUrl}/${current_index}/`;
     $.get(url, (response) => {
         fillAttributes(response);
-
+        
+        $("#editMaterial").attr("href", `${window.location.pathname}${current_index}/`);
         $("#material-history").html("");
         $.get(`${url}history/`, (response) => {
             $.each(response, (index, item) => {
