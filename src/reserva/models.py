@@ -25,6 +25,7 @@ class Classroom(models.Model):
 
     name = models.CharField("Nome da sala", max_length=64, blank=True, null=True)
     acronym = models.CharField("Acrônimo", null=True, blank=True, max_length=16)
+    capacity = models.IntegerField("Capacidade", null=True, blank=True)
 
     type = models.CharField("Tipo de sala", max_length=3, choices=Type.choices)
     number = models.CharField("Número da sala", max_length=10)

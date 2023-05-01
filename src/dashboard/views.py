@@ -1,25 +1,15 @@
-from datetime import time
-
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import PasswordResetView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
-from django.utils import timezone
 from django.views.decorators.cache import never_cache
 
 from dashboard.forms import SiginForm
+from dashboard.helpers import get_current_reserves
 from principal.decorators import authenticated_user, unauthenticated_user
 from principal.models import Message
-from reserva.models import Reserve, ReserveDay
-
-MORNING_SHIGT_BEGIN = time(7, 00, 00)
-MORNING_SHIGT_END = time(12, 30, 00)
-AFTERNOON_SHIFT_BEGIN = time(13, 00, 00)
-AFTERNOON_SHIFT_END = time(18, 30, 00)
-NIGHT_SHIFT_BEGIN = time(18, 45, 00)
-NIGHT_SHIFT_END = time(22, 15, 00)
 
 
 # REGISTRATION
@@ -77,29 +67,10 @@ def logout_view(request):
 @login_required(login_url="/dashboard/login")
 def home_view(request):
     messages = Message.objects.all()
-    now = timezone.now()
 
-    shift = None
-    current_time = timezone.localtime(now).time()
-    if MORNING_SHIGT_BEGIN <= current_time <= MORNING_SHIGT_END:
-        shift = "M"
-
-    elif AFTERNOON_SHIFT_BEGIN <= current_time <= AFTERNOON_SHIFT_END:
-        shift = "T"
-
-    elif NIGHT_SHIFT_BEGIN <= current_time <= NIGHT_SHIFT_END:
-        shift = "N"
-
-    events = []
-    classes = []
-    if shift:
-        events = Reserve.objects.filter(date=now.date(), shift=shift, status="A")
-        classes = ReserveDay.objects.filter(
-            date=now.date(),
-            shift=shift,
-            period__status="A",
-            active=True,
-        )
+    queryset = get_current_reserves()
+    events = queryset.filter(reserve__isnull=False)
+    classes = queryset.filter(period__isnull=False)
 
     context = {
         "messages": messages[0:3],
