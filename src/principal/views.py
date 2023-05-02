@@ -111,19 +111,20 @@ def noticias(request):
 def noticia(request, slug):
     try:
         news = News.objects.get(slug=slug)
-        context = {
-            "status": "success",
-            "news": news,
-            "crumbs": [
-                {"name": "Notícias", "link": reverse("principal:noticias")},
-                {"name": news.title},
-            ],
-        }
 
-        return render(request, "home.noticia.html", context)
+    except News.DoesNotExist as exc:
+        raise Http404 from exc
 
-    except News.DoesNotExist as e:
-        raise Http404 from e
+    context = {
+        "status": "success",
+        "news": news,
+        "crumbs": [
+            {"name": "Notícias", "link": reverse("principal:noticias")},
+            {"name": news.title},
+        ],
+    }
+
+    return render(request, "home.noticia.html", context)
 
 
 def instituicao_equipe(request):
@@ -194,6 +195,10 @@ def ensino_pronatec(request):
 
 
 def email_unsubscribe(request):
+    crumbs = [
+        {"name": "Newsletter"},
+        {"name": "Cancelar subscrição"},
+    ]
     settings.BOLD = ""
 
     email = request.GET.get("email")
@@ -219,14 +224,14 @@ def email_unsubscribe(request):
                 context = {
                     "status": "success",
                     "message": "Email descadastrado",
-                    "crumbs": [{"name": "Newsletter"}, {"name": "Cancelar subscrição"}],
+                    "crumbs": crumbs,
                 }
                 return render(request, "email.unsubscribe.html", context)
 
     context = {
         "status": "error",
         "message": "Ocorreu um erro ao descadastrar o email",
-        "crumbs": [{"name": "Newsletter"}, {"name": "Cancelar subscrição"}],
+        "crumbs": crumbs,
     }
     return render(request, "email.unsubscribe.html", context)
 
@@ -268,14 +273,16 @@ def email_subscribe(request):
 
 
 def busca(request):
+    crumbs = [
+        {"name": "Notícias", "link": reverse("principal:noticias")},
+        {"name": "Resultados da busca"},
+    ]
     news = News.objects.all()
 
-    category = request.GET.get("category")
-    if category:
+    if category := request.GET.get("category"):
         news = news.filter(category=category)
 
-    period = request.GET.get("period")
-    if period:
+    if period := request.GET.get("period"):
         if period == "hora":
             delta = timedelta(hours=1)
         elif period == "dia":
@@ -293,7 +300,6 @@ def busca(request):
         news = news.filter(published_at__range=(now - delta, now))
 
     page = int(request.GET.get("page", "1"))
-    field_search = request.GET.get("termo")
 
     result_obj_blog = []
     result_obj_pub = []
@@ -301,7 +307,7 @@ def busca(request):
     total_intervalo = range(0, 0)
 
     total_qnt = 0
-    if field_search:
+    if field_search := request.GET.get("termo"):
         settings.BOLD = field_search
         words = field_search.split()
 
@@ -371,20 +377,14 @@ def busca(request):
             "status": "success",
             "total": total_qnt,
             "rng": total_intervalo,
-            "crumbs": [
-                {"name": "Notícias", "link": reverse("principal:noticias")},
-                {"name": "Resultados da busca"},
-            ],
+            "crumbs": crumbs,
         }
 
     else:
         context = {
             "status": "error",
             "mensagem": "error",
-            "crumbs": [
-                {"name": "Notícias", "link": reverse("principal:noticias")},
-                {"name": "Resultados da busca"},
-            ],
+            "crumbs": crumbs,
         }
 
     return render(request, "home.busca.html", context)
