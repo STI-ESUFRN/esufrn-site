@@ -60,7 +60,7 @@ class ReserveViewSet(viewsets.ModelViewSet):
     def cadastrar(self, request, pk=None):
         serializer = self.get_serializer(
             data=request.data,
-            context={"request": request},
+            context=self.get_serializer_context(),
         )
         serializer.is_valid(raise_exception=True)
         serializer.save()
