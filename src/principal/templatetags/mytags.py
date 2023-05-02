@@ -33,7 +33,7 @@ def enum(value, key):
     list = value.split(key)
     length = len(list)
 
-    if length > 2:
+    if length > 2:  # noqa: PLR2004
         return "{} {} {}".format(
             ", ".join(list[0 : length - 1]),
             _("and"),

@@ -68,8 +68,17 @@ class ReserveSerializer(serializers.ModelSerializer):
             },
         }
 
+    def create(self, validated_data):
+        if self.context["view"].action == "create":
+            validated_data["admin_created"] = True
+
+        return super().create(validated_data)
+
     def validate_date(self, date):
-        if "shift" in self.context["request"].data:
+        if (
+            "shift" in self.context["request"].data
+            and self.context["view"].action != "create"
+        ):
             if self.context["request"].data["shift"] == "M":
                 time = "12:30"
             elif self.context["request"].data["shift"] == "T":
@@ -195,6 +204,7 @@ class PeriodSerializer(serializers.ModelSerializer):
 
 class ReserveDaySerializer(serializers.ModelSerializer):
     classroom = serializers.PrimaryKeyRelatedField(read_only=True)
+    requester = serializers.SerializerMethodField()
 
     class Meta:
         model = ReserveDay
@@ -203,7 +213,11 @@ class ReserveDaySerializer(serializers.ModelSerializer):
             "date",
             "shift",
             "classroom",
+            "requester",
             "active",
             "status",
             "event",
         ]
+
+    def get_requester(self, obj):
+        return (obj.reserve or obj.period).requester

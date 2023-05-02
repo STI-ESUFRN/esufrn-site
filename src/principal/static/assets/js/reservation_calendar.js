@@ -67,6 +67,28 @@ class ReservationCalendar {
 		return auxString;
 	}
 
+	_addModal(){
+		return `
+		<div class="modal fade" id="reservation-details-modal" tabindex="-1" style="text-align: left!important;" role="dialog" aria-labelledby="reservation-details-label" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+		  <div class="modal-content">
+			<div class="modal-header">
+			  <h5 class="modal-title" id="reservation-details-label">Detalhes da reserva</h5>
+			  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			  </button>
+			</div>
+			<div class="modal-body">
+			  ...
+			</div>
+			<div class="modal-footer">
+			  <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+			</div>
+		  </div>
+		</div>
+	  </div>`;
+	}
+
 	_addWeekRow(id) {
 		return `
 			<tr data-parent="${id}" class="tr-dia">
@@ -88,6 +110,7 @@ class ReservationCalendar {
 
 	_createStruct() {
 		let template = `
+			${this._addModal()}
 			<div class="table-reserva d-flex justify-content-md-center">
 				<div class="w-100">
 					<table class="table reservation table-bordered text-center col-md-12 table-hover">
@@ -135,6 +158,17 @@ class ReservationCalendar {
 			}
 		});
 
+		$('#reservation-details-modal').on('show.bs.modal', function (e) {
+			let current_index = $(e.relatedTarget).attr("data-id");
+			$.get(`/api/calendar/${current_index}/`, (response) =>{
+				let modal_body = $(this).find(".modal-body");
+				modal_body.html("");
+				modal_body.append(
+					$("<p />", {html: `<small>Evento:</small> <b>${response.event}</b>`}),
+					$("<p />", {html: `<small>Solicitante:</small> <b>${response.requester}</b>`}),
+				);
+			});
+		});
 	}
 
 	_updateReservations(data) {
@@ -156,7 +190,7 @@ class ReservationCalendar {
 						indicatorBall = "w-confirmado"
 						break;
 				}
-				arrayLine[eventWeekDay].innerHTML += `<div class='w-100 h-100' title='${value[this.varNames.event]}'><i class="fas fa-circle ${indicatorBall}"></i> ${value[this.varNames.event]} </div>`
+				arrayLine[eventWeekDay].innerHTML += `<div class='w-100 h-100' data-toggle="modal" data-target="#reservation-details-modal" data-id=${value["id"]} title='${value[this.varNames.event]}'><i class="fas fa-circle ${indicatorBall}"></i> ${value[this.varNames.event]} </div>`
 			} catch {
 				console.warn(`Something went wrong when field 'shift[${value.shift}]' was being filled! Check if this field was setted.`);
 			}
@@ -169,3 +203,4 @@ class ReservationCalendar {
 		this._updateReservations(data);
 	}
 }
+
