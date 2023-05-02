@@ -54,10 +54,15 @@ class Classroom(models.Model):
 
     @property
     def full_name(self):
-        if self.name:
-            return f"{self.name} - {self.number}"
+        full_name = self.name if self.name else self.Type(self.type).label
 
-        return f"{self.Type(self.type).label} - {self.number}"
+        if self.number:
+            full_name = f"{full_name} - {self.number}"
+
+        if self.capacity:
+            full_name = f"{full_name} ({self.capacity} lugares)"
+
+        return full_name
 
     def __str__(self):
         return self.full_name
@@ -67,8 +72,10 @@ class Classroom(models.Model):
             raise ValidationError(
                 {
                     "name": [
-                        "Caso informada um acrônimo, por favor informar também o"
-                        " nome da sala.",
+                        (
+                            "Caso informada um acrônimo, por favor informar também o"
+                            " nome da sala."
+                        ),
                     ],
                 },
             )
@@ -172,8 +179,10 @@ class Reserve(TimeStampedModel, SoftDeletableModel):
                 raise ValidationError(
                     {
                         "cause": [
-                            "Este tipo de sala requer que o usuário informe uma"
-                            " justificativa para seu uso.",
+                            (
+                                "Este tipo de sala requer que o usuário informe uma"
+                                " justificativa para seu uso."
+                            ),
                         ],
                     },
                 )
@@ -186,8 +195,10 @@ class Reserve(TimeStampedModel, SoftDeletableModel):
                 raise ValidationError(
                     {
                         "declare": [
-                            "Este tipo de sala requer que o usuário declare que"
-                            " esteja presente um docente no momento da aula.",
+                            (
+                                "Este tipo de sala requer que o usuário declare que"
+                                " esteja presente um docente no momento da aula."
+                            ),
                         ],
                     },
                 )
@@ -430,8 +441,10 @@ class ReserveDay(models.Model):
                 raise ValidationError(
                     {
                         "date": [
-                            "Já existe uma reserva aprovada para o dia"
-                            f" {self.date.strftime('%d-%m-%Y')}",
+                            (
+                                "Já existe uma reserva aprovada para o dia"
+                                f" {self.date.strftime('%d-%m-%Y')}"
+                            ),
                         ],
                     },
                 )
