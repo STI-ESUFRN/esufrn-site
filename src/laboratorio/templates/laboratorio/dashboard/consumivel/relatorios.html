@@ -1,0 +1,39 @@
+{% extends "dashboard.base.html" %}
+{% load static %}
+{% block styles %}
+{% endblock styles %}
+{% block content %}
+    <a class="btn btn-secondary rounded-0 m-0"
+       href="{% url 'consumable_dashboard' %}"
+       role="button">
+        <i class="fa-solid fa-arrow-left mr-2" aria-hidden="true"></i> Voltar
+    </a>
+    <div class="mb-2 text-center">
+        <h3>Relatórios</h3>
+    </div>
+    <hr/>
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Última atualização</th>
+                    <th colspan=2>Nome do documento</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in reports %}
+                    <tr>
+                        <td>{{ report.last_modified|date:"d/m/Y H:i" }}</td>
+                        <td>Relatório de entradas e saídas {{ report.created__year }}</td>
+                        <td>
+                            <a download
+                               href="{% url 'consumable_report' year=report.created__year %}"><i aria-hidden="true" class="fas fa-download"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock content %}
+{% block scripts %}
+{% endblock scripts %}
