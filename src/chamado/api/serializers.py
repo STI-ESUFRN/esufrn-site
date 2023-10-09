@@ -4,6 +4,10 @@ from chamado.models import Chamado
 
 
 class ChamadoCreateSerializer(serializers.ModelSerializer):
+    shift = serializers.CharField(required=True, allow_null=False)
+    concorda = serializers.CharField(required=True, allow_null=False)
+    # presenca = serializers.BooleanField(required=True, allow_null=False)
+
     class Meta:
         model = Chamado
         fields = [
@@ -12,6 +16,9 @@ class ChamadoCreateSerializer(serializers.ModelSerializer):
             "requester",
             "course",
             "contact",
+            "date1",
+            "shift",
+            "concorda",
         ]
 
 
@@ -31,4 +38,8 @@ class ChamadoSerializer(serializers.ModelSerializer):
             "created",
             "modified",
             "is_removed",
+
+            "date1",
+            "shift",
+            "concorda",
         ]
