@@ -1,5 +1,4 @@
 import threading
-
 from constance import config
 from django.conf import settings
 from django.core.mail import send_mail
@@ -16,11 +15,38 @@ class Chamado(SoftDeletableModel, TimeStampedModel):
         NOT_RESOLVED = "N", _("Not resolved")
         PENDING = "P", _("Pending")
 
+    class Shift(models.TextChoices):
+        MORNING = 'M', 'Manhã'
+        AFTERNOON = 'T', 'Tarde'
+    class Concorda(models.TextChoices):
+        YES = 'y', 'SIM'
+
+
     title = models.CharField("Título", max_length=100)
-    description = models.TextField("Descrição", max_length=300)
-    requester = models.CharField("Solicitante", max_length=50)
-    course = models.CharField("Curso", max_length=100)
-    contact = models.CharField("Whatsapp ou Email", max_length=50)
+    description = models.TextField("Descrição do problema", max_length=300)
+    requester = models.CharField("Nome completo", max_length=50)
+    course = models.CharField("Nome do curso", max_length=100)
+    contact = models.CharField("Whatsapp ou Email para contato", max_length=50)
+    # presenca = models.BooleanField(
+    #     "Supervisionado por docente", default=False,
+    #     help_text=(
+    #         "Marcando esta caixa, você declara que a sala contará com a supervisão de"
+    #         " um docente no momento da aula."
+    #     ),
+    # )
+    date1 = models.DateField("Data *")
+    shift = models.CharField(
+        "Turno *",
+        max_length=1,
+        choices=Shift.choices,
+        null=True,
+    )
+    concorda = models.CharField(
+        "Marcando esta caixa você declara que estará presente no momento da manutenção",
+        max_length=1,
+        choices=Concorda.choices,
+        null=False,
+    )
     solved_at = models.DateTimeField("Resolvido em", null=True)
     obs = models.TextField("Observações", null=True)
     status = models.CharField(
@@ -51,7 +77,9 @@ class Chamado(SoftDeletableModel, TimeStampedModel):
             Descrição: {self.description}<br/>
             Solicitante: {self.requester}<br/>
             Curso: {self.course}<br/>
-            Contato: {self.contact}
+            Contato: {self.contact}<br/>
+            Data: {self.date1}<br/>
+            Turno: {self.shift}
         """
 
         context = {"message": message}
