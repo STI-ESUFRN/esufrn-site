@@ -20,6 +20,17 @@ services:
         volumes:
             - redis-data:/data
 
+    nginx:
+        image: nginx
+        restart: always
+        ports:
+            - "80:80"
+        volumes:
+            - ./path/to/nginx/conf:/etc/nginx/conf.d
+            - ./path/to/nginx/html:/usr/share/nginx/html
+        depends_on:
+            - postgres
+
 volumes:
     postgres-data:
     redis-data:
