@@ -1,0 +1,49 @@
+<!-- templates/pronatec_videos.html -->
+
+{% extends "base.pagina.html" %}
+{% load static %}
+
+<!-- Carregue os estilos CSS do Fancybox -->
+<link rel="stylesheet" type="text/css" href="{% static 'fancybox/css/jquery.fancybox.min.css' %}">
+
+<!-- Carregue o JavaScript do Fancybox -->
+<script src="{% static 'fancybox/js/jquery.fancybox.min.js' %}"></script>
+
+{% block styles %}
+    <style>
+        /* Estilo para diminuir o tamanho da descrição */
+        .video-card p {
+            font-size: 13px; /* Ajuste o tamanho da fonte conforme necessário */
+        }
+    </style>
+{% endblock styles %}
+{% block content %}
+    <article>
+        <div class="container mt-5 text-center cabecalho">
+            <h3>Galeria de Vídeos Pronatec</h3>
+            <hr class="hr-escuro mt-5"/>
+        </div>
+        <div class="container mt-4 corpo">
+            <div class="row">
+                {% for video in videos %}
+                    <div class="col-md-4">
+                        <div class="video-card">
+                            <video width="100%" height="auto" controls>
+                                <source src="{{ video.video.url }}" type="video/mp4">
+                                Seu navegador não suporta o elemento de vídeo.
+                            </video>
+                            <p>{{ video.descricao }}</p>
+                        </div>
+                    </div>
+                    {% if forloop.counter|divisibleby:3 %}
+                        <div class="w-100"></div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="container text-right">
+            <hr class="hr-escuro my-5"/>
+            <a href="#" class="text-uppercase text-dark">Voltar ao topo <i class="fas fa-arrow-alt-circle-up"></i></a>
+        </div>
+    </article>
+{% endblock content %}

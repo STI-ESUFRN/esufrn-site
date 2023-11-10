@@ -12,6 +12,9 @@ from principal.models import (
     Page,
     Team,
     Testimonial,
+    Photo,
+    Video,
+    destaque,
 )
 
 
@@ -118,6 +121,20 @@ class AdminAlerta(admin.ModelAdmin):
     list_display = ["title", "expires_at", "created", "modified"]
     search_fields = ["title", "content"]
 
+class PhotoAdmin(admin.ModelAdmin):
+    list_display = ('descricao', 'image')  # Renomeie de 'caption' para 'descricao'
+
+    def descricao(self, obj):
+        return obj.descricao
+
+    descricao.short_description = 'Descrição'
+
+
+
+class VideoAdmin(admin.ModelAdmin):
+    list_display = ('descricao', 'video')
+class DestaqueAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'tipo', 'imagem', 'video_file', 'link')
 
 admin.site.register(News, BlogAdmin)
 admin.site.register(Team, EquipeAdmin)
@@ -128,3 +145,6 @@ admin.site.register(Newsletter, NewsletterAdmin)
 admin.site.register(Document, AdminDocumentos)
 admin.site.register(Message, AdminMensagem)
 admin.site.register(Alert, AdminAlerta)
+admin.site.register(Video, VideoAdmin)
+admin.site.register(Photo, PhotoAdmin)
+admin.site.register(destaque, DestaqueAdmin)
