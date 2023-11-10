@@ -10,14 +10,14 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.db.models import Q
 from django.http import Http404, JsonResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 from principal.forms import NewsletterForm
 from principal.helpers import email_token, join_range, paginator, qnt_page
-from principal.models import Alert, Document, News, Newsletter, Page, Team, Testimonial
+from principal.models import Alert, Document, News, Newsletter, Page, Team, Testimonial, Photo, Video, destaque
 
 
 def pagina(request, path):
@@ -154,6 +154,8 @@ def ensino_tecnico(request):
     return render(request, "ensino.tecnico.html", context)
 
 
+
+
 def ensino_graduacao(request):
     settings.BOLD = ""
 
@@ -182,7 +184,7 @@ def ensino_mestrado(request):
     )
 
 
-def ensino_pronatec(request):
+def ensino_pronatec_institucional(request):
     settings.BOLD = ""
     context = {
         "curso": "pronatec",
@@ -190,6 +192,25 @@ def ensino_pronatec(request):
     }
     return render(request, "ensino.tecnico.html", context)
 
+
+# ---------------------------------------------------------------------
+def ensino_pronatec(request):
+    # Recupere todas as fotos e vídeos do banco de dados
+    photos = Photo.objects.all()
+    videos = Video.objects.all()
+
+    # Recupere todos os destaques
+    destaques = destaque.objects.all()
+
+    context = {
+        "curso": "pronatec",
+        "crumbs": [{"name": "Ensino"}, {"name": "Pronatec"}],
+        "photos": photos,
+        "videos": videos,
+        "destaques": destaques,
+    }
+
+    return render(request, "ensino.pronatec.html", context)
 
 # ---------------------------------------------------------------------
 
@@ -432,3 +453,19 @@ def publicacoes_outras(request):
         "crumbs": [{"name": "Publicações"}, {"name": "Outras publicações"}],
     }
     return render(request, "publicacoes.outraspublicacoes.html", context)
+
+
+
+def pronatec_fotos(request):  # Recupere todas as fotos do banco de dados
+    photos = Photo.objects.all()
+
+    context = {"photos": photos}
+
+    return render(request, "pronatec_fotos.html", context)
+def pronatec_videos(request):
+    videos = Video.objects.all()
+
+    context = {"videos": videos}
+
+    return render(request, "pronatec_videos.html", context)
+

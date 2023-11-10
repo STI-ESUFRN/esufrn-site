@@ -1,0 +1,47 @@
+{% extends "base.pagina.html" %}
+{% load static %}
+
+<!-- Carregue os estilos CSS do Fancybox -->
+<link rel="stylesheet" type="text/css" href="{% static 'fancybox/css/jquery.fancybox.min.css' %}">
+
+<!-- Carregue o JavaScript do Fancybox -->
+<script src="{% static 'fancybox/js/jquery.fancybox.min.js' %}"></script>
+
+{% block styles %}
+    <style>
+        /* Estilo para diminuir o tamanho da descrição */
+        .photo-card p {
+            font-size: 13px; /* Ajuste o tamanho da fonte conforme necessário */
+        }
+    </style>
+{% endblock styles %}
+
+{% block content %}
+    <article>
+        <div class="container mt-5 text-center cabecalho">
+            <h3>Galeria de fotos</h3>
+            <hr class="hr-escuro mt-5"/>
+        </div>
+        <div class="container mt-4 corpo">
+            <div class="row">
+                {% for photo in photos %}
+                    <div class="col-md-4 mb-4">
+                        <div class="photo-card">
+                            <a href="{{ photo.image.url }}" data-fancybox="gallery" data-caption="{{ photo.descricao }}">
+                                <img src="{{ photo.image.url }}" alt="{{ photo.descricao }}" class="img-fluid">
+                            </a>
+                            <p>{{ photo.descricao }}</p>
+                        </div>
+                    </div>
+                    {% if forloop.counter|divisibleby:3 %}
+                        <div class="w-100"></div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="container text-right">
+            <hr class="hr-escuro my-5"/>
+            <a href="#" class="text-uppercase text-dark">Voltar ao topo <i class="fas fa-arrow-alt-circle-up"></i></a>
+        </div>
+    </article>
+{% endblock content %}
