@@ -10,6 +10,9 @@ services:
         depends_on:
             - postgres
             - redis
+        ports:
+            - "80:80"
+            - "443:443"
         volumes:
             - ./src:/app/src
 
@@ -63,25 +66,10 @@ services:
             PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
         volumes:
             - pgadmin-data:/var/lib/pgadmin
-        expose:
-            - 80
+        ports:
+            - "8002:80"
         depends_on:
             - postgres
-
-    nginx:
-        build:
-            context: nginx
-        restart: always
-        ports:
-            - 80:80
-            - 443:443
-        depends_on:
-            - web
-        volumes:
-            - ./src/staticfiles:/usr/share/nginx/html/staticfiles:ro
-            - ./src/media:/usr/share/nginx/html/media:ro
-            - ./src/templates:/usr/share/nginx/html/templates:ro
-            - ./nginx/ssl:/ssl:ro
 
 volumes:
     postgres-data:
