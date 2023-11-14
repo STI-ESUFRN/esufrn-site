@@ -27,14 +27,14 @@ class Chamado(SoftDeletableModel, TimeStampedModel):
     requester = models.CharField("Nome completo", max_length=50)
     course = models.CharField("Nome do curso", max_length=100)
     contact = models.CharField("Whatsapp ou Email para contato", max_length=50)
-    # presenca = models.BooleanField(
-    #     "Supervisionado por docente", default=False,
-    #     help_text=(
-    #         "Marcando esta caixa, você declara que a sala contará com a supervisão de"
-    #         " um docente no momento da aula."
-    #     ),
-    # )
-    date1 = models.DateField("Data *")
+    presenca = models.BooleanField(
+        "Supervisionado por docente", default=False,
+        help_text=(
+            "Marcando esta caixa, você declara que a sala contará com a supervisão de"
+            " um docente no momento da aula."
+        ),
+    )
+    date = models.DateField("Data *", null=True)
     shift = models.CharField(
         "Turno *",
         max_length=1,
