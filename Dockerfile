@@ -14,8 +14,8 @@ WORKDIR $PROJECT_DIR
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
     gettext=0.21-4 \
-    libcurl4=7.74.0-1.3+deb11u3 \
-    curl=7.74.0-1.3+deb11u3 \
+    libcurl4=7.74.0-1.3+deb11u10 \
+    curl=7.74.0-1.3+deb11u10 \
     netcat \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
