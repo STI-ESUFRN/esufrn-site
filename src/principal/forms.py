@@ -73,4 +73,3 @@ class UnsubscribeES(forms.Form):
             },
         ),
     )
-

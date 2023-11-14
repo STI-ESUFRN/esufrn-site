@@ -91,8 +91,10 @@ class CategoryViewSet(viewsets.ModelViewSet):
             return Response(
                 {
                     "category": [
-                        "Não foi possível apagar esta instância pois existem materiais"
-                        " categorizados como tal.",
+                        (
+                            "Não foi possível apagar esta instância pois existem"
+                            " materiais categorizados como tal."
+                        ),
                     ],
                 },
                 status=status.HTTP_400_BAD_REQUEST,

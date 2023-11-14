@@ -1,6 +1,7 @@
-from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
+from django.urls import path
+
 from principal.views import (
     busca,
     email_subscribe,
@@ -8,6 +9,7 @@ from principal.views import (
     ensino_especializacao,
     ensino_graduacao,
     ensino_mestrado,
+    ensino_pronatec,
     ensino_pronatec_institucional,
     ensino_sobre,
     ensino_tecnico,
@@ -17,11 +19,9 @@ from principal.views import (
     noticia,
     noticias,
     pagina,
-    publicacoes_outras,
-    ensino_pronatec,
     pronatec_fotos,
     pronatec_videos,
-
+    publicacoes_outras,
 )
 
 app_name = "principal"
@@ -32,7 +32,11 @@ urlpatterns = [
     path("ensino/especializacao/", ensino_especializacao, name="ensino_especializacao"),
     path("ensino/graduacao/", ensino_graduacao, name="ensino_graduacao"),
     path("ensino/mestrado/", ensino_mestrado, name="ensino_mestrado"),
-    path("ensino/pronatec/institucional", ensino_pronatec_institucional, name="ensino_pronatec_institucional"),
+    path(
+        "ensino/pronatec/institucional",
+        ensino_pronatec_institucional,
+        name="ensino_pronatec_institucional",
+    ),
     path("ensino/pronatec/", ensino_pronatec, name="ensino_pronatec"),
     path("ensino/sobre/", ensino_sobre, name="ensino_sobre"),
     path("ensino/tecnico/", ensino_tecnico, name="ensino_tecnico"),
@@ -46,7 +50,6 @@ urlpatterns = [
     path("publicacoes/outras", publicacoes_outras, name="publicacoes_outras"),
     path("pronatec/videos", pronatec_videos, name="pronatec_videos"),
     path("pronatec/fotos/", pronatec_fotos, name="pronatec_fotos"),
-
 ]
 
 if settings.DEBUG:
