@@ -481,44 +481,44 @@ class Alert(TimeStampedModel):
         verbose_name_plural = "Alertas"
         ordering = ["-created"]
 
+
 class Photo(models.Model):
-    image = models.ImageField(upload_to='photos/')
+    image = models.ImageField(upload_to="photos/")
     descricao = models.CharField(max_length=255)
+
     def __str__(self):
         return self.descricao
-
 
 
 class Video(models.Model):
-    video = models.FileField(upload_to='videos/')
+    video = models.FileField(upload_to="videos/")
     descricao = models.CharField(max_length=255)
 
     def __str__(self):
         return self.descricao
-
 
 
 class destaque(models.Model):
     TIPO_CHOICES = [
-        ('imagem', 'Imagem'),
-        ('video', 'Vídeo'),
+        ("imagem", "Imagem"),
+        ("video", "Vídeo"),
     ]
 
     titulo = models.CharField(max_length=25, default="Título")
-    tipo = models.CharField(max_length=10, choices=TIPO_CHOICES, default='imagem')
-    imagem = models.ImageField(upload_to='destaques/', null=True, blank=True)
-    video_file = models.FileField(upload_to='videos/', null=True, blank=True)
+    tipo = models.CharField(max_length=10, choices=TIPO_CHOICES, default="imagem")
+    imagem = models.ImageField(upload_to="destaques/", null=True, blank=True)
+    video_file = models.FileField(upload_to="videos/", null=True, blank=True)
     link = models.URLField()
 
     def clean(self):
-        if self.tipo == 'imagem' and not self.imagem:
-            raise ValidationError("É necessário adicionar uma imagem para este tipo de destaque.")
-        if self.tipo == 'video' and not self.video_file:
-            raise ValidationError("É necessário adicionar um vídeo para este tipo de destaque.")
+        if self.tipo == "imagem" and not self.imagem:
+            raise ValidationError(
+                "É necessário adicionar uma imagem para este tipo de destaque.",
+            )
+        if self.tipo == "video" and not self.video_file:
+            raise ValidationError(
+                "É necessário adicionar um vídeo para este tipo de destaque.",
+            )
 
     def __str__(self):
         return self.titulo
-
-
-
-

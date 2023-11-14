@@ -248,9 +248,11 @@ def report_view(request, year):
 @allowed_users(allowed_roles=material_roles)
 def reports_view(request):
     context = {
-        "reports": History.objects.values("created__year")
-        .annotate(last_modified=Max("modified"))
-        .order_by("-created__year"),
+        "reports": (
+            History.objects.values("created__year")
+            .annotate(last_modified=Max("modified"))
+            .order_by("-created__year")
+        ),
     }
 
     return render(

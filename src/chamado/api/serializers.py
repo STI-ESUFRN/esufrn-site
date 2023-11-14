@@ -38,7 +38,6 @@ class ChamadoSerializer(serializers.ModelSerializer):
             "created",
             "modified",
             "is_removed",
-
             "date1",
             "shift",
             "concorda",

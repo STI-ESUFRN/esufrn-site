@@ -1,4 +1,5 @@
 import threading
+
 from constance import config
 from django.conf import settings
 from django.core.mail import send_mail
@@ -16,11 +17,11 @@ class Chamado(SoftDeletableModel, TimeStampedModel):
         PENDING = "P", _("Pending")
 
     class Shift(models.TextChoices):
-        MORNING = 'M', 'Manhã'
-        AFTERNOON = 'T', 'Tarde'
-    class Concorda(models.TextChoices):
-        YES = 'y', 'SIM'
+        MORNING = "M", "Manhã"
+        AFTERNOON = "T", "Tarde"
 
+    class Concorda(models.TextChoices):
+        YES = "y", "SIM"
 
     title = models.CharField("Título", max_length=100)
     description = models.TextField("Descrição do problema", max_length=300)
@@ -28,7 +29,8 @@ class Chamado(SoftDeletableModel, TimeStampedModel):
     course = models.CharField("Nome do curso", max_length=100)
     contact = models.CharField("Whatsapp ou Email para contato", max_length=50)
     presenca = models.BooleanField(
-        "Supervisionado por docente", default=False,
+        "Supervisionado por docente",
+        default=False,
         help_text=(
             "Marcando esta caixa, você declara que a sala contará com a supervisão de"
             " um docente no momento da aula."
@@ -37,21 +39,20 @@ class Chamado(SoftDeletableModel, TimeStampedModel):
     date = models.DateField("Data *", null=True)
     shift = models.CharField(
         "Turno *",
-        max_length=1,
+        max_length=10,
         choices=Shift.choices,
         null=True,
     )
     concorda = models.CharField(
         "Marcando esta caixa você declara que estará presente no momento da manutenção",
-        max_length=1,
+        max_length=10,
         choices=Concorda.choices,
-        null=False,
     )
     solved_at = models.DateTimeField("Resolvido em", null=True)
     obs = models.TextField("Observações", null=True)
     status = models.CharField(
         "Status",
-        max_length=1,
+        max_length=10,
         choices=Status.choices,
         default=Status.PENDING,
     )
