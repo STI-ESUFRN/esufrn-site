@@ -79,7 +79,7 @@ class Chamado(SoftDeletableModel, TimeStampedModel):
             Solicitante: {self.requester}<br/>
             Curso: {self.course}<br/>
             Contato: {self.contact}<br/>
-            Data: {self.date1}<br/>
+            Data: {self.date}<br/>
             Turno: {self.shift}
         """
 

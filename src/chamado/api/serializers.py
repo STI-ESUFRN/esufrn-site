@@ -16,7 +16,7 @@ class ChamadoCreateSerializer(serializers.ModelSerializer):
             "requester",
             "course",
             "contact",
-            "date1",
+            "date",
             "shift",
             "concorda",
         ]
@@ -38,7 +38,7 @@ class ChamadoSerializer(serializers.ModelSerializer):
             "created",
             "modified",
             "is_removed",
-            "date1",
+            "date",
             "shift",
             "concorda",
         ]
