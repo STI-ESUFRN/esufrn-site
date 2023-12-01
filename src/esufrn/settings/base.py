@@ -153,7 +153,7 @@ TEST_RUNNER = "redgreenunittest.django.runner.RedGreenDiscoverRunner"
 ADMINS = [
     ("SUPORTE", "suporteeen@gmail.com"),
     ("SUPORTE", "suporte.es@ufrn.br"),
-    ("Felipe", "felipe.medeiros.712@ufrn.edu.br"),
+
 ]
 
 
