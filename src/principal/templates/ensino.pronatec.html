@@ -6,6 +6,8 @@
 {% block styles %}
 
     <link rel="stylesheet" href="{% static 'assets/owl-carousel/owl.carousel.min.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
+
     <style>
         .parceria-imagem {
             display: inline-block;
@@ -218,7 +220,12 @@
 
                             <hr class="hr-escuro my-4" style="margin-top: 0;" />
                             <div class="container text-justify">
-                                <h1>Apresentação </h1>
+
+                                <div class="container mt-5 text-center cabecalho">
+                                    <h3>Apresentação</h3>
+
+                                </div>
+
                                 </br>
                                 <p>
                                     O Programa Nacional de Acesso ao Ensino Técnico e Emprego (Pronatec) foi uma iniciativa criada pelo governo
@@ -240,8 +247,21 @@
                                 <p>
                                     Atenciosamente, Coordenação do Pronatec da ESUFRN.
                                 </p>
+                                </br>
                             </div>
                         </div>
+                        <hr class="hr-escuro my-4" style="margin-top: 0;" />
+                        <h4><b>Notícias do Pronatec</b></h4>
+                        </br>
+
+                        <ul>
+                            {% for noticia in noticias %}
+                                <li>
+                                    <a href="{{ noticia.link }}" target="_blank">{{ noticia.titulo }}</a></br>
+                                    </br>
+                                </li>
+                            {% endfor %}
+                        </ul>
                     </div>
                     <div class="col-sm-4">
                         <div class="container mt-5 text-center cabecalho">
@@ -278,16 +298,18 @@
                             <a href="{% url 'principal:pronatec_fotos' %}" target="_blank"><b>Galeria</b></a>
                             </br>
                             </br>
-                            <div class="gallery owl-carousel">
-                                {% for photo in photos %}
-                                <div class="item">
-                                    <a data-fancybox="gallery" href="{{ photo.image.url }}">
-                                        <img src="{{ photo.image.url }}" alt="{{ photo.descricao }}">
-                                    </a>
-                                    <p style="font-size: 13px;">{{ photo.descricao }}</p>
+                                <div class="gallery owl-carousel">
+                                    {% for photo in photos %}
+                                        <div class="item">
+                                            <a data-fancybox="gallery" data-options='{"toolbar": true}' href="{{ photo.image.url }}">
+                                                <img src="{{ photo.image.url }}" alt="{{ photo.descricao }}">
+                                            </a>
+                                            <p>{{ photo.descricao }}</p>
+                                        </div>
+                                    {% endfor %}
                                 </div>
-                                {% endfor %}
-                            </div>
+
+
                             <a id="videos"></a>
                             <a href="{% url 'principal:pronatec_videos' %}" target="_blank"><b>Histórias Mil</b></a>
                             </br>
@@ -341,26 +363,27 @@
                     </br>
                     </br>
                     <div class="parcerias-carousel owl-carousel">
+                        <div class="parceria-imagem"><!--Ministério-->
+                            <a href="https://www.gov.br/mec/pt-br" target="_blank">
+                                <img src="{% static 'assets/images/Parceria4.jpeg' %}" alt="Parceria 4" style="max-width: 325px; height: 92px;">
+                            </a>
+                        </div>
                         <div class="parceria-imagem"><!--Natal-->
                             <a href="https://www.natal.rn.gov.br/" target="_blank">
-                                <img src="{% static 'assets/images/Parceria1.jpeg' %}" alt="Parceria 1" style="max-width: 100px; height: auto;">
+                                <img src="{% static 'assets/images/Parceria1.jpeg' %}" alt="Parceria 1" style="max-width: 150px; height: auto;">
                             </a>
                         </div>
                         <div class="parceria-imagem"><!--Parnamirim-->
                             <a href="https://www.parnamirim.rn.gov.br/" target="_blank">
-                                <img src="{% static 'assets/images/Parceria2.png' %}" alt="Parceria 2" style="max-width: 150px; height: auto;">
+                                <img src="{% static 'assets/images/Parceria2.png' %}" alt="Parceria 2" style="max-width: 210px; height: auto;">
                             </a>
                         </div>
                         <div class="parceria-imagem"><!--Maxaramguape-->
                             <a href="https://site.maxaranguape.rn.gov.br/" target="_blank">
-                                <img src="{% static 'assets/images/Parceria3.jpeg' %}" alt="Parceria 3" style="max-width: 80px; height: auto;">
+                                <img src="{% static 'assets/images/Parceria3.jpeg' %}" alt="Parceria 3" style="max-width: 100px; height: auto;">
                             </a>
                         </div>
-                        <div class="parceria-imagem"><!--Ministério-->
-                            <a href="http://portal.mec.gov.br/" target="_blank">
-                                <img src="{% static 'assets/images/Parceria4.jpeg' %}" alt="Parceria 4" style="max-width: 300px; height: auto;">
-                            </a>
-                        </div>
+
                         <!-- Adicione mais imagens de parcerias conforme necessário -->
                     </div>
             </div>
@@ -372,6 +395,9 @@
     </article>
 {% endblock content %}
 {% block scripts %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'assets/owl-carousel/owl.carousel.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
     <script src="https://vjs.zencdn.net/7.11.4/video.js"></script>
     <link href="https://vjs.zencdn.net/7.11.4/video-js.css" rel="stylesheet">
 
@@ -417,12 +443,14 @@
                 dots: false // Desabilita os pontos indicadores
             });
             $('.gallery').owlCarousel({
-                items: 1, // Você pode ajustar o número de imagens visíveis por vez
-                loop: true, // Para torná-lo contínuo
-                autoplay: true, // Inicia a reprodução automática
-                autoplayTimeout: 3000, // Intervalo entre as imagens (em milissegundos)
-                nav: false, // Navegação próxima/anterior (se desejar)
+                items: 1, // Número de imagens visíveis por vez
+                loop: true,
+                autoplay: true,
+                autoplayTimeout: 3000,
+                nav: false
+
             });
+
             $('.video-gallery').owlCarousel({
                 items: 1, // Você pode ajustar o número de vídeos visíveis por vez
                 loop: true, // Para torná-lo contínuo
@@ -444,6 +472,7 @@
             $("[data-fancybox]").fancybox({
                 loop: true, // Permite percorrer as imagens continuamente
             });
+
             // Mede a largura do texto
             var textWidth = $('.banner-text').width();
 

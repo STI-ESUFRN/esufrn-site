@@ -15,6 +15,7 @@ from principal.models import (
     Testimonial,
     Video,
     destaque,
+    Noticia,
 )
 
 
@@ -138,7 +139,7 @@ class VideoAdmin(admin.ModelAdmin):
 class DestaqueAdmin(admin.ModelAdmin):
     list_display = ("titulo", "tipo", "imagem", "video_file", "link")
 
-
+admin.site.register(Noticia)
 admin.site.register(News, BlogAdmin)
 admin.site.register(Team, EquipeAdmin)
 admin.site.register(File, ArquivosAdmin)

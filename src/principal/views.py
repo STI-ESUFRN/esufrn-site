@@ -28,6 +28,7 @@ from principal.models import (
     Testimonial,
     Video,
     destaque,
+    Noticia,
 )
 
 
@@ -200,27 +201,6 @@ def ensino_pronatec_institucional(request):
         "crumbs": [{"name": "Ensino"}, {"name": "Pronatec"}],
     }
     return render(request, "ensino.tecnico.html", context)
-
-
-# ---------------------------------------------------------------------
-def ensino_pronatec(request):
-    # Recupere todas as fotos e vídeos do banco de dados
-    photos = Photo.objects.all()
-    videos = Video.objects.all()
-
-    # Recupere todos os destaques
-    destaques = destaque.objects.all()
-
-    context = {
-        "curso": "pronatec",
-        "crumbs": [{"name": "Ensino"}, {"name": "Pronatec"}],
-        "photos": photos,
-        "videos": videos,
-        "destaques": destaques,
-    }
-
-    return render(request, "ensino.pronatec.html", context)
-
 
 # ---------------------------------------------------------------------
 
@@ -479,3 +459,22 @@ def pronatec_videos(request):
     context = {"videos": videos}
 
     return render(request, "pronatec_videos.html", context)
+# ---------------------------------------------------------------------
+def ensino_pronatec(request):
+    # Recupere todas as fotos e vídeos do banco de dados
+    photos = Photo.objects.all()
+    videos = Video.objects.all()
+
+    # Recupere todos os destaques
+    destaques = destaque.objects.all()
+    noticias = Noticia.objects.all()
+    context = {
+        "curso": "pronatec",
+        "crumbs": [{"name": "Ensino"}, {"name": "Pronatec"}],
+        "photos": photos,
+        "videos": videos,
+        "destaques": destaques,
+        "noticias": noticias,
+    }
+
+    return render(request, "ensino.pronatec.html", context)

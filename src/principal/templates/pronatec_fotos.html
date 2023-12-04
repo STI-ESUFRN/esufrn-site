@@ -1,13 +1,13 @@
 {% extends "base.pagina.html" %}
 {% load static %}
 
-<!-- Carregue os estilos CSS do Fancybox -->
-<link rel="stylesheet" type="text/css" href="{% static 'fancybox/css/jquery.fancybox.min.css' %}">
 
-<!-- Carregue o JavaScript do Fancybox -->
-<script src="{% static 'fancybox/js/jquery.fancybox.min.js' %}"></script>
 
 {% block styles %}
+
+    <link rel="stylesheet" href="{% static 'assets/owl-carousel/owl.carousel.min.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
+
     <style>
         /* Estilo para diminuir o tamanho da descrição */
         .photo-card p {
@@ -45,3 +45,8 @@
         </div>
     </article>
 {% endblock content %}
+{% block scripts %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'assets/owl-carousel/owl.carousel.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+{% endblock scripts %}
