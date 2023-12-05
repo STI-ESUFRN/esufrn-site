@@ -292,6 +292,13 @@
                                         </a>
                                     </div>
                                 </div>
+                                <div class="item" data-curso-id="3">
+                                    <div class="image-description">
+                                        <a href="{% url 'principal:ensino_pronatec_institucional' %}" target="_blank">
+                                            <img src="{% static 'assets/images/curso3.jpeg' %}" alt="Descrição da Imagem 2" style="width: 100px; height: auto;">
+                                        </a>
+                                    </div>
+                                </div>
                                 <!-- Adicione mais imagens e links conforme necessário -->
                             </div>
                             <a id="fotos"></a>
@@ -315,15 +322,14 @@
                             </br>
                             </br>
                             <div class="video-gallery owl-carousel">
-                                {% for video in videos %}
+                                {% for link in links %}
                                 <div class="item">
                                     <div class="video-card video-container">
-                                        <video width="100%" height="auto" controls>
-                                            <source src="{{ video.video.url }}" type="video/mp4">
-                                            Seu navegador não suporta o elemento de vídeo.
-                                        </video>
-                                        <p style="font-size: 13px;">{{ video.descricao }}</p>
-                                    </div>
+                                    <a href="{{ link.link }}" target="_blank">
+                                        <img src="{{ link.imagem.url }}" alt="{{ link.titulo }}" class="img-fluid">
+                                    </a>
+                                    <p style="font-size: 13px;">{{ link.titulo }}</p>
+                                </div>
                                 </div>
                                 {% endfor %}
                             </div>
@@ -332,14 +338,14 @@
 
 
                             </br>
-                            <b>Menu</b>
-                            <div id="menu">
-                                <div class="menu-column">
-                                    <ul>
-                                        <li><a href="{% url 'principal:ensino_pronatec_institucional' %}" target="_blank">Institucional</a></li>
-                                    </ul>
-                                </div>
-                            </div>
+<!--                            <b>Menu</b>-->
+<!--                            <div id="menu">-->
+<!--                                <div class="menu-column">-->
+<!--                                    <ul>-->
+<!--                                        <li><a href="{% url 'principal:ensino_pronatec_institucional' %}" target="_blank">Institucional</a></li>-->
+<!--                                    </ul>-->
+<!--                                </div>-->
+<!--                            </div>-->
                             <b>Polos</b>
                             </br>
                             <p style="font-size: 15px;"><a href="https://www.natal.rn.gov.br/news/post2/17767" target="_blank" class="blue-rectangle">Natal</a></p>

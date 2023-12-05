@@ -13,7 +13,7 @@ from principal.models import (
     Photo,
     Team,
     Testimonial,
-    Video,
+    Links_V,
     destaque,
     Noticia,
 )
@@ -132,8 +132,8 @@ class PhotoAdmin(admin.ModelAdmin):
     descricao.short_description = "Descrição"
 
 
-class VideoAdmin(admin.ModelAdmin):
-    list_display = ("descricao", "video")
+class Links_VAdmin(admin.ModelAdmin):
+    list_display = ("titulo", "imagem", "link")
 
 
 class DestaqueAdmin(admin.ModelAdmin):
@@ -149,6 +149,6 @@ admin.site.register(Newsletter, NewsletterAdmin)
 admin.site.register(Document, AdminDocumentos)
 admin.site.register(Message, AdminMensagem)
 admin.site.register(Alert, AdminAlerta)
-admin.site.register(Video, VideoAdmin)
+admin.site.register(Links_V, Links_VAdmin)
 admin.site.register(Photo, PhotoAdmin)
 admin.site.register(destaque, DestaqueAdmin)

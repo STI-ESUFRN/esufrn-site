@@ -26,7 +26,7 @@ from principal.models import (
     Photo,
     Team,
     Testimonial,
-    Video,
+    Links_V,
     destaque,
     Noticia,
 )
@@ -454,16 +454,16 @@ def pronatec_fotos(request):  # Recupere todas as fotos do banco de dados
 
 
 def pronatec_videos(request):
-    videos = Video.objects.all()
+    links = Links_V.objects.all()
 
-    context = {"videos": videos}
+    context = {"links": links}
 
     return render(request, "pronatec_videos.html", context)
 # ---------------------------------------------------------------------
 def ensino_pronatec(request):
     # Recupere todas as fotos e vídeos do banco de dados
     photos = Photo.objects.all()
-    videos = Video.objects.all()
+    links = Links_V.objects.all()
 
     # Recupere todos os destaques
     destaques = destaque.objects.all()
@@ -472,7 +472,7 @@ def ensino_pronatec(request):
         "curso": "pronatec",
         "crumbs": [{"name": "Ensino"}, {"name": "Pronatec"}],
         "photos": photos,
-        "videos": videos,
+        "links": links,
         "destaques": destaques,
         "noticias": noticias,
     }
