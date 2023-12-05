@@ -490,13 +490,16 @@ class Photo(models.Model):
         return self.descricao
 
 
-class Video(models.Model):
-    video = models.FileField(upload_to="videos/")
-    descricao = models.CharField(max_length=255)
+class Links_V(models.Model):
+    titulo = models.CharField(max_length=100)
+    imagem = models.ImageField(upload_to="imagens/")
+    link = models.URLField(max_length=200)
 
     def __str__(self):
-        return self.descricao
+        return self.titulo
 
+    class Meta:
+        verbose_name_plural = "Videos_pronatec"
 
 class destaque(models.Model):
     TIPO_CHOICES = [
@@ -524,7 +527,6 @@ class destaque(models.Model):
         return self.titulo
 
 
-from django.db import models
 
 class Noticia(models.Model):
     # Seus campos

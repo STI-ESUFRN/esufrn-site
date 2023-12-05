@@ -1,34 +1,39 @@
-<!-- templates/pronatec_videos.html -->
+<!-- templates/links_v.html -->
 
 {% extends "base.pagina.html" %}
 {% load static %}
 
-
-
 {% block styles %}
+    <link rel="stylesheet" href="{% static 'assets/owl-carousel/owl.carousel.min.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
+
     <style>
-        /* Estilo para diminuir o tamanho da descrição */
-        .video-card p {
+        /* Estilo para diminuir o tamanho do título */
+        .link-card p {
             font-size: 13px; /* Ajuste o tamanho da fonte conforme necessário */
+        }
+        .link-card img {
+            max-width: 100%;
+            height: auto;
         }
     </style>
 {% endblock styles %}
+
 {% block content %}
     <article>
         <div class="container mt-5 text-center cabecalho">
-            <h3>Galeria de Vídeos Pronatec</h3>
+            <h3>Vídeos</h3>
             <hr class="hr-escuro mt-5"/>
         </div>
         <div class="container mt-4 corpo">
             <div class="row">
-                {% for video in videos %}
-                    <div class="col-md-4">
-                        <div class="video-card">
-                            <video width="100%" height="auto" controls>
-                                <source src="{{ video.video.url }}" type="video/mp4">
-                                Seu navegador não suporta o elemento de vídeo.
-                            </video>
-                            <p>{{ video.descricao }}</p>
+                {% for link in links %}
+                    <div class="col-md-4 mb-4">
+                        <div class="link-card">
+                            <a href="{{ link.link }}" target="_blank">
+                                <img src="{{ link.imagem.url }}" alt="{{ link.titulo }}" class="img-fluid">
+                            </a>
+                            <p>{{ link.titulo }}</p>
                         </div>
                     </div>
                     {% if forloop.counter|divisibleby:3 %}
@@ -43,3 +48,9 @@
         </div>
     </article>
 {% endblock content %}
+
+{% block scripts %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'assets/owl-carousel/owl.carousel.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+{% endblock scripts %}
