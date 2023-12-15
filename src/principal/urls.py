@@ -22,6 +22,7 @@ from principal.views import (
     pronatec_fotos,
     pronatec_videos,
     publicacoes_outras,
+    Cusos_pronatec,
 )
 
 app_name = "principal"
@@ -50,6 +51,7 @@ urlpatterns = [
     path("publicacoes/outras", publicacoes_outras, name="publicacoes_outras"),
     path("pronatec/videos", pronatec_videos, name="pronatec_videos"),
     path("pronatec/fotos/", pronatec_fotos, name="pronatec_fotos"),
+    path("pronatec/Cursos/", Cusos_pronatec, name="Cusos_pronatec"),
 ]
 
 if settings.DEBUG:

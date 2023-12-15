@@ -1,0 +1,57 @@
+{% extends "base.pagina.html" %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'assets/owl-carousel/owl.carousel.min.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+    <style>
+        /* Estilo para diminuir o tamanho da descrição */
+        .curso-card p {
+            font-size: 13px; /* Ajuste o tamanho da fonte conforme necessário */
+        }
+
+        /* Estilo para controlar o tamanho máximo das imagens dos cursos */
+        .curso-card img {
+            max-width: 100%;
+            height: 900px;
+            /* Defina o tamanho máximo desejado para as imagens */
+            max-height: 300px; /* Altere este valor conforme necessário */
+        }
+    </style>
+{% endblock styles %}
+{% block content %}
+    <article>
+        <div class="container mt-5 text-center cabecalho">
+            <h3>Cursos do Pronatec</h3>
+            <hr class="hr-escuro mt-5"/>
+        </div>
+        <div class="container mt-4 corpo">
+            <div class="row">
+                {% for curso in cursos %}
+                    <div class="col-md-4 mb-4">
+                        <div class="curso-card">
+                            <a href="{{ curso.link }}" target="_blank">
+                                <img src="{{ curso.imagem.url }}" alt="{{ curso.nome_curso }}" class="img-fluid">
+                            </a>
+<!--                            <p>{{ curso.nome_curso }}</p>-->
+                        </div>
+                    </div>
+                    {% if forloop.counter|divisibleby:3 %}
+                        <div class="w-100"></div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="container text-right">
+            <hr class="hr-escuro my-5"/>
+            <a href="#" class="text-uppercase text-dark">Voltar ao topo <i class="fas fa-arrow-alt-circle-up"></i></a>
+        </div>
+    </article>
+{% endblock content %}
+
+{% block scripts %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'assets/owl-carousel/owl.carousel.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+{% endblock scripts %}

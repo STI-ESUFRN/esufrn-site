@@ -538,3 +538,10 @@ class Noticia(models.Model):
 
     class Meta:
         verbose_name_plural = "Noticias_PRONATEC"
+
+class Cursos_Pronatec(models.Model):
+    nome_curso = models.CharField(max_length=100)
+    imagem = models.ImageField(upload_to='cursos_pronatec/')
+    link = models.URLField()
+    def __str__(self):
+        return self.nome_curso

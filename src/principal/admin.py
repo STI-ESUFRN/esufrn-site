@@ -16,6 +16,7 @@ from principal.models import (
     Links_V,
     destaque,
     Noticia,
+    Cursos_Pronatec,
 )
 
 
@@ -139,6 +140,9 @@ class Links_VAdmin(admin.ModelAdmin):
 class DestaqueAdmin(admin.ModelAdmin):
     list_display = ("titulo", "tipo", "imagem", "video_file", "link")
 
+class CursosPronatecAdmin(admin.ModelAdmin):
+    list_display = ('nome_curso', 'imagem', 'link')
+
 admin.site.register(Noticia)
 admin.site.register(News, BlogAdmin)
 admin.site.register(Team, EquipeAdmin)
@@ -152,3 +156,4 @@ admin.site.register(Alert, AdminAlerta)
 admin.site.register(Links_V, Links_VAdmin)
 admin.site.register(Photo, PhotoAdmin)
 admin.site.register(destaque, DestaqueAdmin)
+admin.site.register(Cursos_Pronatec, CursosPronatecAdmin)
