@@ -67,7 +67,7 @@
         }
         .owl-carousel,
         .modal-content {
-            border-radius: 20px;
+            border-radius: 0;
             overflow: hidden;
         }
         footer {
@@ -221,10 +221,11 @@
                             <hr class="hr-escuro my-4" style="margin-top: 0;" />
                             <div class="container text-justify">
 
-                                <div class="container mt-5 text-center cabecalho">
-                                    <h3>Apresentação</h3>
+                                <b>Apresentação</b>
 
-                                </div>
+
+                                </br>
+                                </br>
 
                                 </br>
                                 <p>
@@ -251,7 +252,8 @@
                             </div>
                         </div>
                         <hr class="hr-escuro my-4" style="margin-top: 0;" />
-                        <h4><b>Notícias do Pronatec</b></h4>
+                        <b>Notícias do Pronatec</b>
+                        </br>
                         </br>
 
                         <ul>
@@ -311,7 +313,7 @@
                                             <a data-fancybox="gallery" data-options='{"toolbar": true}' href="{{ photo.image.url }}">
                                                 <img src="{{ photo.image.url }}" alt="{{ photo.descricao }}">
                                             </a>
-                                            <p>{{ photo.descricao }}</p>
+                                            <p style="font-size: 13px;">{{ photo.descricao }}</p>
                                         </div>
                                     {% endfor %}
                                 </div>
