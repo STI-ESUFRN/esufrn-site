@@ -545,3 +545,6 @@ class Cursos_Pronatec(models.Model):
     link = models.URLField()
     def __str__(self):
         return self.nome_curso
+
+    class Meta:
+        verbose_name_plural = "Cursos_PRONATEC"
