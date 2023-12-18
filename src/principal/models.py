@@ -499,7 +499,7 @@ class Links_V(models.Model):
         return self.titulo
 
     class Meta:
-        verbose_name_plural = "Videos_pronatec"
+        verbose_name_plural = "Videos_PRONATEC"
 
 class destaque(models.Model):
     TIPO_CHOICES = [
@@ -525,6 +525,8 @@ class destaque(models.Model):
 
     def __str__(self):
         return self.titulo
+    class Meta:
+        verbose_name_plural = "Destaque_PRONATEC"
 
 
 
