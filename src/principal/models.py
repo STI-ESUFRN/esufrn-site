@@ -488,6 +488,8 @@ class Photo(models.Model):
 
     def __str__(self):
         return self.descricao
+    class Meta:
+        verbose_name_plural = "Fotos_PRONATEC"
 
 
 class Links_V(models.Model):
