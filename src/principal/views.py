@@ -29,6 +29,7 @@ from principal.models import (
     Links_V,
     destaque,
     Noticia,
+    Cursos_Pronatec,
 )
 
 
@@ -468,6 +469,7 @@ def ensino_pronatec(request):
     # Recupere todos os destaques
     destaques = destaque.objects.all()
     noticias = Noticia.objects.all()
+    cursos = Cursos_Pronatec.objects.all()
     context = {
         "curso": "pronatec",
         "crumbs": [{"name": "Ensino"}, {"name": "Pronatec"}],
@@ -475,6 +477,14 @@ def ensino_pronatec(request):
         "links": links,
         "destaques": destaques,
         "noticias": noticias,
+        "cursos": cursos,
     }
 
     return render(request, "ensino.pronatec.html", context)
+
+
+def Cusos_pronatec(request):
+    cursos = Cursos_Pronatec.objects.all()
+    context = {"cursos": cursos}
+
+    return render(request, 'Cursos_pronatec.html', {'cursos': cursos})

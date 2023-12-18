@@ -162,6 +162,13 @@
             display: inline-block;
             margin-right: 20px; /* Espaçamento entre colunas (ajuste conforme necessário) */
         }
+        .cursos-carrossel .item .image-description img {
+            max-width: 100px; /* Defina o tamanho máximo desejado para as imagens */
+            height: auto; /* Mantém a proporção da imagem */
+        }
+
+
+
     </style>
 {% endblock styles %}
 {% block content %}
@@ -278,31 +285,23 @@
                                 });
                             </script>
                         </div>
-                            <b>Cursos oferecidos</b>
+                            <a id="Cursos"></a>
+                            <a href="{% url 'principal:Cusos_pronatec' %}" target="_blank"><b>Cursos oferecidos</b></a>
                             <div class="cursos-carrossel owl-carousel">
-                                <div class="item" data-curso-id="1">
-                                    <div class="image-description">
-                                        <a href="https://escoladesaude.ufrn.br/pagina/pronatec_cursos_AuxiliardeCozinha/" target="_blank">
-                                            <img src="{% static 'assets/images/curso1.jpeg' %}" alt="Descrição da Imagem 1" style="width: 100px; height: auto;">
-                                        </a>
+                                {% for curso in cursos %}
+                                    <div class="item" data-curso-id="{{ curso.id }}">
+                                        <div class="image-description">
+                                            <a href="{{ curso.link }}" target="_blank">
+                                                <img src="{{ curso.imagem.url }}" alt="{{ curso.nome_curso }}">
+                                            </a>
+                                        </div>
+
                                     </div>
-                                </div>
-                                <div class="item" data-curso-id="2">
-                                    <div class="image-description">
-                                        <a href="https://escoladesaude.ufrn.br/pagina/pronatec_cursos_CuidadordeIdoso/" target="_blank">
-                                            <img src="{% static 'assets/images/curso2.jpeg' %}" alt="Descrição da Imagem 2" style="width: 100px; height: auto;">
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="item" data-curso-id="3">
-                                    <div class="image-description">
-                                        <a href="{% url 'principal:ensino_pronatec_institucional' %}" target="_blank">
-                                            <img src="{% static 'assets/images/curso3.jpeg' %}" alt="Descrição da Imagem 2" style="width: 100px; height: auto;">
-                                        </a>
-                                    </div>
-                                </div>
-                                <!-- Adicione mais imagens e links conforme necessário -->
+                                {% endfor %}
                             </div>
+
+
+
                             <a id="fotos"></a>
                             <a href="{% url 'principal:pronatec_fotos' %}" target="_blank"><b>Galeria</b></a>
                             </br>
@@ -357,7 +356,7 @@
                             <b>Contatos</b>
                             <div class="menu-column">
                                 <ul>
-                                    <li><p>mulheresmilesufrb@gmail.com</p></li>
+                                    <li><p>mulheresmilesufrn@gmail.com</p></li>
                                     <li><p>Telefone: 3342-2290</p></li>
 
                                 </ul>
