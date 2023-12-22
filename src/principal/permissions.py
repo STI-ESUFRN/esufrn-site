@@ -8,7 +8,7 @@ class IsUserFromSupport(permissions.BasePermission):
 
 class IsUserFromCoordination(permissions.BasePermission):
     def has_permission(self, request, _):
-        return request.user.groups.filter(name="suporte")
+        return request.user.groups.filter(name="coordenacao")
 
 
 class IsUserFromReserve(permissions.BasePermission):
