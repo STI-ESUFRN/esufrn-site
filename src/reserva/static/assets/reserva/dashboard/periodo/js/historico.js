@@ -234,7 +234,7 @@ function createDayRow(data) {
 }
 
 function updateDetails() {
-    $("#editButton").attr("href", `/dashboard/periodo/editar/${currentPeriod}`);
+    $("#editButton").attr("href", `/dashboard/reserva/periodo/editar/${currentPeriod}`);
     $.ajax({
         type: "GET",
         url: `${baseUrl}/${currentPeriod}/`,
