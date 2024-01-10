@@ -534,9 +534,9 @@ class destaque(models.Model):
 
 class Noticia(models.Model):
     # Seus campos
-    titulo = models.CharField(max_length=100)
+    titulo = models.CharField(max_length=400)
     link = models.URLField()
-
+    data_criacao = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     def __str__(self):
         return self.titulo
 
