@@ -468,7 +468,7 @@ def ensino_pronatec(request):
 
     # Recupere todos os destaques
     destaques = destaque.objects.all()
-    noticias = Noticia.objects.all()
+    noticias = Noticia.objects.all().order_by('-data_criacao')
     cursos = Cursos_Pronatec.objects.all()
     context = {
         "curso": "pronatec",
