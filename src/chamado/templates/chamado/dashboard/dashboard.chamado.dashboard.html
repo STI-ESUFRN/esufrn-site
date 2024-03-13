@@ -59,8 +59,13 @@
                         <small>Sala:</small> <b data-attribute="course">Sala 27A</b>
                     </li>
                     <li class="list-group-item">
-                        <small>Data do Chamado:</small> <b data-attribute="date">{{ chamado.date }}</b>
+                        <small>Data do Chamado:</small> <b date-format="DD/MM/YYYY" data-attribute="date">{{ chamado.date }}</b>
                     </li>
+
+                    <li class="list-group-item">
+                        <small>Turno:</small> <b data-attribute="shift">{{ chamado.shift }}</b>
+                    </li>
+
 
                     <!-- <li class="list-group-item"><small>Tempo decorrido:</small> <b data-attribute="decorrido">42min REVER ISSO</b></li> -->
                 </ul>
