@@ -4,9 +4,9 @@
         {% include "base.head.html" %}
         {% load static %}
         <link rel="stylesheet"
-              href="{% static 'assets/owl-carousel/owl.carousel.min.css' %}"/>
+              href="{% static 'assets/owl-carousel/owl.carousel.min.css' %}" />
         <link rel="stylesheet"
-              href="{% static 'assets/owl-carousel/owl.theme.default.min.css' %}"/>
+              href="{% static 'assets/owl-carousel/owl.theme.default.min.css' %}" />
         <title>Escola de Saúde da UFRN</title>
     </head>
     <body>
@@ -21,7 +21,7 @@
                     <div class="flex-shrink h-100 pr-lg-2 text-center py-4 py-lg-0">
                         <img class="h-100 mx-auto my-0"
                              src="{% static 'assets/images/logotipo_ufrn_esufrn.low.png' %}"
-                             alt="Logo Escola de Saúde da UFRN - ESUFRN"/>
+                             alt="Logo Escola de Saúde da UFRN - ESUFRN" />
                     </div>
                     <div class="w-100 h-100 position-relative py-1 pl-lg-5 menu-box">
                         <svg class="d-none d-lg-blockXX"
@@ -31,19 +31,14 @@
                              version="1.1"
                              id="svg3"
                              sodipodi:docname="vetor.svg">
-                            <defs id="defs7" pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10"
-                            gridtolerance="10" guidetolerance="10" id="namedview5" showgrid="false" />
-                            <path id="Sem nome"
-                            d="m 0,-3.0094776e-5 c 0,0 0,130.000000094776 0,130.000000094776 0,0 20,0 20,0 2.25,-7.25 2.5,-24.25 -4,-65.25 -6.5,-41 4.04,-64.80000009 4,-64.750000094776 0,0 -20,0 -20,0 z"
-                            style="fill:#ffffff;stroke:none;stroke-width:1" inkscape:connector-curvature="0" />
+                            <defs id="defs7" pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview5" showgrid="false" />
+                            <path id="Sem nome" d="m 0,-3.0094776e-5 c 0,0 0,130.000000094776 0,130.000000094776 0,0 20,0 20,0 2.25,-7.25 2.5,-24.25 -4,-65.25 -6.5,-41 4.04,-64.80000009 4,-64.750000094776 0,0 -20,0 -20,0 z" style="fill:#ffffff;stroke:none;stroke-width:1" inkscape:connector-curvature="0" />
                         </svg>
                         <div class="h-50 d-lg-flex align-items-center text-center"
                              style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)">
                             <div class="mr-lg-auto float-none float-lg-left my-2"
                                  style="color: rgba(255, 255, 255, 0.7);
-                                        font-size: 20px">
-                                ESCOLA DE SAÚDE - UFRN
-                            </div>
+                                        font-size: 20px">ESCOLA DE SAÚDE - UFRN</div>
                             <div class="ml-lg-auto float-none float-lg-right my-2" id="logo">
                                 <button id="contraste">
                                     <i class="fas fa-sun"></i>
@@ -68,7 +63,7 @@
                                 <form class="form-inline my-2 my-lg-0 form-busca"
                                       method="get"
                                       action="{% url 'principal:busca' %}">
-                                    <input type="search" name="termo" placeholder="Buscar"/>
+                                    <input type="search" name="termo" placeholder="Buscar" />
                                     <button type="submit">
                                         <i class="fas fa-search"></i>
                                     </button>
@@ -109,13 +104,13 @@
                                                         z-index: 1;
                                                         object-fit: cover;
                                                         opacity: 0.5;
-                                                        filter: blur(10px)"/>
+                                                        filter: blur(10px)" />
                                             <img src="/media/{{ i.image }}"
                                                  alt=""
                                                  class="h-100 h-100 m-auto"
                                                  style="object-fit: contain;
                                                         z-index: 2;
-                                                        max-height: 450px"/>
+                                                        max-height: 450px" />
                                         {% else %}
                                             <img src="{% static 'assets/images/ESUFRN.high.png' %}"
                                                  alt=""
@@ -127,13 +122,13 @@
                                                         z-index: 1;
                                                         object-fit: cover;
                                                         opacity: 0.5;
-                                                        filter: blur(10px)"/>
+                                                        filter: blur(10px)" />
                                             <img src="{% static 'assets/images/ESUFRN.high.png' %}"
                                                  alt=""
                                                  class="h-100 h-100 m-auto"
                                                  style="object-fit: contain;
                                                         z-index: 2;
-                                                        max-height: 450px"/>
+                                                        max-height: 450px" />
                                         {% endif %}
                                         <!-- <span style="background-color: transparent;
               background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.8) 100%);
@@ -155,7 +150,7 @@
                     <div class="owl-carousel owl-theme slide-owl">
                         <div class="destaque-box h-100">
                             <div class="destaque-image">
-                                <img src="{% static 'assets/images/porta.min.jpg' %}" alt=""/>
+                                <img src="{% static 'assets/images/porta.min.jpg' %}" alt="" />
                                 <span style="background-color: transparent;
                                              background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.8) 100%);
                                              width: 100%;
@@ -193,24 +188,22 @@
                             {% if i.image %}
                                 <img src="{{ i.image.url }}"
                                      alt="{{ i.title }} - Escola de Saúde da UFRN - ESUFRN"
-                                     title="{{ i.title }} - Escola de Saúde da UFRN - ESUFRN"/>
+                                     title="{{ i.title }} - Escola de Saúde da UFRN - ESUFRN" />
                             {% else %}
-                                <img src="{% static 'assets/images/ESUFRN.low.png' %}" alt=""/>
+                                <img src="{% static 'assets/images/ESUFRN.low.png' %}" alt="" />
                             {% endif %}
                         </div>
                         <p class="mb-0 mb-sm-2" style="text-align: left; text-align-last: left;">{{ i.published_at|date:'d F Y' }}</p>
                         <h5 class="mb-4 mb-sm-0"
                             style="text-align: left;
                                    text-align-last: left"
-                            title="{{ i.title }}">
-                            {{ i.title|truncatechars:150 }}
-                        </h5>
+                            title="{{ i.title }}">{{ i.title|truncatechars:150 }}</h5>
                     </a>
                 {% endfor %}
             </div>
             <div class="text-l-left mb-4 mb-lg-0 mt-4">
                 <a href="{% url 'principal:noticias' %}" class="text-center">
-                    <button class="btn btn-outline-dark btn-radio">Ver mais notícicas</button>
+                    <button class="btn btn-outline-dark btn-radio">Ver mais notícias</button>
                 </a>
             </div>
         </div>
@@ -218,9 +211,7 @@
     <!-- Eventos -->
     <section id="eventos" class="Xmt-3">
         <svg viewBox="0 0 1080 60">
-            <path style="fill:#ffffff;stroke:none"
-            d="m -2.1383708,240.22025 v 22.42705 38.48654 H 1085.1142 V 262.6473 249.3029 C 715.70463,219.76034 451.47612,279.5853 -2.1383708,240.22025 Z"
-            transform="translate(0,-236)" />
+            <path style="fill:#ffffff;stroke:none" d="m -2.1383708,240.22025 v 22.42705 38.48654 H 1085.1142 V 262.6473 249.3029 C 715.70463,219.76034 451.47612,279.5853 -2.1383708,240.22025 Z" transform="translate(0,-236)" />
         </svg>
         <div class="container titulo mb-0 mb-sm-4 mt-2 mt-sm-5 pt-3 text-white">
             <h2>Eventos</h2>
@@ -241,7 +232,8 @@
                 <h5 class="text-white">No momento não há eventos futuros cadastrados</h5>
             {% endif %}
             <div class="text-l-left my-4 see-more">
-                <a href="{% url 'principal:noticias' %}?category=evento" class="text-center">
+                <a href="{% url 'principal:noticias' %}?category=evento"
+                   class="text-center">
                     <button class="btn btn-outline-light btn-radio">Ver mais eventos</button>
                 </a>
             </div>
@@ -269,7 +261,7 @@
                     <div class="form-row justify-content-md-center text-center mt-3">
                         {% for field in newsletter.category %}<div class="col-md-4 form-check">{{ field }}</div>{% endfor %}
                     </div>
-                    <hr class="hr-escuro"/>
+                    <hr class="hr-escuro" />
                     <div class="form-row justify-content-md-center text-center mt-3">
                         <div class="col-md-12">
                             <label>
@@ -279,9 +271,7 @@
                     </div>
                     <div class="form-row justify-content-md-center text-center mt-3">
                         <div class="col-md-5">
-                            <button id="cadastrar-newsletter">
-                                Cadastrar
-                            </button>
+                            <button id="cadastrar-newsletter">Cadastrar</button>
                         </div>
                     </div>
                 </form>
@@ -291,9 +281,7 @@
     <!-- Depoimentos -->
     <section id="depoimentos" class="py-5">
         <div class="titulo mb-4 text-white text-center">
-            <h1>
-                Depoimentos
-            </h1>
+            <h1>Depoimentos</h1>
         </div>
         <div class="depoimento-shadow">
             <div class="owl-carousel owl-theme depoimentos-owl">
@@ -302,25 +290,19 @@
                         {% if depoimento.file %}
                             <img src="{{ depoimento.file.url }}"
                                  alt="{{ depoimento.name }} - Escola de Saúde da UFRN - ESUFRN"
-                                 title="{{ depoimento.name }}"/>
+                                 title="{{ depoimento.name }}" />
                         {% else %}
                             <img src="{% static 'assets/images/ESUFRN.low.png' %}"
                                  alt="{{ depoimento.name }} - Escola de Saúde da UFRN - ESUFRN"
-                                 title="{{ depoimento.name }}"/>
+                                 title="{{ depoimento.name }}" />
                         {% endif %}
                         <div class="mt-4 w-75 text-white">
                             <h3>
                                 <i class="fas fa-quote-right text-white"></i>
                             </h3>
-                            <p>
-                                {{ depoimento.testimonial }}
-                            </p>
-                            <p>
-                                {{ depoimento.name }}
-                            </p>
-                            <p>
-                                {{ depoimento.occupation }}
-                            </p>
+                            <p>{{ depoimento.testimonial }}</p>
+                            <p>{{ depoimento.name }}</p>
+                            <p>{{ depoimento.occupation }}</p>
                         </div>
                     </div>
                 {% endfor %}
@@ -332,48 +314,48 @@
         <div class="my-5">
             <div class="owl-carousel owl-theme portais-owl">
                 <a href="http://bvsenfermeria.bvsalud.org/pt/brasil/" target="_blank">
-                    <img src="/media/files/BIBLIOTECA.png" alt="" title=""/>
+                    <img src="/media/files/BIBLIOTECA.png" alt="" title="" />
                 </a>
                 <a href="http://cnpq.br/" target="_blank">
-                    <img src="/media/files/cnpq.png" alt="" title=""/>
+                    <img src="/media/files/cnpq.png" alt="" title="" />
                 </a>
                 <a href="http://www.cofen.gov.br/" target="_blank">
-                    <img src="/media/files/cofen.png" alt="" title=""/>
+                    <img src="/media/files/cofen.png" alt="" title="" />
                 </a>
                 <a href="https://www.ufrn.br/" target="_blank">
-                    <img src="/media/files/UFRN_logotipo_flat.png" alt="" title=""/>
+                    <img src="/media/files/UFRN_logotipo_flat.png" alt="" title="" />
                 </a>
                 <a href="http://www.aplicativos.gov.br/categorias?filtro=Categoria&valor=7f35cdb799032648c6159fb5c3842137"
                    target="_blank">
-                    <img src="/media/files/JOGOS.png" alt="" title=""/>
+                    <img src="/media/files/JOGOS.png" alt="" title="" />
                 </a>
                 <a href="http://www.ouvidoria.ufrn.br/" target="_blank">
-                    <img src="/media/files/ouvidoria-2.png" alt="" title=""/>
+                    <img src="/media/files/ouvidoria-2.png" alt="" title="" />
                 </a>
                 <a href="http://www-periodicos-capes-gov-br.ez18.periodicos.capes.gov.br/index.php?"
                    target="_blank">
-                    <img src="/media/files/periodicos.png" alt="" title=""/>
+                    <img src="/media/files/periodicos.png" alt="" title="" />
                 </a>
                 <a href="http://www.mostradeprofissoes.prograd.ufrn.br/" target="_blank">
-                    <img src="/media/files/portal1.png" alt="" title=""/>
+                    <img src="/media/files/portal1.png" alt="" title="" />
                 </a>
                 <a href="http://www.saude.gov.br/" target="_blank">
-                    <img src="/media/files/PORTAL-DA-SAUDE.png" alt="" title=""/>
+                    <img src="/media/files/PORTAL-DA-SAUDE.png" alt="" title="" />
                 </a>
                 <a href="http://www.rets.epsjv.fiocruz.br/" target="_blank">
-                    <img src="/media/files/REDE.png" alt="" title=""/>
+                    <img src="/media/files/REDE.png" alt="" title="" />
                 </a>
                 <a href="http://www.cartadeservicos.ufrn.br/" target="_blank">
-                    <img src="/media/files/SERVICOS-3.png" alt="" title=""/>
+                    <img src="/media/files/SERVICOS-3.png" alt="" title="" />
                 </a>
                 <a href="https://sigaa.ufrn.br/sigaa/public/home.jsf" target="_blank">
-                    <img src="/media/files/sigaa.png" alt="" title=""/>
+                    <img src="/media/files/sigaa.png" alt="" title="" />
                 </a>
                 <a href="https://sigrh.ufrn.br/sigrh/public/home.jsf" target="_blank">
-                    <img src="/media/files/sigrh.png" alt="" title=""/>
+                    <img src="/media/files/sigrh.png" alt="" title="" />
                 </a>
                 <a href="https://sipac.ufrn.br/public/jsp/portal.jsf" target="_blank">
-                    <img src="/media/files/sipac.png" alt="" title=""/>
+                    <img src="/media/files/sipac.png" alt="" title="" />
                 </a>
             </div>
         </div>
@@ -387,14 +369,10 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-body ">
-                        <div class="alert-container">
-                            {{ alerta.content|safe }}
-                        </div>
+                        <div class="alert-container">{{ alerta.content|safe }}</div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                            Fechar
-                        </button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                     </div>
                 </div>
             </div>
