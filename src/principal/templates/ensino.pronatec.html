@@ -279,71 +279,56 @@
                         {% endfor %}
                     </div>
                     <hr class="hr-escuro my-4" style="margin-top: 0;" />
-                    <div class="container text-justify">
-                        <b>Apresentação</b>
-                    </br>
-                </br>
-            </br>
-            <p>
-                O Programa Nacional de Acesso ao Ensino Técnico e Emprego (Pronatec) foi uma iniciativa criada pelo governo federal em 2011 para expandir, interiorizar e
-                democratizar a oferta de cursos de educação profissional e tecnológica no Brasil, em várias áreas do conhecimento. Na UFRN, a Escola de Saúde já realizou
-                dezenas de cursos de Formação Inicial e Continuada (FIC) e Cursos Técnicos entre os anos de 2011 e 2015.
-            </p>
-            <p>
-                Retomada em abril de 2023, a parceria entre Escola de Saúde da UFRN e o Pronatec oferta agora cursos de capacitação na modalidade Mulheres Mil, como parte de
-                um conjunto de políticas públicas que objetiva, além do acesso à educação e ao mercado de trabalho, a promoção, inclusão social e exercício da cidadania, bem
-                como combater as diversas formas de vulnerabilidade social em mulheres em situação de pobreza ou extrema pobreza.
-            </p>
-            <p>
-                Nesta página, nosso objetivo é reunir informações sobre o Pronatec na Escola de Saúde da UFRN para que todos tenham a oportunidade de conhecer e participar de
-                nossas ações.
-            </p>
-            <p>Atenciosamente, Coordenação do Pronatec da ESUFRN.</p>
-        </br>
-    </div>
-</div>
-<hr class="hr-escuro my-4" style="margin-top: 0;" />
-<b>Notícias do Pronatec</b>
-</br>
-</br>
-<ul>
-    {% for noticia in noticias %}
-        <li>
-            <a href="{{ noticia.link }}" target="_blank">{{ noticia.titulo }}</a>
-            <br>
-            <br>
-        </li>
-    {% endfor %}
-</ul>
-</div>
-<div class="col-sm-4">
-    <div class="container mt-5 text-center cabecalho"></div>
-    <div class="container text-justify">
-        <script>
-            $(document).ready(function() {
-                // Mede a largura do texto
-                var textWidth = $('.banner-text').width();
-                // Aplica a largura medida ao banner
-                $('.banner-image').css('width', textWidth + 'px');
-            });
-        </script>
-    </div>
-    <a id="Cursos"></a>
-    <a href="{% url 'principal:Cusos_pronatec' %}" target="_blank"><b>Cursos oferecidos</b></a>
-    <div class="cursos-carrossel owl-carousel">
-        {% for curso in cursos %}
-            <div class="item" data-curso-id="{{ curso.id }}">
-                <div class="image-description">
-                    <a href="{{ curso.link }}" target="_blank">
-                        <img src="{{ curso.imagem.url }}" alt="{{ curso.nome_curso }}">
-                    </a>
+                    <b>Cursos Oferecidos</b>
+                    <br>
+                    <br>
+                    <div class="container mt-4 corpo">
+                        <div class="row">
+                            {% for curso in cursos %}
+                                <div class="col-md-4 mb-4">
+                                    <div class="curso-card">
+                                        <a href="{{ curso.link }}" target="_blank">
+                                            <img src="{{ curso.imagem.url }}"
+                                                 alt="{{ curso.nome_curso }}"
+                                                 class="img-fluid">
+                                        </a>
+                                        <!--                            <p>{{ curso.nome_curso }}</p>-->
+                                    </div>
+                                </div>
+                                {% if forloop.counter|divisibleby:3 %}<div class="w-100"></div>{% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
-            </div>
-        {% endfor %}
+                <hr class="hr-escuro my-4" style="margin-top: 0;" />
+                <b>Notícias do Pronatec</b>
+            </br>
+        </br>
+        <ul>
+            {% for noticia in noticias %}
+                <li>
+                    <a href="{{ noticia.link }}" target="_blank">{{ noticia.titulo }}</a>
+                    <br>
+                    <br>
+                </li>
+            {% endfor %}
+        </ul>
     </div>
-    <a id="fotos"></a>
-    <a href="{% url 'principal:pronatec_fotos' %}" target="_blank"><b>Galeria</b></a>
-</br>
+    <div class="col-sm-4">
+        <div class="container mt-5 text-center cabecalho"></div>
+        <div class="container text-justify">
+            <script>
+                $(document).ready(function() {
+                    // Mede a largura do texto
+                    var textWidth = $('.banner-text').width();
+                    // Aplica a largura medida ao banner
+                    $('.banner-image').css('width', textWidth + 'px');
+                });
+            </script>
+        </div>
+        <a id="fotos"></a>
+        <a href="{% url 'principal:pronatec_fotos' %}" target="_blank"><b>Galeria</b></a>
+    </br>
 </br>
 <div class="gallery owl-carousel">
     {% for photo in photos %}
@@ -397,7 +382,8 @@
 <p style="font-size: 15px;">
     <a href="http://site.saomigueldogostoso.rn.gov.br/"
        target="_blank"
-       class="blue-rectangle">São Miguel do Gostoso</a>
+       class="blue-rectangle">São
+    Miguel do Gostoso</a>
 </p>
 <p style="font-size: 15px;">
     <a href="https://santacruz.rn.gov.br/"
@@ -405,6 +391,11 @@
        class="blue-rectangle">Santa Cruz</a>
 </p>
 </br>
+<a href="https://escoladesaude.ufrn.br/pagina/pronatec_nossa_historia/"
+   target="_blank"><b>Sobre
+nós</b></a>
+</br>
+<br>
 <b>Contatos</b>
 <div class="menu-column">
     <ul>
@@ -510,8 +501,8 @@
             var currentIndex = 0;
             var items = document.querySelectorAll('.item');
             $('.parcerias-carousel').owlCarousel({
-                items: 4, // Número de itens exibidos de uma vez
-                loop: false, // Faz o carrossel ser contínuo
+                items: 5, // Número de itens exibidos de uma vez
+                loop: true, // Faz o carrossel ser contínuo
                 autoplay: true, // Inicia a reprodução automática
                 autoplayTimeout: 3000, // Intervalo de tempo entre as imagens (em milissegundos)
                 nav: false, // Desabilita as setas de navegação (próximo/anterior)
