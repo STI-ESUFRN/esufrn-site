@@ -1,18 +1,18 @@
 {% extends "base.pagina.html" %}
 {% load static %}
-
-
 {% load mytags %}
 {% block styles %}
-
-    <link rel="stylesheet" href="{% static 'assets/owl-carousel/owl.carousel.min.css' %}" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
-
+    <link rel="stylesheet"
+          href="{% static 'assets/owl-carousel/owl.carousel.min.css' %}" />
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
     <style>
         .parceria-imagem {
             display: inline-block;
-            margin-right: 60px; /* Espaçamento entre as imagens */
+            margin-right: 60px;
+            /* Espaçamento entre as imagens */
         }
+
         .banner-container {
             display: flex;
             justify-content: center;
@@ -22,19 +22,24 @@
             margin: 0;
             text-align: center;
             margin-left: auto;
-            margin-right: auto; /* Adiciona margens automáticas para centralizar */
+            margin-right: auto;
+            /* Adiciona margens automáticas para centralizar */
         }
+
         .banner-image {
             max-width: 100%;
             border: none;
             display: inline-block;
         }
+
         .secondary {
             background-color: #0b3e61 !important;
         }
+
         .inner-infos div {
             margin-top: 5px;
         }
+
         .info-item {
             padding: 18px 10px 10px 10px;
             text-align: center;
@@ -44,131 +49,180 @@
             background-color: white;
             color: #0b3e61;
         }
+
         .info-item p {
             font-weight: 600;
             font-size: 12px;
         }
+
         .info-item div {
             height: calc(100% - 37px);
             text-align: center;
         }
+
         .info-item div p {
             font-size: 20px;
         }
+
         .card-course {
             background-color: #0b3e61;
         }
+
         .btn-cursos .btn-primary {
             background-color: #0b3e61;
             border-color: #0b3e61;
         }
+
         .bg-azul-escuro {
             background-color: #0b3e61;
         }
+
         .owl-carousel,
         .modal-content {
             border-radius: 0;
             overflow: hidden;
         }
+
         footer {
             background-color: #0b3e61 !important;
         }
+
         .dropdown-item.active,
         .dropdown-item:active,
         .dropdown-item.hover,
         .dropdown-item:hover {
             background-color: #082f49;
         }
+
         .force-wrap {
             white-space: normal !important;
         }
+
         .item {
-            flex: 0 0 50%; /* Mostra duas imagens por vez */
-            transition: transform 0.5s; /* Adiciona um efeito de transição suave */
+            flex: 0 0 50%;
+            /* Mostra duas imagens por vez */
+            transition: transform 0.5s;
+            /* Adiciona um efeito de transição suave */
         }
+
         .image-description {
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 3px;
         }
+
         .image-description img {
             max-width: 100%;
             height: auto;
         }
+
         .blue-rectangle {
             display: inline-block;
-            padding: 4px 35px; /* Ajuste o padding conforme necessário */
-            background-color: #00999e; /* Cor de fundo azul desejada */
-            color: white; /* Cor do texto */
-            border-radius: 5px; /* Cantos arredondados */
-            margin-right: 5px; /* Espaço entre os retângulos */
+            padding: 4px 35px;
+            /* Ajuste o padding conforme necessário */
+            background-color: #0c6980;
+            /* Cor de fundo azul desejada */
+            color: white;
+            /* Cor do texto */
+            margin-right: 5px;
+            /* Espaço entre os retângulos */
+            width: 240px;
+            text-align: center;
         }
+
         .cursos-carrossel {
             display: flex;
             overflow: hidden;
-            margin: 20px 0; /* Adicione margens superior e inferior para espaçamento */
+            margin: 20px 0;
+            /* Adicione margens superior e inferior para espaçamento */
         }
+
         .item {
             flex: 0 0 50%;
             transition: transform 0.5s;
-            margin: 0 10px; /* Adicione margens laterais entre os itens */
+            margin: 0 10px;
+            /* Adicione margens laterais entre os itens */
         }
+
         .owl-nav {
             display: flex;
             justify-content: space-between;
         }
+
         .owl-nav button {
-            background-color: #000000; /* Cor de fundo desejada */
-            color: white; /* Cor do ícone da seta */
+            background-color: #000000;
+            /* Cor de fundo desejada */
+            color: white;
+            /* Cor do ícone da seta */
             width: 40px;
-            height: 40px; /* Aumente a altura para tornar as setas mais visíveis */
-            font-size: 24px; /* Tamanho da fonte das setas */
+            height: 40px;
+            /* Aumente a altura para tornar as setas mais visíveis */
+            font-size: 24px;
+            /* Tamanho da fonte das setas */
             border: none;
-            margin: 0 10px; /* Espaçamento entre as setas de navegação */
-            border-radius: 50%; /* Cantos arredondados para criar um botão circular */
+            margin: 0 10px;
+            /* Espaçamento entre as setas de navegação */
+            border-radius: 50%;
+            /* Cantos arredondados para criar um botão circular */
         }
+
         .owl-nav button:hover {
-            background-color: #333333; /* Cor de fundo ao passar o mouse sobre as setas */
+            background-color: #333333;
+            /* Cor de fundo ao passar o mouse sobre as setas */
         }
+
         .owl-dots {
             text-align: center;
         }
+
         .owl-dots button {
             background-color: #0b3e61;
             border: none;
             width: 10px;
             height: 10px;
-            margin: 0 5px; /* Adicione margens laterais entre os indicadores */
+            margin: 0 5px;
+            /* Adicione margens laterais entre os indicadores */
         }
+
         .video-gallery a {
             display: inline-block;
-            margin: 10px; /* Espaçamento entre miniaturas */
-            border: 1px solid #ccc; /* Adicionar borda para separar miniaturas */
+            margin: 10px;
+            /* Espaçamento entre miniaturas */
+            border: 1px solid #ccc;
+            /* Adicionar borda para separar miniaturas */
             border-radius: 5px;
             padding: 5px;
             text-align: center;
         }
+
         .video-gallery img {
-            max-width: 100%; /* Garante que a imagem não ultrapasse o contêiner */
+            max-width: 100%;
+            /* Garante que a imagem não ultrapasse o contêiner */
             height: auto;
-            opacity: 1; /* Certifique-se de que a opacidade está definida como 1 (totalmente visível) */
+            opacity: 1;
+            /* Certifique-se de que a opacidade está definida como 1 (totalmente visível) */
         }
+
         .gallery .item img {
-            width: 100%; /* Define a largura da imagem para 100% */
-            height: auto; /* Isso mantém a proporção original da imagem */
+            width: 100%;
+            /* Define a largura da imagem para 100% */
+            height: auto;
+            /* Isso mantém a proporção original da imagem */
         }
+
         .menu-column {
             display: inline-block;
-            margin-right: 20px; /* Espaçamento entre colunas (ajuste conforme necessário) */
+            margin-right: 20px;
+            /* Espaçamento entre colunas (ajuste conforme necessário) */
         }
+
         .cursos-carrossel .item .image-description img {
-            max-width: 100px; /* Defina o tamanho máximo desejado para as imagens */
-            height: auto; /* Mantém a proporção da imagem */
+            max-width: 100px;
+            /* Defina o tamanho máximo desejado para as imagens */
+            height: auto;
+            /* Mantém a proporção da imagem */
         }
-
-
-
     </style>
 {% endblock styles %}
 {% block content %}
@@ -176,11 +230,12 @@
         <div class="container text-justify banner-text">
             <div class="container" id="dadosAlert">
                 {% block banner %}
-                <a id="topo"></a>
-
-                <div class="banner-container">
-                    <img src="{% static 'assets/images/banner.jpeg' %}" alt="Banner" class="banner-image">
-                </div>
+                    <a id="topo"></a>
+                    <div class="banner-container">
+                        <img src="{% static 'assets/images/banner.jpeg' %}"
+                             alt="Banner"
+                             class="banner-image">
+                    </div>
                 {% endblock %}
             </div>
         </div>
@@ -188,8 +243,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-sm-8">
-                        <div class="container mt-5 text-center cabecalho">
-                        </div>
+                        <div class="container mt-5 text-center cabecalho"></div>
                         <div class="container text-justify">
                             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                             <script>
@@ -201,143 +255,125 @@
                                 });
                             </script>
                             <b>Destaques</b>
-                            </br>
-                            </br>
-                            <div class="owl-carousel destaque-carousel">
-                                {% for destaque in destaques %}
-                                    <div class="destaque-item">
-                                        {% if destaque.tipo == 'imagem' and destaque.imagem %}
-                                            <a href="{{ destaque.link }}" target="_blank">
-                                                <img src="{{ destaque.imagem.url }}" alt="Destaque" data-link="{{ destaque.link }}">
-                                            </a>
-                                        {% elif destaque.tipo == 'video' %}
-                                            {% if destaque.video_file %}
-                                                <!-- Incorporar vídeo aqui, se necessário -->
-                                                <video controls data-link="{{ destaque.link }}">
-                                                    <source src="{{ destaque.video_file.url }}" type="video/mp4">
-                                                    Seu navegador não suporta o elemento de vídeo.
-                                                </video>
-                                            {% endif %}
-                                        {% endif %}
-                                    </div>
-                                {% endfor %}
-                            </div>
-
-
-
-                            <hr class="hr-escuro my-4" style="margin-top: 0;" />
-                            <div class="container text-justify">
-
-                                <b>Apresentação</b>
-
-
-                                </br>
-                                </br>
-
-                                </br>
-                                <p>
-                                    O Programa Nacional de Acesso ao Ensino Técnico e Emprego (Pronatec) foi uma iniciativa criada pelo governo federal em 2011 para expandir, interiorizar e
-                                    democratizar a oferta de cursos de educação profissional e tecnológica no Brasil, em várias áreas do conhecimento. Na UFRN, a Escola de Saúde já realizou
-                                    dezenas de cursos de Formação Inicial e Continuada (FIC) e Cursos Técnicos entre os anos de 2011 e 2015.
-                                </p>
-                                <p>
-                                    Retomada em abril de 2023, a parceria entre Escola de Saúde da UFRN e o Pronatec oferta agora cursos de capacitação na modalidade Mulheres Mil, como parte de
-                                    um conjunto de políticas públicas que objetiva, além do acesso à educação e ao mercado de trabalho, a promoção, inclusão social e exercício da cidadania, bem
-                                    como combater as diversas formas de vulnerabilidade social em mulheres em situação de pobreza ou extrema pobreza.
-
-                                </p>
-                                <p>
-                                    Nesta página, nosso objetivo é reunir informações sobre o Pronatec na Escola de Saúde da UFRN para que todos tenham a oportunidade de conhecer e participar de
-                                    nossas ações.
-                                </p>
-                                <p>
-                                    Atenciosamente, Coordenação do Pronatec da ESUFRN.
-                                </p>
-                                </br>
-                            </div>
-                        </div>
-                        <hr class="hr-escuro my-4" style="margin-top: 0;" />
-                        <b>Notícias do Pronatec</b>
                         </br>
-                        </br>
-
-                        <ul>
-                            {% for noticia in noticias %}
-                                <li>
-                                    <a href="{{ noticia.link }}" target="_blank">{{ noticia.titulo }}</a><br><br>
-                                </li>
-                            {% endfor %}
-                        </ul>
-
-
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="container mt-5 text-center cabecalho">
-                        </div>
-                        <div class="container text-justify">
-                            <script>
-                                $(document).ready(function() {
-                                    // Mede a largura do texto
-                                    var textWidth = $('.banner-text').width();
-                                    // Aplica a largura medida ao banner
-                                    $('.banner-image').css('width', textWidth + 'px');
-                                });
-                            </script>
-                        </div>
-                            <a id="Cursos"></a>
-                            <a href="{% url 'principal:Cusos_pronatec' %}" target="_blank"><b>Cursos oferecidos</b></a>
-                            <div class="cursos-carrossel owl-carousel">
-                                {% for curso in cursos %}
-                                    <div class="item" data-curso-id="{{ curso.id }}">
-                                        <div class="image-description">
-                                            <a href="{{ curso.link }}" target="_blank">
-                                                <img src="{{ curso.imagem.url }}" alt="{{ curso.nome_curso }}">
-                                            </a>
-                                        </div>
-
-                                    </div>
-                                {% endfor %}
-                            </div>
-
-
-
-                            <a id="fotos"></a>
-                            <a href="{% url 'principal:pronatec_fotos' %}" target="_blank"><b>Galeria</b></a>
-                            </br>
-                            </br>
-                                <div class="gallery owl-carousel">
-                                    {% for photo in photos %}
-                                        <div class="item">
-                                            <a data-fancybox="gallery" data-options='{"toolbar": true}' href="{{ photo.image.url }}">
-                                                <img src="{{ photo.image.url }}" alt="{{ photo.descricao }}">
-                                            </a>
-                                            <p style="font-size: 13px;">{{ photo.descricao }}</p>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-
-
-                            <a id="videos"></a>
-                            <a href="{% url 'principal:pronatec_videos' %}" target="_blank"><b>Histórias Mil</b></a>
-                            </br>
-                            </br>
-                            <div class="video-gallery owl-carousel">
-                                {% for link in links %}
-                                <div class="item">
-                                    <div class="video-card video-container">
-                                    <a href="{{ link.link }}" target="_blank">
-                                        <img src="{{ link.imagem.url }}" alt="{{ link.titulo }}" class="img-fluid">
+                    </br>
+                    <div class="owl-carousel destaque-carousel">
+                        {% for destaque in destaques %}
+                            <div class="destaque-item">
+                                {% if destaque.tipo == 'imagem' and destaque.imagem %}
+                                    <a href="{{ destaque.link }}" target="_blank">
+                                        <img src="{{ destaque.imagem.url }}"
+                                             alt="Destaque"
+                                             data-link="{{ destaque.link }}">
                                     </a>
-                                    <p style="font-size: 13px;">{{ link.titulo }}</p>
-                                </div>
-                                </div>
-                                {% endfor %}
+                                {% elif destaque.tipo == 'video' %}
+                                    {% if destaque.video_file %}
+                                        <!-- Incorporar vídeo aqui, se necessário -->
+                                        <video controls data-link="{{ destaque.link }}">
+                                            <source src="{{ destaque.video_file.url }}" type="video/mp4">
+                                            Seu navegador não suporta o elemento de vídeo.
+                                        </video>
+                                    {% endif %}
+                                {% endif %}
                             </div>
-
-
-
-
-                            </br>
+                        {% endfor %}
+                    </div>
+                    <hr class="hr-escuro my-4" style="margin-top: 0;" />
+                    <div class="container text-justify">
+                        <b>Apresentação</b>
+                    </br>
+                </br>
+            </br>
+            <p>
+                O Programa Nacional de Acesso ao Ensino Técnico e Emprego (Pronatec) foi uma iniciativa criada pelo governo federal em 2011 para expandir, interiorizar e
+                democratizar a oferta de cursos de educação profissional e tecnológica no Brasil, em várias áreas do conhecimento. Na UFRN, a Escola de Saúde já realizou
+                dezenas de cursos de Formação Inicial e Continuada (FIC) e Cursos Técnicos entre os anos de 2011 e 2015.
+            </p>
+            <p>
+                Retomada em abril de 2023, a parceria entre Escola de Saúde da UFRN e o Pronatec oferta agora cursos de capacitação na modalidade Mulheres Mil, como parte de
+                um conjunto de políticas públicas que objetiva, além do acesso à educação e ao mercado de trabalho, a promoção, inclusão social e exercício da cidadania, bem
+                como combater as diversas formas de vulnerabilidade social em mulheres em situação de pobreza ou extrema pobreza.
+            </p>
+            <p>
+                Nesta página, nosso objetivo é reunir informações sobre o Pronatec na Escola de Saúde da UFRN para que todos tenham a oportunidade de conhecer e participar de
+                nossas ações.
+            </p>
+            <p>Atenciosamente, Coordenação do Pronatec da ESUFRN.</p>
+        </br>
+    </div>
+</div>
+<hr class="hr-escuro my-4" style="margin-top: 0;" />
+<b>Notícias do Pronatec</b>
+</br>
+</br>
+<ul>
+    {% for noticia in noticias %}
+        <li>
+            <a href="{{ noticia.link }}" target="_blank">{{ noticia.titulo }}</a>
+            <br>
+            <br>
+        </li>
+    {% endfor %}
+</ul>
+</div>
+<div class="col-sm-4">
+    <div class="container mt-5 text-center cabecalho"></div>
+    <div class="container text-justify">
+        <script>
+            $(document).ready(function() {
+                // Mede a largura do texto
+                var textWidth = $('.banner-text').width();
+                // Aplica a largura medida ao banner
+                $('.banner-image').css('width', textWidth + 'px');
+            });
+        </script>
+    </div>
+    <a id="Cursos"></a>
+    <a href="{% url 'principal:Cusos_pronatec' %}" target="_blank"><b>Cursos oferecidos</b></a>
+    <div class="cursos-carrossel owl-carousel">
+        {% for curso in cursos %}
+            <div class="item" data-curso-id="{{ curso.id }}">
+                <div class="image-description">
+                    <a href="{{ curso.link }}" target="_blank">
+                        <img src="{{ curso.imagem.url }}" alt="{{ curso.nome_curso }}">
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <a id="fotos"></a>
+    <a href="{% url 'principal:pronatec_fotos' %}" target="_blank"><b>Galeria</b></a>
+</br>
+</br>
+<div class="gallery owl-carousel">
+    {% for photo in photos %}
+        <div class="item">
+            <a data-fancybox="gallery"
+               data-options='{"toolbar": true}'
+               href="{{ photo.image.url }}">
+                <img src="{{ photo.image.url }}" alt="{{ photo.descricao }}">
+            </a>
+            <p style="font-size: 13px;">{{ photo.descricao }}</p>
+        </div>
+    {% endfor %}
+</div>
+<a id="videos"></a>
+<a href="{% url 'principal:pronatec_videos' %}" target="_blank"><b>Histórias Mil</b></a>
+</br>
+</br>
+<div class="video-gallery owl-carousel">
+    {% for link in links %}
+        <div class="item">
+            <div class="video-card video-container">
+                <a href="{{ link.link }}" target="_blank">
+                    <img src="{{ link.imagem.url }}" alt="{{ link.titulo }}" class="img-fluid">
+                </a>
+                <p style="font-size: 13px;">{{ link.titulo }}</p>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+</br>
 <!--                            <b>Menu</b>-->
 <!--                            <div id="menu">-->
 <!--                                <div class="menu-column">-->
@@ -346,59 +382,92 @@
 <!--                                    </ul>-->
 <!--                                </div>-->
 <!--                            </div>-->
-                            <b>Polos</b>
-                            </br>
-                            <p style="font-size: 15px;"><a href="https://www.natal.rn.gov.br/" target="_blank" class="blue-rectangle">Natal</a></p>
-                            <p style="font-size: 15px;"><a href="https://www.parnamirim.rn.gov.br/" target="_blank" class="blue-rectangle">Parnamirim</a></p>
-                            <p style="font-size: 15px;"><a href="https://site.maxaranguape.rn.gov.br/" target="_blank" class="blue-rectangle">Maxaranguape</a></p>
-                            </br>
-                            <b>Contatos</b>
-                            <div class="menu-column">
-                                <ul>
-                                    <li><p>mulheresmilesufrn@gmail.com</p></li>
-                                    <li><p>Telefone: 3342-2290</p></li>
-
-                                </ul>
-                            </div>
-
-
-                    </div>
-                </div>
-                <hr class="hr-escuro mt-5"/>
-                <b>Parcerias</b>
-                    </br>
-                    </br>
-                    <div class="parcerias-carousel owl-carousel">
-                        <div class="parceria-imagem"><!--Ministério-->
-                            <a href="https://www.gov.br/mec/pt-br" target="_blank">
-                                <img src="{% static 'assets/images/Parceria4.jpeg' %}" alt="Parceria 4" style="max-width: 180px; height: auto;">
-                            </a>
-                        </div>
-                        <div class="parceria-imagem"><!--Natal-->
-                            <a href="https://www.natal.rn.gov.br/" target="_blank">
-                                <img src="{% static 'assets/images/Parceria1.jpeg' %}" alt="Parceria 1" style="max-width: 180px; height: auto;">
-                            </a>
-                        </div>
-                        <div class="parceria-imagem"><!--Parnamirim-->
-                            <a href="https://www.parnamirim.rn.gov.br/" target="_blank">
-                                <img src="{% static 'assets/images/Parceria2.jpeg' %}" alt="Parceria 2" style="max-width: 180px; height: auto;">
-                            </a>
-                        </div>
-                        <div class="parceria-imagem"><!--Maxaramguape-->
-                            <a href="https://site.maxaranguape.rn.gov.br/" target="_blank">
-                                <img src="{% static 'assets/images/Parceria3.jpeg' %}" alt="Parceria 3" style="max-width: 180px; height: auto;">
-                            </a>
-                        </div>
-
-                        <!-- Adicione mais imagens de parcerias conforme necessário -->
-                    </div>
-            </div>
-        {% endif %}
-        <div class="container mt-4 text-right">
-            <hr class="hr-escuro my-5"/>
-            <a href="#" class="text-uppercase text-dark">Voltar ao topo <i class="fas fa-arrow-alt-circle-up"></i></a>
-        </div>
-    </article>
+<b>Polos</b>
+</br>
+<p style="font-size: 15px;">
+    <a href="https://www.natal.rn.gov.br/"
+       target="_blank"
+       class="blue-rectangle">Natal</a>
+</p>
+<p style="font-size: 15px;">
+    <a href="https://www.parnamirim.rn.gov.br/"
+       target="_blank"
+       class="blue-rectangle">Parnamirim</a>
+</p>
+<p style="font-size: 15px;">
+    <a href="http://site.saomigueldogostoso.rn.gov.br/"
+       target="_blank"
+       class="blue-rectangle">São Miguel do Gostoso</a>
+</p>
+<p style="font-size: 15px;">
+    <a href="https://santacruz.rn.gov.br/"
+       target="_blank"
+       class="blue-rectangle">Santa Cruz</a>
+</p>
+</br>
+<b>Contatos</b>
+<div class="menu-column">
+    <ul>
+        <li>
+            <p>mulheresmilesufrn@gmail.com</p>
+        </li>
+        <li>
+            <p>Telefone: 3342-2290</p>
+        </li>
+    </ul>
+</div>
+</div>
+</div>
+<hr class="hr-escuro mt-5" />
+<b>Parcerias</b>
+</br>
+</br>
+<div class="parcerias-carousel owl-carousel">
+    <div class="parceria-imagem">
+        <!--Ministério-->
+        <a href="https://www.gov.br/mec/pt-br" target="_blank">
+            <img src="{% static 'assets/images/Parceria4.jpeg' %}"
+                 alt="Parceria 4"
+                 style="max-width: 180px;
+                        height: auto">
+        </a>
+    </div>
+    <div class="parceria-imagem">
+        <!--Natal-->
+        <a href="https://www.natal.rn.gov.br/" target="_blank">
+            <img src="{% static 'assets/images/Parceria1.jpeg' %}"
+                 alt="Parceria 1"
+                 style="max-width: 180px;
+                        height: auto">
+        </a>
+    </div>
+    <div class="parceria-imagem">
+        <!--Parnamirim-->
+        <a href="https://www.parnamirim.rn.gov.br/" target="_blank">
+            <img src="{% static 'assets/images/Parceria2.jpeg' %}"
+                 alt="Parceria 2"
+                 style="max-width: 180px;
+                        height: auto">
+        </a>
+    </div>
+    <div class="parceria-imagem">
+        <!--Maxaramguape-->
+        <a href="https://site.maxaranguape.rn.gov.br/" target="_blank">
+            <img src="{% static 'assets/images/Parceria3.jpeg' %}"
+                 alt="Parceria 3"
+                 style="max-width: 180px;
+                        height: auto">
+        </a>
+    </div>
+    <!-- Adicione mais imagens de parcerias conforme necessário -->
+</div>
+</div>
+{% endif %}
+<div class="container mt-4 text-right">
+    <hr class="hr-escuro my-5" />
+    <a href="#" class="text-uppercase text-dark">Voltar ao topo <i class="fas fa-arrow-alt-circle-up"></i></a>
+</div>
+</article>
 {% endblock content %}
 {% block scripts %}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -406,7 +475,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
     <script src="https://vjs.zencdn.net/7.11.4/video.js"></script>
     <link href="https://vjs.zencdn.net/7.11.4/video-js.css" rel="stylesheet">
-
     <script src="{% static 'assets/owl-carousel/owl.carousel.min.js' %}"></script>
     <script>
         $(document).ready(function() {
@@ -415,7 +483,7 @@
                 items: 1,
                 loop: true,
                 autoplay: true,
-                autoplayTimeout: 3000,  // Defina o intervalo de tempo desejado
+                autoplayTimeout: 3000, // Defina o intervalo de tempo desejado
                 autoplayHoverPause: true,
                 dots: false,
             });
@@ -428,6 +496,7 @@
                 // Alterne a visibilidade do link (de oculto para visível e vice-versa)
                 link.toggle();
             });
+
             function setCarousel() {
                 $('#modal-images').owlCarousel({
                     items: 1,
@@ -464,7 +533,7 @@
                 autoplayTimeout: 3000, // Intervalo entre os vídeos (em milissegundos)
                 nav: false, // Navegação próxima/anterior (se desejar)
             });
-            document.addEventListener('DOMContentLoaded', function () {
+            document.addEventListener('DOMContentLoaded', function() {
                 videojs(document.querySelectorAll('iframe'), {});
             });
             $('.cursos-carrossel').owlCarousel({
@@ -485,27 +554,30 @@
             // Aplica a largura medida ao banner
             $('.banner-image').css('width', textWidth + 'px');
         });
-             function updateCarousel() {
-                items.forEach(item => {
-                    item.style.transform = `translateX(-${currentIndex * 50}%)`; // 50% para duas imagens por vez
-                });
+
+        function updateCarousel() {
+            items.forEach(item => {
+                item.style.transform = `translateX(-${currentIndex * 50}%)`; // 50% para duas imagens por vez
+            });
+        }
+
+        function nextSlide() {
+            currentIndex++;
+            if (currentIndex >= items.length - 1) {
+                currentIndex = items.length - 1;
             }
-            function nextSlide() {
-                currentIndex++;
-                if (currentIndex >= items.length - 1) {
-                    currentIndex = items.length - 1;
-                }
-                updateCarousel();
-            }
-            function prevSlide() {
-                currentIndex--;
-                if (currentIndex < 0) {
-                    currentIndex = 0;
-                }
-                updateCarousel();
-            }
-            document.getElementById('next-button').addEventListener('click', nextSlide);
-            document.getElementById('prev-button').addEventListener('click', prevSlide);
             updateCarousel();
+        }
+
+        function prevSlide() {
+            currentIndex--;
+            if (currentIndex < 0) {
+                currentIndex = 0;
+            }
+            updateCarousel();
+        }
+        document.getElementById('next-button').addEventListener('click', nextSlide);
+        document.getElementById('prev-button').addEventListener('click', prevSlide);
+        updateCarousel();
     </script>
 {% endblock scripts %}
