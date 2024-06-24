@@ -485,11 +485,14 @@ class Alert(TimeStampedModel):
 class Photo(models.Model):
     image = models.ImageField(upload_to="photos/")
     descricao = models.CharField(max_length=255)
+    date_created = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.descricao
+
     class Meta:
         verbose_name_plural = "Fotos_PRONATEC"
+        ordering = ['-date_created']
 
 
 class Links_V(models.Model):
