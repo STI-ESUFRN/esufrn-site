@@ -17,7 +17,9 @@
                                         {% if documento.document_type == "arquivo" %}
                                             <a target="_blank" href="{{ documento.file.url }}">{{ documento.name }}</a>
                                         {% elif documento.document_type == "link" %}
-                                            <a target="_blank" href="{{ documento.link }}">{{ documento.name }}</a>
+                                            <li>
+                                                <a target="_blank" href="{{ documento.link }}">{{ documento.name }}</a>
+                                            </li>
                                         {% endif %}
                                     </h5>
                                 </div>
