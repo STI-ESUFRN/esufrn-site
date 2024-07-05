@@ -420,6 +420,23 @@ def instituicao_documentos(request):
 
     return render(request, "instituicao.documentos.html", context)
 
+def instituicao_projetos(request):
+    categories = (
+        ("institucional", "Institucional"),
+        ("ensino", "Ensino"),
+    )
+    list = []
+    queryset = Document.objects.exclude(is_active=False)
+    for index, category in categories:
+        docs = queryset.filter(category=index)
+        list.append({"main": category, "documentos": docs})
+
+    context = {
+        "categorias": list,
+        "crumbs": [{"name": "Instituição"}, {"name": "Projetos"}],
+    }
+
+    return render(request, "instituicao.projetos.html", context)
 
 def publicacoes_outras(request):
     anos_list = (

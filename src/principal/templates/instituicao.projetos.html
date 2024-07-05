@@ -3,13 +3,13 @@
 {% block content %}
     <article>
         <div class="container mt-5 text-center cabecalho">
-            <h3>Documentos Institucionais</h3>
+            <h3>Projetos Pedagógicos</h3>
             <hr class="hr-escuro mt-5" />
         </div>
         <div class="container mt-4">
             <div class="row">
                 {% for categoria in categorias %}
-                    {% if categoria.main == "Institucional" %}
+                    {% if categoria.main == "Ensino" %}
                         {% for documento in categoria.documentos %}
                             <div class="col-12 mb-2">
                                 <div class="col text-left documentos">
