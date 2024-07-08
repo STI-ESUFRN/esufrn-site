@@ -113,6 +113,16 @@ class AdminDocumentos(admin.ModelAdmin):
     search_fields = ["name"]
     list_filter = ["category", "document_type"]
 
+    fieldsets = [
+        (None, {
+            'fields': ('name', 'authors', 'category', 'ensino_subcategory', 'document_type', 'file', 'link', 'date', 'is_active')
+        }),
+    ]
+
+    class Media:
+        js = ("assets/js/admin_documents.js",)
+
+
 
 class AdminMensagem(admin.ModelAdmin):
     list_display = ["name", "contact"]

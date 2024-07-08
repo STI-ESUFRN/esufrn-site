@@ -429,6 +429,16 @@ def instituicao_projetos(request):
     queryset = Document.objects.exclude(is_active=False)
     for index, category in categories:
         docs = queryset.filter(category=index)
+        documentos = []
+        
+        for doc in docs:
+            documentos.append({
+                "name": doc.name,
+                "document_type": doc.document_type,
+                "file": doc.file.url if doc.document_type == "arquivo" else None,
+                "link": doc.link if doc.document_type == "link" else None,
+                "ensino_subcategory": doc.ensino_subcategory
+            })
         list.append({"main": category, "documentos": docs})
 
     context = {

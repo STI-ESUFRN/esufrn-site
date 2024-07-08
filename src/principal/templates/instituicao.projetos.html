@@ -1,5 +1,13 @@
 {% extends "base.pagina.html" %}
 {% load static %}
+{% block styles %}
+    <style>
+        h4 {
+            font-size: 30px;
+            font-weight: 500;
+        }
+    </style>
+{% endblock styles %}
 {% block content %}
     <article>
         <div class="container mt-5 text-center cabecalho">
@@ -7,23 +15,52 @@
             <hr class="hr-escuro mt-5" />
         </div>
         <div class="container mt-4">
+            <h4>Cursos Técnicos</h4>
             <div class="row">
                 {% for categoria in categorias %}
                     {% if categoria.main == "Ensino" %}
                         {% for documento in categoria.documentos %}
-                            <div class="col-12 mb-2">
-                                <div class="col text-left documentos">
-                                    <h5 class="mb-0">
-                                        <li>
-                                            {% if documento.document_type == "arquivo" %}
-                                                <a target="_blank" href="{{ documento.file.url }}">{{ documento.name }}</a>
-                                            {% elif documento.document_type == "link" %}
-                                                <a target="_blank" href="{{ documento.link }}">{{ documento.name }}</a>
-                                            {% endif %}
-                                        </li>
-                                    </h5>
+                            {% if documento.ensino_subcategory == "cursos_tecnicos" %}
+                                <div class="col-12 mb-2">
+                                    <div class="col text-left documentos">
+                                        <h5 class="mb-0">
+                                            <li>
+                                                {% if documento.document_type == "arquivo" %}
+                                                    <a target="_blank" href="{{ documento.file }}">{{ documento.name }}</a>
+                                                {% elif documento.document_type == "link" %}
+                                                    <a target="_blank" href="{{ documento.link }}">{{ documento.name }}</a>
+                                                {% endif %}
+                                            </li>
+                                        </h5>
+                                    </div>
                                 </div>
-                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="container mt-4">
+            <h4>Graduação Tecnológica</h4>
+            <div class="row">
+                {% for categoria in categorias %}
+                    {% if categoria.main == "Ensino" %}
+                        {% for documento in categoria.documentos %}
+                            {% if documento.ensino_subcategory == "graduacao_tecnologica" %}
+                                <div class="col-12 mb-2">
+                                    <div class="col text-left documentos">
+                                        <h5 class="mb-0">
+                                            <li>
+                                                {% if documento.document_type == "arquivo" %}
+                                                    <a target="_blank" href="{{ documento.file }}">{{ documento.name }}</a>
+                                                {% elif documento.document_type == "link" %}
+                                                    <a target="_blank" href="{{ documento.link }}">{{ documento.name }}</a>
+                                                {% endif %}
+                                            </li>
+                                        </h5>
+                                    </div>
+                                </div>
+                            {% endif %}
                         {% endfor %}
                     {% endif %}
                 {% endfor %}
