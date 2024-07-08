@@ -344,6 +344,10 @@ class Document(TimeStampedModel):
         ARQUIVO = "arquivo", "Arquivo"
         LINK = "link", "Link"
 
+    class EnsinoSubcategory(models.TextChoices):
+        CURSOS_TECNICOS = "cursos_tecnicos", "Cursos Técnicos"
+        GRADUACAO_TECNOLOGICA = "graduacao_tecnologica", "Graduação Tecnológica"
+    
     name = models.CharField("Nome", max_length=250)
     authors = models.CharField(
         "Autores",
@@ -357,6 +361,9 @@ class Document(TimeStampedModel):
         verbose_name="Categoria",
         choices=Category.choices,
         max_length=32,
+        help_text=(
+            "Caso selecione a categoria Ensino, escolha uma subcategoria."
+        ),
     )
 
     document_type = models.CharField(
@@ -368,6 +375,14 @@ class Document(TimeStampedModel):
             "Documento: Ao clicar, abrirá o documento em uma nova guia; Link: Ao clicar"
             " abrirá o link inserido em uma nova guia."
         ),
+    )
+
+    ensino_subcategory = models.CharField(
+        verbose_name="Subcategoria de Ensino",
+        choices=EnsinoSubcategory.choices,
+        max_length=32,
+        blank=True,
+        null=True,
     )
 
     file = models.FileField(
@@ -408,6 +423,11 @@ class Document(TimeStampedModel):
         if self.document_type == "link" and not self.link:
             raise ValidationError(
                 "O tipo do documento exige que seja informado um link",
+            )
+        
+        if self.category == self.Category.ENSINO and not self.ensino_subcategory:
+            raise ValidationError(
+                "A categoria Ensino exige que seja escolhida uma subcategoria",
             )
 
     def __str__(self):
