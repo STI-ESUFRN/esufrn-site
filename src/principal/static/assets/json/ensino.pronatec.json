@@ -4,26 +4,12 @@
     "nome": " Técnico em Estética (Pronatec)",
     "ativo": false,
     "head": {
-      "vagas": " 25 vagas",
-      "duracao": " Aproximadamente dois anos.",
-      "carga": " 1220 horas.",
-      "turno": " Tarde",
-      "periodicidade": " -- "
     },
     "main": {
-      "Forma de ingresso": " PRONATEC. ",
-      "A quem se destina": "  Estudantes ou profissionais que tenham concluído o Ensino Médio.",
-      "Estrutura oferecida": [
-        "Laboratórios de enfermagem e informática;",
-        "Salas de aula climatizadas com data-show;",
-        "Dispositivos de Multimídia;",
-        "Biblioteca com exemplares atualizados;",
-        "Estágios realizados com acompanhamento de instrutores;",
-        "Auditórios e anfiteatros;",
-        "Corpo docente qualificado."
-      ],
-      "Área de atuação": " O egresso atua em atividades de embelezamento, promoção, proteção, manutenção e recuperação estética da pele. Seleciona e aplica procedimentos e recursos estéticos utilizando produtos cosméticos, técnicas e equipamentos específicos de acordo com as características e necessidades do cliente. Utiliza técnicas de atendimento ao cliente orientando-o sobre ações de proteção à saúde cutânea.",
-      "Maiores informações": " ensino@es.ufrn.br"
+	"Carga Horária": " 1220h.",
+      "Forma de ingresso e a quem se destinou": " O ingresso ocorreu por inscrição dos interessados no referido curso, ofertado através do Programa Nacional de Acesso ao Ensino Técnico e Emprego (PRONATEC). Destinou-se a estudantes cursando o 2° ou 3° anos do Ensino Médio da Rede pública de ensino. ",
+      "Área de atuação": " O Técnico em Estética é o profissional de nível técnico, com exercício regido pela Lei nº 12.592/12, que desenvolve atividades de embelezamento, promoção, proteção, manutenção e recuperação estética da pele. Seleciona e aplica procedimentos e recursos estéticos utilizando produtos cosméticos, técnicas e equipamentos específicos, de acordo com as características e necessidades do cliente. Utiliza técnicas de atendimento ao cliente orientando-o sobre ações de proteção à saúde cutânea.",
+      "Maiores informações": "sai@es.ufrn.br ou 3342 2290"
     },
     "fotos": {
       "Aula de laboratório de Estética": "pronatec.estetica.1.jpg",
@@ -36,26 +22,12 @@
     "nome": " Técnico em Análises Clínicas (Pronatec)",
     "ativo": false,
     "head": {
-      "vagas": " --",
-      "duracao": " --",
-      "carga": " --",
-      "turno": " --",
-      "periodicidade": " --"
     },
     "main": {
-      "Forma de ingresso": " --",
-      "A quem se destina": "  --",
-      "Estrutura oferecida": [
-        "Laboratórios de enfermagem e informática;",
-        "Salas de aula climatizadas com data-show;",
-        "Dispositivos de Multimídia;",
-        "Biblioteca com exemplares atualizados;",
-        "Estágios realizados com acompanhamento de instrutores;",
-        "Auditórios e anfiteatros;",
-        "Corpo docente qualificado."
-      ],
-      "Área de atuação": " --",
-      "Maiores informações": " ensino@es.ufrn.br"
+	"Carga Horária": " 1200h.",
+      "Forma de ingresso e a quem se destinou": " O ingresso ocorreu por inscrição dos interessados no referido curso, ofertado através do Programa Nacional de Acesso ao Ensino Técnico e Emprego (PRONATEC). Destinou-se a estudantes cursando o 2° ou 3° anos do Ensino Médio da Rede pública de ensino.",
+      "Área de atuação": " O Técnico em Análises Clínicas é o profissional de nível técnico capaz de auxiliar e executar atividades padronizadas de laboratório - automatizadas ou técnicas clássicas - necessárias ao diagnóstico, nas áreas de parasitologia, microbiologia médica, imunologia, hematologia, bioquímica, biologia molecular e urinálise; conhecer os procedimentos pré-analíticos, analíticos e pós-analíticos com total controle de qualidade; compor equipes multidisciplinares, na investigação e implantação de novas tecnologias biomédicas relacionadas às análises clínicas; operar e zelar pelo bom funcionamento do aparato tecnológico de laboratório de análises clínicas; desenvolver diferentes ações de promoção da saúde, de proteção e prevenção de agravos e doenças; entre outros.",
+      "Maiores informações": " sai@es.ufrn.br ou 3342 2290"
     }
   },
   {
@@ -63,26 +35,12 @@
     "nome": " Técnico em Segurança do Trabalho (Pronatec)",
     "ativo": false,
     "head": {
-      "vagas": " --",
-      "duracao": " --",
-      "carga": " --",
-      "turno": " --",
-      "periodicidade": " --"
     },
     "main": {
-      "Forma de ingresso": " --",
-      "A quem se destina": "  --",
-      "Estrutura oferecida": [
-        "Laboratórios de enfermagem e informática;",
-        "Salas de aula climatizadas com data-show;",
-        "Dispositivos de Multimídia;",
-        "Biblioteca com exemplares atualizados;",
-        "Estágios realizados com acompanhamento de instrutores;",
-        "Auditórios e anfiteatros;",
-        "Corpo docente qualificado."
-      ],
-      "Área de atuação": " --",
-      "Maiores informações": " ensino@es.ufrn.br"
+	"Carga Horária":"1485h",
+      "Forma de ingresso e a quem se destinou": " O ingresso ocorreu por inscrição dos interessados no referido curso, ofertado através do Programa Nacional de Acesso ao Ensino Técnico e Emprego (PRONATEC). Destinou-se a estudantes cursando o 2° ou 3° anos do Ensino Médio da Rede pública de ensino.",
+      "Área de atuação": " O profissional Técnico em Segurança do Trabalho desenvolve atividades de promoção da saúde e prevenção de doenças e agravos aos trabalhadores, obedecendo aos níveis de menor e médio conhecimento e complexidade de ações, referenciadas nas necessidades de saúde e segurança individuais e coletivas, determinadas pelo processo saúde-doença nas atividades laborais exercidas pelo trabalhador, atuando no planejamento, programação, orientação e execução das atividades de saúde e segurança do trabalho, nos três níveis de prevenção.",
+      "Maiores informações": "  sai@es.ufrn.br ou 3342 2290"
     }
   },
   {
@@ -90,67 +48,50 @@
     "nome": " Técnico em Saúde Bucal (Pronatec)",
     "ativo": false,
     "head": {
-      "vagas": " --",
-      "duracao": " --",
-      "carga": " --",
-      "turno": " --",
-      "periodicidade": " --"
     },
     "main": {
-      "Forma de ingresso": " --",
-      "A quem se destina": "  --",
-      "Estrutura oferecida": [
-        "Laboratórios de enfermagem e informática;",
-        "Salas de aula climatizadas com data-show;",
-        "Dispositivos de Multimídia;",
-        "Biblioteca com exemplares atualizados;",
-        "Estágios realizados com acompanhamento de instrutores;",
-        "Auditórios e anfiteatros;",
-        "Corpo docente qualificado."
-      ],
-      "Área de atuação": " --",
-      "Maiores informações": " ensino@es.ufrn.br"
+	"Carga Horária":"1200h",    
+      "Forma de ingresso e a quem se destinou": " O ingresso ocorreu por inscrição dos interessados no referido curso, ofertado através do Programa Nacional de Acesso ao Ensino Técnico e Emprego (PRONATEC). Destinou-se a estudantes cursando o 2° ou 3° anos do Ensino Médio da Rede pública de ensino.",
+      "Área de atuação": " O Técnico em Saúde Bucal é um profissional habilitado que, sob a orientação e supervisão do Cirurgião-Dentista (CD), executa tarefas auxiliares no atendimento odontológico, atuando na promoção, prevenção e controle das doenças bucais. Sua formação o credencia a compor equipes de saúde em nível local, colaborar com o CD em pesquisas, em seu atendimento no consultório ou clínica e em Odontologia Sanitária.",
+      "Maiores informações": " sai@es.ufrn.br ou 3342 2290"
     }
   },
   {
     "id": "e014",
-    "nome": " Técnico em Manutenção e Suporte em Informática (Pronatec)",
+    "nome": "Técnico em Manutenção e Suporte em Informática (Pronatec)",
     "ativo": false,
-    "head": {
-      "vagas": " --",
-      "duracao": " --",
-      "carga": " --",
-      "turno": " --",
-      "periodicidade": " --"
-    },
+    "head":"",
     "main": {
-      "Forma de ingresso": " --",
-      "A quem se destina": "  --",
-      "Estrutura oferecida": [
-        "Laboratórios de enfermagem e informática;",
-        "Salas de aula climatizadas com data-show;",
-        "Dispositivos de Multimídia;",
-        "Biblioteca com exemplares atualizados;",
-        "Estágios realizados com acompanhamento de instrutores;",
-        "Auditórios e anfiteatros;",
-        "Corpo docente qualificado."
-      ],
-      "Área de atuação": " --",
-      "Maiores informações": " ensino@es.ufrn.br"
+    "Carga Horária":"1000h",
+      "Forma de ingresso e a quem se destina": " Forma de ingresso e a quem se destinou: O ingresso ocorreu por inscrição dos interessados no referido curso, ofertado através do Programa Nacional de Acesso ao Ensino Técnico e Emprego (PRONATEC). Destinou-se a estudantes cursando o 2° ou 3° anos do Ensino Médio da Rede pública de ensino",
+      
+      "Área de atuação": " -O Técnico em Manutenção e Suporte em Informática é um profissional habilitado para conhecer e operar os serviços e funções do sistema operacional;  instalar e utilizar softwares básicos e aplicativos em geral; identificar os componentes de um computador e verificar o correto funcionamento dos equipamentos e softwares do sistema de informação interpretando orientações dos manuais, bem como analisando o funcionamento entre eles; identificar a origem de falhas no funcionamento de computadores, periféricos e softwares básicos, avaliando seus efeitos; instalar computadores e seus acessórios essenciais; entre outros",
+      "Maiores informações": " sai@es.ufrn.br ou 3342 2290"
     }
   },
    {
     "id": "e015",
-    "nome": " Técnico em Agente Comunitário de Saúde (Pronatec)",
+    "nome": "Técnico em Agente Comunitário de Saúde",
     "ativo": false,
-    "head": {
-      "duracao": " 1200h"
-      },
+    "head":"",
     "main": {
-      "Forma de ingresso": " Forma de ingresso e a quem se destinou: O ingresso ocorreu por inscrição dos interessados no referido curso, ofertado através do Programa Nacional de Acesso ao Ensino Técnico e Emprego (PRONATEC). Destinou-se a estudantes cursando o 2° ou 3° anos do Ensino Médio da Rede pública de ensino",
-      "Área de atuação": "O Técnico em Agente Comunitário de Saúde é um profissional que compõe a equipe multiprofissional dos serviços de atenção básica à saúde. Suas atividades transcendem o campo da saúde na medida em que requerem atenção a múltiplos aspectos das condições de vida da população, desempenhando atividades profissionais com responsabilidade, justiça, ética e competência, considerando os princípios básicos de universalidade, equidade e integralidade em saúde",
-      "Maiores informações": "sai@es.ufrn.br ou 3342 2290"
+    "Carga Horária":"1200h",
+      "Forma de ingresso e a quem se destina": " Forma de ingresso e a quem se destinou: O ingresso ocorreu por inscrição dos interessados no referido curso, ofertado através do Programa Nacional de Acesso ao Ensino Técnico e Emprego (PRONATEC). Destinou-se a estudantes cursando o 2° ou 3° anos do Ensino Médio da Rede pública de ensino",
+
+      "Área de atuação": " O Técnico em Agente Comunitário de Saúde é um profissional que compõe a equipe multiprofissional dos serviços de atenção básica à saúde. Suas atividades transcendem o campo da saúde na medida em que requerem atenção a múltiplos aspectos das condições de vida da população, desempenhando atividades profissionais com responsabilidade, justiça, ética e competência, considerando os princípios básicos de universalidade, equidade e integralidade em saúde.",
+      "Maiores informações": "  sai@es.ufrn.br ou 3342 2290"
+    }
+  },
+    {
+    "id": "e016",
+    "nome": "Técnico em Massoterapia",
+    "ativo": false,
+    "head":"",
+    "main": {
+    "Carga Horária":"1200h",
+      "Forma de ingresso e a quem se destina": " Forma de ingresso e a quem se destinou: O ingresso ocorreu por inscrição dos interessados no referido curso, ofertado através do Programa Nacional de Acesso ao Ensino Técnico e Emprego (PRONATEC). Destinou-se a estudantes cursando o 2° ou 3° anos do Ensino Médio da Rede pública de ensino",
+
+      "Área de atuação": "O Técnico em Massoterapia atua em diferentes tipos de estabelecimentos públicos e privados e também no seu próprio espaço de atendimento, executando com segurança, diferentes técnicas de massagem, e contribuindo para a atenção integral à saúde.",                                   "Maiores informações": "  sai@es.ufrn.br ou 3342 2290"
     }
   }
-
 ]
