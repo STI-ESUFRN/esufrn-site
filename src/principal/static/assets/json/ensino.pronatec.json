@@ -138,5 +138,19 @@
       "Área de atuação": " --",
       "Maiores informações": " ensino@es.ufrn.br"
     }
+  },
+   {
+    "id": "e015",
+    "nome": " Técnico em Agente Comunitário de Saúde (Pronatec)",
+    "ativo": false,
+    "head": {
+      "duracao": " 1200h"
+      },
+    "main": {
+      "Forma de ingresso": " Forma de ingresso e a quem se destinou: O ingresso ocorreu por inscrição dos interessados no referido curso, ofertado através do Programa Nacional de Acesso ao Ensino Técnico e Emprego (PRONATEC). Destinou-se a estudantes cursando o 2° ou 3° anos do Ensino Médio da Rede pública de ensino",
+      "Área de atuação": "O Técnico em Agente Comunitário de Saúde é um profissional que compõe a equipe multiprofissional dos serviços de atenção básica à saúde. Suas atividades transcendem o campo da saúde na medida em que requerem atenção a múltiplos aspectos das condições de vida da população, desempenhando atividades profissionais com responsabilidade, justiça, ética e competência, considerando os princípios básicos de universalidade, equidade e integralidade em saúde",
+      "Maiores informações": "sai@es.ufrn.br ou 3342 2290"
+    }
   }
+
 ]
