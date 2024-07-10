@@ -2,20 +2,16 @@
 {% load static %}
 {% block styles %}
     <style>
-        h4 {
-            font-size: 30px;
-            font-weight: 500;
-        }
+        
     </style>
 {% endblock styles %}
 {% block content %}
     <article>
         <div class="container mt-5 text-center cabecalho">
-            <h3>Projetos Pedagógicos</h3>
+            <h3>Projetos Pedagógicos dos Cursos Técnicos</h3>
             <hr class="hr-escuro mt-5" />
         </div>
         <div class="container mt-4">
-            <h4>Cursos Técnicos</h4>
             <div class="row">
                 {% for categoria in categorias %}
                     {% if categoria.main == "Ensino" %}
@@ -40,8 +36,11 @@
                 {% endfor %}
             </div>
         </div>
+        <div class="container mt-5 text-center cabecalho">
+            <h3>Projetos Pedagógicos da Graduação Tecnológica</h3>
+            <hr class="hr-escuro mt-5" />
+        </div>
         <div class="container mt-4">
-            <h4>Graduação Tecnológica</h4>
             <div class="row">
                 {% for categoria in categorias %}
                     {% if categoria.main == "Ensino" %}
