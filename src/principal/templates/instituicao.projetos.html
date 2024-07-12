@@ -51,7 +51,7 @@
                                         <h5 class="mb-0">
                                             <li>
                                                 {% if documento.document_type == "arquivo" %}
-                                                    <a target="_blank" href="{{ documento.file }}">{{ documento.name }}</a>
+                                                    <a target="_blank" href="{{ documento.file.url }}">{{ documento.name }}</a>
                                                 {% elif documento.document_type == "link" %}
                                                     <a target="_blank" href="{{ documento.link }}">{{ documento.name }}</a>
                                                 {% endif %}
