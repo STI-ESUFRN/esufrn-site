@@ -570,8 +570,10 @@ class Cursos_Pronatec(models.Model):
     nome_curso = models.CharField(max_length=100)
     imagem = models.ImageField(upload_to='cursos_pronatec/')
     link = models.URLField()
+    ordem = models.IntegerField(default=0)
     def __str__(self):
         return self.nome_curso
 
     class Meta:
         verbose_name_plural = "Cursos_PRONATEC"
+        ordering = ['ordem', 'nome_curso']
