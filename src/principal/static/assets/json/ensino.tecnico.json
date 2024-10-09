@@ -24,14 +24,6 @@
       ],
       "Área de atuação": "O egresso atua na promoção, prevenção, recuperação e reabilitação dos processos saúde/doença. Colabora com o atendimento das   necessidades de saúde dos pacientes e comunidade, em todas as faixas etárias. Promove ações de orientação e preparo do paciente para exames. Realiza   cuidados de enfermagem, tais como: curativos, administração de medicamentos e vacinas, nebulizações, banho de leito, mensuração antropométrica e   verificação de sinais vitais, dentre outros. Presta assistência de enfermagem a pacientes clínicos e cirúrgicos. Técnico em enfermagem no atendimento  ao cliente grave.",
       "Maiores informações": "ensino@es.ufrn.br"
-    },
-    "fotos": {
-      "Cientec": "tecnico.enfermagem.1.jpg",
-      "Lab Enfermagem": "tecnico.enfermagem.2.jpg",
-      "Aula Prática TENF": "tecnico.enfermagem.3.jpg",
-      "Aula Prática 2 TENF": "tecnico.enfermagem.4.jpg",
-      "Manequins": "tecnico.enfermagem.5.jpg",
-      "Colação": "tecnico.enfermagem.6.jpg"
     }
   },
   {
@@ -60,12 +52,6 @@
       "Perfil do Profissional": "Ao final do curso, o egresso é capaz de compreender os determinantes da saúde, realizando ações, em seu nível de competência, atuando com base nos princípios do SUS, de modo autônomo, crítico, reflexivo e criativo.",
       "Área de atuação": "O egresso atua em diversos cenários de promoção da saúde, de proteção e prevenção de agravos e doenças, compreendendo o território enquanto espaço de produção de condições que influenciam no processo saúde/doença da população. Promove ações capazes de contribuir com a melhoria da vida e saúde da população, estando apto a atuar em ações das vigilâncias: sanitária, epidemiológica, ambiental e em saúde do trabalhador, em seu nível de competência, fortalecendo o modelo de vigilância em saúde, proposto pelo Sistema Único de Saúde (SUS). Poderá atuar, ainda, na área de planejamento, gestão, informação, educação em saúde e em outros cenários como núcleos de vigilância epidemiológica, secretarias municipais e estaduais, secretaria de vigilância em Saúde, entre outros.",
       "Maiores informações": "ensino@es.ufrn.br"
-    },
-    "fotos": {
-      "Territorialidade": "tecnico.vigilancia.1.jpg",
-      "Sala de Aula": "tecnico.vigilancia.2.jpg",
-      "Biblioteca": "tecnico.vigilancia.3.jpg",
-      "Sala de Estudos": "tecnico.vigilancia.4.jpg"
     }
   },
   {
@@ -94,12 +80,34 @@
       "Perfil do Profissional": "Ao final do curso, o profissional egresso é capaz de aplicar técnicas de organização e administração de serviços de documentação e registros clínicos ou prontuários; desenvolver e aplicar procedimentos voltados para a guarda, catalogação e conservação dos prontuários; realizar coleta, registro, estatística e análise dos dados produzidos pelo serviço de saúde; publicar, periodicamente, relatórios com informações estatísticas de saúde, apresentando tabelas e gráficos, indicadores gerenciais e epidemiológicos; colaborar com a gestão dos serviços de saúde na elaboração de normas de conteúdo dos prontuários, bem como na avaliação da qualidade dos serviços; supervisionar o pessoal auxiliar visando a eficácia, efetividade e eficiência das ações desenvolvidas nos serviços de saúde; estimular o registro dos dados produzidos por ocasião da atenção à saúde, necessários à gestão, planejamento e avaliação; participar da coordenação das atividades relacionadas aos registros e informações em saúde nos diferentes setores dos serviços de saúde e níveis de atenção à saúde; apoiar estratégias de educação permanente na área de registros e informações em saúde, junto aos profissionais de saúde; alimentar, sempre que necessário, os sistemas de informações em saúde, de acordo com sua área de atuação, de forma a garantir a fidedignidade, disponibilidade e segurança dos dados.",
       "Área de atuação": "Atua na organização do conteúdo e do arquivo de prontuários, na organização das fontes de dados e no registro para os sistemas de informações em saúde, contribuindo para a continuidade do atendimento, o planejamento e a avaliação das ações. Desenvolve procedimentos de guarda, catalogação, pesquisa e manutenção de registros e dados em saúde.",
       "Maiores informações": "ensino@es.ufrn.br"
+    }
+  },
+  {
+    "id": "c004",
+    "nome": " Curso Técnico em Práticas Integrativas e Complementares em Saúde",
+    "ativo": false,
+    "head": {
+      "vagas": " - ",
+      "duracao": " - ",
+      "carga": " - ",
+      "turno": " - ",
+      "periodicidade": " Turmas Encerradas "
     },
-    "fotos": {
-      "Estágio": "tecnico.registro.1.jpg",
-      "Laboratório de Informatica": "tecnico.registro.2.jpg",
-      "Estágio 2": "tecnico.registro.3.jpg",
-      "Sala de Aula": "tecnico.registro.4.jpg"
+    "main": {
+      "Forma de ingresso": " Ocorrerá mediante aprovação no processo seletivo classificatório regido por edital publicado pela ESUFRN/UFRN. ,Para a seleção o candidato deverá ter concluído ou estar no último ano do Ensino Médio.",
+      "A quem se destina": " Estudantes ou profissionais concluintes que tenham concluído Ensino Médio.",
+      "Estrutura oferecida": [
+        "Laboratórios de enfermagem e informática;",
+        "Salas de aula climatizadas com data-show;",
+        "Dispositivos de Multimídia;",
+        "Biblioteca com exemplares atualizados;",
+        "Estágios realizados com acompanhamento de instrutores;",
+        "Auditórios e anfiteatros;",
+        "Corpo docente qualificado."
+      ],
+      "Perfil do profissional": " O egresso estará apto a desenvolver práticas coletivas e individuais com ênfase na promoção do cuidado, da saúde e na prevenção dos desequilíbrios energético-funcionais e/ou restauração das desarmonias existentes. Espera-se que este profissional possua competências específicas para atuar na gestão do estresse, sendo capacitado a conduzir práticas corporais de descontração e relaxamento, advindas de tradições da medicina aiurvédica indiana, como o Yoga e da Medicina Tradicional Chinesa (MTC), como o Lian Gong e o Tai Chi Chuan; aplicar técnicas de massagens relaxantes e estimulantes, do tipo terapêutica e estética; utilizar técnicas oriundas da aromaterapia, cromoterapia, musicoterapia, auriculoterapia, moxabustão e ventosaterapia, entre outras. Aliado a isso, este profissional desenvolverá competências gerais dos profissionais de nível técnico da área de saúde.",
+      "Área de atuação": " Atua em clínicas de reabilitação, clínicas estéticas, associações desportivas, hospitais, unidades básicas de saúde e domicílios, centros de atendimento a idosos, casas de repouso, entre outros.",
+      "Maiores informações": " ensino@es.ufrn.br"
     }
   },
   {
@@ -128,13 +136,6 @@
       "Perfil do profissional": " O profissional técnico em Agente Comunitário de Saúde atua na perspectiva de promoção, prevenção e proteção da saúde, orienta e acompanha famílias e grupos em seus domicílios e os encaminha aos serviços de saúde. Realiza mapeamento e cadastramento de dados sociais, demográficos e de saúde, consolidando e analisando as informações obtidas; participa, com as equipes de saúde e a comunidade, da elaboração, implementação, avaliação e reprogramação do plano de ação local de saúde. Participa e mobiliza a população para as reuniões do conselho de saúde. Identifica indivíduos ou grupos que demandam cuidados especiais, sensibilizando a comunidade para a convivência. Trabalha em equipe nas unidades básicas do Sistema Único de Saúde, promovendo a integração entre população atendida e os serviços de atenção básica à saúde.",
       "Área de atuação": " Atua no Sistema Único de Saúde.",
       "Maiores informações": " ensino@es.ufrn.br"
-    },
-    "fotos": {
-      "Aula Prática": "tecnico.agente.1.jpg",
-      "Encerramento": "tecnico.agente.2.jpg",
-      "Atividade Prática": "tecnico.agente.3.jpg",
-      "Estágio": "tecnico.agente.4.jpg",
-      "Estágio 2": "tecnico.agente.5.jpg"
     }
   },
   {
@@ -195,11 +196,6 @@
       ],
       "Área de atuação": " O egresso atua em atividades de embelezamento, promoção, proteção, manutenção e recuperação estética da pele. Seleciona e aplica procedimentos e recursos estéticos utilizando produtos cosméticos, técnicas e equipamentos específicos de acordo com as características e necessidades do cliente. Utiliza técnicas de atendimento ao cliente orientando-o sobre ações de proteção à saúde cutânea.",
       "Maiores informações": " ensino@es.ufrn.br"
-    },
-    "fotos": {
-      "Aula Prática": "tecnico.estetica.1.jpg",
-      "Aula Prática 2": "tecnico.estetica.2.jpg",
-      "Aula Prática 3": "tecnico.estetica.3.jpg"
     }
   },
   {
@@ -221,22 +217,12 @@
       ],
       "Área de atuação": " O técnico em Gerência de Saúde atua em hospitais, clínicas, postos e Unidades de Ponto Atendimento (UPA) e Unidades de Saúde da Família (PSF). Além de empresas seguradoras de medicina de grupo, de autogestão ou similares.",
       "Maiores informações": " ensino@es.ufrn.br"
-    },
-    "fotos": {
-      "Aula": "tecnico.gerenciadesaude.1.jpg",
-      "Aula 2": "tecnico.gerenciadesaude.2.jpg",
-      "Aula 3": "tecnico.gerenciadesaude.3.jpg",
-      "Aula 4": "tecnico.gerenciadesaude.4.jpg",
-      "Aula 5": "tecnico.gerenciadesaude.5.jpg",
-      "Aula 6": "tecnico.gerenciadesaude.6.jpg",
-      "Aula 7": "tecnico.gerenciadesaude.7.jpg",
-      "Aula 8": "tecnico.gerenciadesaude.8.jpg"
     }
   },
   {
-    "id": "c004",
-    "nome": " Curso Técnico em Práticas Integrativas e Complementares em Saúde",
-    "ativo": false,
+    "id": "c009",
+    "nome": " Curso Técnico de Cuidador de Idoso",
+    "ativo": true,
     "head": {
       "vagas": " - ",
       "duracao": " - ",
@@ -245,26 +231,11 @@
       "periodicidade": " Turmas Encerradas "
     },
     "main": {
-      "Forma de ingresso": " Ocorrerá mediante aprovação no processo seletivo classificatório regido por edital publicado pela ESUFRN/UFRN. ,Para a seleção o candidato deverá ter concluído ou estar no último ano do Ensino Médio.",
-      "A quem se destina": " Estudantes ou profissionais concluintes que tenham concluído Ensino Médio.",
-      "Estrutura oferecida": [
-        "Laboratórios de enfermagem e informática;",
-        "Salas de aula climatizadas com data-show;",
-        "Dispositivos de Multimídia;",
-        "Biblioteca com exemplares atualizados;",
-        "Estágios realizados com acompanhamento de instrutores;",
-        "Auditórios e anfiteatros;",
-        "Corpo docente qualificado."
-      ],
-      "Perfil do profissional": " O egresso estará apto a desenvolver práticas coletivas e individuais com ênfase na promoção do cuidado, da saúde e na prevenção dos desequilíbrios energético-funcionais e/ou restauração das desarmonias existentes. Espera-se que este profissional possua competências específicas para atuar na gestão do estresse, sendo capacitado a conduzir práticas corporais de descontração e relaxamento, advindas de tradições da medicina aiurvédica indiana, como o Yoga e da Medicina Tradicional Chinesa (MTC), como o Lian Gong e o Tai Chi Chuan; aplicar técnicas de massagens relaxantes e estimulantes, do tipo terapêutica e estética; utilizar técnicas oriundas da aromaterapia, cromoterapia, musicoterapia, auriculoterapia, moxabustão e ventosaterapia, entre outras. Aliado a isso, este profissional desenvolverá competências gerais dos profissionais de nível técnico da área de saúde.",
-      "Área de atuação": " Atua em clínicas de reabilitação, clínicas estéticas, associações desportivas, hospitais, unidades básicas de saúde e domicílios, centros de atendimento a idosos, casas de repouso, entre outros.",
-      "Maiores informações": " ensino@es.ufrn.br"
-    },
-    "fotos": {
-      "Ações de Extenção": "tecnico.praticas.1.jpg",
-      "Prática de Massagem": "tecnico.praticas.2.jpg",
-      "Estágio": "tecnico.praticas.3.jpg",
-      "Lian Gong": "tecnico.praticas.4.jpg"
+      "Forma de ingresso": " Processo Seletivo pela Comperve",
+      "A quem se destina": " Estudantes ou profissionais que tenham concluído ensino Médio.",
+      "Estrutura oferecida": " O ensino teórico-prático será operacionalizado em salas de aula e em ambientes que proporcionem o desenvolvimento de habilidades técnicas e no contexto da realidade do trabalho em saúde. Para tanto, a Escola dispõe de instalações e equipamentos que favorecem o processo de aprendizagem: Laboratórios de Habilidades Técnicas  e  de Informática; salas de aula climatizadas com projetores e dispositivos multimídia; Biblioteca Setorial e  Auditórios. ",
+      "Área de atuação": " Centros de convivência, centros dias, hospitais dias, instituições de longa permanência para idosos (ILPI), instituições de saúde, serviços de cuidados domiciliares e de forma autônoma. ",
+      "Maiores informações": " sec.direcaodeensino@gmail.com"
     }
   }
 ]
