@@ -1,95 +1,86 @@
 {% extends "base.pagina.html" %}
 {% load static %}
 {% block styles %}
-    <link rel="stylesheet"
-          href="{% static 'assets/owl-carousel/owl.carousel.min.css' %}" />
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
-    <style>
-        /* Estilo para diminuir o tamanho da descrição */
-        .photo-card p {
-            font-size: 13px;
-            /* Ajuste o tamanho da fonte conforme necessário */
-        }
-    </style>
+<link rel="stylesheet" href="{% static 'assets/owl-carousel/owl.carousel.min.css' %}" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
+<style>
+    /* Estilo para diminuir o tamanho da descrição */
+    .photo-card p {
+        font-size: 13px;
+        /* Ajuste o tamanho da fonte conforme necessário */
+    }
+</style>
 {% endblock styles %}
 {% block content %}
-    <article>
-        <div class="container mt-5 text-center cabecalho">
-            <h3>Galeria de fotos</h3>
-            <hr class="hr-escuro mt-5" />
-        </div>
-        <div class="container mt-4 text-center">
-            <!-- Semester Buttons -->
-            <button id="btn-2024.2" onclick="filterPhotos('2024.2')" class="btn btn-primary m-2 selected">2024.2</button>
-            <button id="btn-2024.1"
-                    onclick="filterPhotos('2024.1')"
-                    class="btn btn-primary m-2">2024.1</button>
-            <button id="btn-2023.2"
-                    onclick="filterPhotos('2023.2')"
-                    class="btn btn-primary m-2">2023.2</button>
-        </div>
-        <div class="container mt-4 corpo">
-            <div class="row" id="photo-gallery">
-                {% for photo in photos %}
-                    <div class="col-md-4 mb-4 photo-item"
-                         data-date="{{ photo.date_created|date:'Y-m-d' }}">
-                        <div class="photo-card">
-                            <a href="{{ photo.image.url }}"
-                               data-fancybox="gallery"
-                               data-caption="{{ photo.descricao }}">
-                                <img src="{{ photo.image.url }}"
-                                     alt="{{ photo.descricao }}"
-                                     class="img-fluid">
-                            </a>
-                            <p>{{ photo.descricao }}</p>
-                        </div>
-                    </div>
-                    <!-- {% if forloop.counter|divisibleby:3 %}<div class="w-100"></div>{% endif %} -->
-                {% endfor %}
+<article>
+    <div class="container mt-5 text-center cabecalho">
+        <h3>Galeria de fotos</h3>
+        <hr class="hr-escuro mt-5" />
+    </div>
+    <div class="container mt-4 text-center">
+        <!-- Semester Buttons -->
+        <!-- <button id="btn-2025.1" onclick="filterPhotos('2025.1')" class="btn btn-primary m-2">2025.1</button> -->
+        <button id="btn-2024.2" onclick="filterPhotos('2024.2')" class="btn btn-primary m-2 selected">2024.2</button>
+        <button id="btn-2024.1" onclick="filterPhotos('2024.1')" class="btn btn-primary m-2">2024.1</button>
+        <button id="btn-2023.2" onclick="filterPhotos('2023.2')" class="btn btn-primary m-2">2023.2</button>
+    </div>
+    <div class="container mt-4 corpo">
+        <div class="row" id="photo-gallery">
+            {% for photo in photos %}
+            <div class="col-md-4 mb-4 photo-item" data-date="{{ photo.date_created|date:'Y-m-d' }}">
+                <div class="photo-card">
+                    <a href="{{ photo.image.url }}" data-fancybox="gallery" data-caption="{{ photo.descricao }}">
+                        <img src="{{ photo.image.url }}" alt="{{ photo.descricao }}" class="img-fluid">
+                    </a>
+                    <p>{{ photo.descricao }}</p>
+                </div>
             </div>
+            <!-- {% if forloop.counter|divisibleby:3 %}<div class="w-100"></div>{% endif %} -->
+            {% endfor %}
         </div>
-        <div class="container text-right">
-            <hr class="hr-escuro my-5" />
-            <a href="#" class="text-uppercase text-dark">Voltar ao topo <i class="fas fa-arrow-alt-circle-up"></i></a>
-        </div>
-    </article>
-    <script>
-        function filterPhotos(semester) {
-            const semesterDates = {
-                '2024.2': ['2024-09-01', '2024-12-31'],
-                '2024.1': ['2024-01-01', '2024-08-31'],
-                '2023.2': ['2023-07-01', '2023-12-31'],
+    </div>
+    <div class="container text-right">
+        <hr class="hr-escuro my-5" />
+        <a href="#" class="text-uppercase text-dark">Voltar ao topo <i class="fas fa-arrow-alt-circle-up"></i></a>
+    </div>
+</article>
+<script>
+    function filterPhotos(semester) {
+        const semesterDates = {
+            //'2025.1': ['2025-02-03', '2025-07-27'],
+            '2024.2': ['2024-09-01', '2025-02-02'],
+            '2024.1': ['2024-01-01', '2024-08-31'],
+            '2023.2': ['2023-07-01', '2023-12-31'],
 
-            };
+        };
 
-            const [startDate, endDate] = semesterDates[semester];
-            const photos = document.querySelectorAll('.photo-item');
+        const [startDate, endDate] = semesterDates[semester];
+        const photos = document.querySelectorAll('.photo-item');
 
-            photos.forEach(photo => {
-                const photoDate = photo.getAttribute('data-date');
-                if (photoDate >= startDate && photoDate <= endDate) {
-                    photo.style.display = 'block';
-                } else {
-                    photo.style.display = 'none';
-                }
-            });
-
-            // Update button styles
-            document.querySelectorAll('button').forEach(button => {
-                button.classList.remove('selected');
-            });
-            document.getElementById('btn-' + semester).classList.add('selected');
-        }
-
-        // Automatically select 2024.2 on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            filterPhotos('2024.2');
+        photos.forEach(photo => {
+            const photoDate = photo.getAttribute('data-date');
+            if (photoDate >= startDate && photoDate <= endDate) {
+                photo.style.display = 'block';
+            } else {
+                photo.style.display = 'none';
+            }
         });
-    </script>
+
+        // Update button styles
+        document.querySelectorAll('button').forEach(button => {
+            button.classList.remove('selected');
+        });
+        document.getElementById('btn-' + semester).classList.add('selected');
+    }
+
+    // Automatically select 2025.1 on page load
+    document.addEventListener('DOMContentLoaded', function () {
+        filterPhotos('2024.2');
+    });
+</script>
 {% endblock content %}
 {% block scripts %}
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{% static 'assets/owl-carousel/owl.carousel.min.js' %}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{% static 'assets/owl-carousel/owl.carousel.min.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
 {% endblock scripts %}
