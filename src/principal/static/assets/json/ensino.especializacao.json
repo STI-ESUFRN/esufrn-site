@@ -224,7 +224,7 @@
   {
     "id": "e018",
     "nome": " Especialização em Gestão na Educação Profissional e Tecnológica (EPT)",
-    "ativo": true,
+    "ativo": false,
     "head": {
       "vagas": "",
       "duracao": "",
