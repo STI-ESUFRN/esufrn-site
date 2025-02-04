@@ -45,12 +45,6 @@
                             <div class="invalid-feedback" for="quantity"></div>
                         </div>
                         <div class="form-group col-md-3">
-                            <label>Unidade de armazenamento</label>
-                            <input class="form-control rounded-0" placeholder="Ex. Unidades, caixas, etc." type="text"
-                                name="measure_unit" />
-                            <div class="invalid-feedback" for="measure_unit"></div>
-                        </div>
-                        <div class="form-group col-md-3">
                             <label>Data de validade</label>
                             <input class="form-control rounded-0 mb-1" name="expiration" data-mask="00-00-0000"
                                 data-toggle="datepicker" required autocomplete="off" maxlength="10" date-field />
@@ -69,26 +63,18 @@
                     </div>
                     <hr />
                     <div class="form-row">
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-7">
                             <label>
                                 <b>Almoxarifado*</b>
                             </label>
-                            <select class="form-control rounded-0" name="warehouse" id="warehouse">
+                            <select class="form-control rounded-0" name="warehouse_ti" id="warehouse">
                                 <option selected disabled>
                                     Selecione um Almoxarifado
                                 </option>
                             </select>
-                            <div class="invalid-feedback" for="warehouse"></div>
+                            <div class="invalid-feedback" for="warehouse_ti"></div>
                         </div>
-                        <div class="form-group col-md-4">
-                            <label>Localização</label>
-                            <input type="text" class="form-control rounded-0" name="location"
-                                placeholder="Ex. Armário 3B" required />
-                            <div class="invalid-feedback" for="location"></div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-5">
                             <label>Data de entrada no sistema</label>
                             <input class="form-control rounded-0 mb-1" name="received_at" data-mask="00-00-0000"
                                 data-toggle="datepicker" required autocomplete="off" maxlength="10" date-field />
