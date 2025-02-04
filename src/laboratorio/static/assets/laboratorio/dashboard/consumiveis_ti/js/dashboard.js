@@ -1,7 +1,7 @@
 var current_index = undefined;
 var next = undefined;
 var previous = undefined;
-var baseUrl = "/api/laboratory/consumables";
+var baseUrl = "/api/laboratory/ti/consumables"; // Atualizado para a rota de TI
 
 function fillItem() {
     $("#details").hide();
@@ -153,11 +153,11 @@ function getMaterials() {
 }
 
 function getWarehouses(callback = undefined) {
-    $.get(`/api/laboratory/warehouses/`, function (response) {
+    $.get(`/api/laboratory/ti/warehouses/`, function (response) { // Atualizado para a rota de TI
         response.forEach((element) => {
             let opt = `<option value=${element.id}>${element.name}</option>`;
             $("#warehouse").append(opt);
-            $("[name=warehouse][data-filter]").append(opt);
+            $("[name=warehouse_ti][data-filter]").append(opt);
         });
 
         if (callback) {

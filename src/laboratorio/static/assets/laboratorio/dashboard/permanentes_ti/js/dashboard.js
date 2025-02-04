@@ -1,46 +1,16 @@
 var current_index = undefined;
 var next = undefined;
 var previous = undefined;
-var baseUrl = "/api/laboratory/consumables";
 
 function fillItem() {
     $("#details").hide();
     $(".loader-global").addClass("load");
-    let url = `${baseUrl}/${current_index}/`;
+    let url = `/api/laboratory/ti/permanents/${current_index}/`;
     $.get(url, (response) => {
         fillAttributes(response);
 
-        $("#editMaterial").attr("href", `${window.location.pathname}${current_index}/`);
-        $("#material-history").html("");
-        $.get(`${url}history/`, (response) => {
-            $.each(response, (index, item) => {
-                let date = moment(item.created);
-                let p = $("<p />", {
-                    html: `
-                        Em
-                        ${date.format("DD/MM/YYYY")}
-                        às
-                        ${date.format("HH:mm")},
-                        <strong>
-                            ${item.user.username}
-                            ${item.diff > 0
-                            ? '<span class="text-success">adicionou</span>'
-                            : '<span class="text-danger">removeu</span>'
-                        }
-                        </strong>
-                        ${Math.abs(item.diff)}
-                        unidade${item.diff != 1 ? "s" : ""
-                        } deste material no inventário
-                        (anterior: ${item.prev_quantity}).
-                        <br/>
-                    `,
-                });
-                $("#material-history").append(p);
-            });
-
-            $(".loader-global").removeClass("load");
-            $("#details").fadeTo("fast", 0).fadeTo("fast", 1).show();
-        });
+        $(".loader-global").removeClass("load");
+        $("#details").fadeTo("fast", 0).fadeTo("fast", 1).show();
     });
 }
 
@@ -64,19 +34,17 @@ function createMaterialRow(data) {
     let name = $("<td />", {
         text: data.name,
     });
-    let quantity = $("<td />", {
-        text: data.quantity,
-        class: data.quantity <= data.alert_below ? "text-danger" : "",
+    let number = $("<td />", {
+        text: data.number,
     });
-    let expiration = $("<td />", { text: "-" });
-    if (data.expiration) {
-        expiration.text(moment(data.expiration).format("DD/MM/YYYY"));
-    }
+    let status = $("<td />", {
+        text: data.status_display,
+    });
     let brand = $("<td />", {
         text: data.brand,
     });
 
-    row.append(icon, name, brand, expiration, quantity);
+    row.append(icon, name, number, brand, status);
     row.click(function (e) {
         e.preventDefault();
         current_index = e.currentTarget.dataset.idItem;
@@ -86,12 +54,12 @@ function createMaterialRow(data) {
     return row;
 }
 
-function getAllMaterials(url = undefined) {
+function getMaterials(url = undefined) {
     $(".loader-global").addClass("load");
 
     if (!url) {
         let filters = $("[data-filter]").serialize();
-        url = `${baseUrl}/dashboard/?${filters}`;
+        url = `/api/laboratory/ti/permanents/?${filters}`;
     }
 
     $.ajax({
@@ -121,43 +89,47 @@ function getAllMaterials(url = undefined) {
     });
 }
 
-function getWarnMaterials() {
-    $(".loader-global").addClass("load");
-
-    let filters = $("[data-filter]").serialize();
+function getCategories() {
     $.ajax({
-        url: `${baseUrl}/alert/?${filters}`,
+        url: "/api/laboratory/ti/categories/",
         type: "GET",
         success: function (response) {
-            $(".loader-global").removeClass("load");
-
-            let length = response.length;
-            $("#critical-materials-list").html("");
-            $("#critical-materials-count").text(length);
-            if (length) {
-                $.each(response, (index, item) => {
-                    let row = createMaterialRow(item);
-                    $("#critical-materials-list").append(row);
-                });
-                $("#critical-materials-collapse").collapse("show");
-            } else {
-                $("#critical-materials-collapse").collapse("hide");
-            }
+            $("#category").html("");
+            $("#category-filter").html("");
+            response.forEach((value) => {
+                let opt = `<option value=${value.id}>${value.name}</option>`;
+                $("#category").append(opt);
+                $("#category-filter").append(opt);
+            });
+        },
+        error: function (response) {
+            $("#form-item").fillErrors(response.responseJSON, (message) =>
+                showMessage(message, "alert-danger")
+            );
         },
     });
 }
 
-function getMaterials() {
-    getAllMaterials();
-    getWarnMaterials();
+function getStatuses() {
+    $.ajax({
+        url: "/api/laboratory/ti/permanents/",
+        type: "OPTIONS",
+        success: function (response) {
+            $.map(response.actions.POST.status.choices, (value, index) => {
+                let opt = `<option value=${value.value}>${value.display_name}</option>`;
+                $("#status").append(opt);
+                $("#status-filter").append(opt);
+            });
+        },
+    });
 }
 
 function getWarehouses(callback = undefined) {
-    $.get(`/api/laboratory/warehouses/`, function (response) {
+    $.get(`/api/laboratory/ti/warehouses/`, function (response) {
         response.forEach((element) => {
             let opt = `<option value=${element.id}>${element.name}</option>`;
             $("#warehouse").append(opt);
-            $("[name=warehouse][data-filter]").append(opt);
+            $("[name=warehouse_ti][data-filter]").append(opt);
         });
 
         if (callback) {
@@ -181,18 +153,18 @@ $(document).ready(function () {
 
     $("#load-previous").click(function (e) {
         e.preventDefault();
-        getAllMaterials(previous);
+        getMaterials(previous);
     });
 
     $("#load-next").click(function (e) {
         e.preventDefault();
-        getAllMaterials(next);
+        getMaterials(next);
     });
 
     $("#delete-material").click(function (e) {
         e.preventDefault();
         $.ajax({
-            url: `${baseUrl}/${current_index}/`,
+            url: `/api/laboratory/ti/permanents/${current_index}/`,
             type: "DELETE",
             success: function (response) {
                 showMessage("Material apagado com sucesso.", "alert-success");
@@ -207,7 +179,7 @@ $(document).ready(function () {
     $("#patch-comment").click(function (e) {
         e.preventDefault();
         $.ajax({
-            url: `${baseUrl}/${current_index}/`,
+            url: `/api/laboratory/ti/permanents/${current_index}/`,
             type: "PATCH",
             data: {
                 comments: $("[data-attribute=comments]").val(),
@@ -240,23 +212,17 @@ $(document).ready(function () {
         daysMin: ["D", "S", "T", "Q", "Q", "S", "S"],
     });
 
-    $("#create-material-form [name]").change(function () {
+    $("#form-item [name]").change(function () {
         $(this).removeClass("is-invalid");
-    });
-
-    $("#create-material-form [name=quantity]").on("input", function () {
-        $("#create-material-form [name=alert_below]").val(
-            Math.trunc($(this).val() * 0.25)
-        );
     });
 
     $("#create-material").click(function (e) {
         e.preventDefault();
 
-        let serialized_data = $("#create-material-form").serializeREST();
+        let serialized_data = $("#form-item").serializeREST();
         $.ajax({
             type: "POST",
-            url: `${baseUrl}/`,
+            url: "/api/laboratory/ti/permanents/",
             dataType: "json",
             data: serialized_data,
             success: function (response) {
@@ -266,16 +232,72 @@ $(document).ready(function () {
                 );
                 getMaterials();
                 $("#add-material").modal("hide");
-                $("#create-material-form").trigger("reset");
+                $("#form-item").trigger("reset");
             },
             error(response) {
-                $("#create-material-form").fillErrors(
-                    response.responseJSON,
-                    (message) => showMessage(message, "text-danger")
+                console.error(response);
+                $("#form-item").fillErrors(response.responseJSON, (message) =>
+                    showMessage(message, "text-danger")
                 );
             },
         });
     });
 
-    getWarehouses(getMaterials);
+    $("#add-category").click(function (e) {
+        e.preventDefault();
+    });
+
+    $("#new-category-modal").on("hidden.bs.modal", function (e) {
+        $("#add-material").modal("show");
+    });
+    $("#new-category-modal").on("show.bs.modal", function (e) {
+        $("#add-material").modal("hide");
+    });
+
+    $("#create-category").click(function (e) {
+        e.preventDefault();
+
+        serialized_data = $("#form-category").serializeREST();
+        $.ajax({
+            url: "/api/laboratory/ti/categories/",
+            type: "POST",
+            data: serialized_data,
+            success: function (response) {
+                getCategories();
+                $("#new-category-modal").modal("hide");
+                $("#form-category").trigger("reset");
+            },
+            error: function (response) {
+                console.error(response);
+                $("#form-category").fillErrors(
+                    response.responseJSON,
+                    (message) => showNonFieldErrorMessage(message, "errors")
+                );
+            },
+        });
+    });
+
+    $("#del-category").click(function (e) {
+        e.preventDefault();
+        $("#form-errors").html("");
+        $.ajax({
+            url: `/api/laboratory/ti/categories/${$("#category").val()}/`,
+            type: "DELETE",
+            success: function (response) {
+                getCategories();
+            },
+            error: function (response) {
+                showMessage();
+                $("#form-item").fillErrors(response.responseJSON, (message) =>
+                    showMessage(message, "alert-danger")
+                );
+            },
+        });
+    });
+
+    getWarehouses(() => {
+        getMaterials();
+        getStatuses();
+        getCategories();
+    });
 });

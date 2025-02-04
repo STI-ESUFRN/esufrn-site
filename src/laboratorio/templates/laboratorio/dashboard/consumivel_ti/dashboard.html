@@ -1,0 +1,252 @@
+{% extends "dashboard.base.html" %}
+{% load static %}
+{% load mathfilters %}
+{% block styles %}
+<style>
+    table.table {
+        table-layout: fixed;
+    }
+
+    table.table th:nth-child(1) {
+        width: 30px;
+    }
+
+    .datepicker-container {
+        z-index: 1600 !important;
+    }
+</style>
+{% endblock styles %}
+{% block content %}
+<div class="d-flex justify-content-between">
+    <span>
+        <a href="#" class="btn btn-secondary rounded-0 m-0" data-toggle="modal" data-target="#add-material"
+            role="button">
+            <i class="fas fa-plus mr-2" aria-hidden="true"></i> Inserir material de consumo
+        </a>
+        <a class="btn btn-secondary rounded-0 m-0" href="{% url 'consumable_ti_list' %}" role="button">
+            <i class="fa-solid fa-list mr-2" aria-hidden="true"></i> Relação de itens
+        </a>
+        <a class="btn btn-secondary rounded-0 m-0" href="{% url 'report_ti_list' %}" role="button">
+            <i class="fa-solid fa-list mr-2" aria-hidden="true"></i> Relatórios
+        </a>
+    </span>
+    <div>
+        <form id="filters">
+            <div class="form-row">
+                <div class="form-group col">
+                    <select class="form-control rounded-0" name="warehouse_ti" data-filter>
+                    </select>
+                </div>
+                <div class="form-group col">
+                    <input class="form-control rounded-0" placeholder="Buscar" type="text" name="search" data-filter />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<hr class="mt-0" />
+<div class="row">
+    <div class="col-md-8">
+        <div class="accordion">
+            <div class="card rounded-0 mb-2">
+                <div class="card-header head-table border-0 rounded-0" id="headingOne">
+                    <h5 class="mb-0">
+                        <a data-toggle="collapse" data-target="#critical-materials-collapse" aria-expanded="true"
+                            aria-controls="critical-materials-collapse">
+                            <b><i class="fas fa-exclamation-triangle mr-2"></i> Itens consumíveis em nível crítico:
+                                <span id="critical-materials-count"></span></b>
+                        </a>
+                    </h5>
+                </div>
+                <div id="critical-materials-collapse" class="collapse show" aria-labelledby="headingOne"
+                    data-parent="#accordion">
+                    <div class="card-body p-0" style="overflow-x: auto;">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr class="capt-table">
+                                    <th class="border-0 text-center" scope="col"></th>
+                                    <th class="border-0" scope="col">Nome</th>
+                                    <th class="border-0" scope="col">Marca</th>
+                                    <th class="border-0" scope="col">Validade</th>
+                                    <th class="border-0" scope="col">Quantidade</th>
+                                </tr>
+                            </thead>
+                            <tbody id="critical-materials-list">
+                                {% comment %} AJAX {% endcomment %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div id="card-material" class="card rounded-0 my-2">
+                <div class="card-header head-table border-0 rounded-0" id="headingTwo">
+                    <h5 class="mb-0">
+                        <a data-toggle="collapse" data-target="#materials-collapse" aria-expanded="true"
+                            aria-controls="materials-collapse">
+                            <b><i class="fa-solid fa-mask-face mr-2"></i> Itens consumíveis disponíveis: <span
+                                    id="material-count"></span></b>
+                        </a>
+                    </h5>
+                </div>
+                <div id="materials-collapse" class="collapse show" aria-labelledby="headingTwo"
+                    data-parent="#accordion">
+                    <div class="card-body p-0" style="overflow-x: auto;">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr class="capt-table">
+                                    <th class="border-0 text-center" scope="col"></th>
+                                    <th class="border-0" scope="col">Nome</th>
+                                    <th class="border-0" scope="col">Marca</th>
+                                    <th class="border-0" scope="col">Validade</th>
+                                    <th class="border-0" scope="col">Quantidade</th>
+                                </tr>
+                            </thead>
+                            <tbody id="materials-list">
+                                {% comment %} AJAX {% endcomment %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer">
+                        <div class="text-center w-100">
+                            <button id="load-previous" class="btn rounded-0">
+                                <i class="fa-solid fa-circle-arrow-left"></i> Anterior
+                            </button>
+                            <button id="load-next" class="btn rounded-0">
+                                Próxima <i class="fa-solid fa-circle-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card-group" id="details" style="display: none;opacity: 0;">
+            <div class="card" style="width: 18rem;">
+                <div class="card-header head-table border-0 rounded-0">
+                    <b><i class="fas fa-info mr-2"></i>Detalhes do Material</b>
+                    <button id="details-dismiss" type="button" class="close" aria-label="Close">
+                        <span aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i></span>
+                    </button>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title mb-2">
+                        <small>Nome:</small> <b data-attribute="name"></b>
+                    </h5>
+                    <p class="card-text m-0">
+                        <small>Descrição:</small> <b data-attribute="description"></b>
+                    </p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <p class="card-text m-0">
+                            <small>Marca:</small> <b data-attribute="brand"></b>
+                        </p>
+                        <p class="card-text m-0">
+                            <small>Quantidade:</small> <b data-attribute="quantity"></b> <span
+                                data-attribute="measure_unit"></span>
+                        </p>
+                        <p class="card-text m-0">
+                            <small>
+                                Data de validade: <span date-format="DD/MM/YYYY" data-attribute="expiration"></span>
+                            </small>
+                        </p>
+                    </li>
+                </ul>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <p class="my-0">
+                            <small>Almoxarifado:</small> <b data-attribute="warehouse_ti.name"></b>
+                        </p>
+                        <p class="my-0">
+                            <small>Localização:</small> <b data-attribute="location"></b>
+                        </p>
+                        <p class="my-0">
+                            <small>
+                                Recebido em: <span date-format="DD/MM/YYYY" data-attribute="received_at"></span>
+                            </small>
+                        </p>
+                    </li>
+                </ul>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <small class="text-muted">Observações sobre o material:</small>
+                        <textarea class="form-control mb-3" rows="4" placeholder="Escrever observação"
+                            data-attribute="comments"></textarea>
+                        <a href="#" class="btn mb-1 btn-outline-primary btn-sm" id="patch-comment">Salvar observação <i
+                                class="fa-solid fa-floppy-disk"></i></a>
+                    </li>
+                </ul>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <div class="d-flex justify-content-end">
+                            <a href="#" id="editMaterial" class="btn btn-primary ml-2" role="button">
+                                Editar <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+                            </a>
+                            <button class="btn btn-danger ml-2" data-toggle="modal" data-target="#deleteConfirm">
+                                Apagar <i class="fas fa-trash" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+                <div id="accordion">
+                    <div class="card rounded-0">
+                        <div class="card-header" id="card-material-history">
+                            <h5 class="mb-0">
+                                <a data-toggle="collapse" data-target="#collapse-material-history" aria-expanded="true"
+                                    aria-controls="collapse-material-history">
+                                    Histórico <i class="fas fa-history" aria-hidden="true"></i>
+                                </a>
+                            </h5>
+                        </div>
+                        <div id="collapse-material-history" class="collapse" aria-labelledby="card-material-history"
+                            data-parent="#accordion">
+                            <div id="material-history" class="card-body" style="max-height: 200px;
+                                            overflow-y: scroll"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer border-top-0">
+                    <p class="m-0">
+                        <small class="text-muted">Data de criação: <span date-format="DD/MM/YYYY HH:mm"
+                                data-attribute="created"></span></small>
+                    </p>
+                    <p class="m-0">
+                        <small class="text-muted">Ultima Alteração: <span date-format="DD/MM/YYYY HH:mm"
+                                data-attribute="modified"></span></small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="deleteConfirm" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmar exclusão</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Tem certeza que deseja apagar este material?
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">
+                    Cancelar
+                </button>
+                <button id="delete-material" type="button" class="btn btn-danger" data-dismiss="modal">
+                    Apagar <i class="fas fa-trash" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% include "laboratorio/dashboard/consumivel_ti/inserir.form.html" with target_id="add-material" %}
+{% endblock content %}
+{% block scripts %}
+<script src="{% static 'assets/laboratorio/dashboard/consumiveis_ti/js/dashboard.js' %}"></script>
+{% endblock scripts %}
