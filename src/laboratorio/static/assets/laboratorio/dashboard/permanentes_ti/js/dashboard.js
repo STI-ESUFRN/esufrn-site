@@ -38,7 +38,7 @@ function createMaterialRow(data) {
         text: data.number,
     });
     let status = $("<td />", {
-        text: data.status_display,
+        text: data.status,
     });
     let brand = $("<td />", {
         text: data.brand,

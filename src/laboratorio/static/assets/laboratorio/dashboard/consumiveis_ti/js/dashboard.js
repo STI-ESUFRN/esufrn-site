@@ -72,11 +72,11 @@ function createMaterialRow(data) {
     if (data.expiration) {
         expiration.text(moment(data.expiration).format("DD/MM/YYYY"));
     }
-    let brand = $("<td />", {
-        text: data.brand,
+    let pedido = $("<td />", {
+        text: data.pedido,
     });
 
-    row.append(icon, name, brand, expiration, quantity);
+    row.append(icon, name, pedido, expiration, quantity);
     row.click(function (e) {
         e.preventDefault();
         current_index = e.currentTarget.dataset.idItem;

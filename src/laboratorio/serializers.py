@@ -192,6 +192,8 @@ class ConsumableTISerializer(MaterialTISerializer):
             "initial_quantity",
             "quantity",
             "expiration",
+            "sold_out_at",
+            "pedido", 
         ]
         extra_kwargs = {
             "initial_quantity": {"read_only": True},

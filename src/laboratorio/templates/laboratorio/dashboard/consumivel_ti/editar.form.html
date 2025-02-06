@@ -5,7 +5,8 @@
             <label>
                 <b>Nome</b>
             </label>
-            <input class="form-control rounded-0" type="text" name="name" {% if item %} value="{{ item.name }}" {%endif%} />
+            <input class="form-control rounded-0" type="text" name="name" {% if item %} value="{{ item.name }}"
+                {%endif%} />
             <div class="invalid-feedback" for="name"></div>
         </div>
         <div class="form-group col-md-4">
@@ -24,7 +25,7 @@
         </div>
     </div>
     <div class="form-row">
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-4">
             <label>
                 <b>Quantidade</b>
             </label>
@@ -32,29 +33,41 @@
                 value="{{ item.quantity }}" {% endif %} />
             <div class="invalid-feedback" for="quantity"></div>
         </div>
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-4">
+            <label>Quantidade crítica</label>
+            <input class="form-control rounded-0" type="number" name="alert_below" id="alert_below" {% if item %}
+                value="{{ item.alert_below }}" {% endif %} />
+            <div class="invalid-feedback" for="alert_below"></div>
+        </div>
+        <div class="form-group col-md-4">
             <label>Data de validade</label>
-            <input class="form-control rounded-0 mb-1" name="expiration" data-mask="00-00-0000" data-toggle="datepicker"
-                required date-field autocomplete="off" maxlength="10" {% if item %} value="{{ item.expiration|date:"
-                %d-m-Y"|default_if_none:'' }}"{% endif %} />
+            <input class="form-control rounded-0 mb-1"
+                   name="expiration"
+                   data-mask="00-00-0000"
+                   data-toggle="datepicker"
+                   required
+                   date-field
+                   autocomplete="off"
+                   maxlength="10"
+                   {% if item %} value="{{ item.expiration|date:"%d-m-Y"|default_if_none:'' }}"{% endif %}/>
             <div class="invalid-feedback" for="expiration"></div>
         </div>
     </div>
     <div class="form-row">
         <div class="form-group col-md-3">
-            <label>Data de recebimento</label>
-            <input class="form-control rounded-0 mb-1" name="received_at" data-mask="00-00-0000"
-                data-toggle="datepicker" required date-field autocomplete="off" maxlength="10" {% if item %}
-                value="{{ item.received_at|date:" %d-m-Y"|default_if_none:'' }}"{% endif %} />
-            <div class="invalid-feedback" for="received_at"></div>
+            <label>Pedido</label>
+            <select class="form-control rounded-0" name="pedido" id="pedido" required>
+                <option>{% if item %}{{ item.pedido }}{% endif %}</option>
+                <option>{% if item and item.pedido == "Solicitado" %}Não solicitado{% else %}Solicitado{% endif %}</option>
+            </select>
+            <div class="invalid-feedback" for="pedido"></div>
         </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-md-3">
-            <label>Quantidade crítica</label>
-            <input class="form-control rounded-0" type="number" name="alert_below" id="alert_below" {% if item %}
-                value="{{ item.alert_below }}" {% endif %} />
-            <div class="invalid-feedback" for="alert_below"></div>
+        <div class="form-group col-md-4">
+            <label>Data do pedido</label>
+            <input class="form-control rounded-0 mb-1" name="sold_out_at" data-mask="00-00-0000"
+                data-toggle="datepicker" required date-field autocomplete="off" maxlength="16" {% if item %}
+                value="{{ item.sold_out_at|date:" %d-%m-%Y"|default_if_none:'' }}"{% endif %} />
+            <div class="invalid-feedback" for="sold_out_at"></div>
         </div>
     </div>
     <div class="text-center mt-4">

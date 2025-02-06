@@ -229,12 +229,22 @@ class Consumable(Material):
                 )
 
 class ConsumableTI(MaterialTI):
+    STATUS_CHOICES = [
+        ('Solicitado', 'Solicitado'),
+        ('Não solicitado', 'Não solicitado'),
+    ]
+
     initial_quantity = models.IntegerField("Quantidade inicial", null=True, blank=True)
 
     quantity = models.IntegerField("Quantidade disponível")
     alert_below = models.IntegerField("Nível crítico")
     expiration = models.DateField("Data de validade", null=True, blank=True)
-    sold_out_at = models.DateTimeField("Esgotado em", null=True, blank=True)
+    pedido = models.CharField(
+        max_length=15,
+        choices=STATUS_CHOICES,
+        default='Não solicitado'
+    )
+    sold_out_at = models.DateField("Pedido em", null=True, blank=True)
 
     available_objects = ConsumableManager()
 
@@ -249,9 +259,6 @@ class ConsumableTI(MaterialTI):
 
         elif self.quantity <= self.alert_below:
             send_alert_email(self)
-
-        if self.quantity == 0 and not self.sold_out_at:
-            self.sold_out_at = timezone.now()
 
         return super().save(*args, **kwargs)
 
@@ -276,6 +283,9 @@ class ConsumableTI(MaterialTI):
                     quantity=self.quantity,
                     prev_quantity=obj.quantity,
                 )
+    
+    def __str__(self):
+        return self.pedido
 
 class History(TimeStampedModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

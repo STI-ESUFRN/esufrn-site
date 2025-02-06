@@ -73,6 +73,8 @@
                 <th class="text-center">Marca</th>
                 <th class="text-center">Quantidade</th>
                 <th class="text-center">Validade</th>
+                <th class="text-center">Pedido</th>
+                <th class="text-center">Data do pedido</th>
                 <th class="text-center">QR</th>
             </tr>
         </thead>
@@ -138,12 +140,20 @@
                     "text": moment(item.expiration).format("DD/MM/YYYY"),
                     "class": "py-0 text-center"
                 });
+                let pedido = $("<td />", {
+                    "text": item.pedido,
+                    "class": "py-0 text-center"
+                });
+                let sold_out_at = $("<td />", {
+                    "text": moment(item.sold_out_at).format("DD/MM/YYYY"),
+                    "class": "py-0 text-center"
+                });
                 let qr = $("<td />", {
                     "html": `<img style="width: 4cm; height: 4cm" src="${item.qr_code.high}" alt=""/>`,
                     "class": "py-1 text-center"
                 });
 
-                row.append(name, brand, quantity, expiration, qr);
+                row.append(name, brand, quantity, expiration, pedido, sold_out_at, qr);
                 materials.append(row);
             });
         });
