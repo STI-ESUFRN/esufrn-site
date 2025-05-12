@@ -32,4 +32,7 @@ urlpatterns = [
     path("chamado/", include("chamado.dashboard.urls")),
     path("laboratorio/", include("laboratorio.dashboard.urls")),
     path("reserva/", include("reserva.dashboard.urls")),
+
+    # Atenção:
+    # A rota "/dashboard/metrics/" está definida no app "principal"
 ]

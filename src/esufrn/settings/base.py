@@ -17,7 +17,7 @@ def get_nth_parent(path: Path, parents: int) -> str:
 BASE_DIR = get_nth_parent(Path(__file__).resolve(), 3)
 SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = True
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "*").split(" ")
+ALLOWED_HOSTS = ["127.0.0.1"] #os.getenv("ALLOWED_HOSTS", "*").split(" ")
 
 INSTALLED_APPS = [
     # other
@@ -62,6 +62,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "htmlmin.middleware.HtmlMinifyMiddleware",
     "htmlmin.middleware.MarkRequestMiddleware",
+    "principal.middleware.SitePageViewMiddleware",
 ]
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
