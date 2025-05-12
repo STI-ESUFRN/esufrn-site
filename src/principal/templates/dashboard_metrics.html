@@ -1,0 +1,155 @@
+{% extends "dashboard.base.html" %}
+{% load static %}
+
+{% block styles %}
+<style>
+  .filter-form {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .filter-form select {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.9rem;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+  }
+
+  .filter-form button {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.9rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #007bff;
+  }
+
+  .filter-form button:hover {
+    text-decoration: underline;
+  }
+
+  .metrics-dashboard {
+    padding: 2rem;
+  }
+
+  .metrics-cards-container {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+
+  .metric-card {
+    flex: 1;
+    min-width: 200px;
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: .5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
+  }
+
+  .metric-card h4 {
+    margin-top: 0;
+  }
+
+  .metric-value {
+    font-size: 2rem;
+    margin: .5rem 0;
+  }
+
+  .charts-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
+
+  .chart-item {
+    flex: 1;
+    min-width: 300px;
+  }
+
+  .chart-item h5 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+</style>
+{% endblock styles %}
+
+{% block content %}
+<div class="container metrics-dashboard">
+  <h1>Dashboard de Métricas</h1>
+
+  <!-- formulário discreto de filtros -->
+  <form method="get" class="filter-form">
+    <select name="year">
+      <option value="">Ano</option>
+      {% for y in years %}
+        <option value="{{ y }}" {% if y|stringformat:"s" == selected_year %}selected{% endif %}>{{ y }}</option>
+      {% endfor %}
+    </select>
+    <select name="month">
+      <option value="">Mês</option>
+      {% for m in months %}
+        <option value="{{ m }}" {% if m|stringformat:"s" == selected_month %}selected{% endif %}>{{ m }}</option>
+      {% endfor %}
+    </select>
+    <select name="week">
+      <option value="">Semana</option>
+      {% for w in weeks %}
+        <option value="{{ w }}" {% if w|stringformat:"s" == selected_week %}selected{% endif %}>{{ w }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit">🔍 Aplicar</button>
+  </form>
+
+  <div class="metrics-cards-container">
+    <div class="metric-card">
+      <h4>Total de Acessos</h4>
+      <p class="metric-value">{{ total_site }}</p>
+    </div>
+    <div class="metric-card">
+      <h4>Visualizações de Notícias</h4>
+      <p class="metric-value">{{ total_news }}</p>
+    </div>
+    <div class="metric-card">
+      <h4>Visualizações de Processos</h4>
+      <p class="metric-value">{{ total_processos }}</p>
+    </div>
+  </div>
+
+  <div class="charts-container">
+    <div class="chart-item">
+      <h5>📰 Top 5 Notícias</h5>
+      <canvas id="topNewsChart"></canvas>
+    </div>
+    <div class="chart-item">
+      <h5>📂 Top 5 Processos Seletivos</h5>
+      <canvas id="topProcessosChart"></canvas>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const labelsNews = [{% for title,count in top_news %}"{{ title|truncatechars:100|escapejs }}",{% endfor %}];
+  const dataNews   = [{% for title,count in top_news %}{{ count }},{% endfor %}];
+  new Chart(document.getElementById('topNewsChart'), {
+    type: 'bar',
+    data: { labels: labelsNews, datasets:[{ label:'Visualizações', data: dataNews, backgroundColor:'#003C62', borderWidth:1 }] },
+    options: { indexAxis:'x', responsive:true, scales:{ x:{ beginAtZero:true, ticks:{display:false} } } }
+  });
+
+  const labelsProc = [{% for title,count in top_processos %}"{{ title|truncatechars:100|escapejs }}",{% endfor %}];
+  const dataProc   = [{% for title,count in top_processos %}{{ count }},{% endfor %}];
+  new Chart(document.getElementById('topProcessosChart'), {
+    type: 'bar',
+    data: { labels: labelsProc, datasets:[{ label:'Visualizações', data: dataProc, backgroundColor:'#00999C', borderWidth:1 }] },
+    options: { indexAxis:'x', responsive:true, scales:{ x:{ beginAtZero:true, ticks:{display:false} } } }
+  });
+</script>
+{% endblock scripts %}

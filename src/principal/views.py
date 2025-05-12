@@ -1,14 +1,16 @@
+import calendar
 import json
 import os
 import threading
 import unicodedata
-from datetime import timedelta
+from datetime import date, timedelta
 from functools import reduce
 
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.core.mail import send_mail
-from django.db.models import Q
+from django.db import models
+from django.db.models import Count, Q
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -19,17 +21,18 @@ from principal.forms import NewsletterForm
 from principal.helpers import email_token, join_range, paginator, qnt_page
 from principal.models import (
     Alert,
+    Cursos_Pronatec,
     Document,
+    destaque,
+    Links_V,
     News,
     Newsletter,
+    Noticia,
     Page,
+    PageView,
     Photo,
     Team,
     Testimonial,
-    Links_V,
-    destaque,
-    Noticia,
-    Cursos_Pronatec,
 )
 
 
@@ -124,9 +127,23 @@ def noticias(request):
 def noticia(request, slug):
     try:
         news = News.objects.get(slug=slug)
-
     except News.DoesNotExist as exc:
         raise Http404 from exc
+
+    # --- início da lógica de sessão unificada ---
+    viewed = request.session.get('viewed_news', [])
+    if news.id not in viewed:
+        tipo = 'processo' if news.category == News.Category.PROCESS.value else 'noticia'
+        # cria o registro de PageView
+        PageView.objects.create(page_type=tipo, object_id=news.id)
+        # incrementa contador no próprio objeto News
+        news.views = models.F('views') + 1
+        news.save(update_fields=['views'])
+        news.refresh_from_db()
+
+        viewed.append(news.id)
+        request.session['viewed_news'] = viewed
+    # --- fim da lógica de sessão ---
 
     context = {
         "status": "success",
@@ -137,7 +154,16 @@ def noticia(request, slug):
         ],
     }
 
-    return render(request, "home.noticia.html", context)
+    # conta todos os pageviews desta notícia, combinando 'noticia' e 'processo'
+    pageview_count = PageView.objects.filter(
+        object_id=news.id,
+        page_type__in=['noticia', 'processo']
+    ).count()
+
+    return render(request, "home.noticia.html", {
+        **context,
+        "pageview_count": pageview_count,
+    })
 
 
 def instituicao_equipe(request):
@@ -515,3 +541,81 @@ def Cusos_pronatec(request):
     context = {"cursos": cursos}
 
     return render(request, 'Cursos_pronatec.html', {'cursos': cursos})
+
+def dashboard_metrics(request):
+    # --- parâmetros de filtro via GET (podem estar vazios) ---
+    year = request.GET.get('year')       # ex.: '2025' ou None
+    month = request.GET.get('month')     # ex.: '4' ou None
+    week = request.GET.get('week')       # ex.: '1' ou None
+
+    # queryset base (todos os registros)
+    queryset = PageView.objects.all()
+
+    # filtra por ano, se fornecido
+    if year:
+        year = int(year)
+        queryset = queryset.filter(timestamp__year=year)
+
+    # filtra por mês, se fornecido
+    if month:
+        month = int(month)
+        queryset = queryset.filter(timestamp__month=month)
+
+    # filtra por semana, apenas se year+month+week estiverem
+    if year and month and week:
+        week = int(week)
+        _, days_in_month = calendar.monthrange(year, month)
+        start_day = (week - 1) * 7 + 1
+        end_day = min(week * 7, days_in_month)
+        start_date = date(year, month, start_day)
+        end_date   = date(year, month, end_day)
+        queryset = queryset.filter(timestamp__date__range=(start_date, end_date))
+
+    # --- métricas ---
+    site_views      = queryset.filter(page_type='site')
+    total_site      = site_views.count()
+    total_news      = queryset.filter(page_type='noticia').count()
+    total_processos = queryset.filter(page_type='processo').count()
+
+    # Top 5 notícias e processos
+    top_news_qs = (
+        queryset.filter(page_type='noticia')
+        .values('object_id')
+        .annotate(total=Count('id'))
+        .order_by('-total')[:5]
+    )
+    top_proc_qs = (
+        queryset.filter(page_type='processo')
+        .values('object_id')
+        .annotate(total=Count('id'))
+        .order_by('-total')[:5]
+    )
+
+    # mapeia títulos
+    news_map = {
+        n.id: n.title
+        for n in News.objects.filter(id__in=[x['object_id'] for x in top_news_qs])
+    }
+    proc_map = {
+        n.id: n.title
+        for n in News.objects.filter(id__in=[x['object_id'] for x in top_proc_qs])
+    }
+
+    # --- contexto p/ template ---
+    context = {
+        # filtros
+        'selected_year':  year,
+        'selected_month': month,
+        'selected_week':  week,
+        'years':  list(range(2025, timezone.now().year + 1)),
+        'months': list(range(1, 13)),
+        'weeks':  [1, 2, 3, 4, 5],
+
+        # métricas
+        'total_site':      total_site,
+        'total_news':      total_news,
+        'total_processos': total_processos,
+        'top_news':        [(news_map[x['object_id']], x['total']) for x in top_news_qs],
+        'top_processos':   [(proc_map[x['object_id']], x['total']) for x in top_proc_qs],
+    }
+    return render(request, 'dashboard_metrics.html', context)

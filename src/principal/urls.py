@@ -24,6 +24,7 @@ from principal.views import (
     pronatec_videos,
     publicacoes_outras,
     Cusos_pronatec,
+    dashboard_metrics,
 )
 
 app_name = "principal"
@@ -54,6 +55,7 @@ urlpatterns = [
     path("pronatec/videos", pronatec_videos, name="pronatec_videos"),
     path("pronatec/fotos/", pronatec_fotos, name="pronatec_fotos"),
     path("pronatec/Cursos/", Cusos_pronatec, name="Cusos_pronatec"),
+    path('dashboard/metrics/', dashboard_metrics, name='dashboard_metrics'),
 ]
 
 if settings.DEBUG:

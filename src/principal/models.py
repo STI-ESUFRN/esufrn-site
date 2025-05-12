@@ -33,6 +33,7 @@ class News(TimeStampedModel):
 
     title = models.CharField("Título da notícia", max_length=400)
     subtitle = models.CharField("Subtítulo da notícia", max_length=500)
+    views = models.PositiveIntegerField(default=0)
     slug = models.SlugField(
         "Atalho",
         max_length=255,
@@ -577,3 +578,17 @@ class Cursos_Pronatec(models.Model):
     class Meta:
         verbose_name_plural = "Cursos_PRONATEC"
         ordering = ['ordem', 'nome_curso']
+
+class PageView(models.Model):
+    PAGE_TYPES = [
+        ('site', 'Acesso geral ao site'),
+        ('noticia', 'Visualização de notícia'),
+        ('processo', 'Visualização de processo seletivo'),
+    ]
+    page_type = models.CharField(max_length=20, choices=PAGE_TYPES)
+    object_id = models.PositiveIntegerField(null=True, blank=True,
+                                           help_text="ID da notícia ou processo, se aplicável")
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.page_type} @ {self.timestamp.strftime('%Y-%m-%d %H:%M:%S')}"

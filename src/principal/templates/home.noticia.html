@@ -32,6 +32,7 @@
                     <span class="mx-1">Publicado: {{ news.published_at|date:"d/m/y H:i" }}</span>
                     <span class="mx-1">Última modificação: {{ news.modified|date:"d/m/y H:i" }}</span>
                     <span class="mx-1">Autor: {{ news.author }}</span>
+                    <span class="mx-1">Acessos: {{ pageview_count }}</span>
                     <br class="d-sm-none" />
                     <span class="float-sm-right">
                         <a data-href="{{ news.get_absolute_url }}"

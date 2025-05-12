@@ -62,6 +62,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "htmlmin.middleware.HtmlMinifyMiddleware",
     "htmlmin.middleware.MarkRequestMiddleware",
+    "principal.middleware.SitePageViewMiddleware",
 ]
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
