@@ -17,6 +17,8 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
+from .middleware import BOT_UA_PATTERNS
+
 from principal.forms import NewsletterForm
 from principal.helpers import email_token, join_range, paginator, qnt_page
 from principal.models import (
@@ -130,40 +132,48 @@ def noticia(request, slug):
     except News.DoesNotExist as exc:
         raise Http404 from exc
 
-    # --- início da lógica de sessão unificada ---
-    viewed = request.session.get('viewed_news', [])
-    if news.id not in viewed:
-        tipo = 'processo' if news.category == News.Category.PROCESS.value else 'noticia'
-        # cria o registro de PageView
-        PageView.objects.create(page_type=tipo, object_id=news.id)
-        # incrementa contador no próprio objeto News
-        news.views = models.F('views') + 1
-        news.save(update_fields=['views'])
-        news.refresh_from_db()
+    # --- detecção de bot ---
+    ua = request.META.get('HTTP_USER_AGENT', '').lower()
+    is_bot = any(pat in ua for pat in BOT_UA_PATTERNS)
 
-        viewed.append(news.id)
-        request.session['viewed_news'] = viewed
-    # --- fim da lógica de sessão ---
+    # --- lógica de sessão unificada, só se NÃO for bot ---
+    if not is_bot:
+        viewed = request.session.get('viewed_news', [])
+        if news.id not in viewed:
+            tipo = (
+                'processo'
+                if news.category == News.Category.PROCESS.value
+                else 'noticia'
+            )
+            PageView.objects.create(page_type=tipo, object_id=news.id)
 
-    context = {
-        "status": "success",
-        "news": news,
-        "crumbs": [
-            {"name": "Notícias", "link": reverse("principal:noticias")},
-            {"name": news.title},
-        ],
-    }
+            # incrementa contador no próprio objeto News
+            news.views = models.F('views') + 1
+            news.save(update_fields=['views'])
+            news.refresh_from_db()
 
-    # conta todos os pageviews desta notícia, combinando 'noticia' e 'processo'
+            viewed.append(news.id)
+            request.session['viewed_news'] = viewed
+
+    # --- renderiza normalmente ---
     pageview_count = PageView.objects.filter(
         object_id=news.id,
         page_type__in=['noticia', 'processo']
     ).count()
 
-    return render(request, "home.noticia.html", {
-        **context,
-        "pageview_count": pageview_count,
-    })
+    return render(
+        request,
+        "home.noticia.html",
+        {
+            "status": "success",
+            "news": news,
+            "crumbs": [
+                {"name": "Notícias", "link": reverse("principal:noticias")},
+                {"name": news.title},
+            ],
+            "pageview_count": pageview_count,
+        }
+    )
 
 
 def instituicao_equipe(request):
