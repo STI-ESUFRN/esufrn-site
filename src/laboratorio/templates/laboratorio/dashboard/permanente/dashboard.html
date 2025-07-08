@@ -154,9 +154,6 @@
                                 <small>Almoxarifado:</small> <b data-attribute="warehouse.name"></b>
                             </p>
                             <p class="my-0">
-                                <small>Localização:</small> <b data-attribute="location"></b>
-                            </p>
-                            <p class="my-0">
                                 <small>
                                     Recebido em: <span date-format="DD/MM/YYYY" data-attribute="received_at"></span>
                                 </small>
@@ -192,6 +189,9 @@
                                  aria-labelledby="card-actions"
                                  data-parent="#accordion">
                                 <div class="card-body">
+                                    <a href="#" id="editMaterial" class="btn btn-primary ml-2" role="button">
+                                        Editar <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+                                    </a>
                                     <button class="btn btn-danger"
                                             data-toggle="modal"
                                             data-target="#deleteConfirm">

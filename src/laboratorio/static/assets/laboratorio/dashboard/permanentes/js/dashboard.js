@@ -9,6 +9,8 @@ function fillItem() {
     $.get(url, (response) => {
         fillAttributes(response);
 
+        $("#editMaterial").attr("href", `${window.location.pathname}${current_index}/`);
+
         $(".loader-global").removeClass("load");
         $("#details").fadeTo("fast", 0).fadeTo("fast", 1).show();
     });

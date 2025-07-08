@@ -9,6 +9,8 @@ function fillItem() {
     $.get(url, (response) => {
         fillAttributes(response);
 
+        $("#editMaterial").attr("href", `${window.location.pathname}${current_index}/`);
+
         $(".loader-global").removeClass("load");
         $("#details").fadeTo("fast", 0).fadeTo("fast", 1).show();
     });
@@ -38,7 +40,7 @@ function createMaterialRow(data) {
         text: data.number,
     });
     let status = $("<td />", {
-        text: data.status,
+        text: data.status_display,
     });
     let brand = $("<td />", {
         text: data.brand,

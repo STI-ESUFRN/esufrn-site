@@ -69,6 +69,7 @@
                 <th class="text-center">Tombo</th>
                 <th class="text-center">Marca</th>
                 <th class="text-center">Status</th>
+                <th class="text-center">Observações</th>
                 <th class="text-center">QR</th>
             </tr>
         </thead>
@@ -120,13 +121,20 @@
                     "text": item.status_display,
                     "class": "py-0 text-center"
                 });
-
+                let obsText = item.comments || '';
+                if (obsText.length > 50) {
+                    obsText = obsText.slice(0, 50) + '...';
+                }
+                let obs = $("<td />", {
+                    "text": obsText,
+                    "class": "py-0 text-center"
+                });
                 let qr = $("<td />", {
                     "html": `<img style="width: 4cm; height: 4cm" src="${item.qr_code.high}" alt=""/>`,
                     "class": "py-1 text-center"
                 });
 
-                row.append(name, number, brand, status, qr);
+                row.append(name, number, brand, status, obs, qr);
                 materials.append(row);
             });
         });

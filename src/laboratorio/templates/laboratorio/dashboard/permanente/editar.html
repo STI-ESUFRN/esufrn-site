@@ -51,11 +51,6 @@
                 <small>Recebido em:</small> <b>{{ item.received_at|default_if_none:"Não especificado" }}</b>
             </div>
         </div>
-        <div class="row">
-            <div class="col-6">
-                <small>Localização:</small> <b>{{ item.location }}</b>
-            </div>
-        </div>
     </div>
     <div class="card-footer border-top-0">
         <p class="m-0">
@@ -127,7 +122,7 @@
     function atualizarQuantidade(serialized_data) {
         $.ajax({
             type: "POST",
-            url: `/api/laboratory/permanent/${$("#form-item [name=id]").val()}/add/`,
+            url: `/api/laboratory/permanents/${$("#form-item [name=id]").val()}/add/`,
             dataType: "json",
             data: serialized_data,
             success: function (response) {
@@ -183,7 +178,7 @@
 
         $.ajax({
             type: "PATCH",
-            url: `/api/laboratory/permanent/${$("#form-item [name=id]").val()}/`,
+            url: `/api/laboratory/permanents/${$("#form-item [name=id]").val()}/`,
             dataType: "json",
             data: serialized_data,
             success: function (response) {
