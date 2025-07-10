@@ -10,3 +10,15 @@
 <link rel="stylesheet" href="{% static 'assets/css/barra_2.0.css' %}"/>
 <link rel="stylesheet"
       href="{% static 'assets/fontawesome-free-6.3.0-web/css/all.min.css' %}"/>
+
+<!-- VLibras Widget -->
+<div vw class="enabled">
+      <div vw-access-button class="active" style="position: fixed; bottom: 0px; right: 0px; z-index: 9999;"></div>
+      <div vw-plugin-wrapper>
+      <div class="vw-plugin-top-wrapper"></div>
+      </div>
+</div>
+<script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+<script>
+      new window.VLibras.Widget('https://vlibras.gov.br/app');
+</script>
