@@ -57,7 +57,7 @@
   {
     "id": "c003",
     "nome": "Curso Técnico em Registros e Informações em Saúde",
-    "ativo": true,
+    "ativo": false,
     "head": {
       "vagas": "50 vagas.",
       "duracao": "Dois anos.",
