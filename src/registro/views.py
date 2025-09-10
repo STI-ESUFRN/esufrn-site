@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from .forms import PessoaForm, PessoaDeclaracaoMultiUploadForm
+from .forms import PessoaForm
 from .models import Pessoa, PessoaDeclaracao
 
 # Create your views here.
@@ -14,12 +14,11 @@ def registro(request):
 def formulario(request):
     if request.method == "POST":
         form = PessoaForm(request.POST)
-        files_form = PessoaDeclaracaoMultiUploadForm(request.POST, request.FILES)
         if form.is_valid():
             pessoa = form.save()
-            if files_form.is_valid():
-                arquivos = request.FILES.getlist("arquivos")
-                for f in arquivos:
+            # Trata uploads múltiplos diretamente
+            for f in request.FILES.getlist("arquivos"):
+                if f:  # simples guarda
                     PessoaDeclaracao.objects.create(pessoa=pessoa, arquivo=f)
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
                 item = {
@@ -40,14 +39,10 @@ def formulario(request):
                 }
                 return JsonResponse({"ok": True, "item": item})
             return redirect("registro")
-        else:
-            if request.headers.get("x-requested-with") == "XMLHttpRequest":
-                # mescla erros se necessário
-                errors = form.errors.copy()
-                errors.update(files_form.errors)
-                return JsonResponse(errors, status=400)
-            return render(request, "registro/formulario.html", {"form": form, "files_form": files_form})
+        # POST inválido
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            return JsonResponse(form.errors, status=400)
+        return render(request, "registro/formulario.html", {"form": form})
 
     form = PessoaForm()
-    files_form = PessoaDeclaracaoMultiUploadForm()
-    return render(request, "registro/formulario.html", {"form": form, "files_form": files_form})
+    return render(request, "registro/formulario.html", {"form": form})

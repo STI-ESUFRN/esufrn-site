@@ -76,7 +76,7 @@
                 <td class="text-center">{{ pessoa.pontuacao|floatformat:2 }}</td>
                 <td class="text-center">
                     {% for d in pessoa.declaracoes.all %}
-                        <a href="{{ d.arquivo.url }}" target="_blank">Arquivo {{ forloop.counter }}</a>{% if not forloop.last %}, {% endif %}
+                        <a href="{{ d.arquivo.url }}" target="_blank">Declaração {{ forloop.counter }}</a>{% if not forloop.last %}, {% endif %}
                     {% empty %}
                         &mdash;
                     {% endfor %}

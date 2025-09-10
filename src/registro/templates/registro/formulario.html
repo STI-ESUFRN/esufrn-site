@@ -1,19 +1,20 @@
 {% extends "dashboard.base.html" %}
 {% block content %}
 <div class="container mt-5">
-    <h2>Novo item RSC</h2>
+    <h3>Novo item RSC</h3>
+    <hr />
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-row">
             <div class="form-group col-md-2">
-                <label for="id_numero" class="form-label">Nº</label>
+                <label for="id_numero" class="form-label"><b>Nº*</b></label>
                 {{ form.numero }}
                 {% if form.numero.errors %}
                 <div class="invalid-feedback d-block">{{ form.numero.errors|join:", " }}</div>
                 {% endif %}
             </div>
             <div class="form-group col-md-10">
-                <label for="id_saberes_competencias" class="form-label">Saberes e Competências</label>
+                <label for="id_saberes_competencias" class="form-label"><b>Saberes e Competências*</b></label>
                 {{ form.saberes_competencias }}
                 {% if form.saberes_competencias.errors %}
                 <div class="invalid-feedback d-block">{{ form.saberes_competencias.errors|join:", " }}</div>
@@ -36,7 +37,7 @@
             <div class="invalid-feedback d-block">{{ form.documentos_comprobatorios.errors|join:", " }}</div>
             {% endif %}
         </div>
-
+        <hr />
         <div class="form-row">
             <div class="form-group col-md-4">
                 <label for="id_unidade_medida" class="form-label">Unidade de Medida</label>
@@ -53,14 +54,19 @@
                 {% endif %}
             </div>
             <div class="form-group col-md-4">
-                <label for="id_arquivos" class="form-label">Upload declarações (múltiplos)</label>
-                {{ files_form.arquivos }}
-                {% if files_form.arquivos.errors %}
-                <div class="invalid-feedback d-block">{{ files_form.arquivos.errors|join:", " }}</div>
-                {% endif %}
+                <label class="form-label">Declarações</label>
+                <div id="arquivos-wrapper">
+                    <div class="arquivo-row d-flex align-items-start mb-2" data-initial="true">
+                        <input type="file" name="arquivos" class="form-control form-control-sm" style="padding: 7px;" />
+                        <button type="button" id="add-arquivo" class="btn mx-1" title="Adicionar outro">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                <small class="form-text text-muted">Use o botão + para adicionar vários arquivos</small>
             </div>
         </div>
-
+        <hr />
         <div class="form-row">
             <div class="form-group col-md-8">
                 <label for="id_pessoas" class="form-label">Pessoas</label>
@@ -96,5 +102,49 @@
             </button>
         </div>
     </form>
+    <script>
+        // Comportamento dinâmico para múltiplos arquivos (estilo simplificado)
+        (function () {
+            const wrapper = document.getElementById('arquivos-wrapper');
+            const addBtn = document.getElementById('add-arquivo');
+
+            function createRow() {
+                const row = document.createElement('div');
+                row.className = 'arquivo-row d-flex align-items-start mb-2';
+                row.innerHTML = `
+                <input type="file" name="arquivos" class="form-control form-control-sm me-2" style="padding: 7px;"/>
+                <button type="button" class="btn ml-1 remove-arquivo" title="Remover">
+                    <i class="fas fa-trash"></i>
+                </button>`;
+                return row;
+            }
+
+            function updateVisibility() {
+                const rows = wrapper.querySelectorAll('.arquivo-row');
+                rows.forEach(r => {
+                    const rm = r.querySelector('.remove-arquivo');
+                    if (rm) rm.style.display = rows.length > 1 ? 'inline-block' : 'none';
+                });
+            }
+
+            addBtn.addEventListener('click', function () {
+                const row = createRow();
+                wrapper.appendChild(row);
+                updateVisibility();
+            });
+
+            wrapper.addEventListener('click', function (e) {
+                if (e.target.closest && e.target.closest('.remove-arquivo')) {
+                    const row = e.target.closest('.arquivo-row');
+                    if (row && !row.dataset.initial) {
+                        row.remove();
+                        updateVisibility();
+                    }
+                }
+            });
+
+            updateVisibility();
+        })();
+    </script>
 </div>
 {% endblock content %}

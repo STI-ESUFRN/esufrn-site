@@ -3,10 +3,6 @@ from django import forms
 from .models import Pessoa
 
 
-class MultipleFileInput(forms.ClearableFileInput):
-    allow_multiple_selected = True
-
-
 class PessoaForm(forms.ModelForm):
     class Meta:
         model = Pessoa
@@ -33,9 +29,3 @@ class PessoaForm(forms.ModelForm):
             "observacoes": forms.Textarea(attrs={"class": "form-control", "rows": 3}),
         }
 
-class PessoaDeclaracaoMultiUploadForm(forms.Form):
-    arquivos = forms.FileField(
-        label="Declarações",
-    widget=MultipleFileInput(attrs={"class": "form-control", "multiple": True}),
-        required=False,
-    )
