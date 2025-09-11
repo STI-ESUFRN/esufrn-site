@@ -193,7 +193,7 @@
                 <div class="container">
                     {% for i in result_cur %}
                         <div class="item-noticia mt-4">
-                            <a href="{% url 'principal:ensino_pronatec' %}?curso={{ i.id }}">
+                            <a href="{% url 'principal:ensino_tecnico' %}?curso={{ i.id }}">
                                 <h2>{{ i.nome|bold|safe }}</h2>
                             </a>
                             <p class="text-muted resumo">
