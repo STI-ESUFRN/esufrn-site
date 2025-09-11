@@ -302,6 +302,14 @@
 					`);
 				}
 			});
+
+			// Tenta abrir o modal se houver o parâmetro 'curso' na URL
+			var url = new URL(window.location.href);
+			var cursoParam = url.searchParams.get("curso");
+			if (cursoParam) {
+				// Dispara o clique diretamente, pois os botões já foram criados.
+				$('#' + cursoParam).click();
+			}
 		}).fail(function (err) {
 			console.log(err);
 			$("#dadosAlert").html("<div class='alert alert-danger rounded-0' role='alert'>Houve um erro ao carregar o arquivo de cursos, por favor, contate o suporte!</div>");
@@ -321,11 +329,5 @@
 			$("#dadosAlert").html("<div class='alert alert-danger rounded-0' role='alert'>Houve um erro ao carregar o arquivo de cursos, por favor, contate o suporte!</div>")
 		});
 		{% endif %}
-
-		var surl = new URL(window.location.href);
-		var c = surl.searchParams.get("curso");
-		$(document).ready(function () {
-			console.log($(`#${c}`).click())
-		});
     </script>
 {% endblock scripts %}
