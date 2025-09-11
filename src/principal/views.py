@@ -3,7 +3,7 @@ import json
 import os
 import threading
 import unicodedata
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 from functools import reduce
 
 from dateutil.relativedelta import relativedelta
@@ -331,6 +331,7 @@ def busca(request):
     if category := request.GET.get("category"):
         news = news.filter(category=category)
 
+    # Filtro rápido por período relativo
     if period := request.GET.get("period"):
         if period == "hora":
             delta = timedelta(hours=1)
@@ -344,9 +345,42 @@ def busca(request):
             delta = relativedelta(years=+1)
         else:
             delta = timedelta()
-
         now = timezone.now()
         news = news.filter(published_at__range=(now - delta, now))
+
+    # Filtro por intervalo de datas específico (tem precedência sobre 'period')
+    start_date_str = request.GET.get("start_date")
+    end_date_str = request.GET.get("end_date")
+    if start_date_str or end_date_str:
+        # Ignora filtro de período relativo anterior se intervalo explícito for usado
+        # Recarrega queryset básico respeitando categoria
+        news = News.objects.all()
+        if category := request.GET.get("category"):
+            news = news.filter(category=category)
+        try:
+            start_dt = None
+            end_dt = None
+            if start_date_str:
+                # Espera formato YYYY-MM-DD (input type=date)
+                start_dt = timezone.make_aware(
+                    datetime.strptime(start_date_str, "%Y-%m-%d")
+                )
+            if end_date_str:
+                # Final do dia
+                end_raw = datetime.strptime(end_date_str, "%Y-%m-%d")
+                end_dt = timezone.make_aware(end_raw) + timedelta(days=1)
+            filter_kwargs = {}
+            if start_dt and end_dt:
+                filter_kwargs["published_at__range"] = (start_dt, end_dt)
+            elif start_dt:
+                filter_kwargs["published_at__gte"] = start_dt
+            elif end_dt:
+                filter_kwargs["published_at__lte"] = end_dt
+            if filter_kwargs:
+                news = news.filter(**filter_kwargs)
+        except Exception:
+            # Silencia erros de parsing e mantém queryset atual
+            pass
 
     page = int(request.GET.get("page", "1"))
 
@@ -375,7 +409,7 @@ def busca(request):
                         for word in words
                     ],
                 ),
-            ).order_by("-modified")
+            ).order_by("-published_at")
 
             result_obj_blog, qnt, intervalo = paginator(page, result_blog)
 
@@ -422,6 +456,8 @@ def busca(request):
             "pag": page,
             "category": category if category else None,
             "period": period if period else None,
+            "start_date": start_date_str if (start_date_str) else "",
+            "end_date": end_date_str if (end_date_str) else "",
             "search": field_search,
             "status": "success",
             "total": total_qnt,
@@ -434,6 +470,8 @@ def busca(request):
             "status": "error",
             "mensagem": "error",
             "crumbs": crumbs,
+            "start_date": request.GET.get("start_date", ""),
+            "end_date": request.GET.get("end_date", ""),
         }
 
     return render(request, "home.busca.html", context)

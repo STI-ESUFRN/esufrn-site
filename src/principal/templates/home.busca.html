@@ -109,21 +109,33 @@
                             <i class="fas fa-solid fa-caret-down"></i>
                         </b>
                     </button>
-                    <div class="dropdown-menu custom-dropdown-menu">
+                    <div class="dropdown-menu custom-dropdown-menu p-2" style="min-width:280px;">
                         <div class="text-center text-muted my-2">POR PERÍODO</div>
-                        {% with period=request.GET.period category=request.GET.category|getparam:'category' %}
-                            <a class="{{ period|active }}"
-                               href="{% url 'principal:busca' %}?termo={{ search }}{{ category }}">Em qualquer data</a>
-                            <a class="{{ period|active:'hora' }}"
-                               href="{% url 'principal:busca' %}?termo={{ search }}&period=hora{{ category }}">Na última hora</a>
-                            <a class="{{ period|active:'dia' }}"
-                               href="{% url 'principal:busca' %}?termo={{ search }}&period=dia{{ category }}">Nas últimas 24 horas</a>
-                            <a class="{{ period|active:'semana' }}"
-                               href="{% url 'principal:busca' %}?termo={{ search }}&period=semana{{ category }}">Na última semana</a>
-                            <a class="{{ period|active:'mes' }}"
-                               href="{% url 'principal:busca' %}?termo={{ search }}&period=mes{{ category }}">No último mês</a>
-                            <a class="{{ period|active:'ano' }}"
-                               href="{% url 'principal:busca' %}?termo={{ search }}&period=ano{{ category }}">No último ano</a>
+                        {% with period=request.GET.period category=request.GET.category|getparam:'category' start=request.GET.start_date|getparam:'start_date' end=request.GET.end_date|getparam:'end_date' %}
+                            <a class="{{ period|active }}" href="{% url 'principal:busca' %}?termo={{ search }}{{ category }}">Em qualquer data</a>
+                            <!-- <a class="{{ period|active:'hora' }}" href="{% url 'principal:busca' %}?termo={{ search }}&period=hora{{ category }}">Na última hora</a> -->
+                            <!-- <a class="{{ period|active:'dia' }}" href="{% url 'principal:busca' %}?termo={{ search }}&period=dia{{ category }}">Nas últimas 24 horas</a> -->
+                            <a class="{{ period|active:'semana' }}" href="{% url 'principal:busca' %}?termo={{ search }}&period=semana{{ category }}">Na última semana</a>
+                            <a class="{{ period|active:'mes' }}" href="{% url 'principal:busca' %}?termo={{ search }}&period=mes{{ category }}">No último mês</a>
+                            <a class="{{ period|active:'ano' }}" href="{% url 'principal:busca' %}?termo={{ search }}&period=ano{{ category }}">No último ano</a>
+                            <hr class="my-2"/>
+                            <div class="text-center text-muted my-2">POR INTERVALO</div>
+                            <form method="get" action="{% url 'principal:busca' %}" class="px-2 pb-2">
+                                <input type="hidden" name="termo" value="{{ search }}"/>
+                                {% if category %}<input type="hidden" name="category" value="{{ category }}"/>{% endif %}
+                                <div class="form-group mb-2">
+                                    <label class="small m-0">Início</label>
+                                    <input class="form-control form-control-sm" type="date" name="start_date" value="{{ start_date }}"/>
+                                </div>
+                                <div class="form-group mb-2">
+                                    <label class="small m-0">Fim</label>
+                                    <input class="form-control form-control-sm" type="date" name="end_date" value="{{ end_date }}"/>
+                                </div>
+                                <button type="submit" class="btn btn-sm btn-primary w-100">Aplicar</button>
+                                {% if start_date or end_date %}
+                                    <a href="{% url 'principal:busca' %}?termo={{ search }}{{ category }}" class="btn btn-sm btn-link w-100 mt-1">Limpar intervalo</a>
+                                {% endif %}
+                            </form>
                         {% endwith %}
                     </div>
                 </div>
@@ -247,10 +259,10 @@
                         </button>
                     </a>
                 {% endif %} {% endcomment %}
-                {% with period=request.GET.period|getparam:'period' category=request.GET.category|getparam:'category' %}
+                {% with period=request.GET.period|getparam:'period' category=request.GET.category|getparam:'category' start=request.GET.start_date|getparam:'start_date' end=request.GET.end_date|getparam:'end_date' %}
                     {% if pag > 4 %}
                         <a class="a-clear mx-1"
-                           href="{% url 'principal:busca' %}?termo={{ search }}&page=1{{ category }}{{ period }}">
+                           href="{% url 'principal:busca' %}?termo={{ search }}&page=1{{ category }}{{ period }}{{ start }}{{ end }}">
                             <button class="btn btn-outline-dark rounded-circle btn-pagination {{ pag|active:'1' }}">
                                 <p>
                                     1
@@ -263,9 +275,9 @@
                             </p>
                         </button>
                     {% endif %}
-                    {% for i in rng %}
+              {% for i in rng %}
                         <a class="a-clear mx-1"
-                           href="{% url 'principal:busca' %}?termo={{ search }}&page={{ i }}{{ category }}{{ period }}">
+                  href="{% url 'principal:busca' %}?termo={{ search }}&page={{ i }}{{ category }}{{ period }}{{ start }}{{ end }}">
                             <button class="btn btn-outline-dark rounded-circle btn-pagination {{ pag|active:i }}">
                                 <p>
                                     {{ i }}
@@ -280,7 +292,7 @@
                             </p>
                         </button>
                         <a class="a-clear mx-1"
-                           href="{% url 'principal:busca' %}?termo={{ search }}&page={{ total }}{{ category }}{{ period }}">
+                  href="{% url 'principal:busca' %}?termo={{ search }}&page={{ total }}{{ category }}{{ period }}{{ start }}{{ end }}">
                             <button class="btn btn-outline-dark rounded-circle btn-pagination {{ pag|active:total }}">
                                 <p>
                                     {{ total }}

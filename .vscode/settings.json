@@ -5,7 +5,7 @@
             "source.fixAll": "explicit"
         }
     },
-    "editor.formatOnSave": true,
+    "editor.formatOnSave": false,
     "editor.tabSize": 4,
     "python.analysis.extraPaths": ["./src"],
     "python.formatting.provider": "black",
