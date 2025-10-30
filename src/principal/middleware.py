@@ -14,6 +14,7 @@ BOT_UA_PATTERNS = [
     'crawler','spider','slurp','curl','wget','l9explore',
     'python-requests','http-client','go-http-client','gptbot',
     'headless','headlesschrome',
+    'openvas', 'masscan', 'nikto', 'acunetix',
 ]
 
 IGNORED_PATH_PREFIXES = (
