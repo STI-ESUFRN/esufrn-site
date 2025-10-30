@@ -111,6 +111,39 @@ def noticias(request):
         now = timezone.now()
         news = news.filter(published_at__range=(now - delta, now))
 
+    # Filtro por intervalo de datas específico (tem precedência sobre 'period')
+    start_date_str = request.GET.get("start_date")
+    end_date_str = request.GET.get("end_date")
+    if start_date_str or end_date_str:
+        # Recarrega queryset básico respeitando categoria
+        news = News.objects.all()
+        if category:
+            news = news.filter(category=category)
+        try:
+            start_dt = None
+            end_dt = None
+            if start_date_str:
+                # Espera formato YYYY-MM-DD (input type=date)
+                start_dt = timezone.make_aware(
+                    datetime.strptime(start_date_str, "%Y-%m-%d")
+                )
+            if end_date_str:
+                # Final do dia
+                end_raw = datetime.strptime(end_date_str, "%Y-%m-%d")
+                end_dt = timezone.make_aware(end_raw) + timedelta(days=1)
+            filter_kwargs = {}
+            if start_dt and end_dt:
+                filter_kwargs["published_at__range"] = (start_dt, end_dt)
+            elif start_dt:
+                filter_kwargs["published_at__gte"] = start_dt
+            elif end_dt:
+                filter_kwargs["published_at__lte"] = end_dt
+            if filter_kwargs:
+                news = news.filter(**filter_kwargs)
+        except Exception:
+            # Silencia erros de parsing e mantém queryset atual
+            pass
+
     page = int(request.GET.get("page", "1"))
 
     result_obj, qnt, intervalo = paginator(page, news)
@@ -122,6 +155,8 @@ def noticias(request):
         "total": qnt,
         "rng": intervalo,
         "crumbs": [{"name": "Notícias"}],
+        "start_date": start_date_str if (start_date_str) else "",
+        "end_date": end_date_str if (end_date_str) else "",
     }
 
     return render(request, "home.noticias.html", context)
@@ -149,8 +184,11 @@ def noticia(request, slug):
             PageView.objects.create(page_type=tipo, object_id=news.id)
 
             # incrementa contador no próprio objeto News
-            news.views = models.F('views') + 1
-            news.save(update_fields=['views'])
+            # Atualiza o contador diretamente via QuerySet update para evitar
+            # chamar o método save() do modelo (que atualizaria campos como
+            # `modified` por causa de TimeStampedModel). Usando update() não
+            # dispara lógica adicional nem altera o campo `modified`.
+            News.objects.filter(pk=news.pk).update(views=models.F('views') + 1)
             news.refresh_from_db()
 
             viewed.append(news.id)

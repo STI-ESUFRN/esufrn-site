@@ -16,6 +16,7 @@ from principal.models import (
     Links_V,
     destaque,
     Noticia,
+    PageView,
     Cursos_Pronatec,
 )
 
@@ -27,8 +28,8 @@ class BlogAttachmentsInline(admin.TabularInline):
 class BlogAdmin(admin.ModelAdmin):
     list_display = [
         "title",
+        "pageview_count",
         "author",
-        "is_important",
         "modified",
         "created",
         "category",
@@ -58,6 +59,15 @@ class BlogAdmin(admin.ModelAdmin):
     inlines = [
         BlogAttachmentsInline,
     ]
+
+    def pageview_count(self, obj):
+        """Retorna o número de PageView associados a esta notícia.
+
+        Contabiliza page_type 'noticia' e 'processo' como feito na view.
+        """
+        return PageView.objects.filter(object_id=obj.id, page_type__in=["noticia", "processo"]).count()
+
+    pageview_count.short_description = "Acessos"
 
     @admin.action(description="Adicionar destaque às Notícias selecionadas")
     def add_important(self, request, queryset):
