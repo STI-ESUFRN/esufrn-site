@@ -237,5 +237,25 @@
       "Área de atuação": " Centros de convivência, centros dias, hospitais dias, instituições de longa permanência para idosos (ILPI), instituições de saúde, serviços de cuidados domiciliares e de forma autônoma. ",
       "Maiores informações": " sec.direcaodeensino@gmail.com"
     }
+  },
+  {
+    "id": "c010",
+    "nome": " Curso Técnico em Terapias Holísticas",
+    "ativo": true,
+    "head": {
+      "vagas": " - ",
+      "duracao": " - ",
+      "carga": " - ",
+      "turno": " - ",
+      "periodicidade": " Turmas Encerradas "
+    },
+    "main": {
+      "Forma de ingresso": " Processo Seletivo junto à COMPERVE.",
+      "A quem se destina": " Pessoas com Ensino Médio Completo.",
+      "Estrutura oferecida": " Biblioteca com acervo físico ou virtual específico e atualizado Salas de aula climatizadas com dispositivos de multimídia e projeção, Salas para práticas coletivas.",
+      "Perfil do profissional": " O Técnico em Terapias Holísticas está apto para executar práticas corporais de descontração e relaxamento, advindas de tradições da medicina ayurvédica indiana, como o Yoga e da Medicina Tradicional Chinesa (MTC), como o Lian Gong e o Tai Chi Chuan; Aplicar técnicas de massagens relaxantes e estimulantes, do tipo terapêutica e estética; Conduzir práticas meditativas/contemplativas e danças circulares; Utilizar técnicas oriundas da aromaterapia, cromoterapia, musicoterapia, auriculoterapia, moxabustão e ventosaterapia, entre outras; Participar de equipes multiprofissionais em serviços de saúde, clínicas estéticas. ",      
+      "Área de atuação": " Associações Desportivas; Centros de Atenção Psicossocial; Centros de Atendimento a Idosos e Instituições de Longa Permanência – ILP; Centros de Práticas Integrativas e Complementares; Clínicas de Reabilitação; Clínicas Estéticas; Empresas e Domicílios; Hospitais; Hotéis; Navios de Cruzeiros e Eventos; Profissional Autônomo; SPAs; Unidades Básicas de Saúde, dentre outros. ",
+      "Maiores informações": " ensino@es.ufrn.br"
+    }
   }
 ]
