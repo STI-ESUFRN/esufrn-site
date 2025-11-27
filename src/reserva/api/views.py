@@ -5,6 +5,7 @@ from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 
 from core.permissions import IsSafeMethods, IsSuperAdmin
 from reserva.api.filters import CalendarFilter
@@ -174,3 +175,16 @@ class CalendarViewSet(
             active=True,
         )
         return self.filter_queryset(queryset)
+
+    def retrieve(self, request, pk=None):
+        base_qs = ReserveDay.objects.filter(
+            Q(period__status=Status.APPROVED)
+            | Q(reserve__status=Status.APPROVED)
+            | Q(period__status=Status.WAITING)
+            | Q(reserve__status=Status.WAITING),
+            active=True,
+        )
+
+        instance = get_object_or_404(base_qs, pk=pk)
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
