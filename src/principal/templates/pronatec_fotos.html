@@ -19,7 +19,8 @@
     </div>
     <div class="container mt-4 text-center">
         <!-- Semester Buttons -->
-        <button id="btn-2025.1" onclick="filterPhotos('2025.2')" class="btn btn-primary m-2 selected">2025.2</button>
+         <button id="btn-2026.1" onclick="filterPhotos('2026.1')" class="btn btn-primary m-2 selected">2026.1</button>
+        <button id="btn-2025.2" onclick="filterPhotos('2025.2')" class="btn btn-primary m-2">2025.2</button>
         <button id="btn-2025.1" onclick="filterPhotos('2025.1')" class="btn btn-primary m-2">2025.1</button>
         <button id="btn-2024.2" onclick="filterPhotos('2024.2')" class="btn btn-primary m-2">2024.2</button>
         <button id="btn-2024.1" onclick="filterPhotos('2024.1')" class="btn btn-primary m-2">2024.1</button>
@@ -48,6 +49,7 @@
 <script>
     function filterPhotos(semester) {
         const semesterDates = {
+            '2026.1': ['2025-12-25', '2026-07-24'],
             '2025.2': ['2025-07-27', '2025-12-24'],
             '2025.1': ['2025-03-17', '2025-07-26'],
             '2024.2': ['2024-09-01', '2025-03-16'],
@@ -75,9 +77,9 @@
         document.getElementById('btn-' + semester).classList.add('selected');
     }
 
-    // Automatically select 2025.2 on page load
+    // Automatically select 2026.1 on page load
     document.addEventListener('DOMContentLoaded', function () {
-        filterPhotos('2025.2');
+        filterPhotos('2026.1');
     });
 </script>
 {% endblock content %}
