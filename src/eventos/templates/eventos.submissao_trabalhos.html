@@ -1,0 +1,510 @@
+{% extends "base.pagina.html" %}
+{% load static %}
+
+{% block styles %}
+<style>
+    .nav-tabs .nav-link {
+        color: #495057;
+        /* cor visível */
+    }
+
+    .nav-tabs .nav-link.active {
+        color: #000;
+        background-color: #fff;
+        border-color: #dee2e6 #dee2e6 #fff;
+    }
+</style>
+{% endblock styles %}
+
+{% block content %}
+<article class="container mt-5">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
+    <header class="text-center mb-5 text-center cabecalho">
+        <h3>Submissão de Trabalhos</h3>
+    </header>
+
+    <ul class="nav nav-tabs" id="submissaoTabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="tab-simples" data-toggle="tab" href="#simples" role="tab">Resumo Simples</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="tab-expandido" data-toggle="tab" href="#expandido" role="tab">Resumo Expandido</a>
+        </li>
+    </ul>
+
+    <div class="tab-content mt-4">
+        <div class="tab-pane fade show active" id="simples" role="tabpanel">
+
+            <section class="mb-4">
+                <h5 class="font-weight-bold">Período de submissão</h5>
+                <p class="border p-3 bg-light">15/09/2025 até 02/05/2026</p>
+            </section>
+
+            <section class="mb-4">
+                <h5 class="font-weight-bold">Informações</h5>
+                <div class="border p-4 bg-light">
+                    <h3>Resumo Simples - Publicação em Anais de Evento</h3>
+                    <ul>
+                        <li><strong>Número máximo de autores:&nbsp;</strong>10</li>
+                        <li><strong>Inscrição obrigatória:&nbsp;</strong>Apenas o autor principal deve estar inscrito no
+                            evento.</li>
+                        <li><strong>Taxa de publicação: </strong>A avaliação do trabalho é gratuita. Em caso de
+                            aprovação, será cobrada uma taxa de R$ 50,00 por trabalho para a publicação.</li>
+                    </ul>
+
+                    <p>Para submeter o trabalho, siga as instruções:</p>
+
+                    <ol>
+                        <li><strong>Envio em dois formatos:&nbsp;</strong>Submeta o trabalho em duas versões, uma com os
+                            nomes dos autores e outra sem, para avaliação cega.</li>
+                        <li><strong>Modelo e edital:&nbsp;</strong>Consulte o modelo e o edital antes de enviar o
+                            trabalho.</li>
+                    </ol>
+
+                    <h3>Apresentação do trabalho</h3>
+
+                    <p>Todos os trabalhos aceitos devem ser apresentados. Se preferir não apresentar oralmente, escolha
+                        a modalidade de pôster.</p>
+
+                    <h3>Detalhes importantes:</h3>
+
+                    <ul>
+                        <li><strong>Submissão:&nbsp;</strong>Inclua os nomes de todos os autores no momento da
+                            submissão, já que todos constarão no certificado.</li>
+                        <li><strong>Ajustes pós-submissões:&nbsp;</strong>Podem ser realizados mediante pagamento de
+                            taxa, conforme edital.</li>
+                        <li><strong>Prazo de validação:&nbsp;</strong>5 dias úteis.</li>
+                        <li><strong>Formato de envio:&nbsp;</strong>Envie o arquivo em formato Word.</li>
+                    </ul>
+
+                    <p>&nbsp;</p>
+
+                    <p>Para mais informações, acesse nosso edital!</p>
+                </div>
+            </section>
+
+            <section class="mb-4">
+                <ul>
+                    <li><a href="#" class="corpo"><i></i>Baixar regulamento</a></li>
+                    <li><a href="#" class="corpo"><i></i>Baixar template</a></li>
+                    <li><a href="#" class="corpo"><i></i>Baixar modelo do pôster</a></li>
+                </ul>
+            </section>
+
+            <article>
+                <div class="corpo">
+
+                    <form action="{% url 'submeter_trabalho' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="ArtigoNome">
+                                    <b>Título do trabalho*</b>
+                                </label>
+                                <input name="data[Artigo][nome]" type="text" id="ArtigoNome"
+                                    class="form-control rounded-0" required placeholder="Insira o título completo">
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="ArtigoAreaTematicaId">
+                                    <b>Área temática*</b>
+                                </label>
+                                <select name="data[Artigo][area_tematica_id]" class="form-control rounded-0"
+                                    id="ArtigoAreaTematicaId" required>
+                                    <option value="54999">Submissão de Trabalhos - RESUMO SIMPLES</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="ArtigoModalidadeId">
+                                    <b>Modalidade de apresentação*</b>
+                                </label>
+                                <select name="data[Artigo][modalidade_id]" class="form-control rounded-0"
+                                    id="ArtigoModalidadeId" required>
+                                    <option value="">Selecione a modalidade</option>
+                                    <option value="1">Oral</option>
+                                    <option value="2">Pôster</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="ArtigoPalavrasChave">
+                                    <b>Palavras-chave*</b>
+                                </label>
+                                <input name="data[Artigo][palavras_chave]" type="text" id="ArtigoPalavrasChave"
+                                    class="form-control rounded-0" required
+                                    placeholder="Digite as palavras-chave separadas por vírgula">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="ArtigoResumo">
+                                <b>Resumo do trabalho*</b>
+                            </label>
+                            <textarea name="data[Artigo][resumo]" id="ArtigoResumo" class="form-control rounded-0"
+                                rows="6" placeholder="Digite ou cole seu resumo aqui..."></textarea>
+                            <small class="form-text text-muted">Máximo de 500 palavras. <span id="wordCountSimples"
+                                    class="font-weight"></span></small>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label>
+                                    <b>TRABALHO SEM O NOME DOS AUTORES (WORD)*</b>
+                                </label>
+                                <input type="file" name="data[Artigo][arquivo]"
+                                    class="form-control-file border p-2 rounded-0">
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label>
+                                    <b>TRABALHO COM O NOME DOS AUTORES (WORD)*</b>
+                                </label>
+                                <input type="file" name="data[Artigo][segundo_arquivo]"
+                                    class="form-control-file border p-2 rounded-0">
+                            </div>
+                        </div>
+
+                        <div id="container-autores">
+                            <div class="form-row autor-group">
+                                <div class="col-md-6 form-group">
+                                    <label><b>Nome do autor*</b></label>
+                                    <input name="data[Autor][1][name]" class="form-control rounded-0 input-nome-autor"
+                                        type="text" placeholder="Nome completo" required>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label><b>E-mail do autor*</b></label>
+                                    <input name="data[Autor][1][email]" class="form-control rounded-0" type="email"
+                                        placeholder="email@exemplo.com" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-2">
+                            <a href="javascript:void(0)" class="text-primary" id="id-coautor">
+                                <i class="fa fa-plus-circle"></i> Adicionar Coautor
+                            </a>
+                        </div>
+
+                        <div class="rounded-0 mt-4">
+                            <div class="form-row">
+                                <div class="col-md-12 form-group">
+                                    <label><b>Apresentador*</b></label>
+                                    <select name="data[Artigo][apresentador]" id="ArtigoApresentador"
+                                        class="form-control rounded-0" required>
+                                        <option value="">Selecione o apresentador</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-5 mb-5">
+                            <button type="submit" class="btn btn-dark btn-lg rounded-0 px-5">
+                                Submeter trabalho
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </article>
+        </div>
+
+        <div class="tab-pane fade" id="expandido" role="tabpanel">
+            <section class="mb-4">
+                <h5 class="font-weight-bold">Período de submissão</h5>
+                <p class="border p-3 bg-light">15/09/2025 até 02/05/2026</p>
+            </section>
+
+            <section class="mb-4">
+                <h5 class="font-weight-bold">Informações</h5>
+                <div class="border p-4 bg-light">
+                    <h3>Resumo Expandido - Publicação em Anais de Evento</h3>
+                    <ul>
+                        <li><strong>Número máximo de autores: </strong>10</li>
+                        <li><strong>Inscrição obrigatória: </strong>Apenas o autor principal deve estar inscrito no
+                            evento.</li>
+                        <li><strong>Taxa de publicação: </strong>A avaliação do trabalho é gratuita. Em caso de
+                            aprovação, será cobrada uma taxa de R$ 50,00 por trabalho para a publicação.</li>
+                    </ul>
+
+                    <p>Para submeter o trabalho, siga as instruções:</p>
+
+                    <ol>
+                        <li><strong>Envio em dois formatos: </strong>Submeta o trabalho em duas versões, uma com os
+                            nomes dos autores e outra sem, para avaliação cega.</li>
+                        <li><strong>Modelo e edital: </strong>Consulte o modelo e o edital antes de enviar o trabalho.
+                        </li>
+                    </ol>
+
+                    <h3>Apresentação do trabalho</h3>
+                    <p>Todos os trabalhos aceitos devem ser apresentados. Se preferir não apresentar oralmente, escolha
+                        a modalidade de pôster.</p>
+
+                    <h3>Detalhes importantes:</h3>
+                    <ul>
+                        <li><strong>Submissão: </strong>Inclua os nomes de todos os autores no momento da submissão.
+                        </li>
+                        <li><strong>Ajustes pós-submissões: </strong>Podem ser realizados mediante pagamento de taxa.
+                        </li>
+                        <li><strong>Prazo de validação: </strong>7 dias úteis.</li>
+                        <li><strong>Formato de envio: </strong>Envie o arquivo em formato Word.</li>
+                    </ul>
+
+                    <p>&nbsp;</p>
+
+                    <p>Para mais informações, acesse nosso edital!</p>
+                </div>
+            </section>
+
+            <section class="mb-4">
+                <ul>
+                    <li><a href="#" class="corpo"><i></i>Baixar regulamento</a></li>
+                    <li><a href="#" class="corpo"><i></i>Baixar template</a></li>
+                    <li><a href="#" class="corpo"><i></i>Baixar modelo do pôster</a></li>
+                </ul>
+            </section>
+
+            <article>
+                <div class="corpo">
+                    <form action="{% url 'submeter_trabalho' %}" method="post" enctype="multipart/form-data"
+                        autocomplete="off">
+                        {% csrf_token %}
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="ArtigoNomeExpandido"><b>Título do trabalho*</b></label>
+                                <input name="data[Artigo][nome]" type="text" id="ArtigoNomeExpandido"
+                                    class="form-control rounded-0" required placeholder="Insira o título completo">
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="ArtigoAreaTematicaExpandido"><b>Área temática*</b></label>
+                                <select name="data[Artigo][area_tematica_id]" class="form-control rounded-0"
+                                    id="ArtigoAreaTematicaExpandido" required>
+                                    <option value="55000">Submissão de Trabalhos - RESUMO EXPANDIDO</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="ArtigoModalidadeExpandido"><b>Modalidade de apresentação*</b></label>
+                                <select name="data[Artigo][modalidade_id]" class="form-control rounded-0"
+                                    id="ArtigoModalidadeExpandido" required>
+                                    <option value="">Selecione a modalidade</option>
+                                    <option value="1">Oral</option>
+                                    <option value="2">Pôster</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="ArtigoPalavrasChaveExpandido"><b>Palavras-chave*</b></label>
+                                <input name="data[Artigo][palavras_chave]" type="text" id="ArtigoPalavrasChaveExpandido"
+                                    class="form-control rounded-0" required
+                                    placeholder="Digite as palavras-chave separadas por vírgula">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ArtigoResumoExpandido"><b>Resumo do trabalho*</b></label>
+                            <textarea name="data[Artigo][resumo]" id="ArtigoResumoExpandido"
+                                class="form-control rounded-0 textarea-resumo" rows="6"
+                                placeholder="Digite ou cole seu resumo aqui..."></textarea>
+                            <small class="form-text text-muted">Máximo de 200 palavras. <span id="wordCountExpandido"
+                                    class="font-weight"></span></small>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label><b>TRABALHO SEM O NOME DOS AUTORES (WORD)*</b></label>
+                                <input type="file" name="data[Artigo][arquivo]"
+                                    class="form-control-file border p-2 rounded-0">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label><b>TRABALHO COM O NOME DOS AUTORES (WORD)*</b></label>
+                                <input type="file" name="data[Artigo][segundo_arquivo]"
+                                    class="form-control-file border p-2 rounded-0">
+                            </div>
+                        </div>
+
+                        <div class="container-autores-dinamico">
+                            <div class="form-row autor-group">
+                                <div class="col-md-6 form-group">
+                                    <label><b>Nome do autor*</b></label>
+                                    <input name="data[Autor][1][name]" class="form-control rounded-0 input-nome-autor"
+                                        type="text" placeholder="Nome completo" required>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label><b>E-mail do autor*</b></label>
+                                    <input name="data[Autor][1][email]" class="form-control rounded-0" type="email"
+                                        placeholder="email@exemplo.com" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-2">
+                            <a href="javascript:void(0)" class="text-primary btn-add-coautor">
+                                <i class="fa fa-plus-circle"></i> Adicionar Coautor
+                            </a>
+                        </div>
+
+                        <div class="form-row mt-4">
+                            <div class="col-md-12 form-group">
+                                <label><b>Apresentador*</b></label>
+                                <select name="data[Artigo][apresentador]"
+                                    class="form-control rounded-0 select-apresentador" required>
+                                    <option value="">Selecione o apresentador</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-5 mb-5">
+                            <button type="submit" class="btn btn-dark btn-lg rounded-0 px-5">Submeter trabalho</button>
+                        </div>
+                    </form>
+                </div>
+            </article>
+        </div>
+    </div>
+</article>
+{% endblock content %}
+{% block scripts %}
+<script>
+    $(document).ready(function () {
+        const MAX_AUTORES = 10;
+
+        // 1. LÓGICA: RESUMO SIMPLES
+        let autorCountSimples = 1;
+        const limitSimples = 500;
+
+        function atualizarApresentadoresSimples() {
+            const $select = $('#ArtigoApresentador');
+            const valorSelecionado = $select.val();
+            $select.empty().append('<option value="">Selecione o apresentador</option>');
+
+            $('#simples .input-nome-autor').each(function () {
+                const nome = $(this).val();
+                if (nome.trim() !== "") {
+                    $select.append(`<option value="${nome}">${nome}</option>`);
+                }
+            });
+            $select.val(valorSelecionado);
+        }
+
+        $('#id-coautor').click(function (e) {
+            e.preventDefault();
+            if (autorCountSimples < MAX_AUTORES) {
+                autorCountSimples++;
+                const novoCampo = `
+                <div class="form-row autor-group mt-3">
+                    <div class="col-md-6 form-group">
+                        <label><b>Nome do coautor*</b></label>
+                        <input name="data[Autor][${autorCountSimples}][name]" class="form-control rounded-0 input-nome-autor" type="text" placeholder="Nome completo" required>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label><b>E-mail do coautor*</b></label>
+                        <input name="data[Autor][${autorCountSimples}][email]" class="form-control rounded-0" type="email" placeholder="email@exemplo.com" required>
+                    </div>
+                </div>`;
+                $('#container-autores').append(novoCampo);
+            } else {
+                alert("Limite máximo de 10 autores atingido.");
+            }
+        });
+
+        $(document).on('input', '#simples .input-nome-autor', atualizarApresentadoresSimples);
+
+        // Contagem específica para Resumo Simples
+        $('#ArtigoResumo').on('input', function () {
+            const words = this.value.trim().split(/\s+/).filter(word => word.length > 0);
+            const count = words.length;
+
+            if (count > limitSimples) {
+                this.value = words.slice(0, limitSimples).join(" ");
+            }
+            $('#wordCountSimples').text(`Palavras digitadas: ${Math.min(count, limitSimples)} / ${limitSimples}`);
+        });
+
+
+        // 2. LÓGICA: RESUMO EXPANDIDO
+        let autorCountExpandido = 1;
+        const limitExpandido = 200;
+
+        function atualizarApresentadoresExpandido() {
+            const $select = $('#expandido .select-apresentador');
+            const valorSelecionado = $select.val();
+            $select.empty().append('<option value="">Selecione o apresentador</option>');
+
+            $('#expandido .input-nome-autor').each(function () {
+                const nome = $(this).val();
+                if (nome.trim() !== "") {
+                    $select.append(`<option value="${nome}">${nome}</option>`);
+                }
+            });
+            $select.val(valorSelecionado);
+        }
+
+        $('#expandido .btn-add-coautor').click(function (e) {
+            e.preventDefault();
+            if (autorCountExpandido < MAX_AUTORES) {
+                autorCountExpandido++;
+                const novoCampo = `
+                <div class="form-row autor-group mt-3">
+                    <div class="col-md-6 form-group">
+                        <label><b>Nome do coautor*</b></label>
+                        <input name="data[Autor][${autorCountExpandido}][name]" class="form-control rounded-0 input-nome-autor" type="text" placeholder="Nome completo" required>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label><b>E-mail do coautor*</b></label>
+                        <input name="data[Autor][${autorCountExpandido}][email]" class="form-control rounded-0" type="email" placeholder="email@exemplo.com" required>
+                    </div>
+                </div>`;
+                $('#expandido .container-autores-dinamico').append(novoCampo);
+            } else {
+                alert("Limite máximo de 10 autores atingido.");
+            }
+        });
+
+        $(document).on('input', '#expandido .input-nome-autor', atualizarApresentadoresExpandido);
+
+        // Contagem específica para Resumo Expandido
+        $('#ArtigoResumoExpandido').on('input', function () {
+            const words = this.value.trim().split(/\s+/).filter(word => word.length > 0);
+            const count = words.length;
+
+            if (count > limitExpandido) {
+                this.value = words.slice(0, limitExpandido).join(" ");
+            }
+            $('#wordCountExpandido').text(`Palavras digitadas: ${Math.min(count, limitExpandido)} / ${limitExpandido}`);
+        });
+
+        // Validação de arquivos
+        $('input[type="file"]').on('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const validExtensions = ['.doc', '.docx'];
+                const fileName = file.name.toLowerCase();
+                const isValid = validExtensions.some(ext => fileName.endsWith(ext));
+                
+                if (!isValid) {
+                    alert('Por favor, envie apenas arquivos Word (.doc ou .docx)');
+                    $(this).val('');
+                    return;
+                }
+                
+                if (file.size > 10 * 1024 * 1024) {
+                    alert('O arquivo deve ter no máximo 10MB');
+                    $(this).val('');
+                }
+            }
+        });
+    });
+</script>
+{% endblock scripts %}

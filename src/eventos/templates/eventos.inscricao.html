@@ -1,0 +1,115 @@
+{% extends "base.pagina.html" %}
+{% load static %}
+
+{% block content %}
+<article class="container mt-5">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <header class="text-center cabecalho">
+        <h3>Inscrição em Evento</h3>
+    </header>
+
+    <div class="form-inscricao">
+
+        <form action="{% url 'submeter_inscricao' %}" method="post" id="formInscricao">
+            {% csrf_token %}
+
+            <div class="form-group corpo">
+                <label for="nomeAluno">
+                    <b>Nome completo*</b>
+                </label>
+                <input type="text" class="form-control rounded-0" id="nomeAluno" name="nome_aluno"
+                    placeholder="Digite seu nome completo" required minlength="3" maxlength="200">
+            </div>
+
+            <div class="form-group corpo">
+                <label for="cpfMatricula">
+                    <b>CPF ou Matrícula*</b>
+                </label>
+                <input type="text" class="form-control rounded-0" id="cpfMatricula" name="cpf_matricula"
+                    placeholder="Digite seu CPF ou número de matrícula" required maxlength="20">
+            </div>
+
+            <div class="form-group corpo">
+                <label for="emailAluno">
+                    <b>E-mail*</b>
+                </label>
+                <input type="email" class="form-control rounded-0" id="emailAluno" name="email_aluno"
+                    placeholder="email@exemplo.com" required maxlength="200">
+            </div>
+
+            <div class="text-center mt-5 mb-5">
+                <button type="submit" class="btn btn-dark btn-lg rounded-0 px-5">Realizar Inscrição</button>
+            </div>
+        </form>
+    </div>
+</article>
+{% endblock content %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function () {
+        // Máscara para CPF
+        $('#cpfMatricula').on('input', function () {
+            let value = $(this).val().replace(/\D/g, '');
+
+            // Se tiver 11 dígitos, aplica máscara de CPF
+            if (value.length === 11) {
+                value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+                $(this).val(value);
+            }
+        });
+
+        // Validação do formulário
+        $('#formInscricao').on('submit', function (e) {
+            const nome = $('#nomeAluno').val().trim();
+            const cpf_matricula = $('#cpfMatricula').val().trim();
+            const email = $('#emailAluno').val().trim();
+
+            if (!nome || nome.length < 3) {
+                e.preventDefault();
+                alert('Por favor, informe seu nome completo (mínimo 3 caracteres)');
+                $('#nomeAluno').focus();
+                return false;
+            }
+
+            if (!cpf_matricula) {
+                e.preventDefault();
+                alert('Por favor, informe seu CPF ou matrícula');
+                $('#cpfMatricula').focus();
+                return false;
+            }
+
+            if (!email || !isValidEmail(email)) {
+                e.preventDefault();
+                alert('Por favor, informe um email válido');
+                $('#emailAluno').focus();
+                return false;
+            }
+
+            // Confirmação antes de enviar
+            return confirm('Deseja confirmar sua inscrição com os dados informados?');
+        });
+
+        // Função para validar email
+        function isValidEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        // Limpar espaços em branco ao perder o foco
+        $('input').on('blur', function () {
+            $(this).val($(this).val().trim());
+        });
+    });
+</script>
+{% endblock scripts %}
