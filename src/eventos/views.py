@@ -9,6 +9,7 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 
 from core.helpers import send_email_with_attachments, send_mail_async
+from django.core.mail import send_mail
 from eventos.models import Event
 from principal.helpers import paginator
 
@@ -274,17 +275,16 @@ def submeter_inscricao(request):
         return redirect("inscricao")
 
     try:
-        # Extrair dados do formulário
+        # --- 1. Extração e Validação ---
         nome_aluno = request.POST.get("nome_aluno", "").strip()
         cpf_matricula = request.POST.get("cpf_matricula", "").strip()
         email_aluno = request.POST.get("email_aluno", "").strip()
         
-        # Validação básica
         if not nome_aluno or not cpf_matricula or not email_aluno:
             messages.error(request, "Por favor, preencha todos os campos obrigatórios.")
             return redirect("inscricao")
         
-        # Montar mensagem do email para administração
+        # --- 2. Preparação do Email Admin ---
         message_admin = f"""
         <h2>Nova Inscrição em Evento</h2>
         <hr/>
@@ -297,18 +297,20 @@ def submeter_inscricao(request):
         
         context_admin = {"message": message_admin}
         msg_admin = render_to_string("base.email_conversation.html", context_admin)
-        
-        # Email de destino da administração
         recipient_email = "suporte@es.ufrn.br"
         
-        # Enviar email para administração
-        send_mail_async(
+        # --- 3. Envio Síncrono Admin (Debug Ativado) ---
+        print(f"Tentando enviar email Admin para {recipient_email}...") # Log no terminal
+        send_mail(
             subject=f"[Inscrição em Evento] {nome_aluno}",
+            message="",  # Fallback de texto puro obrigatório
+            from_email=settings.EMAIL_HOST_USER,
             recipient_list=[recipient_email],
             html_message=msg_admin,
+            fail_silently=False, # Importante: False para mostrar o erro se falhar
         )
         
-        # Enviar email de confirmação para o aluno
+        # --- 4. Preparação do Email Aluno ---
         message_aluno = f"""
         <h2>Confirmação de Inscrição</h2>
         <hr/>
@@ -326,15 +328,24 @@ def submeter_inscricao(request):
         context_aluno = {"message": message_aluno}
         msg_aluno = render_to_string("base.email_conversation.html", context_aluno)
         
-        send_mail_async(
+        # --- 5. Envio Síncrono Aluno ---
+        print(f"Tentando enviar email Aluno para {email_aluno}...") # Log no terminal
+        send_mail(
             subject="Confirmação de Inscrição - Evento ESUFRN",
+            message="",
+            from_email=settings.EMAIL_HOST_USER,
             recipient_list=[email_aluno],
             html_message=msg_aluno,
+            fail_silently=False,
         )
         
+        # Sucesso
         messages.success(request, "Inscrição realizada com sucesso! Você receberá um email de confirmação em breve.")
         
     except Exception as e:
-        messages.error(request, f"Erro ao realizar inscrição: {str(e)}")
+        # Log detalhado do erro no console do servidor
+        print(f"ERRO CRÍTICO NO ENVIO DE EMAIL: {e}")
+        # Mensagem para o usuário (pode ser genérica em produção, mas aqui ajuda a debugar)
+        messages.error(request, f"Erro ao processar inscrição (Email): {str(e)}")
     
     return redirect("inscricao")
