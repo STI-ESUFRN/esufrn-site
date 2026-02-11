@@ -200,7 +200,7 @@ def submeter_trabalho(request):
         msg_admin = render_to_string("base.email_conversation.html", context_admin)
         
         # Email de destino da administração
-        recipient_email = "suporte@es.ufrn.br"
+        recipient_email = "comunicacaoesufrn@gmail.com"
         
         # Preparar anexos para o email da administração
         attachments = []
