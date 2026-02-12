@@ -161,7 +161,7 @@
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label>
-                                    <b>TRABALHO SEM O NOME DOS AUTORES (WORD)*</b>
+                                    <b>Trabalho SEM o nome dos autores*</b>
                                 </label>
                                 <input type="file" name="data[Artigo][arquivo]"
                                     class="form-control-file border p-2 rounded-0">
@@ -169,7 +169,7 @@
 
                             <div class="form-group col-md-6">
                                 <label>
-                                    <b>TRABALHO COM O NOME DOS AUTORES (WORD)*</b>
+                                    <b>Trabalho COM o nome dos autores*</b>
                                 </label>
                                 <input type="file" name="data[Artigo][segundo_arquivo]"
                                     class="form-control-file border p-2 rounded-0">
@@ -328,12 +328,12 @@
 
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label><b>TRABALHO SEM O NOME DOS AUTORES (WORD)*</b></label>
+                                <label><b>Trabalho SEM o nome dos autores*</b></label>
                                 <input type="file" name="data[Artigo][arquivo]"
                                     class="form-control-file border p-2 rounded-0">
                             </div>
                             <div class="form-group col-md-6">
-                                <label><b>TRABALHO COM O NOME DOS AUTORES (WORD)*</b></label>
+                                <label><b>Trabalho COM o nome dos autores*</b></label>
                                 <input type="file" name="data[Artigo][segundo_arquivo]"
                                     class="form-control-file border p-2 rounded-0">
                             </div>
@@ -490,23 +490,15 @@
             $('#wordCountExpandido').text(`Palavras digitadas: ${Math.min(count, limitExpandido)} / ${limitExpandido}`);
         });
 
-        // Validação de arquivos
-        $('input[type="file"]').on('change', function() {
+        // Validação de arquivos (Qualquer tipo, máx 10MB)
+        $('input[type="file"]').on('change', function () {
             const file = this.files[0];
+
             if (file) {
-                const validExtensions = ['.doc', '.docx'];
-                const fileName = file.name.toLowerCase();
-                const isValid = validExtensions.some(ext => fileName.endsWith(ext));
-                
-                if (!isValid) {
-                    alert('Por favor, envie apenas arquivos Word (.doc ou .docx)');
-                    $(this).val('');
-                    return;
-                }
-                
+                // Validação de tamanho (10MB = 10 * 1024 * 1024 bytes)
                 if (file.size > 10 * 1024 * 1024) {
                     alert('O arquivo deve ter no máximo 10MB');
-                    $(this).val('');
+                    $(this).val(''); // Limpa o input para o usuário escolher outro
                 }
             }
         });

@@ -297,7 +297,7 @@ def submeter_inscricao(request):
         
         context_admin = {"message": message_admin}
         msg_admin = render_to_string("base.email_conversation.html", context_admin)
-        recipient_email = "suporte@es.ufrn.br"
+        recipient_email = "comunicacaoesufrn@gmail.com"
         
         # --- 3. Envio Síncrono Admin (Debug Ativado) ---
         print(f"Tentando enviar email Admin para {recipient_email}...") # Log no terminal
