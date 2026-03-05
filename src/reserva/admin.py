@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import admin
 
 from reserva.models import Classroom, Period, Reserve, ReserveDay, UserClassroom
@@ -42,7 +43,22 @@ class AdminReserve(admin.ModelAdmin):
     list_filter = ["status", "classroom", "shift", "date"]
 
 
+class PeriodAdminForm(forms.ModelForm):
+    class Meta:
+        model = Period
+        fields = '__all__'
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Remove sábado (6) e domingo (7) das opções de dias da semana
+        if 'weekdays' in self.fields:
+            choices = [choice for choice in self.fields['weekdays'].choices 
+                      if choice[0] not in ['6', '7']]
+            self.fields['weekdays'].choices = choices
+
+
 class AdminPeriodReserve(admin.ModelAdmin):
+    form = PeriodAdminForm
     list_display = [
         "classname",
         "course",

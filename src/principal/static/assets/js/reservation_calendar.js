@@ -59,8 +59,6 @@ class ReservationCalendar {
 				<td></td>
 				<td></td>
 				<td></td>
-				<td></td>
-				<td></td>
 				</tr>
 			`;
 		});
@@ -93,13 +91,11 @@ class ReservationCalendar {
 		return `
 			<tr data-parent="${id}" class="tr-dia">
 				<th id="semana-${id}" class="linha-dia" scope="row">${this.dayName}</th>
-				<td data-sem="0"></td>
 				<td data-sem="1"></td>
 				<td data-sem="2"></td>
 				<td data-sem="3"></td>
 				<td data-sem="4"></td>
 				<td data-sem="5"></td>
-				<td data-sem="6"></td>
 			</tr>
 			${this._addColToStruct(id)}
 			<tr class="table-separador" data-separador="${id}">
@@ -117,13 +113,11 @@ class ReservationCalendar {
 						<thead class="thead-light">
 							<tr>
 								<th scope="col"></th>
-								<th scope="col">${this.weekName[0]}</th>
 								<th scope="col">${this.weekName[1]}</th>
 								<th scope="col">${this.weekName[2]}</th>
 								<th scope="col">${this.weekName[3]}</th>
 								<th scope="col">${this.weekName[4]}</th>
 								<th scope="col">${this.weekName[5]}</th>
-								<th scope="col">${this.weekName[6]}</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -145,16 +139,57 @@ class ReservationCalendar {
 		this._createStruct();
 		let numberDaysInMonth = date.daysInMonth();
 		let weekNumberDayOne = date.day();
+		// Ajustar para considerar apenas dias úteis (1-5: Segunda a Sexta)
+		// Se o mês começa no domingo (0), ajustar para começar na segunda
+		if (weekNumberDayOne === 0) {
+			weekNumberDayOne = 7; // Domingo vira último dia
+		}
+		// Se o mês começa no sábado (6), ajustar para começar na segunda
+		if (weekNumberDayOne === 6) {
+			weekNumberDayOne = 7; // Sábado vira além da sexta
+		}
+		
 		let trDia = $(`#${this.element} .tr-dia [data-sem]`)
+		let currentDay = 1;
 
 		$.each(trDia, (index, value) => {
-			if (index < weekNumberDayOne + numberDaysInMonth && weekNumberDayOne <= index) {
-				trDia[index].innerText = index - weekNumberDayOne + 1;
-			} else if (trDia[weekNumberDayOne + numberDaysInMonth - 1].parentElement.getAttribute("data-parent") < value.parentElement.getAttribute("data-parent")) {
-				let dataParentExtra = value.parentElement.getAttribute("data-parent")
-				$(`[data-parent = ${dataParentExtra}]`).remove()
-				$(`[data-separador = ${dataParentExtra}]`).remove()
-				return false;
+			while (currentDay <= numberDaysInMonth) {
+				let tempDate = moment(date).date(currentDay);
+				let dayOfWeek = tempDate.day();
+				
+				// Pular fins de semana (0=domingo, 6=sábado)
+				if (dayOfWeek === 0 || dayOfWeek === 6) {
+					currentDay++;
+					continue;
+				}
+				
+				// Verificar se estamos na coluna correta (1-5 = segunda a sexta)
+				if (parseInt($(value).attr('data-sem')) === dayOfWeek) {
+					$(value).text(currentDay);
+					$(value).attr('data-day', currentDay);
+					currentDay++;
+					break;
+				} else {
+					break;
+				}
+			}
+			
+			// Remover linhas extras vazias
+			if (currentDay > numberDaysInMonth) {
+				let dataParent = $(value).parent().attr("data-parent");
+				let hasContent = false;
+				$(`[data-parent="${dataParent}"] [data-sem]`).each(function() {
+					if ($(this).text().trim() !== '') {
+						hasContent = true;
+						return false;
+					}
+				});
+				
+				if (!hasContent) {
+					$(`[data-parent="${dataParent}"]`).remove();
+					$(`[data-separador="${dataParent}"]`).remove();
+					return false;
+				}
 			}
 		});
 
@@ -174,10 +209,35 @@ class ReservationCalendar {
 	_updateReservations(data) {
 		$.each(data, (index, value) => {
 			try {
-				let eventDay = moment(value[this.varNames.date]).date();
-				let eventWeekDay = $(`#${this.element} .tr-dia td:contains(${eventDay})`).attr("data-sem")
-				let parentNumber = $(`#${this.element} .tr-dia td:contains(${eventDay})`).parent().attr("data-parent")
-				let arrayLine = $(`#${this.element} [data-parent='${parentNumber}'][data-turno='${value[this.varNames.shift]}'] td`)
+				let eventDate = moment(value[this.varNames.date]);
+				let eventDay = eventDate.date();
+				let eventWeekDay = eventDate.day();
+				
+				// Pular eventos em fins de semana
+				if (eventWeekDay === 0 || eventWeekDay === 6) {
+					return true; // continue
+				}
+				
+				// Encontrar a célula correta baseada no dia do mês e dia da semana
+				let targetCell = null;
+				$(`#${this.element} .tr-dia [data-sem="${eventWeekDay}"]`).each(function() {
+					if ($(this).text().trim() == eventDay) {
+						targetCell = $(this);
+						return false;
+					}
+				});
+				
+				if (!targetCell) {
+					console.warn(`Could not find cell for day ${eventDay}, weekday ${eventWeekDay}`);
+					return true;
+				}
+				
+				let parentNumber = targetCell.parent().attr("data-parent");
+				let arrayLine = $(`#${this.element} [data-parent='${parentNumber}'][data-turno='${value[this.varNames.shift]}'] td`);
+				
+				// Encontrar o índice correto na linha baseado no dia da semana (1-5)
+				let columnIndex = eventWeekDay - 1; // Segunda=1 -> índice 0, etc.
+				
 				let indicatorBall = ""
 				switch (value[this.varNames.status.name]) {
 					case this.varNames.status.confirmed:
@@ -190,9 +250,12 @@ class ReservationCalendar {
 						indicatorBall = "w-confirmado"
 						break;
 				}
-				arrayLine[eventWeekDay].innerHTML += `<div class='w-100 h-100' data-toggle="modal" data-target="#reservation-details-modal" data-id=${value["id"]} title='${value[this.varNames.event]}'><i class="fas fa-circle ${indicatorBall}"></i> ${value[this.varNames.event]} </div>`
-			} catch {
-				console.warn(`Something went wrong when field 'shift[${value.shift}]' was being filled! Check if this field was setted.`);
+				
+				if (arrayLine[columnIndex]) {
+					arrayLine[columnIndex].innerHTML += `<div class='w-100 h-100' data-toggle="modal" data-target="#reservation-details-modal" data-id=${value["id"]} title='${value[this.varNames.event]}'><i class="fas fa-circle ${indicatorBall}"></i> ${value[this.varNames.event]} </div>`
+				}
+			} catch (error) {
+				console.warn(`Something went wrong when processing reservation:`, error, value);
 			}
 		});
 	}
