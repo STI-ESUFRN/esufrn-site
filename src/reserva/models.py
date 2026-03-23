@@ -36,7 +36,7 @@ class Classroom(models.Model):
         default=1,
     )
     justification_required = models.BooleanField(
-        "Requer justificativa de uso",
+        "Requer objetivo/observações para uso",
         default=False,
     )
 
