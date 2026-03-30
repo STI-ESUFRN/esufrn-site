@@ -24,16 +24,21 @@ from principal.forms import NewsletterForm
 from principal.helpers import email_token, join_range, paginator, qnt_page
 from principal.models import (
     Alert,
+    Cursos_Formatec,
     Cursos_Pronatec,
+    Destaque_Formatec,
     Document,
     destaque,
+    Links_V_Formatec,
     Links_V,
     News,
     Newsletter,
     Noticia,
+    Noticia_Formatec,
     Page,
     PageView,
     Photo,
+    Photo_Formatec,
     Team,
     Testimonial,
 )
@@ -600,6 +605,22 @@ def pronatec_videos(request):
     context = {"links": links}
 
     return render(request, "pronatec_videos.html", context)
+
+
+def formatec_fotos(request):
+    photos = Photo_Formatec.objects.all()
+
+    context = {"photos": photos}
+
+    return render(request, "pronatec_fotos.html", context)
+
+
+def formatec_videos(request):
+    links = Links_V_Formatec.objects.all()
+
+    context = {"links": links}
+
+    return render(request, "pronatec_videos.html", context)
 # ---------------------------------------------------------------------
 def ensino_pronatec(request):
     # Recupere todas as fotos e vídeos do banco de dados
@@ -621,6 +642,26 @@ def ensino_pronatec(request):
     }
 
     return render(request, "ensino.pronatec.html", context)
+
+
+def ensino_formatec(request):
+    photos = Photo_Formatec.objects.all()
+    links = Links_V_Formatec.objects.all()
+
+    destaques = Destaque_Formatec.objects.all()
+    noticias = Noticia_Formatec.objects.all().order_by('-data_criacao')
+    cursos = Cursos_Formatec.objects.all()
+    context = {
+        "curso": "formatec",
+        "crumbs": [{"name": "Ensino"}, {"name": "Formatec"}],
+        "photos": photos,
+        "links": links,
+        "destaques": destaques,
+        "noticias": noticias,
+        "cursos": cursos,
+    }
+
+    return render(request, "ensino.formatec.html", context)
 
 
 def Cusos_pronatec(request):

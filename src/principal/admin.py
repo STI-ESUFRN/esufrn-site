@@ -3,14 +3,19 @@ from django.utils.translation import gettext as _
 
 from principal.models import (
     Alert,
+    Cursos_Formatec,
     Document,
+    Destaque_Formatec,
     File,
+    Links_V_Formatec,
     Message,
     News,
     NewsAttachment,
     Newsletter,
+    Noticia_Formatec,
     Page,
     Photo,
+    Photo_Formatec,
     Team,
     Testimonial,
     Links_V,
@@ -163,7 +168,24 @@ class DestaqueAdmin(admin.ModelAdmin):
 class CursosPronatecAdmin(admin.ModelAdmin):
     list_display = ('nome_curso', 'imagem', 'link')
 
+
+class PhotoFormatecAdmin(admin.ModelAdmin):
+    list_display = ("descricao", "image")
+
+
+class LinksVFormatecAdmin(admin.ModelAdmin):
+    list_display = ("titulo", "imagem", "link")
+
+
+class DestaqueFormatecAdmin(admin.ModelAdmin):
+    list_display = ("titulo", "tipo", "imagem", "video_file", "link")
+
+
+class CursosFormatecAdmin(admin.ModelAdmin):
+    list_display = ('nome_curso', 'imagem', 'link')
+
 admin.site.register(Noticia)
+admin.site.register(Noticia_Formatec)
 admin.site.register(News, BlogAdmin)
 admin.site.register(Team, EquipeAdmin)
 admin.site.register(File, ArquivosAdmin)
@@ -177,3 +199,7 @@ admin.site.register(Links_V, Links_VAdmin)
 admin.site.register(Photo, PhotoAdmin)
 admin.site.register(destaque, DestaqueAdmin)
 admin.site.register(Cursos_Pronatec, CursosPronatecAdmin)
+admin.site.register(Links_V_Formatec, LinksVFormatecAdmin)
+admin.site.register(Photo_Formatec, PhotoFormatecAdmin)
+admin.site.register(Destaque_Formatec, DestaqueFormatecAdmin)
+admin.site.register(Cursos_Formatec, CursosFormatecAdmin)

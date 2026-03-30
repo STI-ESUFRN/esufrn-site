@@ -579,6 +579,86 @@ class Cursos_Pronatec(models.Model):
         verbose_name_plural = "Cursos_PRONATEC"
         ordering = ['ordem', 'nome_curso']
 
+
+class Photo_Formatec(models.Model):
+    image = models.ImageField(upload_to="photos_formatec/")
+    descricao = models.CharField(max_length=255)
+    date_created = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.descricao
+
+    class Meta:
+        verbose_name_plural = "Fotos_FORMATEC"
+        ordering = ['-date_created']
+
+
+class Links_V_Formatec(models.Model):
+    titulo = models.CharField(max_length=100)
+    imagem = models.ImageField(upload_to="imagens_formatec/")
+    link = models.URLField(max_length=200)
+
+    def __str__(self):
+        return self.titulo
+
+    class Meta:
+        verbose_name_plural = "Videos_FORMATEC"
+
+
+class Destaque_Formatec(models.Model):
+    TIPO_CHOICES = [
+        ("imagem", "Imagem"),
+        ("video", "Vídeo"),
+    ]
+
+    titulo = models.CharField(max_length=25, default="Título")
+    tipo = models.CharField(max_length=10, choices=TIPO_CHOICES, default="imagem")
+    imagem = models.ImageField(upload_to="destaques_formatec/", null=True, blank=True)
+    video_file = models.FileField(upload_to="videos_formatec/", null=True, blank=True)
+    link = models.URLField()
+
+    def clean(self):
+        if self.tipo == "imagem" and not self.imagem:
+            raise ValidationError(
+                "É necessário adicionar uma imagem para este tipo de destaque.",
+            )
+        if self.tipo == "video" and not self.video_file:
+            raise ValidationError(
+                "É necessário adicionar um vídeo para este tipo de destaque.",
+            )
+
+    def __str__(self):
+        return self.titulo
+
+    class Meta:
+        verbose_name_plural = "Destaque_FORMATEC"
+
+
+class Noticia_Formatec(models.Model):
+    titulo = models.CharField(max_length=400)
+    link = models.URLField()
+    data_criacao = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
+    def __str__(self):
+        return self.titulo
+
+    class Meta:
+        verbose_name_plural = "Noticias_FORMATEC"
+
+
+class Cursos_Formatec(models.Model):
+    nome_curso = models.CharField(max_length=100)
+    imagem = models.ImageField(upload_to='cursos_formatec/')
+    link = models.URLField()
+    ordem = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.nome_curso
+
+    class Meta:
+        verbose_name_plural = "Cursos_FORMATEC"
+        ordering = ['ordem', 'nome_curso']
+
 class PageView(models.Model):
     PAGE_TYPES = [
         ('site', 'Acesso geral ao site'),

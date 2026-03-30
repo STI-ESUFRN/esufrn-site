@@ -69,6 +69,12 @@ class PrincipalViewsTest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def test_ensino_formatec_view(self):
+        url = reverse("principal:ensino_formatec")
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
     def test_publicacoes_outras_view(self):
         url = reverse("principal:publicacoes_outras")
         response = self.client.get(url)
