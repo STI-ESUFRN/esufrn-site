@@ -84,3 +84,33 @@ tr.table-separador th {
 .table th {
     vertical-align: middle
 }
+
+/* Mantem as 5 colunas (Seg-Sex) com a mesma largura no modal de disponibilidade */
+#calendarModal #reservation-calendar .table.reservation {
+    width: 100% !important;
+    min-width: 100%;
+    table-layout: fixed;
+}
+
+#calendarModal #reservation-calendar .table.reservation th,
+#calendarModal #reservation-calendar .table.reservation td {
+    width: auto;
+}
+
+#calendarModal #reservation-calendar .table.reservation th:first-child,
+#calendarModal #reservation-calendar .table.reservation td:first-child {
+    width: 12%;
+}
+
+#calendarModal #reservation-calendar .table.reservation th:nth-child(n+2),
+#calendarModal #reservation-calendar .table.reservation td:nth-child(n+2) {
+    width: 17.6%;
+}
+
+#calendarModal #reservation-calendar .linha-turno~td,
+#calendarModal #reservation-calendar .linha-turno~td div {
+    width: auto !important;
+    max-width: 100%;
+    white-space: normal;
+    word-break: break-word;
+}
