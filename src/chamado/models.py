@@ -10,46 +10,46 @@ from django.utils.translation import gettext as _
 from model_utils.models import SoftDeletableModel, TimeStampedModel
 
 
+class Sala(models.Model):
+    nome = models.CharField("Sala", max_length=100, unique=True)
+
+    class Meta:
+        verbose_name = "Sala"
+        verbose_name_plural = "Salas"
+        ordering = ["nome"]
+
+    def __str__(self):
+        return self.nome
+
+
 class Chamado(SoftDeletableModel, TimeStampedModel):
     class Status(models.TextChoices):
         RESOLVED = "R", _("Resolved")
         NOT_RESOLVED = "N", _("Not resolved")
         PENDING = "P", _("Pending")
 
-    class Shift(models.TextChoices):
-        MORNING = "M", "Manhã"
-        AFTERNOON = "T", "Tarde"
-
-    class Concorda(models.TextChoices):
-        YES = "y", "SIM"
-
-    title = models.CharField("Título", max_length=100)
+    equipment = models.CharField("Equipamento", max_length=100)
     description = models.TextField("Descrição do problema", max_length=300)
-    requester = models.CharField("Nome completo", max_length=50)
-    course = models.CharField("Nome do curso", max_length=100)
-    contact = models.CharField("Whatsapp ou Email para contato", max_length=50)
-    presenca = models.BooleanField(
-        "Supervisionado por docente",
-        default=False,
-        help_text=(
-            "Marcando esta caixa, você declara que a sala contará com a supervisão de"
-            " um docente no momento da aula."
-        ),
-    )
-    date = models.DateField("Data *", null=True)
-    shift = models.CharField(
-        "Turno *",
-        max_length=10,
-        choices=Shift.choices,
+    requester = models.CharField("Solicitante", max_length=50)
+    sala = models.ForeignKey(
+        Sala,
+        verbose_name="Sala",
         null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="chamados",
     )
-    concorda = models.CharField(
-        "Marcando esta caixa você declara que estará presente no momento da manutenção",
-        max_length=10,
-        choices=Concorda.choices,
+    sala_outros = models.CharField("Sala (outros)", max_length=100, blank=True, default="")
+    tombamento = models.CharField("Tombamento", max_length=100)
+    date = models.DateField("Data", null=True)
+    responsible_technician = models.CharField(
+        "Responsável técnico",
+        max_length=100,
+        blank=True,
+        default="",
     )
     solved_at = models.DateTimeField("Resolvido em", null=True)
-    obs = models.TextField("Observações", null=True)
+    obs = models.TextField("Observações", null=True, blank=True)
     status = models.CharField(
         "Status",
         max_length=10,
@@ -57,10 +57,20 @@ class Chamado(SoftDeletableModel, TimeStampedModel):
         default=Status.PENDING,
     )
 
+    @property
+    def room(self):
+        if self.sala is not None:
+            return self.sala.nome
+
+        return self.sala_outros
+
+    def get_room_display(self):
+        return self.room or "---"
+
     def save(self, *args, **kwargs):
         pk = self.pk
 
-        if self.status is not self.Status.PENDING:
+        if self.status != self.Status.PENDING:
             if self.solved_at is None:
                 self.solved_at = timezone.now()
         else:
@@ -74,13 +84,13 @@ class Chamado(SoftDeletableModel, TimeStampedModel):
     def notify(self):
         message = f"""
             Um novo chamado foi cadastrado no sistema.<br/>
-            Título: {self.title}<br/>
+            Equipamento: {self.equipment}<br/>
+            Tombamento: {self.tombamento}<br/>
             Descrição: {self.description}<br/>
             Solicitante: {self.requester}<br/>
-            Curso: {self.course}<br/>
-            Contato: {self.contact}<br/>
+            Sala: {self.get_room_display()}<br/>
             Data: {self.date}<br/>
-            Turno: {self.shift}
+            Responsável técnico: {self.responsible_technician}
         """
 
         context = {"message": message}
@@ -90,7 +100,7 @@ class Chamado(SoftDeletableModel, TimeStampedModel):
             target=send_mail,
             args=(
                 (
-                    f"Sistema de Chamados: {self.title}",
+                    f"Sistema de Chamados: {self.equipment}",
                     "",
                     settings.EMAIL_HOST_USER,
                     [config.CONTACT_EMAIL_SUPORTE],
@@ -109,4 +119,4 @@ class Chamado(SoftDeletableModel, TimeStampedModel):
         ordering = ["-created"]
 
     def __str__(self):
-        return self.title
+        return self.equipment

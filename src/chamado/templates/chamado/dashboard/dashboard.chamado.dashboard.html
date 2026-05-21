@@ -18,9 +18,9 @@
                     <tr class="capt-table">
                         <th class="border-0 text-center" scope="col"></th>
                         {% comment %} <th class="border-0" scope="col">Tipo</th> {% endcomment %}
-                        <th class="border-0" scope="col">Título</th>
+                        <th class="border-0" scope="col">Equipamento</th>
                         <th class="border-0" scope="col">Solicitante</th>
-                        <th class="border-0" scope="col">Contato</th>
+                        <th class="border-0" scope="col">Sala</th>
                         <th class="border-0 text-center" scope="col">Tempo</th>
                     </tr>
                 </thead>
@@ -40,10 +40,15 @@
                     </button>
                 </div>
                 <div class="card-body">
-                    <!-- <small class="text-muted">Tipo: Chamado Convencional</small> -->
                     <h5 class="card-title">
-                        <small>Título:</small> <b data-attribute="title">---</b>
+                        <small>Status:</small> <b data-attribute="status">---</b>
                     </h5>
+                    <p class="card-text">
+                        <small>Equipamento:</small> <b data-attribute="equipment">---</b>
+                    </p>
+                    <p class="card-text">
+                        <small>Tombamento:</small> <b data-attribute="tombamento">---</b>
+                    </p>
                     <p class="card-text">
                         <small>Descrição:</small> <b data-attribute="description">---</b>
                     </p>
@@ -53,21 +58,14 @@
                         <small>Solicitante:</small> <b data-attribute="requester">Maria das Dores</b>
                     </li>
                     <li class="list-group-item">
-                        <small>Contato:</small> <b data-attribute="contact">Sala 27A</b>
+                        <small>Sala:</small> <b data-attribute="sala">Sala 27A</b>
                     </li>
                     <li class="list-group-item">
-                        <small>Sala:</small> <b data-attribute="course">Sala 27A</b>
+                        <small>Responsável Técnico:</small> <b data-attribute="responsible_technician">---</b>
                     </li>
                     <li class="list-group-item">
                         <small>Data do Chamado:</small> <b date-format="DD/MM/YYYY" data-attribute="date">{{ chamado.date }}</b>
                     </li>
-
-                    <li class="list-group-item">
-                        <small>Turno:</small> <b data-attribute="shift">{{ chamado.shift }}</b>
-                    </li>
-
-
-                    <!-- <li class="list-group-item"><small>Tempo decorrido:</small> <b data-attribute="decorrido">42min REVER ISSO</b></li> -->
                 </ul>
                 <div class="card-footer border-top-0">
                     <p>
@@ -88,6 +86,10 @@
                        id="rejectCall"
                        data-status="N">Não
                     Resolvido</a>
+                          <a href="#"
+                              class="btn mb-1 btn-outline-warning btn-sm"
+                              id="waitCall"
+                              data-status="P">Pendente</a>
                     <a href="#" class="btn mb-1 btn-outline-primary btn-sm" id="obsCall">Salvar Observação</a>
                     <p class="m-0 mt-2">
                         <small class="text-muted">Data do Chamado: <span date-format="DD/MM/YYYY HH:mm" data-attribute="created"></span></small>

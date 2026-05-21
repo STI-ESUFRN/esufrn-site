@@ -1,0 +1,189 @@
+{% extends "dashboard.base.html" %}
+{% load static %}
+{% block styles %}
+    <style>
+        @media print {
+            @page {
+                size: landscape;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+            .print-only {
+                display: block !important;
+            }
+        }
+
+        .print-only {
+            display: none;
+            white-space: normal;
+        }
+
+        .screen-snippet {
+            max-width: 380px;
+            overflow: hidden;
+        }
+
+        .table-wrapper { overflow-x: auto; }
+
+        table.report-table {
+            table-layout: fixed;
+        }
+
+        table.report-table th,
+        table.report-table td {
+            vertical-align: middle !important;
+            white-space: normal;
+            word-break: break-word;
+        }
+
+        /* table.report-table th:nth-child(1) {
+            width: 7%;
+        }
+
+        table.report-table th:nth-child(2) {
+            width: 11%;
+        }
+
+        table.report-table th:nth-child(3) {
+            width: 13%;
+        }
+
+        table.report-table th:nth-child(4) {
+            width: 7%;
+        }
+
+        table.report-table th:nth-child(5) {
+            width: 13%;
+        }
+
+        table.report-table th:nth-child(6) {
+            width: 13%;
+        }
+
+        table.report-table th:nth-child(7) {
+            width: 17%;
+        }*/
+
+        table.report-table th:nth-child(8) {
+            width: 22%;
+        } 
+    </style>
+{% endblock styles %}
+{% block content %}
+    <div class="no-print mb-4">
+        <div class="mb-2 text-center">
+            <h3>Relatório de chamados</h3>
+            <div class="row justify-content-end">
+                <div class="col-auto">
+                    <button type="button"
+                        class="btn mb-1 btn-outline-primary btn-sm"
+                        onclick="window.print();return false;">
+                    Imprimir <i class="fas fa-print" aria-hidden="true"></i>
+                </button>
+                </div>
+            </div>
+        </div>
+        <form method="get" class="mt-3">
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <label>Solicitante:</label>
+                    <input type="text"
+                           class="form-control form-control-sm"
+                           name="requester"
+                           value="{{ request.GET.requester }}"
+                           placeholder="Filtrar por solicitante"/>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label>Sala:</label>
+                    <select class="form-control form-control-sm" name="sala">
+                        <option value="" {% if not request.GET.sala %}selected{% endif %}>Todas as salas</option>
+                        {% for sala in salas %}
+                            <option value="{{ sala.id }}" {% if request.GET.sala == sala.id|stringformat:"s" %}selected{% endif %}>{{ sala.nome }}</option>
+                        {% endfor %}
+                        <option value="__other__" {% if request.GET.sala == "__other__" %}selected{% endif %}>Outros</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label>Status:</label>
+                    <select class="form-control form-control-sm" name="status">
+                        <option value="" {% if not request.GET.status %}selected{% endif %}>Todos os status</option>
+                        {% for value, label in status_choices %}
+                            <option value="{{ value }}" {% if request.GET.status == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3 mb-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-sm btn-dark btn-block">Filtrar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="card rounded-0">
+        <div class="card-header head-table border-0 rounded-0 d-flex justify-content-between align-items-center flex-wrap">
+            <b><i class="fas fa-file-alt mr-2"></i>Chamados cadastrados</b>
+            <small class="text-muted">Total: {{ chamados|length }}</small>
+        </div>
+        <div class="card-body p-0 table-wrapper">
+            <table class="table table-hover mb-0 report-table">
+                <thead>
+                    <tr class="capt-table">
+                        <th class="border-0 text-center" scope="col">Status</th>
+                        <th class="border-0" scope="col">Equipamento</th>
+                        <th class="border-0" scope="col">Solicitante</th>
+                        <th class="border-0" scope="col">Sala</th>
+                        <th class="border-0" scope="col">Tombamento</th>
+                        <th class="border-0 text-center" scope="col">Data</th>
+                        <th class="border-0" scope="col">Responsável Técnico</th>
+                        <th class="border-0" scope="col">Descrição / Observações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for chamado in chamados %}
+                        <tr>
+                            <td class="text-center">
+                                {% if chamado.status == "P" %}
+                                    <span class="fas fa-user-cog text-warning"></span>
+                                {% elif chamado.status == "R" %}
+                                    <span class="fas fa-check-circle text-success"></span>
+                                {% else %}
+                                    <span class="fas fa-times-circle text-danger"></span>
+                                {% endif %}
+                            </td>
+                            <td>{{ chamado.equipment }}</td>
+                            <td>{{ chamado.requester }}</td>
+                            <td>{{ chamado.get_room_display }}</td>
+                            <td>{{ chamado.tombamento }}</td>
+                            <td class="text-center">{{ chamado.date|date:"d/m/Y" }}</td>
+                            <td>{{ chamado.responsible_technician|default:"---" }}</td>
+                            <td>
+                                <div class="screen-snippet">
+
+                                    <a href="#" class="ver-mais no-print" data-description="{{ chamado.description|escapejs }}" data-obs="{{ chamado.obs|default:''|escapejs }}">ver mais</a>
+                                </div>
+
+                                <div class="print-only">
+                                    <strong>Descrição:</strong>
+                                    {{ chamado.description }}
+                                    <br/>
+                                    <strong>Observações:</strong>
+                                    {{ chamado.obs|default:"---" }}
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="8" class="text-center py-4">
+                                Nenhum chamado encontrado com os filtros atuais.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock content %}
+{% block scripts %}
+    <script src="{% static 'assets/chamado/dashboard/js/relatorio.js' %}"></script>
+{% endblock scripts %}

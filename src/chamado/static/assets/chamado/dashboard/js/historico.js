@@ -28,7 +28,7 @@ function refreshData(url = undefined) {
                 class: "text-center",
                 html: '<i class="fas fa-user-cog"></i>',
             });
-            let title = $("<td />", { text: v.title, title: v.title });
+            let title = $("<td />", { text: v.equipment, title: v.equipment });
             let requester = $("<td />", {
                 text: v.requester,
                 title: v.requester,
@@ -78,10 +78,12 @@ function fillCall(id) {
             status.html(
                 'Resolvido <i class="fas fa-check-circle text-success"></i>'
             );
-        } else {
+        } else if (status.text() == "N") {
             status.html(
                 'Não resolvido <i class="fas fa-times-circle text-danger"></i>'
             );
+        } else {
+            status.html('Pendente <i class="fas fa-clock text-warning"></i>');
         }
 
         $("#detalhes").fadeTo("fast", 0).fadeTo("fast", 1).show();

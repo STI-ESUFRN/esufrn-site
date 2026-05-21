@@ -22,7 +22,7 @@
     </style>
 {% endblock styles %}
 {% block content %}
-    <div class="row">
+    <!-- <div class="row">
         <div class="col-md-3 mb-3">
             <select class="form-control form-control-sm " data-filter name="ordering">
                 <option value="-created" selected>
@@ -46,7 +46,7 @@
                 </option>
             </select>
         </div>
-    </div>
+    </div> -->
     <div class="row">
         <div class="col-md-8">
             <div class="card rounded-0">
@@ -59,7 +59,7 @@
                             <tr class="capt-table">
                                 <th class="border-0 text-center" scope="col"></th>
                                 <th class="border-0" scope="col"></th>
-                                <th class="border-0" scope="col">Título</th>
+                                <th class="border-0" scope="col">Equipamento</th>
                                 <th class="border-0" scope="col">Solicitante</th>
                                 <th class="border-0 text-center" scope="col">Data</th>
                             </tr>
@@ -99,8 +99,11 @@
                             <small class="text-muted">Status:</small><span data-attribute="status"></span>
                         </p>
                         <h5 class="card-title">
-                            <small>Título:</small> <b data-attribute="title"></b>
+                            <small>Equipamento:</small> <b data-attribute="equipment"></b>
                         </h5>
+                        <p class="card-text">
+                            <small>Tombamento:</small> <b data-attribute="tombamento"></b>
+                        </p>
                         <p class="card-text">
                             <small>Descrição:</small> <b data-attribute="description"></b>
                         </p>
@@ -110,10 +113,13 @@
                             <small>Solicitante:</small> <b data-attribute="requester"></b>
                         </li>
                         <li class="list-group-item">
-                            <small>Contato:</small> <b data-attribute="contact">Sala 27A</b>
+                            <small>Sala:</small> <b data-attribute="sala">Sala 27A</b>
                         </li>
                         <li class="list-group-item">
-                            <small>Curso:</small> <b data-attribute="course">Sala 27A</b>
+                            <small>Responsável Técnico:</small> <b data-attribute="responsible_technician">---</b>
+                        </li>
+                        <li class="list-group-item">
+                            <small>Data:</small> <b data-attribute="date"></b>
                         </li>
                     </ul>
                     <div class="card-footer border-top-0">

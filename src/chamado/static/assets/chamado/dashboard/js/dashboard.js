@@ -19,9 +19,9 @@ function refreshData(ring = true) {
                 let criado_ha_date = new Date(reserve.created);
 
                 let criado_ha = criado_ha_date.toISOString();
-                let title = $("<td />", { text: reserve.title });
+                let title = $("<td />", { text: reserve.equipment });
                 let requester = $("<td />", { text: reserve.requester });
-                let contact = $("<td />", { text: reserve.contact });
+                let contact = $("<td />", { text: reserve.sala });
                 let e1 = $("<td />", {
                     class:
                         now - criado_ha_date > 1200000
@@ -59,6 +59,19 @@ function fillCall(id) {
     $("#detalhes").hide();
     $.get(`/api/tickets/${idSelecionado}/`, function (response) {
         fillAttributes(response);
+
+        let status = $("[data-attribute=status]");
+        if (status.text() == "R") {
+            status.html(
+                'Resolvido <i class="fas fa-check-circle text-success"></i>'
+            );
+        } else if (status.text() == "N") {
+            status.html(
+                'Não resolvido <i class="fas fa-times-circle text-danger"></i>'
+            );
+        } else {
+            status.html('Pendente <i class="fas fa-clock text-warning"></i>');
+        }
         $("#detalhes").fadeTo("fast", 0).fadeTo("fast", 1).show();
     });
 }
@@ -101,7 +114,7 @@ setInterval(() => {
 }, 10000);
 
 //--------------- LISTENERS ---------------
-$("#confirmCall, #rejectCall").click(function (e) {
+$("#confirmCall, #rejectCall, #waitCall").click(function (e) {
     e.preventDefault();
     patch({
         obs: $("#call-obs").val() ? $("#call-obs").val() : "",

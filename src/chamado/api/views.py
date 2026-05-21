@@ -25,6 +25,12 @@ class ChamadoViewSet(viewsets.ModelViewSet):
     }
     ordering_fields = ["created"]
 
+    def get_serializer_class(self):
+        if self.action in ("open", "create"):
+            return ChamadoCreateSerializer
+
+        return super().get_serializer_class()
+
     @action(
         methods=["post"],
         detail=False,

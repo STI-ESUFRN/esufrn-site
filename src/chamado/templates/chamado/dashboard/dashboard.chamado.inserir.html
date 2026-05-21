@@ -19,7 +19,7 @@
         <div class="form-row">
             <div class="form-group col-md-4">
                 <label>
-                    <b>Solicitante</b>
+                    <b>Solicitante*</b>
                 </label>
                 <input type="text"
                        class="form-control rounded-0"
@@ -30,53 +30,81 @@
             </div>
             <div class="form-group col-md-4">
                 <label>
-                    <b>Curso</b>
+                    <b>Data*</b>
                 </label>
-                <input type="text"
+                <input type="date"
                        class="form-control rounded-0"
-                       name="course"
-                       placeholder="Curso do solicitante"
+                       name="date"
                        required/>
                 <div class="invalid-feedback">Campo obrigatório.</div>
             </div>
             <div class="form-group col-md-4">
                 <label>
-                    <b>Contato</b>
+                    <b>Sala*</b>
+                </label>
+                <select class="form-control rounded-0" name="sala" id="sala-select" required>
+                    <option value="" selected disabled>Selecione a sala</option>
+                    {% for sala in salas %}
+                        <option value="{{ sala.id }}">{{ sala.nome }}</option>
+                    {% endfor %}
+                    <option value="__other__">Outros</option>
+                </select>
+                <div class="invalid-feedback">Campo obrigatório.</div>
+            </div>
+        </div>
+        <div class="form-row d-none" id="sala-outros-row">
+            <div class="form-group col-md-12">
+                <label>
+                    <b>Informe a Sala</b>
                 </label>
                 <input type="text"
                        class="form-control rounded-0"
-                       name="contact"
-                       placeholder="Email/Whatsapp"
+                       name="sala_outros"
+                       id="sala-outros"
+                       placeholder="Digite a sala que não está cadastrada"/>
+                <div class="invalid-feedback">Campo obrigatório.</div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>
+                    <b>Equipamento*</b>
+                </label>
+                <input type="text"
+                       class="form-control rounded-0"
+                       name="equipment"
+                       placeholder="Equipamento"
+                       required/>
+                <div class="invalid-feedback">Campo obrigatório.</div>
+            </div>
+            <div class="form-group col-md-6">
+                <label>
+                    <b>Tombamento/Nº de Série*</b>
+                </label>
+                <input type="text"
+                       class="form-control rounded-0"
+                       name="tombamento"
+                       placeholder="Número de tombamento/número de série"
                        required/>
                 <div class="invalid-feedback">Campo obrigatório.</div>
             </div>
         </div>
         <div class="form-group">
             <label for="inputAddress2">
-                <b>Título</b>
-            </label>
-            <input type="text"
-                   class="form-control rounded-0"
-                   name="title"
-                   placeholder="Título do chamado"
-                   required/>
-            <div class="invalid-feedback">Campo obrigatório.</div>
-        </div>
-        <div class="form-group">
-            <label for="inputAddress2">
-                <b>Descrição</b>
+                <b>Descrição*</b>
             </label>
             <textarea class="form-control"
                       rows="3"
                       name="description"
+                      id="description"
+                      maxlength="300"
                       placeholder="Descrição do problema"
                       required></textarea>
+            <small id="charCount" class="form-text text-muted">
+                Máximo de 300 caracteres. Restam <span id="descRemaining">300</span>.
+            </small>
             <div class="invalid-feedback">Campo obrigatório.</div>
         </div>
-        <hr class="mt-4"/>
-        <small>
-            <p>Opções do Suporte:</p>
-        </small>
         <div class="form-group">
             <label for="inputAddress2">
                 <b>Observações</b>
@@ -84,18 +112,36 @@
             <textarea class="form-control"
                       rows="3"
                       name="obs"
-                      placeholder="Observações sobre o chamado, quem atendeu, o que foi feito, etc..."></textarea>
+                      id="obs"
+                      maxlength="300"
+                      placeholder="Observações sobre o chamado, o que foi feito"></textarea>
+            <small id="charCountObs" class="form-text text-muted">
+                Máximo de 300 caracteres. Restam <span id="obsRemaining">300</span>.
+            </small>
             <div class="invalid-feedback">Campo obrigatório.</div>
         </div>
         <div class="form-group">
             <label>
-                <b>Status:</b>
+                <b>Responsável Técnico*</b>
             </label>
-            <br/>
+            <input type="text"
+                   class="form-control rounded-0"
+                   name="responsible_technician"
+                   placeholder="Nome do responsável técnico"
+                   required/>
+            <div class="invalid-feedback">Campo obrigatório.</div>
+        </div>
+        <div class="form-group">
             <label>
-                <input type="checkbox" name="status"/>
-                Resolvido
+                <b>Status*</b>
             </label>
+            <select class="form-control rounded-0" name="status" required>
+                <option value="" selected disabled>Selecione o status</option>
+                <option value="P">Pendente</option>
+                <option value="R">Resolvido</option>
+                <option value="N">Não Resolvido</option>
+            </select>
+            <div class="invalid-feedback">Campo obrigatório.</div>
         </div>
         <div class="text-center mt-4">
             <button id="enviar-chamado" class="btn btn-dark rounded-0">Cadastrar Chamado</button>
