@@ -251,6 +251,7 @@ class Period(TimeStampedModel):
         ESU05 = "ESU05", "Técnico em Agente Comunitário de Saúde"
         ESU07 = "ESU07", "Técnico em Massoterapia"
         ESU08 = "ESU08", "Técnico em Cuidados de Idosos"
+        ESU11 = "ESU11", "Técnico em Terapias Holísticas"
         ESU10 = "ESU10", "Graduação Tecnológica em Gestão Hospitalar"
         MPPSE = "MPPSE", "Mestrado Profissional"
         ENF = "ENF", "Outros"
