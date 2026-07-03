@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
+from django.views.generic import TemplateView
 
 from principal.views import (
     busca,
@@ -38,13 +39,28 @@ urlpatterns = [
     path("ensino/especializacao/", ensino_especializacao, name="ensino_especializacao"),
     path("ensino/graduacao/", ensino_graduacao, name="ensino_graduacao"),
     path("ensino/mestrado/", ensino_mestrado, name="ensino_mestrado"),
+    # path(
+    #     "ensino/pronatec/institucional",
+    #     ensino_pronatec_institucional,
+    #     name="ensino_pronatec_institucional",
+    # ),
     path(
         "ensino/pronatec/institucional",
-        ensino_pronatec_institucional,
+        TemplateView.as_view(template_name="aviso_conteudo_oculto.html"),
         name="ensino_pronatec_institucional",
     ),
-    path("ensino/formatec/", ensino_formatec, name="ensino_formatec"),
-    path("ensino/pronatec/", ensino_pronatec, name="ensino_pronatec"),
+    # path("ensino/formatec/", ensino_formatec, name="ensino_formatec"),
+    path(
+        "ensino/formatec/",
+        TemplateView.as_view(template_name="aviso_conteudo_oculto.html"),
+        name="ensino_formatec",
+    ),
+    # path("ensino/pronatec/", ensino_pronatec, name="ensino_pronatec"),
+    path(
+        "ensino/pronatec/",
+        TemplateView.as_view(template_name="aviso_conteudo_oculto.html"),
+        name="ensino_pronatec",
+    ),
     path("ensino/sobre/", ensino_sobre, name="ensino_sobre"),
     path("ensino/tecnico/", ensino_tecnico, name="ensino_tecnico"),
     path("instituicao/documentos/", instituicao_documentos, name="documentos"),
@@ -56,11 +72,36 @@ urlpatterns = [
     path("noticias/<slug:slug>/", noticia, name="noticia"),
     path("pagina/<slug:path>/", pagina, name="pagina"),
     path("publicacoes/outras", publicacoes_outras, name="publicacoes_outras"),
-    path("formatec/videos", formatec_videos, name="formatec_videos"),
-    path("formatec/fotos/", formatec_fotos, name="formatec_fotos"),
-    path("pronatec/videos", pronatec_videos, name="pronatec_videos"),
-    path("pronatec/fotos/", pronatec_fotos, name="pronatec_fotos"),
-    path("pronatec/Cursos/", Cusos_pronatec, name="Cusos_pronatec"),
+    # path("formatec/videos", formatec_videos, name="formatec_videos"),
+    path(
+        "formatec/videos",
+        TemplateView.as_view(template_name="aviso_conteudo_oculto.html"),
+        name="formatec_videos",
+    ),
+    # path("formatec/fotos/", formatec_fotos, name="formatec_fotos"),
+    path(
+        "formatec/fotos/",
+        TemplateView.as_view(template_name="aviso_conteudo_oculto.html"),
+        name="formatec_fotos",
+    ),
+    # path("pronatec/videos", pronatec_videos, name="pronatec_videos"),
+    path(
+        "pronatec/videos",
+        TemplateView.as_view(template_name="aviso_conteudo_oculto.html"),
+        name="pronatec_videos",
+    ),
+    # path("pronatec/fotos/", pronatec_fotos, name="pronatec_fotos"),
+    path(
+        "pronatec/fotos/",
+        TemplateView.as_view(template_name="aviso_conteudo_oculto.html"),
+        name="pronatec_fotos",
+    ),
+    # path("pronatec/Cursos/", Cusos_pronatec, name="Cusos_pronatec"),
+    path(
+        "pronatec/Cursos/",
+        TemplateView.as_view(template_name="aviso_conteudo_oculto.html"),
+        name="Cusos_pronatec",
+    ),
     path('dashboard/metrics/', dashboard_metrics, name='dashboard_metrics'),
 ]
 
