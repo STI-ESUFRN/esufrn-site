@@ -348,6 +348,10 @@ class Document(TimeStampedModel):
     class EnsinoSubcategory(models.TextChoices):
         CURSOS_TECNICOS = "cursos_tecnicos", "Cursos Técnicos"
         GRADUACAO_TECNOLOGICA = "graduacao_tecnologica", "Graduação Tecnológica"
+        FORMACAO_INICIAL_CONTINUADA = (
+            "formacao_inicial_continuada",
+            "Cursos de Formação Inicial e Continuada (Qualificação Profissional)",
+        )
     
     name = models.CharField("Nome", max_length=250)
     authors = models.CharField(

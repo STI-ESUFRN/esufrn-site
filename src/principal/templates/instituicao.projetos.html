@@ -65,6 +65,35 @@
                 {% endfor %}
             </div>
         </div>
+        <div class="container mt-5 text-center cabecalho">
+            <h3>Projetos Pedagógicos de Cursos de Formação Inicial e Continuada (Qualificação Profissional)</h3>
+            <hr class="hr-escuro mt-5" />
+        </div>
+        <div class="container mt-4">
+            <div class="row">
+                {% for categoria in categorias %}
+                    {% if categoria.main == "Ensino" %}
+                        {% for documento in categoria.documentos %}
+                            {% if documento.ensino_subcategory == "formacao_inicial_continuada" %}
+                                <div class="col-12 mb-2">
+                                    <div class="col text-left documentos">
+                                        <h5 class="mb-0">
+                                            <li>
+                                                {% if documento.document_type == "arquivo" %}
+                                                    <a target="_blank" href="{{ documento.file.url }}">{{ documento.name }}</a>
+                                                {% elif documento.document_type == "link" %}
+                                                    <a target="_blank" href="{{ documento.link }}">{{ documento.name }}</a>
+                                                {% endif %}
+                                            </li>
+                                        </h5>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
         <div class="container text-right">
             <hr class="hr-escuro my-5" />
             <a href="#" class="text-uppercase text-dark">Voltar ao topo <i class="fas fa-arrow-alt-circle-up"></i></a>
